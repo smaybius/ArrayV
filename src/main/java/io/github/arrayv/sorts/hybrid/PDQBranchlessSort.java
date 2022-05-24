@@ -40,7 +40,7 @@ public final class PDQBranchlessSort extends PDQSorting {
     public void runSort(int[] array, int currentLength, int bucketCount) {
         visualizeAux();
         this.newHeapSorter(new MaxHeapSort(this.arrayVisualizer));
-        pdqLoop(array, 0, currentLength, true, pdqLog(currentLength));
+        pdqLoop(array, 0, currentLength, true, pdqLog(currentLength), 0);
         deleteAux();
     }
 }

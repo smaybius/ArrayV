@@ -45,21 +45,22 @@ public class WeavedMergeSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private void merge(int[] array, int[] tmp, int length, int residue, int modulus) {
-        if (residue+modulus >= length)
+    private void merge(int[] array, int[] tmp, int length, int residue, int modulus, int depth) {
+        if (residue + modulus >= length)
             return;
 
         int low = residue;
-        int high = residue+modulus;
-        int dmodulus = modulus<<1;
-
-        merge(array, tmp, length, low, dmodulus);
-        merge(array, tmp, length, high, dmodulus);
+        int high = residue + modulus;
+        int dmodulus = modulus << 1;
+        Writes.recordDepth(depth++);
+        Writes.recursion(2);
+        merge(array, tmp, length, low, dmodulus, depth);
+        merge(array, tmp, length, high, dmodulus, depth);
 
         Highlights.markArray(1, low);
         Highlights.markArray(2, high);
         int nxt = residue;
-        for (; low < length && high < length; nxt+=modulus) {
+        for (; low < length && high < length; nxt += modulus) {
             int cmp = Reads.compareValues(array[low], array[high]);
             if (cmp == 1 || cmp == 0 && low > high) {
                 Writes.write(tmp, nxt, array[high], 1, false, true);
@@ -90,7 +91,7 @@ public class WeavedMergeSort extends Sort {
         Highlights.clearMark(1);
         Highlights.clearMark(2);
 
-        for (int i = residue; i < length; i+=modulus) {
+        for (int i = residue; i < length; i += modulus) {
             Writes.write(array, i, tmp[i], 1, true, false);
         }
     }
@@ -99,7 +100,7 @@ public class WeavedMergeSort extends Sort {
     public void runSort(int[] array, int length, int bucketCount) {
         int[] tmp = Writes.createExternalArray(length);
 
-        merge(array, tmp, length, 0 , 1);
+        merge(array, tmp, length, 0, 1, 0);
 
         Writes.deleteExternalArray(tmp);
     }

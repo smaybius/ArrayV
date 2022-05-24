@@ -47,13 +47,13 @@ public final class WeaveMergeSort extends Sort {
     private void weaveInsert(int[] arr, int start, int end) {
         int pos;
 
-        for(int j = start; j < end; j++){
+        for (int j = start; j < end; j++) {
             pos = j;
 
             Highlights.markArray(1, j);
             Highlights.clearMark(2);
 
-            while(pos > start && Reads.compareValues(arr[pos], arr[pos - 1]) < 1) {
+            while (pos > start && Reads.compareValues(arr[pos], arr[pos - 1]) < 1) {
                 Writes.swap(arr, pos, pos - 1, 0.2, true, false);
                 pos--;
             }
@@ -64,7 +64,7 @@ public final class WeaveMergeSort extends Sort {
         int i = 1;
         int target = (mid - min);
 
-        while(i <= target) {
+        while (i <= target) {
             Writes.multiSwap(arr, mid + i, min + (i * 2) - 1, 0.05, true, false);
             i++;
         }
@@ -72,26 +72,25 @@ public final class WeaveMergeSort extends Sort {
         this.weaveInsert(arr, min, max + 1);
     }
 
-    private void weaveMergeSort(int[] array, int min, int max) {
-        if(max - min == 0) {      //only one element.
-            Delays.sleep(1);      //no swap
-        }
-        else if(max - min == 1) { //only two elements and swaps them
-            if(Reads.compareValues(array[min], array[max]) == 1) {
+    private void weaveMergeSort(int[] array, int min, int max, int depth) {
+        if (max - min == 0) { // only one element.
+            Delays.sleep(1); // no swap
+        } else if (max - min == 1) { // only two elements and swaps them
+            if (Reads.compareValues(array[min], array[max]) == 1) {
                 Writes.swap(array, min, max, 0.01, true, false);
             }
-        }
-        else {
-            int mid = (int) Math.floor((min + max) / 2); //The midpoint
-
-            this.weaveMergeSort(array, min, mid);     //sort the left side
-            this.weaveMergeSort(array, mid + 1, max); //sort the right side
-            this.weaveMerge(array, min, max, mid);    //combines them
+        } else {
+            int mid = (int) Math.floor((min + max) / 2); // The midpoint
+            Writes.recordDepth(depth++);
+            Writes.recursion(2);
+            this.weaveMergeSort(array, min, mid, depth); // sort the left side
+            this.weaveMergeSort(array, mid + 1, max, depth); // sort the right side
+            this.weaveMerge(array, min, max, mid); // combines them
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.weaveMergeSort(array, 0, currentLength - 1);
+        this.weaveMergeSort(array, 0, currentLength - 1, 0);
     }
 }

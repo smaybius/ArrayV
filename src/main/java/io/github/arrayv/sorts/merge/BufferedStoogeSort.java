@@ -36,7 +36,7 @@ public final class BufferedStoogeSort extends Sort {
 		return this.Reads.compareValues(arr[x], arr[y]);
 	}
 
-	public void wrapper(int[] arr, int start, int stop) {
+	public void wrapper(int[] arr, int start, int stop, int depth) {
 		if (stop - start > 1) {
 			if (stop - start == 2 && compare(arr, start, stop - 1) == 1) {
 				this.Writes.swap(arr, start, stop - 1, 1.0D, true, false);
@@ -50,8 +50,10 @@ public final class BufferedStoogeSort extends Sort {
 				if ((stop - start - 2) % 3 == 0) {
 					twoThird--;
 				}
-				wrapper(arr, third, twoThird);
-				wrapper(arr, twoThird, stop);
+				Writes.recordDepth(depth++);
+				Writes.recursion(2);
+				wrapper(arr, third, twoThird, depth);
+				wrapper(arr, twoThird, stop, depth);
 				int left = third;
 				int right = twoThird;
 				int bufferStart = start;
@@ -70,7 +72,9 @@ public final class BufferedStoogeSort extends Sort {
 					right++;
 					bufferStart++;
 				}
-				wrapper(arr, twoThird, stop);
+				Writes.recordDepth(depth++);
+				Writes.recursion(1);
+				wrapper(arr, twoThird, stop, depth);
 				left = twoThird - 1;
 				right = stop - 1;
 				while (right > left && left >= start) {
@@ -89,7 +93,7 @@ public final class BufferedStoogeSort extends Sort {
 	@Override
 	public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
 		// TODO Auto-generated method stub
-		wrapper(array, 0, sortLength);
+		wrapper(array, 0, sortLength, 0);
 
 	}
 

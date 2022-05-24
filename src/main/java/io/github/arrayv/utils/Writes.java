@@ -57,6 +57,7 @@ public final class Writes {
     public Writes(ArrayVisualizer arrayVisualizer) {
         this.reversals = 0;
         this.swaps = 0;
+        this.recursions = 0;
         this.depth = 0;
         this.auxWrites = 0;
         this.writes = 0;

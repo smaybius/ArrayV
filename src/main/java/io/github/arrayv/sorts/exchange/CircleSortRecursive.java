@@ -31,18 +31,19 @@ public final class CircleSortRecursive extends CircleSorting {
     }
 
     public void singleRoutine(int[] array, int length) {
-        this.circleSortRoutine(array, 0, length - 1, 0, 0.1);
+        this.circleSortRoutine(array, 0, length - 1, 0, 0.1, 0);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-    	this.end = sortLength;
-    	int n = 1;
-    	for(; n < sortLength; n*=2);
+        this.end = sortLength;
+        int n = 1;
+        for (; n < sortLength; n *= 2)
+            ;
 
         int numberOfSwaps = 0;
         do {
-            numberOfSwaps = this.circleSortRoutine(array, 0, n - 1, 0, 1);
+            numberOfSwaps = this.circleSortRoutine(array, 0, n - 1, 0, 1, 0);
         } while (numberOfSwaps != 0);
     }
 }
