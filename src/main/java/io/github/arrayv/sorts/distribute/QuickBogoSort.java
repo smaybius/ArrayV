@@ -49,8 +49,8 @@ public final class QuickBogoSort extends BogoSorting {
         this.setBogoSort(true);
     }
 
-    private int quickBogoSwap(int[] array, int start, int pivot, int end){
-        for(int i = start; i < end; i++) {
+    private int quickBogoSwap(int[] array, int start, int pivot, int end) {
+        for (int i = start; i < end; i++) {
             int j = BogoSorting.randInt(i, end);
             if (pivot == i)
                 pivot = j;
@@ -61,23 +61,24 @@ public final class QuickBogoSort extends BogoSorting {
         return pivot;
     }
 
-    private void quickBogo(int[] array, int start, int end) {
-        if (start >= end-1)
+    private void quickBogo(int[] array, int start, int end, int depth) {
+        if (start >= end - 1)
             return;
 
         int pivot = start;
         // worst-case pivot (linear distribution)
         // for (; pivot < end; ++pivot)
-        //     if (array[pivot] == (start+end)/2) break;
+        // if (array[pivot] == (start+end)/2) break;
         while (!isRangePartitioned(array, start, pivot, end))
             pivot = quickBogoSwap(array, start, pivot, end);
-
-        quickBogo(array, start, pivot);
-        quickBogo(array, pivot+1, end);
+        Writes.recordDepth(depth++);
+        Writes.recursion(2);
+        quickBogo(array, start, pivot, depth);
+        quickBogo(array, pivot + 1, end, depth);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) {
-        quickBogo(array, 0, sortLength);
+        quickBogo(array, 0, sortLength, 0);
     }
 }

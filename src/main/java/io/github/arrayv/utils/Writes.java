@@ -40,6 +40,8 @@ SOFTWARE.
  */
 public final class Writes {
     private volatile long reversals;
+    private volatile long recursions;
+    private volatile long depth;
     private volatile long swaps;
     private volatile long auxWrites;
     private volatile long writes;
@@ -55,6 +57,7 @@ public final class Writes {
     public Writes(ArrayVisualizer arrayVisualizer) {
         this.reversals = 0;
         this.swaps = 0;
+        this.depth = 0;
         this.auxWrites = 0;
         this.writes = 0;
         this.allocAmount = 0;
@@ -68,6 +71,8 @@ public final class Writes {
     }
 
     public void resetStatistics() {
+        this.recursions = 0;
+        this.depth = 0;
         this.reversals = 0;
         this.swaps = 0;
         this.auxWrites = 0;
@@ -75,13 +80,39 @@ public final class Writes {
         this.allocAmount = 0;
     }
 
+    public String getRecursions() {
+        if (this.recursions < 0) {
+            this.recursions = Long.MIN_VALUE;
+            return "Over " + this.formatter.format(Long.MAX_VALUE);
+        } else {
+            if (recursions == 1)
+                return this.recursions + " Recursion";
+            else
+                return this.formatter.format(this.recursions) + " Recursions";
+        }
+    }
+
+    public String getRecursionDepth() {
+        if (this.depth < 0) {
+            this.depth = Long.MIN_VALUE;
+            return "Over " + this.formatter.format(Long.MAX_VALUE);
+        } else {
+            if (depth == 1)
+                return this.depth + " Layer deep (at most)";
+            else
+                return this.formatter.format(this.depth) + " Layers deep (at most)";
+        }
+    }
+
     public String getReversals() {
         if (this.reversals < 0) {
             this.reversals = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (reversals == 1) return this.reversals + " Reversal";
-            else                return this.formatter.format(this.reversals) + " Reversals";
+            if (reversals == 1)
+                return this.reversals + " Reversal";
+            else
+                return this.formatter.format(this.reversals) + " Reversals";
         }
     }
 
@@ -90,8 +121,10 @@ public final class Writes {
             this.swaps = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (this.swaps == 1) return this.swaps + " Swap";
-            else                 return this.formatter.format(this.swaps) + " Swaps";
+            if (this.swaps == 1)
+                return this.swaps + " Swap";
+            else
+                return this.formatter.format(this.swaps) + " Swaps";
         }
     }
 
@@ -100,8 +133,10 @@ public final class Writes {
             this.auxWrites = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (this.auxWrites == 1) return this.auxWrites + " Write to Auxiliary Array(s)";
-            else                     return this.formatter.format(this.auxWrites) + " Writes to Auxiliary Array(s)";
+            if (this.auxWrites == 1)
+                return this.auxWrites + " Write to Auxiliary Array(s)";
+            else
+                return this.formatter.format(this.auxWrites) + " Writes to Auxiliary Array(s)";
         }
     }
 
@@ -110,8 +145,10 @@ public final class Writes {
             this.writes = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (this.writes == 1) return this.writes + " Write to Main Array";
-            else                 return this.formatter.format(this.writes) + " Writes to Main Array";
+            if (this.writes == 1)
+                return this.writes + " Write to Main Array";
+            else
+                return this.formatter.format(this.writes) + " Writes to Main Array";
         }
     }
 
@@ -120,8 +157,10 @@ public final class Writes {
             this.allocAmount = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (this.allocAmount == 1) return this.allocAmount + " Item in External Arrays";
-            else                       return this.formatter.format(this.allocAmount) + " Items in External Arrays";
+            if (this.allocAmount == 1)
+                return this.allocAmount + " Item in External Arrays";
+            else
+                return this.formatter.format(this.allocAmount) + " Items in External Arrays";
         }
     }
 
@@ -147,8 +186,10 @@ public final class Writes {
 
     private void updateSwap(boolean auxwrite) {
         this.swaps++;
-        if (auxwrite) this.auxWrites += 2;
-        else          this.writes += 2;
+        if (auxwrite)
+            this.auxWrites += 2;
+        else
+            this.writes += 2;
     }
 
     private void markSwap(int a, int b) {
@@ -157,15 +198,19 @@ public final class Writes {
     }
 
     public void swap(int[] array, int a, int b, double pause, boolean mark, boolean auxwrite) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
         if (!auxwrite && a >= arrayVisualizer.getCurrentLength()) {
-            System.err.println("Warning: write to index " + a + ", which is out of bounds for the current length (" + arrayVisualizer.getCurrentLength() + ")");
+            System.err.println("Warning: write to index " + a + ", which is out of bounds for the current length ("
+                    + arrayVisualizer.getCurrentLength() + ")");
         }
         if (!auxwrite && b >= arrayVisualizer.getCurrentLength()) {
-            System.err.println("Warning: write to index " + b + ", which is out of bounds for the current length (" + arrayVisualizer.getCurrentLength() + ")");
+            System.err.println("Warning: write to index " + b + ", which is out of bounds for the current length ("
+                    + arrayVisualizer.getCurrentLength() + ")");
         }
 
-        if (mark) this.markSwap(a, b);
+        if (mark)
+            this.markSwap(a, b);
 
         Timer.startLap("Swap");
 
@@ -202,16 +247,34 @@ public final class Writes {
         }
     }
 
+    public void recursion() {
+        this.recursions++;
+    }
+
+    public void recursion(int k) {
+        this.recursions += k;
+    }
+
+    public void recordDepth(int k) {
+        if (this.depth < k)
+            this.depth = k;
+    }
+
     public void write(int[] array, int at, int equals, double pause, boolean mark, boolean auxwrite) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
         if (!auxwrite && at >= arrayVisualizer.getCurrentLength()) {
-            System.err.println("Warning: write to index " + at + ", which is out of bounds for the current length (" + arrayVisualizer.getCurrentLength() + ")");
+            System.err.println("Warning: write to index " + at + ", which is out of bounds for the current length ("
+                    + arrayVisualizer.getCurrentLength() + ")");
         }
 
-        if (mark) Highlights.markArray(1, at);
+        if (mark)
+            Highlights.markArray(1, at);
 
-        if (auxwrite) auxWrites++;
-        else          writes++;
+        if (auxwrite)
+            auxWrites++;
+        else
+            writes++;
 
         Timer.startLap("Write");
 
@@ -224,8 +287,10 @@ public final class Writes {
     }
 
     public <T> void write(T[] array, int at, T equals, double pause, boolean mark) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
-        if (mark) Highlights.markArray(1, at);
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
+        if (mark)
+            Highlights.markArray(1, at);
 
         auxWrites++;
 
@@ -248,11 +313,15 @@ public final class Writes {
     }
 
     public void multiDimWrite(int[][] array, int x, int y, int equals, double pause, boolean mark, boolean auxwrite) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
-        if (mark) Highlights.markArray(1, x);
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
+        if (mark)
+            Highlights.markArray(1, x);
 
-        if (auxwrite) auxWrites++;
-        else          writes++;
+        if (auxwrite)
+            auxWrites++;
+        else
+            writes++;
 
         Timer.startLap();
 
@@ -265,8 +334,10 @@ public final class Writes {
     }
 
     public <T> void multiDimWrite(T[][] array, int x, int y, T equals, double pause, boolean mark) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
-        if (mark) Highlights.markArray(1, x);
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
+        if (mark)
+            Highlights.markArray(1, x);
 
         auxWrites++;
 
@@ -280,9 +351,11 @@ public final class Writes {
         Delays.sleep(pause);
     }
 
-    //Simulates a write in order to better estimate time for values being written to an ArrayList
+    // Simulates a write in order to better estimate time for values being written
+    // to an ArrayList
     public void mockWrite(int length, int pos, int val, double pause) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
         int[] mockArray = new int[length];
 
         this.auxWrites++;
@@ -302,13 +375,15 @@ public final class Writes {
         for (int index = 0; index < registers.length; index++) {
             for (int i = 0; i < registers[index].size(); i++) {
                 this.write(array, total++, registers[index].get(i), 0, mark, auxwrite);
-                if (mark) Delays.sleep(1);
+                if (mark)
+                    Delays.sleep(1);
             }
             this.arrayListClear(registers[index]);
         }
     }
 
-    public void transcribeMSD(int[] array, ArrayList<Integer>[] registers, int start, int min, double sleep, boolean mark, boolean auxwrite) {
+    public void transcribeMSD(int[] array, ArrayList<Integer>[] registers, int start, int min, double sleep,
+            boolean mark, boolean auxwrite) {
         int total = start;
         int temp = 0;
 
@@ -319,7 +394,8 @@ public final class Writes {
         for (int index = registers.length - 1; index >= 0; index--) {
             for (int i = registers[index].size() - 1; i >= 0; i--) {
                 this.write(array, total + min - temp++ - 1, registers[index].get(i), 0, mark, auxwrite);
-                if (mark) Delays.sleep(sleep);
+                if (mark)
+                    Delays.sleep(sleep);
             }
         }
     }
@@ -342,10 +418,11 @@ public final class Writes {
             }
 
             Highlights.markArray(register, pos);
-            if (register == 0) Delays.sleep(sleep);
+            if (register == 0)
+                Delays.sleep(sleep);
         }
         for (int i = 0; i < length; i++) {
-            if (!tempWrite[i]){
+            if (!tempWrite[i]) {
                 this.write(array, i, tempArray[i], 0, false, false);
             }
         }
@@ -357,9 +434,11 @@ public final class Writes {
 
     /**
      * Method to mimic {@link System#arraycopy(Object, int, Object, int, int)}
+     * 
      * @see System#arraycopy(Object, int, Object, int, int)
      */
-    public void arraycopy(int[] src, int srcPos, int[] dest, int destPos, int length, double sleep, boolean mark, boolean aux) {
+    public void arraycopy(int[] src, int srcPos, int[] dest, int destPos, int length, double sleep, boolean mark,
+            boolean aux) {
         int start, end, dir;
         if (src != dest || destPos < srcPos) {
             start = 0;
@@ -400,11 +479,15 @@ public final class Writes {
 
     /**
      * Same as arraycopy, but used to copy in reverse
-     * @deprecated Use {@link Writes#arraycopy(int[], int, int[], int, int, double, boolean, boolean)} instead
+     * 
+     * @deprecated Use
+     *             {@link Writes#arraycopy(int[], int, int[], int, int, double, boolean, boolean)}
+     *             instead
      * @see Writes#arraycopy(int[], int, int[], int, int, double, boolean, boolean)
      */
     @Deprecated
-    public void reversearraycopy(int[] src, int srcPos, int[] dest, int destPos, int length, double sleep, boolean mark, boolean aux) {
+    public void reversearraycopy(int[] src, int srcPos, int[] dest, int destPos, int length, double sleep, boolean mark,
+            boolean aux) {
         arraycopy(src, srcPos, dest, destPos, length, sleep, mark, aux);
     }
 
@@ -444,7 +527,7 @@ public final class Writes {
 
     public void arrayListAdd(List<Integer> aList, int value, boolean mockWrite, double sleep) {
         if (aList instanceof ArrayVList) {
-            ((ArrayVList)aList).add(value, sleep, false);
+            ((ArrayVList) aList).add(value, sleep, false);
             return;
         }
         allocAmount++;
@@ -469,7 +552,7 @@ public final class Writes {
 
     public void deleteArrayList(List<Integer> aList) {
         if (aList instanceof ArrayVList) {
-            ((ArrayVList)aList).delete();
+            ((ArrayVList) aList).delete();
         } else {
             allocAmount -= aList.size();
         }
@@ -481,20 +564,24 @@ public final class Writes {
         }
     }
 
-    //TODO: These methods should be solely controlled by Timer class
+    // TODO: These methods should be solely controlled by Timer class
     public void addTime(long milliseconds) {
-        if (Timer.timerEnabled()) Timer.manualAddTime(milliseconds);
+        if (Timer.timerEnabled())
+            Timer.manualAddTime(milliseconds);
     }
 
     public void setTime(long milliseconds) {
-        if (Timer.timerEnabled()) Timer.manualSetTime(milliseconds);
+        if (Timer.timerEnabled())
+            Timer.manualSetTime(milliseconds);
     }
 
     public void startLap() {
-        if (Timer.timerEnabled()) Timer.startLap();
+        if (Timer.timerEnabled())
+            Timer.startLap();
     }
 
     public void stopLap() {
-        if (Timer.timerEnabled()) Timer.stopLap();
+        if (Timer.timerEnabled())
+            Timer.stopLap();
     }
 }

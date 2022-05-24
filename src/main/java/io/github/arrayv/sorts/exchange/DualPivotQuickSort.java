@@ -22,19 +22,23 @@ public final class DualPivotQuickSort extends Sort {
     }
 
     /*
-     * ArrayV's original example of a basic Dual-Pivot Quicksort may be found here, written by Sebastian Wild (Sebastian on StackOverflow):
-     * https://cs.stackexchange.com/questions/24092/dual-pivot-quicksort-reference-implementation
+     * ArrayV's original example of a basic Dual-Pivot Quicksort may be found here,
+     * written by Sebastian Wild (Sebastian on StackOverflow):
+     * https://cs.stackexchange.com/questions/24092/dual-pivot-quicksort-reference-
+     * implementation
      *
-     * Unfortunately, its O(n^2) worst-case behavior began to cause stack overflow exceptions with large array sizes. This new unoptimized
-     * version is a stripped-down copy of ArrayV's "Optimized Dual-Pivot Quicksort", written by Vladimir Yaroslavskiy.
+     * Unfortunately, its O(n^2) worst-case behavior began to cause stack overflow
+     * exceptions with large array sizes. This new unoptimized
+     * version is a stripped-down copy of ArrayV's "Optimized Dual-Pivot Quicksort",
+     * written by Vladimir Yaroslavskiy.
      * https://codeblab.com/wp-content/uploads/2009/09/DualPivotQuicksort.pdf
      */
 
-    private void dualPivot(int[] array, int left, int right, int divisor) {
+    private void dualPivot(int[] array, int left, int right, int divisor, int depth) {
         int length = right - left;
 
         // insertion sort for tiny array
-        if(length < 4) {
+        if (length < 4) {
             Highlights.clearMark(2);
             insertSorter.customInsertSort(array, left, right + 1, 1, false);
             return;
@@ -43,22 +47,21 @@ public final class DualPivotQuickSort extends Sort {
         int third = length / divisor;
 
         // "medians"
-        int med1 = left  + third;
+        int med1 = left + third;
         int med2 = right - third;
 
-        if(med1 <= left) {
+        if (med1 <= left) {
             med1 = left + 1;
         }
-        if(med2 >= right) {
+        if (med2 >= right) {
             med2 = right - 1;
         }
-        if(Reads.compareValues(array[med1], array[med2]) == -1) {
-            Writes.swap(array, med1, left,  1, true, false);
+        if (Reads.compareValues(array[med1], array[med2]) == -1) {
+            Writes.swap(array, med1, left, 1, true, false);
             Writes.swap(array, med2, right, 1, true, false);
-        }
-        else {
+        } else {
             Writes.swap(array, med1, right, 1, true, false);
-            Writes.swap(array, med2, left,  1, true, false);
+            Writes.swap(array, med2, left, 1, true, false);
         }
 
         // pivots
@@ -66,16 +69,15 @@ public final class DualPivotQuickSort extends Sort {
         int pivot2 = array[right];
 
         // pointers
-        int less  = left  + 1;
+        int less = left + 1;
         int great = right - 1;
 
         // sorting
-        for(int k = less; k <= great; k++) {
-            if(Reads.compareValues(array[k], pivot1) == -1) {
+        for (int k = less; k <= great; k++) {
+            if (Reads.compareValues(array[k], pivot1) == -1) {
                 Writes.swap(array, k, less++, 1, true, false);
-            }
-            else if(Reads.compareValues(array[k], pivot2) == 1) {
-                while(k < great && Reads.compareValues(array[great], pivot2) == 1) {
+            } else if (Reads.compareValues(array[k], pivot2) == 1) {
+                while (k < great && Reads.compareValues(array[great], pivot2) == 1) {
                     great--;
                     Highlights.markArray(3, great);
                     Delays.sleep(1);
@@ -83,7 +85,7 @@ public final class DualPivotQuickSort extends Sort {
                 Writes.swap(array, k, great--, 1, true, false);
                 Highlights.clearMark(3);
 
-                if(Reads.compareValues(array[k], pivot1) == -1) {
+                if (Reads.compareValues(array[k], pivot1) == -1) {
                     Writes.swap(array, k, less++, 1, true, false);
                 }
             }
@@ -92,23 +94,29 @@ public final class DualPivotQuickSort extends Sort {
         // swaps
         int dist = great - less;
 
-        if(dist < 13) {
+        if (dist < 13) {
             divisor++;
         }
-        Writes.swap(array, less  - 1, left,  1, true, false);
+        Writes.swap(array, less - 1, left, 1, true, false);
         Writes.swap(array, great + 1, right, 1, true, false);
 
         // subarrays
-        this.dualPivot(array, left,   less - 2, divisor);
-        if(pivot1 < pivot2) {
-            this.dualPivot(array, less, great, divisor);
+        Writes.recordDepth(depth++);
+        Writes.recursion(1);
+        this.dualPivot(array, left, less - 2, divisor, depth);
+        if (pivot1 < pivot2) {
+            Writes.recordDepth(depth++);
+            Writes.recursion(1);
+            this.dualPivot(array, less, great, divisor, depth);
         }
-        this.dualPivot(array, great + 2, right, divisor);
+        Writes.recordDepth(depth++);
+        Writes.recursion(1);
+        this.dualPivot(array, great + 2, right, divisor, depth);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         this.insertSorter = new InsertionSort(this.arrayVisualizer);
-        this.dualPivot(array, 0, sortLength - 1, 3);
+        this.dualPivot(array, 0, sortLength - 1, 3, 0);
     }
 }

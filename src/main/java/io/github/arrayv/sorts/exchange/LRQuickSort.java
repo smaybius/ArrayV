@@ -18,8 +18,9 @@ public final class LRQuickSort extends Sort {
         this.setBogoSort(false);
     }
 
-    // Thanks to Timo Bingmann for providing a good reference for Quick Sort w/ LR pointers.
-    private void quickSort(int[] a, int p, int r) {
+    // Thanks to Timo Bingmann for providing a good reference for Quick Sort w/ LR
+    // pointers.
+    private void quickSort(int[] a, int p, int r, int depth) {
         int pivot = p + (r - p + 1) / 2;
         int x = a[pivot];
 
@@ -29,12 +30,12 @@ public final class LRQuickSort extends Sort {
         Highlights.markArray(3, pivot);
 
         while (i <= j) {
-            while (Reads.compareValues(a[i], x) == -1){
+            while (Reads.compareValues(a[i], x) == -1) {
                 i++;
                 Highlights.markArray(1, i);
                 Delays.sleep(0.5);
             }
-            while (Reads.compareValues(a[j], x) == 1){
+            while (Reads.compareValues(a[j], x) == 1) {
                 j--;
                 Highlights.markArray(2, j);
                 Delays.sleep(0.5);
@@ -42,10 +43,10 @@ public final class LRQuickSort extends Sort {
 
             if (i <= j) {
                 // Follow the pivot and highlight it.
-                if(i == pivot) {
+                if (i == pivot) {
                     Highlights.markArray(3, j);
                 }
-                if(j == pivot) {
+                if (j == pivot) {
                     Highlights.markArray(3, i);
                 }
 
@@ -56,16 +57,20 @@ public final class LRQuickSort extends Sort {
             }
         }
 
-        if(p < j) {
-            this.quickSort(a, p, j);
+        if (p < j) {
+            Writes.recordDepth(depth++);
+            Writes.recursion(1);
+            this.quickSort(a, p, j, depth);
         }
-        if(i < r) {
-            this.quickSort(a, i, r);
+        if (i < r) {
+            Writes.recordDepth(depth++);
+            Writes.recursion(2);
+            this.quickSort(a, i, r, depth);
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.quickSort(array, 0, currentLength - 1);
+        this.quickSort(array, 0, currentLength - 1, 0);
     }
 }

@@ -30,30 +30,30 @@ SOFTWARE.
  */
 
 public final class ForcedStableQuickSort extends Sort {
-    public ForcedStableQuickSort(ArrayVisualizer arrayVisualizer) {
-        super(arrayVisualizer);
+	public ForcedStableQuickSort(ArrayVisualizer arrayVisualizer) {
+		super(arrayVisualizer);
 
-        this.setSortListName("Forced Stable Quick");
-        this.setRunAllSortsName("Forced Stable Quick Sort");
-        this.setRunSortName("Forced Stable Quicksort");
-        this.setCategory("Exchange Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
-    }
+		this.setSortListName("Forced Stable Quick");
+		this.setRunAllSortsName("Forced Stable Quick Sort");
+		this.setRunSortName("Forced Stable Quicksort");
+		this.setCategory("Exchange Sorts");
+		this.setBucketSort(false);
+		this.setRadixSort(false);
+		this.setUnreasonablySlow(false);
+		this.setUnreasonableLimit(0);
+		this.setBogoSort(false);
+	}
 
 	private void medianOfThree(int[] array, int[] key, int a, int b) {
-		int m = a+(b-1-a)/2;
+		int m = a + (b - 1 - a) / 2;
 
-		if(this.stableComp(array, key, a, m))
+		if (this.stableComp(array, key, a, m))
 			this.stableSwap(array, key, a, m);
 
-		if(this.stableComp(array, key, m, b-1)) {
-			this.stableSwap(array, key, m, b-1);
+		if (this.stableComp(array, key, m, b - 1)) {
+			this.stableSwap(array, key, m, b - 1);
 
-			if(this.stableComp(array, key, a, m))
+			if (this.stableComp(array, key, a, m))
 				return;
 		}
 
@@ -68,48 +68,53 @@ public final class ForcedStableQuickSort extends Sort {
 
 	private void stableSwap(int[] array, int[] key, int a, int b) {
 		Writes.swap(array, a, b, 0, true, false);
-		Writes.swap(key,   a, b, 1, false, true);
+		Writes.swap(key, a, b, 1, false, true);
 	}
 
 	private int partition(int[] array, int[] key, int a, int b, int p) {
-        int i = a - 1, j = b;
+		int i = a - 1, j = b;
 		Highlights.markArray(3, p);
 
-        while(true) {
-			do i++;
-            while(i < j && !this.stableComp(array, key, i, p));
+		while (true) {
+			do
+				i++;
+			while (i < j && !this.stableComp(array, key, i, p));
 
-			do j--;
-			while(j >= i && this.stableComp(array, key, j, p));
+			do
+				j--;
+			while (j >= i && this.stableComp(array, key, j, p));
 
-            if(i < j) this.stableSwap(array, key, i, j);
-            else      return j;
-        }
-    }
+			if (i < j)
+				this.stableSwap(array, key, i, j);
+			else
+				return j;
+		}
+	}
 
-	private void quickSort(int[] array, int[] key, int a, int b) {
-		if(b-a < 3) {
-			if(b-a == 2 && this.stableComp(array, key, a, a+1))
-				this.stableSwap(array, key, a, a+1);
+	private void quickSort(int[] array, int[] key, int a, int b, int depth) {
+		if (b - a < 3) {
+			if (b - a == 2 && this.stableComp(array, key, a, a + 1))
+				this.stableSwap(array, key, a, a + 1);
 			return;
 		}
 
 		this.medianOfThree(array, key, a, b);
-		int p = this.partition(array, key, a+1, b, a);
+		int p = this.partition(array, key, a + 1, b, a);
 		this.stableSwap(array, key, a, p);
-
-		this.quickSort(array, key, a, p);
-		this.quickSort(array, key, p+1, b);
+		Writes.recordDepth(depth++);
+		Writes.recursion(2);
+		this.quickSort(array, key, a, p, depth);
+		this.quickSort(array, key, p + 1, b, depth);
 	}
 
-    @Override
-    public void runSort(int[] array, int length, int bucketCount) {
+	@Override
+	public void runSort(int[] array, int length, int bucketCount) {
 		int[] key = Writes.createExternalArray(length);
-		for(int i = 0; i < length; i++)
+		for (int i = 0; i < length; i++)
 			Writes.write(key, i, i, 0.5, true, true);
 
-		this.quickSort(array, key, 0, length);
+		this.quickSort(array, key, 0, length, 0);
 
 		Writes.deleteExternalArray(key);
-    }
+	}
 }

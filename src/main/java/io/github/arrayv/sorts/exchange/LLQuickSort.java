@@ -22,9 +22,9 @@ public final class LLQuickSort extends Sort {
         int pivot = array[hi];
         int i = lo;
 
-        for(int j = lo; j < hi; j++) {
+        for (int j = lo; j < hi; j++) {
             Highlights.markArray(1, j);
-            if(Reads.compareValues(array[j], pivot) < 0) {
+            if (Reads.compareValues(array[j], pivot) < 0) {
                 Writes.swap(array, i, j, 1, true, false);
                 i++;
             }
@@ -34,16 +34,18 @@ public final class LLQuickSort extends Sort {
         return i;
     }
 
-    private void quickSort(int[] array, int lo, int hi) {
-        if(lo < hi) {
+    private void quickSort(int[] array, int lo, int hi, int depth) {
+        if (lo < hi) {
             int p = this.partition(array, lo, hi);
-            this.quickSort(array, lo, p - 1);
-            this.quickSort(array, p + 1, hi);
+            Writes.recordDepth(depth++);
+            Writes.recursion(2);
+            this.quickSort(array, lo, p - 1, depth);
+            this.quickSort(array, p + 1, hi, depth);
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.quickSort(array, 0, currentLength - 1);
+        this.quickSort(array, 0, currentLength - 1, 0);
     }
 }

@@ -20,11 +20,11 @@ public final class WeakHeapSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private static int getBitwiseFlag(int[] bits, int x) {
+    public static int getBitwiseFlag(int[] bits, int x) {
         return ((bits[(x) >> 3] >> ((x) & 7)) & 1);
     }
 
-    private void toggleBitwiseFlag(int[] bits, int x) {
+    public void toggleBitwiseFlag(int[] bits, int x) {
         int flag = bits[(x) >> 3];
         flag ^= 1 << ((x) & 7);
 
@@ -34,9 +34,8 @@ public final class WeakHeapSort extends Sort {
     /*
      * Merge Weak Heap
      */
-    private void weakHeapMerge(int[] array, int[] bits, int i, int j) {
-        if (Reads.compareValues(array[i], array[j]) == -1)
-        {
+    public void weakHeapMerge(int[] array, int[] bits, int i, int j) {
+        if (Reads.compareValues(array[i], array[j]) == -1) {
             this.toggleBitwiseFlag(bits, j);
             Writes.swap(array, i, j, 1, true, false);
         }

@@ -25,22 +25,40 @@ SOFTWARE.
  *
  */
 
-public final class PairwiseSortRecursive extends Sort {
-    public PairwiseSortRecursive(ArrayVisualizer arrayVisualizer) {
+public final class PairwiseSortParallel extends Sort {
+    public PairwiseSortParallel(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        this.setSortListName("Pairwise (Recursive)");
-        this.setRunAllSortsName("Recursive Pairwise Sorting Network");
-        this.setRunSortName("Recursive Pairwise Sort");
+        this.setSortListName("Pairwise (Parallel)");
+        this.setRunAllSortsName("Parallel Pairwise Sorting Network");
+        this.setRunSortName("Parallel Pairwise Sort");
         this.setCategory("Concurrent Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
+        this.setUnreasonablySlow(true);
+        this.setUnreasonableLimit(4096);
         this.setBogoSort(false);
     }
 
-    private void pairwiserecursive(int[] array, int start, int end, int gap, double sleep, int depth) {
+    private int[] array;
+
+    private class PairwiseThread extends Thread {
+        private int start, gap, end;
+        private double sleep;
+
+        PairwiseThread(int start, int end, int gap, double sleep) {
+            this.start = start;
+            this.end = end;
+            this.gap = gap;
+            this.sleep = sleep;
+        }
+
+        public void run() {
+            PairwiseSortParallel.this.pairwiseParallel(start, end, gap, sleep);
+        }
+    }
+
+    private void pairwiseParallel(int start, int end, int gap, double sleep) {
         if (start == end - gap) {
             return;
         }
@@ -52,15 +70,29 @@ public final class PairwiseSortRecursive extends Sort {
             b += (2 * gap);
         }
         if (((end - start) / gap) % 2 == 0) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.pairwiserecursive(array, start, end, gap * 2, sleep, depth);
-            this.pairwiserecursive(array, start + gap, end + gap, gap * 2, sleep, depth);
+            PairwiseThread left = new PairwiseThread(start, end, gap * 2, sleep);
+            PairwiseThread right = new PairwiseThread(start + gap, end + gap, gap * 2, sleep);
+            left.start();
+            right.start();
+
+            try {
+                left.join();
+                right.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         } else {
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.pairwiserecursive(array, start, end + gap, gap * 2, sleep, depth);
-            this.pairwiserecursive(array, start + gap, end, gap * 2, sleep, depth);
+            PairwiseThread left = new PairwiseThread(start, end + gap, gap * 2, sleep);
+            PairwiseThread right = new PairwiseThread(start + gap, end, gap * 2, sleep);
+            left.start();
+            right.start();
+
+            try {
+                left.join();
+                right.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
         int a = 1;
         while (a < ((end - start) / gap)) {
@@ -83,6 +115,7 @@ public final class PairwiseSortRecursive extends Sort {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.pairwiserecursive(array, 0, sortLength, 1, 0.5, 0);
+        this.array = array;
+        this.pairwiseParallel(0, sortLength, 1, 0.5);
     }
 }

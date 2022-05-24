@@ -5,16 +5,13 @@ SortPrompt.setSortThreadForCategory('Hybrid Sorts', 32) {
     run HybridCombSort go 1024.numbers
     run IntroCircleSortRecursive go 1024.numbers
     run IntroCircleSortIterative go 1024.numbers
-    run BinaryMergeSort go 2048.numbers
     run MergeInsertionSort go 2048.numbers, 1.75.speed
     run WeaveMergeSort go 2048.numbers, ((arrayv.arrayManager.containsShuffle(Shuffles.RANDOM) ? 1.65 : 6.5).speed)
     run TimSort go 2048.numbers
-    run CocktailMergeSort go 2048.numbers
     run LaziestSort go 1024.numbers
     run WikiSort go 2048.numbers
     run GrailSort go 2048.numbers
     run AdaptiveGrailSort go 2048.numbers
-    run UnstableGrailSort go 2048.numbers
     run SqrtSort go 2048.numbers
     run KotaSort go 2048.numbers
     run EctaSort go 2048.numbers
@@ -32,6 +29,5 @@ SortPrompt.setSortThreadForCategory('Hybrid Sorts', 32) {
     run StacklessHybridQuickSort go 2048.numbers, 0.75.speed
     run StacklessDualPivotQuickSort go 2048.numbers, 0.75.speed
     run PDQBranchedSort go 2048.numbers, 0.75.speed
-    run PDQBranchlessSort go 2048.numbers, 0.75.speed
     run DropMergeSort go 2048.numbers, 0.75.speed
 }

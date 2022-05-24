@@ -44,34 +44,38 @@ public final class CircloidSort extends Sort {
         this.setBogoSort(false);
     }
 
-	private boolean circle(int[] array, int left, int right) {
+    private boolean circle(int[] array, int left, int right) {
         int a = left;
         int b = right;
         boolean swapped = false;
-        while(a < b) {
-        	if(Reads.compareIndices(array, a, b, 0.25, true) == 1) {
-        		Writes.swap(array, a, b, 1, true, false);
-        		swapped = true;
-        	}
-    		a++;
-    		b--;
-    		if(a==b) {
-    			b++;
-    		}
+        while (a < b) {
+            if (Reads.compareIndices(array, a, b, 0.25, true) == 1) {
+                Writes.swap(array, a, b, 1, true, false);
+                swapped = true;
+            }
+            a++;
+            b--;
+            if (a == b) {
+                b++;
+            }
         }
         return swapped;
     }
 
-	private boolean circlePass(int[] array, int left, int right) {
-		if(left >= right) return false;
-		int mid = (left + right) / 2;
-		boolean l = this.circlePass(array, left, mid);
-		boolean r = this.circlePass(array, mid+1, right);
-		return this.circle(array, left, right) || l || r;
+    private boolean circlePass(int[] array, int left, int right, int depth) {
+        if (left >= right)
+            return false;
+        int mid = (left + right) / 2;
+        Writes.recordDepth(depth++);
+        Writes.recursion(2);
+        boolean l = this.circlePass(array, left, mid, depth);
+        boolean r = this.circlePass(array, mid + 1, right, depth);
+        return this.circle(array, left, right) || l || r;
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-    	while(this.circlePass(array, 0, length-1));
+        while (this.circlePass(array, 0, length - 1, 0))
+            ;
     }
 }

@@ -30,19 +30,19 @@ SOFTWARE.
  */
 
 public final class TableSort extends Sort {
-    public TableSort(ArrayVisualizer arrayVisualizer) {
-        super(arrayVisualizer);
+	public TableSort(ArrayVisualizer arrayVisualizer) {
+		super(arrayVisualizer);
 
-        this.setSortListName("Table");
-        this.setRunAllSortsName("Table Sort");
-        this.setRunSortName("Tablesort");
-        this.setCategory("Exchange Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
-    }
+		this.setSortListName("Table");
+		this.setRunAllSortsName("Table Sort");
+		this.setRunSortName("Tablesort");
+		this.setCategory("Exchange Sorts");
+		this.setBucketSort(false);
+		this.setRadixSort(false);
+		this.setUnreasonablySlow(false);
+		this.setUnreasonableLimit(0);
+		this.setBogoSort(false);
+	}
 
 	private boolean stableComp(int[] array, int[] table, int a, int b) {
 		int comp = Reads.compareIndices(array, table[a], table[b], 0.5, true);
@@ -51,15 +51,15 @@ public final class TableSort extends Sort {
 	}
 
 	private void medianOfThree(int[] array, int[] table, int a, int b) {
-		int m = a+(b-1-a)/2;
+		int m = a + (b - 1 - a) / 2;
 
-		if(this.stableComp(array, table, a, m))
+		if (this.stableComp(array, table, a, m))
 			Writes.swap(table, a, m, 1, true, true);
 
-		if(this.stableComp(array, table, m, b-1)) {
-			Writes.swap(table, m, b-1, 1, true, true);
+		if (this.stableComp(array, table, m, b - 1)) {
+			Writes.swap(table, m, b - 1, 1, true, true);
 
-			if(this.stableComp(array, table, a, m))
+			if (this.stableComp(array, table, a, m))
 				return;
 		}
 
@@ -67,49 +67,54 @@ public final class TableSort extends Sort {
 	}
 
 	private int partition(int[] array, int[] table, int a, int b, int p) {
-        int i = a-1, j = b;
+		int i = a - 1, j = b;
 		Highlights.markArray(3, p);
 
-        while(true) {
-			do i++;
-            while(i < j && !this.stableComp(array, table, i, p));
+		while (true) {
+			do
+				i++;
+			while (i < j && !this.stableComp(array, table, i, p));
 
-			do j--;
-			while(j >= i && this.stableComp(array, table, j, p));
+			do
+				j--;
+			while (j >= i && this.stableComp(array, table, j, p));
 
-            if(i < j) Writes.swap(table, i, j, 1, true, true);
-            else      return j;
-        }
-    }
+			if (i < j)
+				Writes.swap(table, i, j, 1, true, true);
+			else
+				return j;
+		}
+	}
 
-	private void quickSort(int[] array, int[] table, int a, int b) {
-		if(b-a < 3) {
-			if(b-a == 2 && this.stableComp(array, table, a, a+1))
-				Writes.swap(table, a, a+1, 1, true, true);
+	private void quickSort(int[] array, int[] table, int a, int b, int depth) {
+		if (b - a < 3) {
+			if (b - a == 2 && this.stableComp(array, table, a, a + 1))
+				Writes.swap(table, a, a + 1, 1, true, true);
 			return;
 		}
 
 		this.medianOfThree(array, table, a, b);
-		int p = this.partition(array, table, a+1, b, a);
+		int p = this.partition(array, table, a + 1, b, a);
 		Writes.swap(table, a, p, 1, true, true);
-
-		this.quickSort(array, table, a, p);
-		this.quickSort(array, table, p+1, b);
+		Writes.recordDepth(depth++);
+		Writes.recursion(2);
+		this.quickSort(array, table, a, p, depth);
+		this.quickSort(array, table, p + 1, b, depth);
 	}
 
-    @Override
-    public void runSort(int[] array, int currentLength, int bucketCount) {
+	@Override
+	public void runSort(int[] array, int currentLength, int bucketCount) {
 		int[] table = Writes.createExternalArray(currentLength);
-		for(int i = 0; i < currentLength; i++)
+		for (int i = 0; i < currentLength; i++)
 			Writes.write(table, i, i, 0.5, true, true);
 
-    	this.quickSort(array, table, 0, currentLength);
+		this.quickSort(array, table, 0, currentLength, 0);
 		Highlights.clearMark(3);
 
-		for(int i = 0; i < table.length; i++) {
+		for (int i = 0; i < table.length; i++) {
 			Highlights.markArray(2, i);
 
-			if(Reads.compareOriginalValues(i, table[i]) != 0) {
+			if (Reads.compareOriginalValues(i, table[i]) != 0) {
 				int t = array[i];
 				int j = i, next = table[i];
 
@@ -119,8 +124,7 @@ public final class TableSort extends Sort {
 
 					j = next;
 					next = table[next];
-				}
-				while(Reads.compareOriginalValues(next, i) != 0);
+				} while (Reads.compareOriginalValues(next, i) != 0);
 
 				Writes.write(array, j, t, 1, true, false);
 				Writes.write(table, j, j, 1, true, true);
@@ -128,5 +132,5 @@ public final class TableSort extends Sort {
 		}
 
 		Writes.deleteExternalArray(table);
-    }
+	}
 }

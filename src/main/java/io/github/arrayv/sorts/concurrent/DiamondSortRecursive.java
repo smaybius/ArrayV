@@ -5,6 +5,7 @@ import io.github.arrayv.sorts.templates.Sort;
 
 public final class DiamondSortRecursive extends Sort {
     private final double DELAY = 0.05;
+
     public DiamondSortRecursive(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
         this.setSortListName("Diamond (Recursive)");
@@ -18,7 +19,8 @@ public final class DiamondSortRecursive extends Sort {
         this.setBogoSort(false);
     }
 
-    private void sort(int[] arr, int start, int stop, boolean merge) {
+    private void sort(int[] arr, int start, int stop, boolean merge, int depth) {
+
         if (stop - start == 2) {
             if (Reads.compareIndices(arr, start, stop - 1, DELAY, true) == 1)
                 Writes.swap(arr, start, stop - 1, DELAY, true, false);
@@ -26,18 +28,22 @@ public final class DiamondSortRecursive extends Sort {
             double div = (stop - start) / 4d;
             int mid = (stop - start) / 2 + start;
             if (merge) {
-                this.sort(arr, start, mid, true);
-                this.sort(arr, mid, stop, true);
+                Writes.recordDepth(depth++);
+                Writes.recursion(2);
+                this.sort(arr, start, mid, true, depth);
+                this.sort(arr, mid, stop, true, depth);
             }
-            this.sort(arr, (int) div + start, (int) (div * 3) + start, false);
-            this.sort(arr, start, mid, false);
-            this.sort(arr, mid, stop, false);
-            this.sort(arr, (int) div + start, (int) (div * 3) + start, false);
+            Writes.recordDepth(depth++);
+            Writes.recursion(4);
+            this.sort(arr, (int) div + start, (int) (div * 3) + start, false, depth);
+            this.sort(arr, start, mid, false, depth);
+            this.sort(arr, mid, stop, false, depth);
+            this.sort(arr, (int) div + start, (int) (div * 3) + start, false, depth);
         }
     }
 
     @Override
     public void runSort(int[] arr, int length, int buckets) {
-        this.sort(arr, 0, length, true);
+        this.sort(arr, 0, length, true, 0);
     }
 }

@@ -41,29 +41,33 @@ public final class ThreeSmoothCombSortRecursive extends Sort {
         this.setBogoSort(false);
     }
 
-    private void recursiveComb(int[] array, int pos, int gap, int end) {
-		if(pos+gap > end) return;
+    private void recursiveComb(int[] array, int pos, int gap, int end, int depth) {
+        if (pos + gap > end)
+            return;
+        Writes.recordDepth(depth++);
+        Writes.recursion(2);
+        this.recursiveComb(array, pos, gap * 2, end, depth);
+        this.recursiveComb(array, pos + gap, gap * 2, end, depth);
 
-		this.recursiveComb(array, pos, gap*2, end);
-		this.recursiveComb(array, pos+gap, gap*2, end);
+        this.powerOfThree(array, pos, gap, end, depth);
+    }
 
-		this.powerOfThree(array, pos, gap, end);
-	}
+    private void powerOfThree(int[] array, int pos, int gap, int end, int depth) {
+        if (pos + gap > end)
+            return;
+        Writes.recordDepth(depth++);
+        Writes.recursion(3);
+        this.powerOfThree(array, pos, gap * 3, end, depth);
+        this.powerOfThree(array, pos + gap, gap * 3, end, depth);
+        this.powerOfThree(array, pos + 2 * gap, gap * 3, end, depth);
 
-	private void powerOfThree(int[] array, int pos, int gap, int end) {
-		if(pos+gap > end) return;
-
-		this.powerOfThree(array, pos, gap*3, end);
-		this.powerOfThree(array, pos+gap, gap*3, end);
-		this.powerOfThree(array, pos+2*gap, gap*3, end);
-
-		for(int i = pos; i+gap < end; i+=gap)
-			if(Reads.compareIndices(array, i, i+gap, 0.5, true) == 1)
-				Writes.swap(array, i, i+gap, 0.5, false, false);
-	}
+        for (int i = pos; i + gap < end; i += gap)
+            if (Reads.compareIndices(array, i, i + gap, 0.5, true) == 1)
+                Writes.swap(array, i, i + gap, 0.5, false, false);
+    }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.recursiveComb(array, 0, 1, length);
+        this.recursiveComb(array, 0, 1, length, 0);
     }
 }

@@ -49,7 +49,7 @@ public final class MergeBogoSort extends BogoSorting {
     }
 
     private void bogoWeave(int[] array, int[] tmp, int start, int mid, int end) {
-        this.bogoCombo(array, start, end, end-mid, false);
+        this.bogoCombo(array, start, end, end - mid, false);
 
         int low = start;
         int high = mid;
@@ -62,14 +62,17 @@ public final class MergeBogoSort extends BogoSorting {
         }
     }
 
-    private void mergeBogo(int[] array, int[] tmp, int start, int end) {
-        if (start >= end-1) return;
+    private void mergeBogo(int[] array, int[] tmp, int start, int end, int depth) {
+        if (start >= end - 1)
+            return;
 
-        int mid = (start+end)/2;
-        mergeBogo(array, tmp, start, mid);
-        mergeBogo(array, tmp, mid, end);
+        int mid = (start + end) / 2;
+        Writes.recordDepth(depth++);
+        Writes.recursion(2);
+        mergeBogo(array, tmp, start, mid, depth);
+        mergeBogo(array, tmp, mid, end, depth);
 
-        Writes.arraycopy(array, start, tmp, start, end-start, this.delay, true, true);
+        Writes.arraycopy(array, start, tmp, start, end - start, this.delay, true, true);
 
         while (!this.isRangeSorted(array, start, end))
             bogoWeave(array, tmp, start, mid, end);
@@ -79,7 +82,7 @@ public final class MergeBogoSort extends BogoSorting {
     public void runSort(int[] array, int sortLength, int bucketCount) {
         int[] tmp = Writes.createExternalArray(sortLength);
 
-        mergeBogo(array, tmp, 0, sortLength);
+        mergeBogo(array, tmp, 0, sortLength, 0);
 
         Writes.deleteExternalArray(tmp);
     }
