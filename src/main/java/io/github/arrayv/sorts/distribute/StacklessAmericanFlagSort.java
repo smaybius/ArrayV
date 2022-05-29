@@ -99,7 +99,6 @@ public final class StacklessAmericanFlagSort extends Sort {
 
 		int[] cnts = Writes.createExternalArray(r),
 				offs = Writes.createExternalArray(r);
-		Writes.changeAllocAmount(2 * r);
 
 		for (int j = i; j < b; j++) {
 			Highlights.markArray(1, j);

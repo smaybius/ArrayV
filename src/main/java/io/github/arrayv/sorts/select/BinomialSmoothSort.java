@@ -25,7 +25,7 @@ public final class BinomialSmoothSort extends Sort {
         return count;
     }
 
-    public void thrift(int[] array, int node, boolean parent, boolean root) {
+    public void thrift(int[] array, int node, boolean parent, boolean root, int depth) {
         root = root && (node >= (1 << height(node)));
         if (!root && !parent)
             return;
@@ -37,7 +37,9 @@ public final class BinomialSmoothSort extends Sort {
         if (Reads.compareValues(array[node - (1 << choice)], array[node]) != 1)
             return;
         Writes.swap(array, node, node - (1 << choice), .65, true, false);
-        thrift(array, node - (1 << choice), (node - (1 << choice)) % 2 == 1, choice == height(node));
+        Writes.recordDepth(depth++);
+        Writes.recursion(1);
+        thrift(array, node - (1 << choice), (node - (1 << choice)) % 2 == 1, choice == height(node), depth);
     }
 
     @Override
@@ -45,11 +47,11 @@ public final class BinomialSmoothSort extends Sort {
         // heapify from 0 to length - 1
         int Node;
         for (Node = 1; Node < length; Node++)
-            thrift(array, Node, Node % 2 == 1, (Node + (1 << height(Node)) >= length));
+            thrift(array, Node, Node % 2 == 1, (Node + (1 << height(Node)) >= length), 0);
         for (Node -= (Node - 1) % 2; Node > 2; Node -= 2)
             // extract largest and second largest(already at end), then heapify from 0 to
             // Node - 1
             for (int Child = height(Node) - 1; Child >= 0; Child--)
-                thrift(array, Node - (1 << Child), false, true);
+                thrift(array, Node - (1 << Child), false, true, 0);
     }
 }

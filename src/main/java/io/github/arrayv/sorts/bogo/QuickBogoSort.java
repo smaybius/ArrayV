@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -30,46 +30,55 @@ SOFTWARE.
  */
 
 /**
- * Smart Bogobogosort is like bogosort, but it makes the observation that
- * the sorted copy produced to check if the array is sorted, is sorted.
- * This is then simplified so that no copy of the array is needed.
- * <ul>
- * <li>All but the last element of the array are sorted using Bogobogosort.
- * <li>If the last element of the sorted section is no greater than the last
- * element of the array,
- * then the copy is sorted. Otherwise, the array is shuffled and the process is
- * repeated.
- * </ul>
+ * Quick Bogosort is like Quicksort, but after selecting a pivot,
+ * it randomly shuffles the array until the pivot partitions the array.
+ * The pivot is tracked as the array is shuffled.
  */
-public final class SmartBogoBogoSort extends BogoSorting {
-    public SmartBogoBogoSort(ArrayVisualizer arrayVisualizer) {
+public final class QuickBogoSort extends BogoSorting {
+    public QuickBogoSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        this.setSortListName("Smart Bogo Bogo");
-        this.setRunAllSortsName("Smart Bogo Bogo Sort");
-        this.setRunSortName("Smart Bogobogosort");
+        this.setSortListName("Quick Bogo");
+        this.setRunAllSortsName("Quick Bogo Sort");
+        this.setRunSortName("Quick Bogosort");
         this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(11);
+        this.setUnreasonableLimit(22);
         this.setBogoSort(true);
     }
 
-    private void smartBogoBogo(int[] array, int length, int depth) {
-        if (length == 1)
+    private int quickBogoSwap(int[] array, int start, int pivot, int end) {
+        for (int i = start; i < end; i++) {
+            int j = BogoSorting.randInt(i, end);
+            if (pivot == i)
+                pivot = j;
+            else if (pivot == j)
+                pivot = i;
+            Writes.swap(array, i, j, this.delay, true, false);
+        }
+        return pivot;
+    }
+
+    private void quickBogo(int[] array, int start, int end, int depth) {
+        if (start >= end - 1)
             return;
+
+        int pivot = start;
+        // worst-case pivot (linear distribution)
+        // for (; pivot < end; ++pivot)
+        // if (array[pivot] == (start+end)/2) break;
+        while (!isRangePartitioned(array, start, pivot, end))
+            pivot = quickBogoSwap(array, start, pivot, end);
         Writes.recordDepth(depth++);
         Writes.recursion(2);
-        smartBogoBogo(array, length - 1, depth);
-        while (Reads.compareIndices(array, length - 2, length - 1, this.delay, true) > 0) {
-            this.bogoSwap(array, 0, length, false);
-            smartBogoBogo(array, length - 1, depth);
-        }
+        quickBogo(array, start, pivot, depth);
+        quickBogo(array, pivot + 1, end, depth);
     }
 
     @Override
-    public void runSort(int[] array, int length, int bucketCount) {
-        smartBogoBogo(array, length, 0);
+    public void runSort(int[] array, int sortLength, int bucketCount) {
+        quickBogo(array, 0, sortLength, 0);
     }
 }

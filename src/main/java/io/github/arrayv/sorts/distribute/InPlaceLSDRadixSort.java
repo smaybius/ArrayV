@@ -51,7 +51,6 @@ public final class InPlaceLSDRadixSort extends Sort {
 
         int pos = 0;
         int[] vregs = Writes.createExternalArray(bucketCount - 1);
-        Writes.changeAllocAmount(vregs.length);
 
         int maxpower = Reads.analyzeMaxLog(array, sortLength, bucketCount, 0, false);
 

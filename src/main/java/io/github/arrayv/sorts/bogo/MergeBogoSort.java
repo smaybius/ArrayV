@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -30,17 +30,16 @@ SOFTWARE.
  */
 
 /**
- * Quick Bogosort is like Quicksort, but after selecting a pivot,
- * it randomly shuffles the array until the pivot partitions the array.
- * The pivot is tracked as the array is shuffled.
+ * Merge Bogosort is like Merge Sort, but when merging,
+ * it randomly weaves the two subarrays together until they are sorted.
  */
-public final class QuickBogoSort extends BogoSorting {
-    public QuickBogoSort(ArrayVisualizer arrayVisualizer) {
+public final class MergeBogoSort extends BogoSorting {
+    public MergeBogoSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        this.setSortListName("Quick Bogo");
-        this.setRunAllSortsName("Quick Bogo Sort");
-        this.setRunSortName("Quick Bogosort");
+        this.setSortListName("Merge Bogo");
+        this.setRunAllSortsName("Merge Bogo Sort");
+        this.setRunSortName("Merge Bogosort");
         this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
@@ -49,36 +48,42 @@ public final class QuickBogoSort extends BogoSorting {
         this.setBogoSort(true);
     }
 
-    private int quickBogoSwap(int[] array, int start, int pivot, int end) {
-        for (int i = start; i < end; i++) {
-            int j = BogoSorting.randInt(i, end);
-            if (pivot == i)
-                pivot = j;
-            else if (pivot == j)
-                pivot = i;
-            Writes.swap(array, i, j, this.delay, true, false);
+    private void bogoWeave(int[] array, int[] tmp, int start, int mid, int end) {
+        this.bogoCombo(array, start, end, end - mid, false);
+
+        int low = start;
+        int high = mid;
+        for (int i = start; i < end; ++i) {
+            Delays.sleep(this.delay);
+            if (Reads.compareValues(array[i], 0) == 0)
+                Writes.write(array, i, tmp[low++], this.delay, true, false);
+            else
+                Writes.write(array, i, tmp[high++], this.delay, true, false);
         }
-        return pivot;
     }
 
-    private void quickBogo(int[] array, int start, int end, int depth) {
+    private void mergeBogo(int[] array, int[] tmp, int start, int end, int depth) {
         if (start >= end - 1)
             return;
 
-        int pivot = start;
-        // worst-case pivot (linear distribution)
-        // for (; pivot < end; ++pivot)
-        // if (array[pivot] == (start+end)/2) break;
-        while (!isRangePartitioned(array, start, pivot, end))
-            pivot = quickBogoSwap(array, start, pivot, end);
+        int mid = (start + end) / 2;
         Writes.recordDepth(depth++);
         Writes.recursion(2);
-        quickBogo(array, start, pivot, depth);
-        quickBogo(array, pivot + 1, end, depth);
+        mergeBogo(array, tmp, start, mid, depth);
+        mergeBogo(array, tmp, mid, end, depth);
+
+        Writes.arraycopy(array, start, tmp, start, end - start, this.delay, true, true);
+
+        while (!this.isRangeSorted(array, start, end))
+            bogoWeave(array, tmp, start, mid, end);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) {
-        quickBogo(array, 0, sortLength, 0);
+        int[] tmp = Writes.createExternalArray(sortLength);
+
+        mergeBogo(array, tmp, 0, sortLength, 0);
+
+        Writes.deleteExternalArray(tmp);
     }
 }

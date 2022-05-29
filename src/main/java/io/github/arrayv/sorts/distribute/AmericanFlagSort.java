@@ -80,9 +80,8 @@ public final class AmericanFlagSort extends Sort {
 
     private void sort(int[] array, int start, int length, int divisor, int depth) {
         // First pass - find counts
-        int[] count = new int[this.NUMBER_OF_BUCKETS];
-        int[] offset = new int[this.NUMBER_OF_BUCKETS];
-        Writes.changeAllocAmount(2 * this.NUMBER_OF_BUCKETS);
+        int[] count = Writes.createExternalArray(this.NUMBER_OF_BUCKETS);
+        int[] offset = Writes.createExternalArray(this.NUMBER_OF_BUCKETS);
         int digit = 0;
 
         for (int i = start; i < length; i++) {

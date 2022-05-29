@@ -1,18 +1,24 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
 
-/* MIT License
-Copyright (c) 2020 Walker Gray
+/*
+ *
+MIT License
+
+Copyright (c) 2019 w0rthy
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,52 +26,30 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ *
+ */
 
 /**
- * Deterministic Bogosort cycles through
- * every permutation of the array until it is sorted.
- * <p>
- * Uses Heap's algorithm.
+ * Bogosort randomly shuffles the array until it is sorted.
  */
-public final class DeterministicBogoSort extends BogoSorting {
-
-    public DeterministicBogoSort(ArrayVisualizer arrayVisualizer) {
+public final class BogoSort extends BogoSorting {
+    public BogoSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        this.setSortListName("Deterministic Bogo");
-        this.setRunAllSortsName("Deterministic Bogo Sort");
-        this.setRunSortName("Deterministic Bogosort");
+        this.setSortListName("Bogo");
+        this.setRunAllSortsName("Bogo Sort");
+        this.setRunSortName("Bogosort");
         this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(11);
+        this.setUnreasonableLimit(10);
         this.setBogoSort(true);
-    }
-
-    private boolean permutationSort(int[] array, int depth, int length, int recursion) {
-        if (depth >= length - 1)
-            return this.isArraySorted(array, length);
-
-        for (int i = length - 1; i > depth; --i) {
-            Writes.recordDepth(recursion++);
-            Writes.recursion(1);
-            if (permutationSort(array, depth + 1, length, recursion))
-                return true;
-
-            if ((length - depth) % 2 == 0)
-                Writes.swap(array, depth, i, this.delay, true, false);
-            else
-                Writes.swap(array, depth, length - 1, this.delay, true, false);
-        }
-        Writes.recordDepth(recursion++);
-        Writes.recursion(1);
-        return permutationSort(array, depth + 1, length, recursion);
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        permutationSort(array, 0, length, 0);
+        while (!this.isArraySorted(array, length))
+            this.bogoSwap(array, 0, length, false);
     }
 }

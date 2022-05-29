@@ -35,7 +35,7 @@ public final class TernaryHeapSort extends Sort {
         return 3 * i + 3;
     }
 
-    private void maxHeapify(int[] array, int i) {
+    private void maxHeapify(int[] array, int i, int depth) {
 
         int leftChild = TernaryHeapSort.leftBranch(i);
         int rightChild = TernaryHeapSort.rightBranch(i);
@@ -54,14 +54,16 @@ public final class TernaryHeapSort extends Sort {
 
         if (largest != i) {
             Writes.swap(array, i, largest, 1, true, false);
-            this.maxHeapify(array, largest);
+            Writes.recordDepth(depth++);
+            Writes.recursion(1);
+            this.maxHeapify(array, largest, depth);
         }
     }
 
     public void buildMaxTernaryHeap(int[] array, int length) {
         heapSize = length - 1;
         for (int i = length - 1 / 3; i >= 0; i--)
-            this.maxHeapify(array, i);
+            this.maxHeapify(array, i, 0);
     }
 
     @Override
@@ -72,7 +74,7 @@ public final class TernaryHeapSort extends Sort {
             Writes.swap(array, 0, i, 1, true, false); // add last element on array, i.e heap root
 
             heapSize = heapSize - 1; // shrink heap by 1
-            this.maxHeapify(array, 0);
+            this.maxHeapify(array, 0, 0);
         }
     }
 }

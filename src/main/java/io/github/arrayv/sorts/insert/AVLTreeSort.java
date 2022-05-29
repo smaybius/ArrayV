@@ -78,13 +78,15 @@ public final class AVLTreeSort extends Sort {
 		/**
 		 * Recursively adds an element to the subtree whose root is this node
 		 *
-		 * @param addPointer A pointer to the array telling what element is to be inserted
+		 * @param addPointer A pointer to the array telling what element is to be
+		 *                   inserted
 		 * @return an AddContainer containing the node that is now the root of this
-		 * subtree, and the boolean telling whether or not this subtree increased in height
+		 *         subtree, and the boolean telling whether or not this subtree
+		 *         increased in height
 		 */
 		private AddContainer add(int addPointer) {
 			// Case 1: If this is where to add the new element, create a node for it
-			if(this == NULL_NODE) {
+			if (this == NULL_NODE) {
 				Highlights.clearMark(2); // No longer comparing to previous leaves
 				Node newNode = new Node(array, addPointer); // Create the node
 				// Return the node, and the fact that the height obviously changed
@@ -98,7 +100,7 @@ public final class AVLTreeSort extends Sort {
 			Highlights.markArray(2, pointer);
 
 			// Case 2: The element is smaller and thus belongs in the left subtree
-			if(Reads.compareValues(array[addPointer], array[pointer]) == -1) {
+			if (Reads.compareValues(array[addPointer], array[pointer]) == -1) {
 				Delays.sleep(0.25);
 
 				// Recursively get the root of the new left subtree
@@ -115,7 +117,7 @@ public final class AVLTreeSort extends Sort {
 
 				// This handles the case where left subtree increased in
 				// height, possibly requiring rotations to keep balance
-				if(container.heightChange)
+				if (container.heightChange)
 					return heightChangeLeft();
 
 				// In the case where left subtree did not increase in height,
@@ -143,7 +145,7 @@ public final class AVLTreeSort extends Sort {
 
 			// This handles the case where right subtree increased in
 			// height, possibly requiring rotations to keep balance
-			if(container.heightChange)
+			if (container.heightChange)
 				return heightChangeRight();
 
 			// In the case where right subtree did not increase in height,
@@ -158,17 +160,17 @@ public final class AVLTreeSort extends Sort {
 		 * height has increased. Helper method for add.
 		 *
 		 * @return an AddContainer including the node to be placed at the position
-		 * and whether or not the left subtree's height has been changed
+		 *         and whether or not the left subtree's height has been changed
 		 */
 		private AddContainer heightChangeLeft() {
-			if(balance != -1) { // No rotation necessary
+			if (balance != -1) { // No rotation necessary
 				balance--;
 				// Trust me, this boolean works
 				return new AddContainer(this, balance == -1);
 			}
 			// Determine which type of rotation necessary. Note that after
 			// a rotation, the subtree height must not have changed.
-			if(left.balance == -1)
+			if (left.balance == -1)
 				// Left-most subtree must be too large, so fix with single rotation
 				return new AddContainer(singleRotateRight(), false);
 			// Middle-left subtree must be too large, so fix with double rotation
@@ -180,17 +182,17 @@ public final class AVLTreeSort extends Sort {
 		 * height has increased. Helper method for add.
 		 *
 		 * @return an AddContainer including the node to be placed at the position
-		 * and whether or not the right subtree's height has been changed
+		 *         and whether or not the right subtree's height has been changed
 		 */
 		private AddContainer heightChangeRight() {
-			if(balance != 1) { // No rotation necessary
+			if (balance != 1) { // No rotation necessary
 				balance++;
 				// Trust me, this boolean works
 				return new AddContainer(this, balance == 1);
 			}
 			// Determine which type of rotation necessary. Note that after
 			// a rotation, the subtree height must not have changed.
-			if(right.balance == 1)
+			if (right.balance == 1)
 				// Right-most subtree must be too large, so fix with single rotation
 				return new AddContainer(singleRotateLeft(), false);
 			// Middle-right subtree must be too large, so fix with double rotation
@@ -278,9 +280,9 @@ public final class AVLTreeSort extends Sort {
 
 			Node b = singleRotateRight();
 
-			if(oldBBalance == -1)
+			if (oldBBalance == -1)
 				b.right.balance = 1;
-			if(oldBBalance == 1)
+			if (oldBBalance == 1)
 				b.left.balance = -1;
 
 			return b;
@@ -305,9 +307,9 @@ public final class AVLTreeSort extends Sort {
 
 			Node b = singleRotateLeft();
 
-			if(oldBBalance == -1)
+			if (oldBBalance == -1)
 				b.right.balance = 1;
-			if(oldBBalance == 1)
+			if (oldBBalance == 1)
 				b.left.balance = -1;
 
 			return b;
@@ -318,13 +320,15 @@ public final class AVLTreeSort extends Sort {
 		 * the values of the original array to a sorted temporary array
 		 *
 		 * @param tempArray the temporary array to write the contents of the subtree to
-		 * @param location a pointer to the location in the temporary array to which the
-		 * contents of the current subtree should be written to
+		 * @param location  a pointer to the location in the temporary array to which
+		 *                  the
+		 *                  contents of the current subtree should be written to
 		 * @return The size of subtree, used to determine where the next value should be
-		 * written to.
+		 *         written to.
 		 */
 		private int writeToArray(int[] tempArray, int location) {
-			if(this == NULL_NODE) return 0;
+			if (this == NULL_NODE)
+				return 0;
 
 			int leftTreeSize = left.writeToArray(tempArray, location);
 			int newLocation = location + leftTreeSize;
@@ -345,7 +349,7 @@ public final class AVLTreeSort extends Sort {
 		Node root = NULL_NODE;
 
 		// This loop adds every element of the array to be sorted into the tree
-		for(int i = 0; i < length; i++) {
+		for (int i = 0; i < length; i++) {
 			Highlights.markArray(1, i); // Highlights the element being added
 			Node.AddContainer container = root.add(i);
 
@@ -361,12 +365,12 @@ public final class AVLTreeSort extends Sort {
 		}
 
 		// Write the contents of the tree to a temporary array
-		int[] tempArray = new int[length];
+		int[] tempArray = Writes.createExternalArray(length);
 		root.writeToArray(tempArray, 0);
 		Highlights.clearMark(1); // No more elements being transferred to temporary array
 
 		// Write the contents of the temporary array back to the main array
-		for(int i = 0; i < length; i++) {
+		for (int i = 0; i < length; i++) {
 			Writes.write(array, i, tempArray[i], 1, true, false);
 		}
 	}

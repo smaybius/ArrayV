@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -7,7 +7,7 @@ import io.github.arrayv.sorts.templates.BogoSorting;
  *
 MIT License
 
-Copyright (c) 2019 w0rthy
+Copyright (c) 2021 EmeraldBlock
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,26 +30,46 @@ SOFTWARE.
  */
 
 /**
- * Bogosort randomly shuffles the array until it is sorted.
+ * Smart Bogobogosort is like bogosort, but it makes the observation that
+ * the sorted copy produced to check if the array is sorted, is sorted.
+ * This is then simplified so that no copy of the array is needed.
+ * <ul>
+ * <li>All but the last element of the array are sorted using Bogobogosort.
+ * <li>If the last element of the sorted section is no greater than the last
+ * element of the array,
+ * then the copy is sorted. Otherwise, the array is shuffled and the process is
+ * repeated.
+ * </ul>
  */
-public final class BogoSort extends BogoSorting {
-    public BogoSort(ArrayVisualizer arrayVisualizer) {
+public final class SmartBogoBogoSort extends BogoSorting {
+    public SmartBogoBogoSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        this.setSortListName("Bogo");
-        this.setRunAllSortsName("Bogo Sort");
-        this.setRunSortName("Bogosort");
+        this.setSortListName("Smart Bogo Bogo");
+        this.setRunAllSortsName("Smart Bogo Bogo Sort");
+        this.setRunSortName("Smart Bogobogosort");
         this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(10);
+        this.setUnreasonableLimit(11);
         this.setBogoSort(true);
+    }
+
+    private void smartBogoBogo(int[] array, int length, int depth) {
+        if (length == 1)
+            return;
+        Writes.recordDepth(depth++);
+        Writes.recursion(2);
+        smartBogoBogo(array, length - 1, depth);
+        while (Reads.compareIndices(array, length - 2, length - 1, this.delay, true) > 0) {
+            this.bogoSwap(array, 0, length, false);
+            smartBogoBogo(array, length - 1, depth);
+        }
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        while(!this.isArraySorted(array, length))
-            this.bogoSwap(array, 0, length, false);
+        smartBogoBogo(array, length, 0);
     }
 }

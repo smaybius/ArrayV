@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -30,60 +30,40 @@ SOFTWARE.
  */
 
 /**
- * Merge Bogosort is like Merge Sort, but when merging,
- * it randomly weaves the two subarrays together until they are sorted.
+ * Median Quick Bogosort repeatedly shuffles the array until the left and right
+ * halves are split.
+ * It then recursively sorts each half.
  */
-public final class MergeBogoSort extends BogoSorting {
-    public MergeBogoSort(ArrayVisualizer arrayVisualizer) {
+public final class MedianQuickBogoSort extends BogoSorting {
+    public MedianQuickBogoSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        this.setSortListName("Merge Bogo");
-        this.setRunAllSortsName("Merge Bogo Sort");
-        this.setRunSortName("Merge Bogosort");
+        this.setSortListName("Median Quick Bogo");
+        this.setRunAllSortsName("Median Quick Bogo Sort");
+        this.setRunSortName("Median Quick Bogosort");
         this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(22);
+        this.setUnreasonableLimit(23);
         this.setBogoSort(true);
     }
 
-    private void bogoWeave(int[] array, int[] tmp, int start, int mid, int end) {
-        this.bogoCombo(array, start, end, end - mid, false);
-
-        int low = start;
-        int high = mid;
-        for (int i = start; i < end; ++i) {
-            Delays.sleep(this.delay);
-            if (Reads.compareValues(array[i], 0) == 0)
-                Writes.write(array, i, tmp[low++], this.delay, true, false);
-            else
-                Writes.write(array, i, tmp[high++], this.delay, true, false);
-        }
-    }
-
-    private void mergeBogo(int[] array, int[] tmp, int start, int end, int depth) {
+    private void medianQuickBogo(int[] array, int start, int end, int depth) {
         if (start >= end - 1)
             return;
 
         int mid = (start + end) / 2;
+        while (!isRangeSplit(array, start, mid, end))
+            this.bogoSwap(array, start, end, false);
         Writes.recordDepth(depth++);
         Writes.recursion(2);
-        mergeBogo(array, tmp, start, mid, depth);
-        mergeBogo(array, tmp, mid, end, depth);
-
-        Writes.arraycopy(array, start, tmp, start, end - start, this.delay, true, true);
-
-        while (!this.isRangeSorted(array, start, end))
-            bogoWeave(array, tmp, start, mid, end);
+        medianQuickBogo(array, start, mid, depth);
+        medianQuickBogo(array, mid, end, depth);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) {
-        int[] tmp = Writes.createExternalArray(sortLength);
-
-        mergeBogo(array, tmp, 0, sortLength, 0);
-
-        Writes.deleteExternalArray(tmp);
+        medianQuickBogo(array, 0, sortLength, 0);
     }
 }

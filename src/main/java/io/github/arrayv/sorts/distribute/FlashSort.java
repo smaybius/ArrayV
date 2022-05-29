@@ -1,7 +1,5 @@
 package io.github.arrayv.sorts.distribute;
 
-import java.util.Arrays;
-
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;

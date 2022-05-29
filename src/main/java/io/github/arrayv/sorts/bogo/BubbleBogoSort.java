@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -7,7 +7,7 @@ import io.github.arrayv.sorts.templates.BogoSorting;
  *
 MIT License
 
-Copyright (c) 2021 EmeraldBlock
+Copyright (c) 2019 w0rthy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,40 +30,31 @@ SOFTWARE.
  */
 
 /**
- * Median Quick Bogosort repeatedly shuffles the array until the left and right
- * halves are split.
- * It then recursively sorts each half.
+ * Bubble Bogosort is like Bubble Sort, but randomly sorts adjacent pairs of
+ * elements until the array is sorted.
  */
-public final class MedianQuickBogoSort extends BogoSorting {
-    public MedianQuickBogoSort(ArrayVisualizer arrayVisualizer) {
+public final class BubbleBogoSort extends BogoSorting {
+    public BubbleBogoSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        this.setSortListName("Median Quick Bogo");
-        this.setRunAllSortsName("Median Quick Bogo Sort");
-        this.setRunSortName("Median Quick Bogosort");
+        this.setSortListName("Bubble Bogo");
+        this.setRunAllSortsName("Bubble Bogo Sort");
+        this.setRunSortName("Bubble Bogosort");
         this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(23);
+        this.setUnreasonableLimit(1024);
         this.setBogoSort(true);
     }
 
-    private void medianQuickBogo(int[] array, int start, int end, int depth) {
-        if (start >= end - 1)
-            return;
-
-        int mid = (start + end) / 2;
-        while (!isRangeSplit(array, start, mid, end))
-            this.bogoSwap(array, start, end, false);
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        medianQuickBogo(array, start, mid, depth);
-        medianQuickBogo(array, mid, end, depth);
-    }
-
     @Override
-    public void runSort(int[] array, int sortLength, int bucketCount) {
-        medianQuickBogo(array, 0, sortLength, 0);
+    public void runSort(int[] array, int length, int bucketCount) {
+        while (!this.isRangeSorted(array, 0, length, false, true)) {
+            int index = BogoSorting.randInt(0, length - 1);
+
+            if (Reads.compareIndices(array, index, index + 1, this.delay, true) > 0)
+                Writes.swap(array, index, index + 1, this.delay, true, false);
+        }
     }
 }
