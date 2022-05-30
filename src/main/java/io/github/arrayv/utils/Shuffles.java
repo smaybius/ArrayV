@@ -1147,7 +1147,7 @@ public enum Shuffles {
         class Node {
             public int index;
             private boolean tournament;
-            public Node childLeft = null, childRight = null, winner = null;
+            private Node childLeft = null, childRight = null, winner = null;
 
             public Node(int index) {
                 this.index = index;

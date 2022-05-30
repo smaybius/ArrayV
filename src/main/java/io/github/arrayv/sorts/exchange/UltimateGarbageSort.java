@@ -1,7 +1,7 @@
-package sorts.exchange;
+package io.github.arrayv.sorts.exchange;
 
-import main.ArrayVisualizer;
-import sorts.templates.Sort;
+import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sorts.templates.Sort;
 
 /*
  * 
@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
- 
 
 final public class UltimateGarbageSort extends Sort {
     public UltimateGarbageSort(ArrayVisualizer arrayVisualizer) {
@@ -34,23 +33,21 @@ final public class UltimateGarbageSort extends Sort {
         this.setRunAllSortsName("Ultimate Garbage Sort");
         this.setRunSortName("Ultimate Garbage Sort");
         this.setCategory("Exchange Sorts");
-        this.setComparisonBased(true);
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
         this.setUnreasonableLimit(16);
         this.setBogoSort(false);
     }
-    
+
     public void garbageMerge(int[] array, int start, int end) {
         if (start < end) {
-        	if (Reads.compareIndices(array, start, end, 0.001, true) > 0) {
-        	    Writes.swap(array, start, end, 0.001, true, false);
+            if (Reads.compareIndices(array, start, end, 0.001, true) > 0) {
+                Writes.swap(array, start, end, 0.001, true, false);
             }
-            
+
             if (end - start + 1 >= 3) {
-            	int mid = (start + end) / 2;
-            	garbageMerge(array, start, end - 1);
+                garbageMerge(array, start, end - 1);
                 garbageMerge(array, start + 1, end);
             }
         }
@@ -58,30 +55,30 @@ final public class UltimateGarbageSort extends Sort {
 
     public void garbageMergeSort(int[] array, int start, int end) {
         if (start < end) {
-        	if (Reads.compareIndices(array, start, end, 0.001, true) > 0) {
-        	    Writes.swap(array, start, end, 0.001, true, false);
+            if (Reads.compareIndices(array, start, end, 0.001, true) > 0) {
+                Writes.swap(array, start, end, 0.001, true, false);
             }
-            
+
             if (end - start + 1 >= 3) {
-            	int mid = (start + end) / 2;
-            	garbageMergeSort(array, start, mid);
+                int mid = (start + end) / 2;
+                garbageMergeSort(array, start, mid);
                 garbageMergeSort(array, mid + 1, end);
                 garbageMerge(array, start, end);
             }
         }
     }
-    
+
     public void garbageMergePlusPlusPlusPlusPlus(int[] array, int start, int end, int x) {
         if (start < end && x <= end) {
-        	if (Reads.compareIndices(array, start, end, 0.001, true) == 1) {
-        	    Writes.swap(array, start, end, 0.001, true, false);
+            if (Reads.compareIndices(array, start, end, 0.001, true) == 1) {
+                Writes.swap(array, start, end, 0.001, true, false);
             }
-            
+
             if (end - start + 1 >= 3) {
-            	int mid = (start + end) / 2;
-            	garbageMergePlusPlusPlusPlusPlus(array, start, mid, 1);
+                int mid = (start + end) / 2;
+                garbageMergePlusPlusPlusPlusPlus(array, start, mid, 1);
                 garbageMergePlusPlusPlusPlusPlus(array, mid + 1, end, 1);
-                
+
                 x++;
                 garbageMergePlusPlusPlusPlusPlus(array, start, end - 1, x);
                 garbageMergePlusPlusPlusPlusPlus(array, start + 1, end, x);
@@ -89,25 +86,25 @@ final public class UltimateGarbageSort extends Sort {
             }
         }
     }
-    
+
     public void ultimateGarbage(int[] array, int start, int end, int x) {
         if (start < end && x <= end) {
-        	if (Reads.compareIndices(array, start, end, 0.001, true) > 0) {
-        	    Writes.swap(array, start, end, 0.001, true, false);
+            if (Reads.compareIndices(array, start, end, 0.001, true) > 0) {
+                Writes.swap(array, start, end, 0.001, true, false);
             }
-            
+
             if (end - start + 1 >= 3) {
-            	int mid = (start + end) / 2;
-            	ultimateGarbage(array, start, mid, 1);
+                int mid = (start + end) / 2;
+                ultimateGarbage(array, start, mid, 1);
                 ultimateGarbage(array, mid + 1, end, 1);
-                
+
                 for (int i = 1; i <= end - start; i++) {
-                	for (int j = 1; j <= i; j++) {
+                    for (int j = 1; j <= i; j++) {
                         ultimateGarbage(array, start, end - x, x + j);
                         ultimateGarbage(array, start + x, end, x + j);
                     }
                 }
-                
+
                 garbageMergePlusPlusPlusPlusPlus(array, start, end, 0);
             }
         }

@@ -47,7 +47,6 @@ final public class FinalGarbageSort extends Sort {
             }
 
             if (end - start + 1 >= 3) {
-                int mid = (start + end) / 2;
                 garbageMerge(a, start, end - 1);
                 garbageMerge(a, start + 1, end);
             }

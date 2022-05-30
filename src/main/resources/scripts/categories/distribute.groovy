@@ -1,6 +1,6 @@
 import io.github.arrayv.prompts.SortPrompt
 
-SortPrompt.setSortThreadForCategory('Distribution Sorts', 18) {
+SortPrompt.setSortThreadForCategory('Distribution Sorts', 58) {
     run CountingSort go 2048.numbers, 1.5.speed
     run OptimizedPigeonholeSort go 64.numbers, 0.025.speed
     run OptimizedPigeonholeSort go 2048.numbers, 1.5.speed
@@ -28,7 +28,7 @@ SortPrompt.setSortThreadForCategory('Distribution Sorts', 18) {
 
     def oldSofterSounds = arrayv.sounds.softerSounds
     arrayv.sounds.softerSounds = true
-    run InPlaceLSDRadixSort go 64.numbers, 10.buckets, 0.0001.speed
+    run InPlaceLSDRadixSort go 64.numbers, 10.buckets, 0.0005.speed
     run InPlaceLSDRadixSort go 2048.numbers, 10.buckets
     arrayv.sounds.softerSounds = oldSofterSounds
 
@@ -53,11 +53,15 @@ SortPrompt.setSortThreadForCategory('Distribution Sorts', 18) {
     run FlashSort go 2048.numbers
     run BinaryQuickSortIterative go 64.numbers, 0.025.speed
     run BinaryQuickSortIterative go 2048.numbers
-    run StacklessBinaryQuickSort go 2048.numbers, 0.025.speed
+    run StacklessBinaryQuickSort go 64.numbers, 0.025.speed
     run StacklessBinaryQuickSort go 2048.numbers, 2.speed
     run QuickBinaryRadixSort go 64.numbers, 0.025.speed
     run QuickBinaryRadixSort go 2048.numbers
+    run ShatterSort go 2048.numbers, 256.buckets
     run ShatterSort go 2048.numbers, 128.buckets
+    run ShatterSort go 2048.numbers, 64.buckets
+    run SimpleShatterSort go 2048.numbers, 265.buckets
     run SimpleShatterSort go 2048.numbers, 128.buckets
+    run SimpleShatterSort go 2048.numbers, 64.buckets
     run TimeSort go 512.numbers, 10.buckets, 0.05.speed
 }
