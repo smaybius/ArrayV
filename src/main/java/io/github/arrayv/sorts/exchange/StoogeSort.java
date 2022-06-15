@@ -36,11 +36,13 @@ public final class StoogeSort extends Sort {
 
         if (j - i + 1 >= 3) {
             int t = (j - i + 1) / 3;
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.stoogeSort(A, i, j - t, depth);
-            this.stoogeSort(A, i + t, j, depth);
-            this.stoogeSort(A, i, j - t, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.stoogeSort(A, i, j - t, depth + 1);
+            Writes.recursion();
+            this.stoogeSort(A, i + t, j, depth + 1);
+            Writes.recursion();
+            this.stoogeSort(A, i, j - t, depth + 1);
         }
     }
 

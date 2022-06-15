@@ -29,10 +29,11 @@ public final class BoseNelsonSortRecursive extends Sort {
 
         if (length > 1) {
             int mid = length / 2;
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            boseNelson(array, start, mid, sleep, depth);
-            boseNelson(array, start + mid, length - mid, sleep, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            boseNelson(array, start, mid, sleep, depth + 1);
+            Writes.recursion();
+            boseNelson(array, start + mid, length - mid, sleep, depth + 1);
             boseNelsonMerge(array, start, mid, start + mid, length - mid, sleep, depth);
         }
     }
@@ -50,11 +51,13 @@ public final class BoseNelsonSortRecursive extends Sort {
         } else {
             int mid1 = len1 / 2;
             int mid2 = len1 % 2 == 1 ? len2 / 2 : (len2 + 1) / 2;
-            Writes.recordDepth(depth++);
-            Writes.recursion(3);
-            boseNelsonMerge(array, start1, mid1, start2, mid2, sleep, depth);
-            boseNelsonMerge(array, start1 + mid1, len1 - mid1, start2 + mid2, len2 - mid2, sleep, depth);
-            boseNelsonMerge(array, start1 + mid1, len1 - mid1, start2, mid2, sleep, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            boseNelsonMerge(array, start1, mid1, start2, mid2, sleep, depth + 1);
+            Writes.recursion();
+            boseNelsonMerge(array, start1 + mid1, len1 - mid1, start2 + mid2, len2 - mid2, sleep, depth + 1);
+            Writes.recursion();
+            boseNelsonMerge(array, start1 + mid1, len1 - mid1, start2, mid2, sleep, depth + 1);
         }
     }
 

@@ -49,9 +49,9 @@ public final class DeterministicBogoSort extends BogoSorting {
             return this.isArraySorted(array, length);
 
         for (int i = length - 1; i > depth; --i) {
-            Writes.recordDepth(recursion++);
-            Writes.recursion(1);
-            if (permutationSort(array, depth + 1, length, recursion))
+            Writes.recordDepth(recursion);
+            Writes.recursion();
+            if (permutationSort(array, depth + 1, length, recursion + 1))
                 return true;
 
             if ((length - depth) % 2 == 0)
@@ -59,9 +59,9 @@ public final class DeterministicBogoSort extends BogoSorting {
             else
                 Writes.swap(array, depth, length - 1, this.delay, true, false);
         }
-        Writes.recordDepth(recursion++);
-        Writes.recursion(1);
-        return permutationSort(array, depth + 1, length, recursion);
+        Writes.recordDepth(recursion);
+        Writes.recursion();
+        return permutationSort(array, depth + 1, length, recursion + 1);
     }
 
     @Override

@@ -67,10 +67,11 @@ public final class MergeBogoSort extends BogoSorting {
             return;
 
         int mid = (start + end) / 2;
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        mergeBogo(array, tmp, start, mid, depth);
-        mergeBogo(array, tmp, mid, end, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        mergeBogo(array, tmp, start, mid, depth + 1);
+        Writes.recursion();
+        mergeBogo(array, tmp, mid, end, depth + 1);
 
         Writes.arraycopy(array, start, tmp, start, end - start, this.delay, true, true);
 

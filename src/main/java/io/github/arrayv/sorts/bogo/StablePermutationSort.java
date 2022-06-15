@@ -51,17 +51,17 @@ public final class StablePermutationSort extends BogoSorting {
 			return this.isArraySorted(array, this.length);
 
 		for (int i = len - 2; i >= 0; i--) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			if (this.permute(array, idx, len - 1, depth))
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			if (this.permute(array, idx, len - 1, depth + 1))
 				return true;
 
 			Writes.swap(array, idx[i], idx[len - 1], 0, true, false);
 			Writes.swap(idx, i, len - 1, this.delay, false, true);
 		}
-		Writes.recordDepth(depth++);
-		Writes.recursion(1);
-		if (this.permute(array, idx, len - 1, depth))
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		if (this.permute(array, idx, len - 1, depth + 1))
 			return true;
 
 		int t = idx[len - 1];

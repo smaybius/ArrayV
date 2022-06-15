@@ -41,15 +41,17 @@ public final class OddEvenMergeSortRecursive extends Sort {
         int m = r * 2;
         if (m < n) {
             if ((n / r) % 2 != 0) {
-                Writes.recordDepth(depth++);
-                Writes.recursion(2);
-                oddEvenMerge(array, lo, (m2 + 1) / 2, n + r, m, depth); // even subsequence
-                oddEvenMerge(array, lo + r, m2 / 2, n - r, m, depth); // odd subsequence
+                Writes.recordDepth(depth);
+                Writes.recursion();
+                oddEvenMerge(array, lo, (m2 + 1) / 2, n + r, m, depth + 1); // even subsequence
+                Writes.recursion();
+                oddEvenMerge(array, lo + r, m2 / 2, n - r, m, depth + 1); // odd subsequence
             } else {
-                Writes.recordDepth(depth++);
-                Writes.recursion(2);
-                oddEvenMerge(array, lo, (m2 + 1) / 2, n, m, depth); // even subsequence
-                oddEvenMerge(array, lo + r, m2 / 2, n, m, depth); // odd subsequence
+                Writes.recordDepth(depth);
+                Writes.recursion();
+                oddEvenMerge(array, lo, (m2 + 1) / 2, n, m, depth + 1); // even subsequence
+                Writes.recursion();
+                oddEvenMerge(array, lo + r, m2 / 2, n, m, depth + 1); // odd subsequence
             }
 
             if (m2 % 2 != 0) {
@@ -71,10 +73,11 @@ public final class OddEvenMergeSortRecursive extends Sort {
     void oddEvenMergeSort(int[] array, int lo, int n, int depth) {
         if (n > 1) {
             int m = n / 2;
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            oddEvenMergeSort(array, lo, m, depth);
-            oddEvenMergeSort(array, lo + m, n - m, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            oddEvenMergeSort(array, lo, m, depth + 1);
+            Writes.recursion();
+            oddEvenMergeSort(array, lo + m, n - m, depth + 1);
             oddEvenMerge(array, lo, m, n, 1, depth);
         }
     }

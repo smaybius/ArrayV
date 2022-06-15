@@ -191,14 +191,14 @@ public final class YujisBufferedMergeSort2 extends Sort {
 		}
 
 		// the same as Andreysort's buffer redistribution
-		Writes.recordDepth(depth++);
-		Writes.recursion(1);
-		this.bufferedMerge(array, a, m, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.bufferedMerge(array, a, m, depth + 1);
 		this.multiSwap(array, a, b - (m - a), m - a);
 		int s = this.merge(array, m, b - (m - a), b, a);
-		Writes.recordDepth(depth++);
-		Writes.recursion(1);
-		this.bufferedMerge(array, b - (m - a) - s, b, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.bufferedMerge(array, b - (m - a) - s, b, depth + 1);
 
 	}
 

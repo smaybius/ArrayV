@@ -56,10 +56,11 @@ public final class MedianQuickBogoSort extends BogoSorting {
         int mid = (start + end) / 2;
         while (!isRangeSplit(array, start, mid, end))
             this.bogoSwap(array, start, end, false);
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        medianQuickBogo(array, start, mid, depth);
-        medianQuickBogo(array, mid, end, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        medianQuickBogo(array, start, mid, depth + 1);
+        Writes.recursion();
+        medianQuickBogo(array, mid, end, depth + 1);
     }
 
     @Override

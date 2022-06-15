@@ -54,9 +54,9 @@ public final class TernaryHeapSort extends Sort {
 
         if (largest != i) {
             Writes.swap(array, i, largest, 1, true, false);
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.maxHeapify(array, largest, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.maxHeapify(array, largest, depth + 1);
         }
     }
 

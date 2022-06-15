@@ -30,7 +30,7 @@ public final class ShoveSort extends Sort {
             this.Highlights.markArray(1, i);
             this.Highlights.markArray(2, i + 1);
             this.Delays.sleep(sleep);
-            if (this.Reads.compareValues(array[i], array[i + 1]) == 1) {
+            if (this.Reads.compareIndices(array, i, i + 1, 1, true) == 1) {
                 for (int f = i; f < end - 1; f++) {
                     this.Writes.swap(array, f, f + 1, sleep, true, false);
                 }

@@ -34,11 +34,13 @@ public final class RecursiveShellSort extends Sort {
 
     public void recursiveShellSort(int[] array, int start, int end, int g, int depth) {
         if (start + g <= end) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(3);
-            this.recursiveShellSort(array, start, end, 3 * g, depth);
-            this.recursiveShellSort(array, start + g, end, 3 * g, depth);
-            this.recursiveShellSort(array, start + (2 * g), end, 3 * g, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.recursiveShellSort(array, start, end, 3 * g, depth + 1);
+            Writes.recursion();
+            this.recursiveShellSort(array, start + g, end, 3 * g, depth + 1);
+            Writes.recursion();
+            this.recursiveShellSort(array, start + (2 * g), end, 3 * g, depth + 1);
             this.gappedInsertionSort(array, start, end, g);
         }
     }

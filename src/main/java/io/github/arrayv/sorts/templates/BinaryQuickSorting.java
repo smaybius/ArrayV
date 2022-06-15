@@ -43,10 +43,11 @@ public abstract class BinaryQuickSorting extends Sort {
         if (p < r && bit >= 0) {
             int q = partition(array, p, r, bit);
             Delays.sleep(1);
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            binaryQuickSortRecursive(array, p, q, bit - 1, depth);
-            binaryQuickSortRecursive(array, q + 1, r, bit - 1, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            binaryQuickSortRecursive(array, p, q, bit - 1, depth + 1);
+            Writes.recursion();
+            binaryQuickSortRecursive(array, q + 1, r, bit - 1, depth + 1);
         }
     }
 

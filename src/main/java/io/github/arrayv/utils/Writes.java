@@ -252,10 +252,6 @@ public final class Writes {
         this.recursions++;
     }
 
-    public void recursion(int k) {
-        this.recursions += k;
-    }
-
     public void recordDepth(int k) {
         if (this.depth < k)
             this.depth = k;

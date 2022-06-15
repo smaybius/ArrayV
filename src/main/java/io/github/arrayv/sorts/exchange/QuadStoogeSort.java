@@ -41,17 +41,21 @@ public final class QuadStoogeSort extends Sort {
 		int len1 = len / 2;
 		int len2 = (len + 1) / 2;
 		int len3 = (len1 + 1) / 2 + (len2 + 1) / 2;
-		Writes.recordDepth(depth++);
-		Writes.recursion(5);
-		quadStooge(array, pos, len1, depth);
-		quadStooge(array, pos + len1, len2, depth);
-		quadStooge(array, pos + len1 / 2, len3, depth);
-		quadStooge(array, pos + len1, len2, depth);
-		quadStooge(array, pos, len1, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		quadStooge(array, pos, len1, depth + 1);
+		Writes.recursion();
+		quadStooge(array, pos + len1, len2, depth + 1);
+		Writes.recursion();
+		quadStooge(array, pos + len1 / 2, len3, depth + 1);
+		Writes.recursion();
+		quadStooge(array, pos + len1, len2, depth + 1);
+		Writes.recursion();
+		quadStooge(array, pos, len1, depth + 1);
 		if (len > 3) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			quadStooge(array, pos + len1 / 2, len3, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			quadStooge(array, pos + len1 / 2, len3, depth + 1);
 		}
 	}
 

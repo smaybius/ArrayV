@@ -145,14 +145,14 @@ public class AndreySort extends Sort {
         }
 
         int s = len - lr;
-        Writes.recordDepth(depth++);
-        Writes.recursion(1);
-        msort(arr, a + lr, s, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        msort(arr, a + lr, s, depth + 1);
         aswap(arr, a, a + lr, s);
         s += backmerge(arr, a + (s - 1), s, a + (lr - 1), lr - s);
-        Writes.recordDepth(depth++);
-        Writes.recursion(1);
-        msort(arr, a, s, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        msort(arr, a, s, depth + 1);
     }
 
     @Override

@@ -71,10 +71,11 @@ public final class QuickBogoSort extends BogoSorting {
         // if (array[pivot] == (start+end)/2) break;
         while (!isRangePartitioned(array, start, pivot, end))
             pivot = quickBogoSwap(array, start, pivot, end);
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        quickBogo(array, start, pivot, depth);
-        quickBogo(array, pivot + 1, end, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        quickBogo(array, start, pivot, depth + 1);
+        Writes.recursion();
+        quickBogo(array, pivot + 1, end, depth + 1);
     }
 
     @Override

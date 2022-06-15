@@ -31,10 +31,11 @@ public class SnuffleSort extends Sort {
             if (stop - start + 1 >= 3) {
                 int mid = (stop - start) / 2 + start;
                 for (int i = 0; i < (int) Math.ceil((stop - start + 1) / 2); i++) {
-                    Writes.recordDepth(depth++);
-                    Writes.recursion(2);
-                    this.snuffleSort(arr, start, mid, depth);
-                    this.snuffleSort(arr, mid, stop, depth);
+                    Writes.recordDepth(depth);
+                    Writes.recursion();
+                    this.snuffleSort(arr, start, mid, depth + 1);
+                    Writes.recursion();
+                    this.snuffleSort(arr, mid, stop, depth + 1);
                 }
             }
         }

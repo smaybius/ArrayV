@@ -86,14 +86,14 @@ public final class SplaySort extends Sort {
 
             if (Reads.compareValues(root.left.key, key) == 1) {
                 root.left.left = treeWrite(splay(root.left.left, key, depth * 4), depth * 4);
-                root = treeWrite(rightRotate(root, depth), depth);
+                root = treeWrite(rightRotate(root, depth + 1), depth + 1);
             } else {
                 root.left.right = treeWrite(splay(root.left.right, key, depth * 4 + 1), depth * 4 + 1);
                 if (root.left.right != null) {
                     root.left = treeWrite(leftRotate(root.left, depth * 2), depth * 2);
                 }
             }
-            return (root.left == null) ? root : rightRotate(root, depth);
+            return (root.left == null) ? root : rightRotate(root, depth + 1);
         } else {
             if (root.right == null) {
                 return root;
@@ -106,9 +106,9 @@ public final class SplaySort extends Sort {
                 }
             } else {
                 root.right.right = treeWrite(splay(root.right.right, key, depth * 4 + 3), depth * 4 + 3);
-                root = treeWrite(leftRotate(root, depth), depth);
+                root = treeWrite(leftRotate(root, depth + 1), depth + 1);
             }
-            return (root.right == null) ? root : leftRotate(root, depth);
+            return (root.right == null) ? root : leftRotate(root, depth + 1);
         }
     }
 
@@ -118,7 +118,7 @@ public final class SplaySort extends Sort {
             return root;
         }
 
-        root = splay(root, key, depth);
+        root = splay(root, key, depth + 1);
         Node n = new Node(key);
 
         if (Reads.compareValues(root.key, key) == 1) {

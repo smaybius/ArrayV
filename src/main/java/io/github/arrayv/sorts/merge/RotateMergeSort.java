@@ -98,14 +98,14 @@ public final class RotateMergeSort extends Sort {
 		this.rotate(array, m1, m, m2);
 
 		if (m2 - (m3 + 1) > 0 && b - m2 > 0) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.rotateMerge(array, m3 + 1, m2, b, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.rotateMerge(array, m3 + 1, m2, b, depth + 1);
 		}
 		if (m1 - a > 0 && m3 - m1 > 0) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.rotateMerge(array, a, m1, m3, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.rotateMerge(array, a, m1, m3, depth + 1);
 		}
 	}
 

@@ -66,10 +66,10 @@ public final class CircloidSort extends Sort {
         if (left >= right)
             return false;
         int mid = (left + right) / 2;
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        boolean l = this.circlePass(array, left, mid, depth);
-        boolean r = this.circlePass(array, mid + 1, right, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        boolean l = this.circlePass(array, left, mid, depth + 1);
+        boolean r = this.circlePass(array, mid + 1, right, depth + 1);
         return this.circle(array, left, right) || l || r;
     }
 

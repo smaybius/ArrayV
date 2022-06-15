@@ -46,7 +46,7 @@ public final class InPlaceMergeSort extends Sort {
 
     private void push(int[] array, int low, int high) {
         for (int i = low; i < high; i++) {
-            if (Reads.compareValues(array[i], array[i + 1]) == 1) {
+            if (Reads.compareIndices(array, i, i + 1, 1, true) == 1) {
                 Writes.swap(array, i, i + 1, 0.035, true, false);
             }
         }
@@ -73,10 +73,11 @@ public final class InPlaceMergeSort extends Sort {
             }
         } else {
             int mid = ((int) Math.floor((min + max) / 2)); // The midpoint
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            mergeSort(array, min, mid, depth); // sort the left side
-            mergeSort(array, mid + 1, max, depth); // sort the right side
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            mergeSort(array, min, mid, depth + 1); // sort the left side
+            Writes.recursion();
+            mergeSort(array, mid + 1, max, depth + 1); // sort the right side
             merge(array, min, max, mid); // combines them
         }
     }

@@ -131,9 +131,9 @@ public final class AmericanFlagSort extends Sort {
                 int end = offset[i];
 
                 if (end - begin > 1) {
-                    Writes.recordDepth(depth++);
-                    Writes.recursion(1);
-                    this.sort(array, begin, end, divisor / this.NUMBER_OF_BUCKETS, depth);
+                    Writes.recordDepth(depth);
+                    Writes.recursion();
+                    this.sort(array, begin, end, divisor / this.NUMBER_OF_BUCKETS, depth + 1);
                 }
             }
         }

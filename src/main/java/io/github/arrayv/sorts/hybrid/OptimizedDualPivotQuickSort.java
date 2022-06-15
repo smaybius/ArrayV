@@ -98,10 +98,11 @@ public final class OptimizedDualPivotQuickSort extends Sort {
         Writes.swap(array, great + 1, right, 1, true, false);
 
         // subarrays
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        this.dualPivot(array, left, less - 2, divisor, depth);
-        this.dualPivot(array, great + 2, right, divisor, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        this.dualPivot(array, left, less - 2, divisor, depth + 1);
+        Writes.recursion();
+        this.dualPivot(array, great + 2, right, divisor, depth + 1);
 
         Highlights.markArray(2, less);
         Highlights.markArray(3, great);
@@ -127,9 +128,9 @@ public final class OptimizedDualPivotQuickSort extends Sort {
 
         // subarray
         if (pivot1 < pivot2) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.dualPivot(array, less, great, divisor, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.dualPivot(array, less, great, divisor, depth + 1);
         }
     }
 

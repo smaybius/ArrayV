@@ -69,7 +69,7 @@ final public class GarbageMergeSort extends Sort {
                 garbageMergeSort(a, start, mid, depth + 1);
                 Writes.recursion();
                 garbageMergeSort(a, mid + 1, end, depth + 1);
-                garbageMerge(a, start, end, depth);
+                garbageMerge(a, start, end, depth + 1);
             }
         }
     }

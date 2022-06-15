@@ -81,10 +81,11 @@ public final class WeaveMergeSort extends Sort {
             }
         } else {
             int mid = (int) Math.floor((min + max) / 2); // The midpoint
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.weaveMergeSort(array, min, mid, depth); // sort the left side
-            this.weaveMergeSort(array, mid + 1, max, depth); // sort the right side
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.weaveMergeSort(array, min, mid, depth + 1); // sort the left side
+            Writes.recursion();
+            this.weaveMergeSort(array, mid + 1, max, depth + 1); // sort the right side
             this.weaveMerge(array, min, max, mid); // combines them
         }
     }

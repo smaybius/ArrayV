@@ -59,12 +59,14 @@ public final class SmartBogoBogoSort extends BogoSorting {
     private void smartBogoBogo(int[] array, int length, int depth) {
         if (length == 1)
             return;
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        smartBogoBogo(array, length - 1, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        smartBogoBogo(array, length - 1, depth + 1);
         while (Reads.compareIndices(array, length - 2, length - 1, this.delay, true) > 0) {
             this.bogoSwap(array, 0, length, false);
-            smartBogoBogo(array, length - 1, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            smartBogoBogo(array, length - 1, depth + 1);
         }
     }
 

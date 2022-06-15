@@ -28,17 +28,21 @@ public final class DiamondSortRecursive extends Sort {
             double div = (stop - start) / 4d;
             int mid = (stop - start) / 2 + start;
             if (merge) {
-                Writes.recordDepth(depth++);
-                Writes.recursion(2);
-                this.sort(arr, start, mid, true, depth);
-                this.sort(arr, mid, stop, true, depth);
+                Writes.recordDepth(depth);
+                Writes.recursion();
+                this.sort(arr, start, mid, true, depth + 1);
+                Writes.recursion();
+                this.sort(arr, mid, stop, true, depth + 1);
             }
-            Writes.recordDepth(depth++);
-            Writes.recursion(4);
-            this.sort(arr, (int) div + start, (int) (div * 3) + start, false, depth);
-            this.sort(arr, start, mid, false, depth);
-            this.sort(arr, mid, stop, false, depth);
-            this.sort(arr, (int) div + start, (int) (div * 3) + start, false, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.sort(arr, (int) div + start, (int) (div * 3) + start, false, depth + 1);
+            Writes.recursion();
+            this.sort(arr, start, mid, false, depth + 1);
+            Writes.recursion();
+            this.sort(arr, mid, stop, false, depth + 1);
+            Writes.recursion();
+            this.sort(arr, (int) div + start, (int) (div * 3) + start, false, depth + 1);
         }
     }
 

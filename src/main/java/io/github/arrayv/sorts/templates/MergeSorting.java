@@ -45,10 +45,11 @@ public abstract class MergeSorting extends Sort {
         } else if (end - start < 64 && binary) {
             binaryInserter.customBinaryInsert(array, start, end, 0.333);
         } else {
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            merge(array, tmp, start, (mid + start) / 2, mid, binary, depth);
-            merge(array, tmp, mid, (mid + end) / 2, end, binary, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            merge(array, tmp, start, (mid + start) / 2, mid, binary, depth + 1);
+            Writes.recursion();
+            merge(array, tmp, mid, (mid + end) / 2, end, binary, depth + 1);
 
             int low = start;
             int high = mid;

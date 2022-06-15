@@ -38,13 +38,13 @@ public abstract class CircleSorting extends Sort {
             lo++;
             hi--;
         }
-        Writes.recordDepth(depth++);
-        Writes.recursion(1);
-        swapCount = this.circleSortRoutine(array, low, low + mid, swapCount, sleep, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        swapCount = this.circleSortRoutine(array, low, low + mid, swapCount, sleep, depth + 1);
         if (low + mid + 1 < this.end) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            swapCount = this.circleSortRoutine(array, low + mid + 1, high, swapCount, sleep, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            swapCount = this.circleSortRoutine(array, low + mid + 1, high, swapCount, sleep, depth + 1);
         }
 
         return swapCount;

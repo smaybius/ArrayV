@@ -92,7 +92,7 @@ public final class RotateLSDRadixSort extends Sort {
 		Writes.recursion();
 		this.mergeSort(array, m, b, p, depth + 1);
 
-		this.merge(array, a, m, b, 0, this.base, p, depth);
+		this.merge(array, a, m, b, 0, this.base, p, depth + 1);
 	}
 
 	@Override

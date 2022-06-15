@@ -50,10 +50,11 @@ public final class BufferedStoogeSort extends Sort {
 				if ((stop - start - 2) % 3 == 0) {
 					twoThird--;
 				}
-				Writes.recordDepth(depth++);
-				Writes.recursion(2);
-				wrapper(arr, third, twoThird, depth);
-				wrapper(arr, twoThird, stop, depth);
+				Writes.recordDepth(depth);
+				Writes.recursion();
+				wrapper(arr, third, twoThird, depth + 1);
+				Writes.recursion();
+				wrapper(arr, twoThird, stop, depth + 1);
 				int left = third;
 				int right = twoThird;
 				int bufferStart = start;
@@ -72,9 +73,9 @@ public final class BufferedStoogeSort extends Sort {
 					right++;
 					bufferStart++;
 				}
-				Writes.recordDepth(depth++);
-				Writes.recursion(1);
-				wrapper(arr, twoThird, stop, depth);
+				Writes.recordDepth(depth);
+				Writes.recursion();
+				wrapper(arr, twoThird, stop, depth + 1);
 				left = twoThird - 1;
 				right = stop - 1;
 				while (right > left && left >= start) {

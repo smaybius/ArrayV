@@ -50,37 +50,37 @@ public final class OptimizedStoogeSortStudio extends Sort {
 		int b2 = (a + b + b + 2) / 3;
 
 		if (m < b2) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			lChange = this.stoogeSort(array, a, m, b2, merge, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			lChange = this.stoogeSort(array, a, m, b2, merge, depth + 1);
 
 			if (merge) {
-				Writes.recordDepth(depth++);
-				Writes.recursion(1);
-				rChange = this.stoogeSort(array, Math.max(a + b2 - m, a2), b2, b, true, depth);
+				Writes.recordDepth(depth);
+				Writes.recursion();
+				rChange = this.stoogeSort(array, Math.max(a + b2 - m, a2), b2, b, true, depth + 1);
 				if (rChange) {
-					Writes.recordDepth(depth++);
-					Writes.recursion(1);
-					this.stoogeSort(array, a + b2 - m, a2, 2 * a2 - a, true, depth);
+					Writes.recordDepth(depth);
+					Writes.recursion();
+					this.stoogeSort(array, a + b2 - m, a2, 2 * a2 - a, true, depth + 1);
 				}
 			} else {
-				Writes.recordDepth(depth++);
-				Writes.recursion(1);
-				rChange = this.stoogeSort(array, a2, b2, b, false, depth);
+				Writes.recordDepth(depth);
+				Writes.recursion();
+				rChange = this.stoogeSort(array, a2, b2, b, false, depth + 1);
 				if (rChange) {
-					Writes.recordDepth(depth++);
-					Writes.recursion(1);
-					this.stoogeSort(array, a, a2, 2 * a2 - a, true, depth);
+					Writes.recordDepth(depth);
+					Writes.recursion();
+					this.stoogeSort(array, a, a2, 2 * a2 - a, true, depth + 1);
 				}
 			}
 		} else {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			rChange = this.stoogeSort(array, a2, m, b, merge, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			rChange = this.stoogeSort(array, a2, m, b, merge, depth + 1);
 			if (rChange) {
-				Writes.recordDepth(depth++);
-				Writes.recursion(1);
-				this.stoogeSort(array, a, a2, a2 + b - m, true, depth);
+				Writes.recordDepth(depth);
+				Writes.recursion();
+				this.stoogeSort(array, a, a2, a2 + b - m, true, depth + 1);
 			}
 		}
 		return lChange || rChange;

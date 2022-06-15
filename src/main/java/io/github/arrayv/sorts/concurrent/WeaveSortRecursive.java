@@ -57,23 +57,23 @@ public final class WeaveSortRecursive extends Sort {
 
 		for (int i = 0; 2 * i < (len - 1) * gap; i += gap)
 			this.compSwap(array, pos + i, pos + (len - 1) * gap - i);
-		Writes.recordDepth(depth++);
-		Writes.recursion(1);
-		this.circle(array, pos, len / 2, gap, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.circle(array, pos, len / 2, gap, depth + 1);
 		if (pos + len * gap / 2 < this.end) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.circle(array, pos + len * gap / 2, len / 2, gap, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.circle(array, pos + len * gap / 2, len / 2, gap, depth + 1);
 		}
 	}
 
 	private void weaveCircle(int[] array, int pos, int len, int gap, int depth) {
 		if (len < 2)
 			return;
-		Writes.recordDepth(depth++);
-		Writes.recursion(2);
-		this.weaveCircle(array, pos, len / 2, 2 * gap, depth);
-		this.weaveCircle(array, pos + gap, len / 2, 2 * gap, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.weaveCircle(array, pos, len / 2, 2 * gap, depth + 1);
+		this.weaveCircle(array, pos + gap, len / 2, 2 * gap, depth + 1);
 
 		this.circle(array, pos, len, gap, depth);
 	}

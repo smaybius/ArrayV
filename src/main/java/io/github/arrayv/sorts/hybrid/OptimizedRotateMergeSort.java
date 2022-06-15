@@ -256,10 +256,11 @@ public final class OptimizedRotateMergeSort extends Sort {
                 m3 = (m2++) - (mid - m1);
             }
             rotate(array, m1, mid - m1, m2 - mid);
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            merge(array, m3 + 1, m2, end, depth);
-            merge(array, start, m1, m3, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            merge(array, m3 + 1, m2, end, depth + 1);
+            Writes.recursion();
+            merge(array, start, m1, m3, depth + 1);
         } else {
             if (end - mid < mid - start) {
                 mergeDown(array, start, mid, end);

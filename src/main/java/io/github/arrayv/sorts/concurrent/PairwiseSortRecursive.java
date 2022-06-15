@@ -52,15 +52,17 @@ public final class PairwiseSortRecursive extends Sort {
             b += (2 * gap);
         }
         if (((end - start) / gap) % 2 == 0) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.pairwiserecursive(array, start, end, gap * 2, sleep, depth);
-            this.pairwiserecursive(array, start + gap, end + gap, gap * 2, sleep, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.pairwiserecursive(array, start, end, gap * 2, sleep, depth + 1);
+            Writes.recursion();
+            this.pairwiserecursive(array, start + gap, end + gap, gap * 2, sleep, depth + 1);
         } else {
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.pairwiserecursive(array, start, end + gap, gap * 2, sleep, depth);
-            this.pairwiserecursive(array, start + gap, end, gap * 2, sleep, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.pairwiserecursive(array, start, end + gap, gap * 2, sleep, depth + 1);
+            Writes.recursion();
+            this.pairwiserecursive(array, start + gap, end, gap * 2, sleep, depth + 1);
         }
         int a = 1;
         while (a < ((end - start) / gap)) {

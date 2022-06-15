@@ -32,10 +32,11 @@ public final class SillySort extends Sort {
 			 * use this function (recursively) to find put the minimum elements of
 			 * each half into the first elements of each half
 			 */
-			Writes.recordDepth(depth++);
-			Writes.recursion(2);
-			this.sillySort(array, i, m, depth);
-			this.sillySort(array, m + 1, j, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.sillySort(array, i, m, depth + 1);
+			Writes.recursion();
+			this.sillySort(array, m + 1, j, depth + 1);
 
 			/*
 			 * Choose the smallest element of the two halves, and put that element in
@@ -47,9 +48,9 @@ public final class SillySort extends Sort {
 
 			Highlights.markArray(1, i);
 			Highlights.markArray(2, m + 1);
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.sillySort(array, i + 1, j, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.sillySort(array, i + 1, j, depth + 1);
 		}
 	}
 

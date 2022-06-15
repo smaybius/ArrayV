@@ -70,9 +70,9 @@ public final class BlockSwapMergeSort extends Sort {
 
         while (m > 0) {
             this.multiSwap(array, mid - m, mid, m);
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.multiSwapMerge(array, mid, mid + m, end, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.multiSwapMerge(array, mid, mid + m, end, depth + 1);
 
             end = mid;
             mid -= m;

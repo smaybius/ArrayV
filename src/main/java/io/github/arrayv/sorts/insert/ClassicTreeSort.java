@@ -51,9 +51,9 @@ public final class ClassicTreeSort extends Sort {
 		Delays.sleep(1);
 
 		if (lower[r] != 0) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.traverse(array, temp, lower, upper, lower[r], depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.traverse(array, temp, lower, upper, lower[r], depth + 1);
 		}
 
 		Writes.write(temp, this.idx++, array[r], 0, false, true);
@@ -61,9 +61,9 @@ public final class ClassicTreeSort extends Sort {
 		Delays.sleep(1);
 
 		if (upper[r] != 0) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.traverse(array, temp, lower, upper, upper[r], depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.traverse(array, temp, lower, upper, upper[r], depth + 1);
 		}
 	}
 

@@ -201,17 +201,17 @@ public final class FluxSort extends QuadSorting {
 			Writes.arraycopy(swap, 0, array, pta, sSize, 0.5, true, false);
 			this.quadSortSwap(array, swap, pta, sSize);
 		} else {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.fluxPartition(array, swap, swap, pta, sSize, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.fluxPartition(array, swap, swap, pta, sSize, depth + 1);
 		}
 
 		if (sSize <= aSize / 16 || aSize <= FLUX_OUT)
 			this.quadSortSwap(array, swap, start, aSize);
 		else {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.fluxPartition(array, swap, array, start, aSize, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.fluxPartition(array, swap, array, start, aSize, depth + 1);
 		}
 	}
 

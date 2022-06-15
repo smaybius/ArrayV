@@ -47,20 +47,22 @@ public final class BitonicSortRecursive extends Sort {
             for (int i = lo; i < lo + n - m; i++) {
                 this.compare(A, i, i + m, dir);
             }
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.bitonicMerge(A, lo, m, dir, depth);
-            this.bitonicMerge(A, lo + m, n - m, dir, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.bitonicMerge(A, lo, m, dir, depth + 1);
+            Writes.recursion();
+            this.bitonicMerge(A, lo + m, n - m, dir, depth + 1);
         }
     }
 
     private void bitonicSort(int[] A, int lo, int n, boolean dir, int depth) {
         if (n > 1) {
             int m = n / 2;
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.bitonicSort(A, lo, m, !dir, depth);
-            this.bitonicSort(A, lo + m, n - m, dir, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.bitonicSort(A, lo, m, !dir, depth + 1);
+            Writes.recursion();
+            this.bitonicSort(A, lo + m, n - m, dir, depth + 1);
             this.bitonicMerge(A, lo, n, dir, depth);
         }
     }

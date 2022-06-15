@@ -680,9 +680,9 @@ public abstract class PDQSorting extends Sort {
             // Sort the left partition first using recursion and do tail recursion
             // elimination for
             // the right-hand partition.
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.pdqLoop(array, begin, pivotPos, Branchless, badAllowed, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.pdqLoop(array, begin, pivotPos, Branchless, badAllowed, depth + 1);
             begin = pivotPos + 1;
             leftmost = false;
         }

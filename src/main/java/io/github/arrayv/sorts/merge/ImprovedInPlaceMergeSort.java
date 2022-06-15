@@ -82,13 +82,13 @@ public final class ImprovedInPlaceMergeSort extends Sort {
 
         if (b - a > 2) {
             if (b - a > 3) {
-                Writes.recordDepth(depth++);
-                Writes.recursion(1);
-                this.mergeSort(array, a, m, 2 * sleep, depth);
+                Writes.recordDepth(depth);
+                Writes.recursion();
+                this.mergeSort(array, a, m, 2 * sleep, depth + 1);
             }
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.mergeSort(array, m, b, 2 * sleep, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.mergeSort(array, m, b, 2 * sleep, depth + 1);
         }
 
         this.merge(array, a, m, b, sleep);

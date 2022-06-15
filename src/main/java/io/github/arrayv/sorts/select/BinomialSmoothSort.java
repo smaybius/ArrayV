@@ -37,9 +37,9 @@ public final class BinomialSmoothSort extends Sort {
         if (Reads.compareValues(array[node - (1 << choice)], array[node]) != 1)
             return;
         Writes.swap(array, node, node - (1 << choice), .65, true, false);
-        Writes.recordDepth(depth++);
-        Writes.recursion(1);
-        thrift(array, node - (1 << choice), (node - (1 << choice)) % 2 == 1, choice == height(node), depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        thrift(array, node - (1 << choice), (node - (1 << choice)) % 2 == 1, choice == height(node), depth + 1);
     }
 
     @Override

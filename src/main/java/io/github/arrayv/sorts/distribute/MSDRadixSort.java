@@ -76,9 +76,9 @@ public final class MSDRadixSort extends Sort {
 
         int sum = 0;
         for (int i = 0; i < registers.length; i++) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.radixMSD(array, length, sum + min, sum + min + registers[i].size(), radix, pow - 1, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.radixMSD(array, length, sum + min, sum + min + registers[i].size(), radix, pow - 1, depth + 1);
 
             sum += registers[i].size();
             Writes.arrayListClear(registers[i]);

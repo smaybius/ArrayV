@@ -59,9 +59,9 @@ public final class PairwiseMergeSortRecursive extends Sort {
 				this.compSwap(array, j + i, j + i + k);
 
 		if (b - a > 4) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(1);
-			this.pairwiseMerge(array, m, b, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.pairwiseMerge(array, m, b, depth + 1);
 		}
 	}
 
@@ -72,10 +72,11 @@ public final class PairwiseMergeSortRecursive extends Sort {
 			this.compSwap(array, i, j);
 
 		if (b - a > 2) {
-			Writes.recordDepth(depth++);
-			Writes.recursion(2);
-			this.pairwiseMergeSort(array, a, m, depth);
-			this.pairwiseMergeSort(array, m, b, depth);
+			Writes.recordDepth(depth);
+			Writes.recursion();
+			this.pairwiseMergeSort(array, a, m, depth + 1);
+			Writes.recursion();
+			this.pairwiseMergeSort(array, m, b, depth + 1);
 			this.pairwiseMerge(array, a, b, depth);
 		}
 	}
