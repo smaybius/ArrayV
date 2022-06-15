@@ -52,10 +52,11 @@ public class WeavedMergeSort extends Sort {
         int low = residue;
         int high = residue + modulus;
         int dmodulus = modulus << 1;
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        merge(array, tmp, length, low, dmodulus, depth);
-        merge(array, tmp, length, high, dmodulus, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        merge(array, tmp, length, low, dmodulus, depth + 1);
+        Writes.recursion();
+        merge(array, tmp, length, high, dmodulus, depth + 1);
 
         Highlights.markArray(1, low);
         Highlights.markArray(2, high);

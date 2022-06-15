@@ -8,8 +8,8 @@ public final class KotaSort extends KotaSorting {
         super(arrayVisualizer);
 
         this.setSortListName("Kota");
-        //this.setRunAllID("Grail Sort (Block Merge Sort)");
-        //this.setRunAllSortsName("Grail Sort [Block Merge Sort]");
+        // this.setRunAllID("Grail Sort (Block Merge Sort)");
+        // this.setRunAllSortsName("Grail Sort [Block Merge Sort]");
         this.setRunAllSortsName("Kotasort");
         this.setRunSortName("Kotasort");
         this.setCategory("Hybrid Sorts");
@@ -22,11 +22,10 @@ public final class KotaSort extends KotaSorting {
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        if(Delays.getSleepRatio() == 55.1) {
+        if (Delays.getSleepRatio() == 55.1) {
             Delays.setSleepRatio(1);
-            //this.kotaSortDynamicBuf(array, 0, length);
-        }
-        else {
+            // this.kotaSortDynamicBuf(array, 0, length);
+        } else {
             this.kotaSort(array, 0, length);
         }
     }

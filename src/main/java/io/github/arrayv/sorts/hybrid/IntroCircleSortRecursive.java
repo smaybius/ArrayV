@@ -1,7 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.insert.BinaryInsertionSort;
+import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.CircleSorting;
 
 /*
@@ -45,8 +45,8 @@ public final class IntroCircleSortRecursive extends CircleSorting {
             iterations++;
 
             if (iterations >= threshold) {
-                BinaryInsertionSort binaryInserter = new BinaryInsertionSort(this.arrayVisualizer);
-                binaryInserter.customBinaryInsert(array, 0, length, 0.1);
+                InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
+                binaryInserter.customInsertSort(array, 0, length, 0.5, false);
                 break;
             }
         } while (this.circleSortRoutine(array, 0, n - 1, 0, 1, 0) != 0);

@@ -99,7 +99,8 @@ public final class FifthMergeSort extends Sort {
         return new IndexPair(left + 1, right + 1);
     }
 
-    protected void mergeForwardsWithBuffer(int[] array, int[] buffer, int dest, int left, int leftEnd, int mid, int end) {
+    protected void mergeForwardsWithBuffer(int[] array, int[] buffer, int dest, int left, int leftEnd, int mid,
+            int end) {
         int right = mid;
         while (left < leftEnd && right < end) {
             Highlights.markArray(2, left);
@@ -186,7 +187,7 @@ public final class FifthMergeSort extends Sort {
         }
     }
 
-	public void fifthMergeSort(int[] array, int currentLength) {
+    public void fifthMergeSort(int[] array, int currentLength) {
         inserter = new BinaryInsertionSort(arrayVisualizer);
 
         int fifthLen = currentLength / 5;
@@ -212,10 +213,10 @@ public final class FifthMergeSort extends Sort {
         mergeForwardsWithBuffer(array, buffer, 0, 0, bufferLen, bufferLen, currentLength);
 
         Writes.deleteExternalArray(buffer);
-	}
+    }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-		fifthMergeSort(array, currentLength);
+        fifthMergeSort(array, currentLength);
     }
 }

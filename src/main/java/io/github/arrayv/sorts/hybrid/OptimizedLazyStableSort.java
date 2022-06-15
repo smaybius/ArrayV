@@ -55,18 +55,20 @@ public final class OptimizedLazyStableSort extends GrailSorting {
 
     public void insertionSort(int[] array, int a, int b, double sleep, boolean auxwrite) {
         int i = a + 1;
-        if(Reads.compareIndices(array, i - 1, i++, sleep, true) == 1) {
-            while(i < b && Reads.compareIndices(array, i - 1, i, sleep, true) == 1) i++;
+        if (Reads.compareIndices(array, i - 1, i++, sleep, true) == 1) {
+            while (i < b && Reads.compareIndices(array, i - 1, i, sleep, true) == 1)
+                i++;
             Writes.reversal(array, a, i - 1, sleep, true, auxwrite);
-        }
-        else while(i < b && Reads.compareIndices(array, i - 1, i, sleep, true) <= 0) i++;
+        } else
+            while (i < b && Reads.compareIndices(array, i - 1, i, sleep, true) <= 0)
+                i++;
 
         Highlights.clearMark(2);
 
-        while(i < b) {
+        while (i < b) {
             int current = array[i];
             int pos = i - 1;
-            while(pos >= a && Reads.compareValues(array[pos], current) > 0){
+            while (pos >= a && Reads.compareValues(array[pos], current) > 0) {
                 Writes.write(array, pos + 1, array[pos], sleep, true, auxwrite);
                 pos--;
             }
@@ -83,17 +85,17 @@ public final class OptimizedLazyStableSort extends GrailSorting {
         if (dist < len)
             insertionSort(arr, pos + dist, pos + len, 1, false);
 
-        for(int part = 16; part < len; part *= 2) {
+        for (int part = 16; part < len; part *= 2) {
             int left = 0;
             int right = len - 2 * part;
 
-            while(left <= right) {
+            while (left <= right) {
                 this.grailMergeWithoutBuffer(arr, pos + left, part, part);
                 left += 2 * part;
             }
 
             int rest = len - left;
-            if(rest > part) {
+            if (rest > part) {
                 this.grailMergeWithoutBuffer(arr, pos + left, part, rest - part);
             }
         }

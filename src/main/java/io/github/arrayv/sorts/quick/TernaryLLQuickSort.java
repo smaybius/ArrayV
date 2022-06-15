@@ -84,10 +84,11 @@ public final class TernaryLLQuickSort extends Sort {
     private void quickSortTernaryLL(int[] A, int lo, int hi, int depth) {
         if (lo + 1 < hi) {
             PivotPair mid = partitionTernaryLL(A, lo, hi);
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            quickSortTernaryLL(A, lo, mid.first, depth);
-            quickSortTernaryLL(A, mid.second, hi, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            quickSortTernaryLL(A, lo, mid.first, depth + 1);
+            Writes.recursion();
+            quickSortTernaryLL(A, mid.second, hi, depth + 1);
         }
     }
 

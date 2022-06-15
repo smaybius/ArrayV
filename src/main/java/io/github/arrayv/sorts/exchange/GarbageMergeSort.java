@@ -40,20 +40,23 @@ final public class GarbageMergeSort extends Sort {
         this.setBogoSort(false);
     }
 
-    public void garbageMerge(int[] a, int start, int end) {
+    public void garbageMerge(int[] a, int start, int end, int depth) {
         if (start < end) {
             if (Reads.compareIndices(a, start, end, 0.001, true) > 0) {
                 Writes.swap(a, start, end, 0.001, true, false);
             }
 
             if (end - start + 1 >= 3) {
-                garbageMerge(a, start, end - 1);
-                garbageMerge(a, start + 1, end);
+                Writes.recordDepth(depth);
+                Writes.recursion();
+                garbageMerge(a, start, end - 1, depth + 1);
+                Writes.recursion();
+                garbageMerge(a, start + 1, end, depth + 1);
             }
         }
     }
 
-    public void garbageMergeSort(int[] a, int start, int end) {
+    public void garbageMergeSort(int[] a, int start, int end, int depth) {
         if (start < end) {
             if (Reads.compareIndices(a, start, end, 0.001, true) > 0) {
                 Writes.swap(a, start, end, 0.001, true, false);
@@ -61,15 +64,18 @@ final public class GarbageMergeSort extends Sort {
 
             if (end - start + 1 >= 3) {
                 int mid = (start + end) / 2;
-                garbageMergeSort(a, start, mid);
-                garbageMergeSort(a, mid + 1, end);
-                garbageMerge(a, start, end);
+                Writes.recordDepth(depth);
+                Writes.recursion();
+                garbageMergeSort(a, start, mid, depth + 1);
+                Writes.recursion();
+                garbageMergeSort(a, mid + 1, end, depth + 1);
+                garbageMerge(a, start, end, depth);
             }
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.garbageMergeSort(array, 0, currentLength - 1);
+        this.garbageMergeSort(array, 0, currentLength - 1, 0);
     }
 }

@@ -10,7 +10,7 @@ public final class LRQuickSort extends Sort {
         this.setSortListName("Left/Right Quick");
         this.setRunAllSortsName("Quick Sort, Left/Right Pointers");
         this.setRunSortName("Left/Right Quicksort");
-        this.setCategory("Exchange Sorts");
+        this.setCategory("Quick Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -58,14 +58,14 @@ public final class LRQuickSort extends Sort {
         }
 
         if (p < j) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.quickSort(a, p, j, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.quickSort(a, p, j, depth + 1);
         }
         if (i < r) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.quickSort(a, i, r, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.quickSort(a, i, r, depth + 1);
         }
     }
 

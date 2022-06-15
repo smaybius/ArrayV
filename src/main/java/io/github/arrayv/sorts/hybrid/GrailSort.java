@@ -52,8 +52,8 @@ public final class GrailSort extends GrailSorting {
         super(arrayVisualizer);
 
         this.setSortListName("Grail");
-        //this.setRunAllID("Grail Sort (Block Merge Sort)");
-        //this.setRunAllSortsName("Grail Sort [Block Merge Sort]");
+        // this.setRunAllID("Grail Sort (Block Merge Sort)");
+        // this.setRunAllSortsName("Grail Sort [Block Merge Sort]");
         this.setRunAllSortsName("Grailsort");
         this.setRunSortName("Grailsort");
         this.setCategory("Hybrid Sorts");
@@ -75,23 +75,24 @@ public final class GrailSort extends GrailSorting {
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-		switch(bucketCount) {
-		case 1:
-            int[] ExtBuf = Writes.createExternalArray(this.getStaticBuffer());
-            this.grailCommonSort(array, 0, length, ExtBuf, 0, this.getStaticBuffer());
-            Writes.deleteExternalArray(ExtBuf);
-			break;
+        switch (bucketCount) {
+            case 1:
+                int[] ExtBuf = Writes.createExternalArray(this.getStaticBuffer());
+                this.grailCommonSort(array, 0, length, ExtBuf, 0, this.getStaticBuffer());
+                Writes.deleteExternalArray(ExtBuf);
+                break;
 
-		case 2:
-            int tempLen = 1;
-            while(tempLen * tempLen < length) tempLen *= 2;
-            int[] DynExtBuf = Writes.createExternalArray(tempLen);
-            this.grailCommonSort(array, 0, length, DynExtBuf, 0, tempLen);
-            Writes.deleteExternalArray(DynExtBuf);
-			break;
+            case 2:
+                int tempLen = 1;
+                while (tempLen * tempLen < length)
+                    tempLen *= 2;
+                int[] DynExtBuf = Writes.createExternalArray(tempLen);
+                this.grailCommonSort(array, 0, length, DynExtBuf, 0, tempLen);
+                Writes.deleteExternalArray(DynExtBuf);
+                break;
 
-		default:
-			this.grailCommonSort(array, 0, length, null, 0, 0);
-		}
+            default:
+                this.grailCommonSort(array, 0, length, null, 0, 0);
+        }
     }
 }

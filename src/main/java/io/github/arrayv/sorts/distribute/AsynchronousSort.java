@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.select;
+package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.insert.InsertionSort;
@@ -37,7 +37,7 @@ public final class AsynchronousSort extends Sort {
         this.setSortListName("Asynchronous");
         this.setRunAllSortsName("Asynchronous Sort");
         this.setRunSortName("Asynchronous Sort");
-        this.setCategory("Selection Sorts");
+        this.setCategory("Distribution Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -51,7 +51,7 @@ public final class AsynchronousSort extends Sort {
 
         int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (int i = 0; i < length; i++) {
-            Writes.write(ext, i, array[i], 0.5, true, true);
+            Writes.write(ext, i, array[i], 0.5, false, true);
             if (array[i] < min) {
                 min = array[i];
             }
@@ -67,7 +67,7 @@ public final class AsynchronousSort extends Sort {
                 Highlights.markArray(2, j);
                 if (Reads.compareValues(ext[j], cur) <= 0) {
                     Writes.write(array, i, ext[j], 0.01, true, false);
-                    Writes.write(ext, j, max, 0, false, true);
+                    Writes.write(ext, j, max, 0.25, false, true);
                     i++;
                 }
                 Delays.sleep(0.01);

@@ -36,7 +36,7 @@ public final class ForcedStableQuickSort extends Sort {
 		this.setSortListName("Forced Stable Quick");
 		this.setRunAllSortsName("Forced Stable Quick Sort");
 		this.setRunSortName("Forced Stable Quicksort");
-		this.setCategory("Exchange Sorts");
+		this.setCategory("Quick Sorts");
 		this.setBucketSort(false);
 		this.setRadixSort(false);
 		this.setUnreasonablySlow(false);
@@ -101,10 +101,11 @@ public final class ForcedStableQuickSort extends Sort {
 		this.medianOfThree(array, key, a, b);
 		int p = this.partition(array, key, a + 1, b, a);
 		this.stableSwap(array, key, a, p);
-		Writes.recordDepth(depth++);
-		Writes.recursion(2);
-		this.quickSort(array, key, a, p, depth);
-		this.quickSort(array, key, p + 1, b, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.quickSort(array, key, a, p, depth + 1);
+		Writes.recursion();
+		this.quickSort(array, key, p + 1, b, depth + 1);
 	}
 
 	@Override

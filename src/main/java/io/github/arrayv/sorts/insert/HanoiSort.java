@@ -235,9 +235,9 @@ public final class HanoiSort extends Sort {
 			return true;
 		if (moves % 2 == 0)
 			return false;
-		Writes.recordDepth(depth++);
-		Writes.recursion(1);
-		return validNumberMoves(moves / 2, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		return validNumberMoves(moves / 2, depth + 1);
 	}
 
 	/**
@@ -249,9 +249,9 @@ public final class HanoiSort extends Sort {
 	private int getHeight(int movesPlus1, int depth) {
 		if (movesPlus1 == 1)
 			return 0;
-		Writes.recordDepth(depth++);
-		Writes.recursion(1);
-		return getHeight(movesPlus1 / 2, depth) + 1;
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		return getHeight(movesPlus1 / 2, depth + 1) + 1;
 	}
 
 	/**
@@ -270,6 +270,7 @@ public final class HanoiSort extends Sort {
 		Writes.changeAuxWrites(1);
 		Writes.startLap();
 		stack.push(array[sp]);
+		Writes.changeAllocAmount(1);
 		Writes.stopLap();
 		sp++;
 		Highlights.markArray(1, sp);
@@ -282,6 +283,7 @@ public final class HanoiSort extends Sort {
 			Writes.changeAuxWrites(1);
 			Writes.startLap();
 			stack.push(array[sp]);
+			Writes.changeAllocAmount(1);
 			Writes.stopLap();
 			sp++;
 			Highlights.markArray(1, sp);
@@ -301,12 +303,14 @@ public final class HanoiSort extends Sort {
 		// Move element
 		sp--;
 		Highlights.markArray(1, sp);
-		Writes.write(array, sp, stack.pop(), 0.25, false, false);
+		Writes.write(array, sp, stack.pop(), 0.25, true, false);
 		// Move any duplicates
 		while (!stack.isEmpty() && Reads.compareValues(stack.peek(), array[sp]) == 0) {
 			sp--;
 			Highlights.markArray(1, sp);
-			Writes.write(array, sp, stack.pop(), 0.25, false, false);
+			Writes.write(array, sp, stack.pop(), 0.25, true, false);
+			Writes.changeAuxWrites(1);
+			Writes.changeAllocAmount(-1);
 		}
 	}
 
@@ -319,14 +323,14 @@ public final class HanoiSort extends Sort {
 	 */
 	private void moveBetweenStacks(Stack<Integer> from, Stack<Integer> to) {
 		// Move element
-		Writes.changeAuxWrites(1);
+		Writes.changeAuxWrites(2);
 		Writes.startLap();
 		to.push(from.pop());
 		Writes.stopLap();
 		Delays.sleep(0.25);
 		// Move any duplicates
 		while (!from.isEmpty() && Reads.compareValues(from.peek(), to.peek()) == 0) {
-			Writes.changeAuxWrites(1);
+			Writes.changeAuxWrites(2);
 			Writes.startLap();
 			to.push(from.pop());
 			Writes.stopLap();

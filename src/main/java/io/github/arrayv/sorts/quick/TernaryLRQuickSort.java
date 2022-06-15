@@ -105,10 +105,11 @@ public final class TernaryLRQuickSort extends Sort {
         }
 
         Highlights.clearAllMarks();
-        Writes.recordDepth(depth++);
-        Writes.recursion(2);
-        quickSortTernaryLR(A, lo, lo + num_less - 1, depth);
-        quickSortTernaryLR(A, hi - num_greater + 1, hi, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        quickSortTernaryLR(A, lo, lo + num_less - 1, depth + 1);
+        Writes.recursion();
+        quickSortTernaryLR(A, hi - num_greater + 1, hi, depth + 1);
     }
 
     @Override

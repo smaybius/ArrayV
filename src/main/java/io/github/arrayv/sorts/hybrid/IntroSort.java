@@ -40,17 +40,17 @@ public final class IntroSort extends Sort {
     // https://gcc.gnu.org/onlinedocs/gcc-4.7.2/libstdc++/api/a01462_source.html
     @SuppressWarnings("unused")
     private int gccmedianof3(int[] arr, int left, int mid, int right) {
-        if (Reads.compareValues(arr[left], arr[mid]) < 0) {
-            if (Reads.compareValues(arr[mid], arr[right]) < 0) {
+        if (Reads.compareIndices(arr, left, mid, 1, true) < 0) {
+            if (Reads.compareIndices(arr, mid, right, 1, true) < 0) {
                 Writes.swap(arr, left, mid, 1, true, false);
-            } else if (Reads.compareValues(arr[left], arr[right]) < 0) {
+            } else if (Reads.compareIndices(arr, left, right, 1, true) < 0) {
                 Writes.swap(arr, left, right, 1, true, false);
             }
-        } else if (Reads.compareValues(arr[left], arr[right]) < 0) {
+        } else if (Reads.compareIndices(arr, left, right, 1, true) < 0) {
             middle = left;
             Highlights.markArray(3, left);
             return arr[left];
-        } else if (Reads.compareValues(arr[mid], arr[right]) < 0) {
+        } else if (Reads.compareIndices(arr, mid, right, 1, true) < 0) {
             Writes.swap(arr, left, right, 1, true, false);
         } else {
             Writes.swap(arr, left, mid, 1, true, false);
@@ -61,13 +61,13 @@ public final class IntroSort extends Sort {
     }
 
     private int medianof3(int[] arr, int left, int mid, int right) {
-        if (Reads.compareValues(arr[right], arr[left]) == -1) {
+        if (Reads.compareIndices(arr, right, left, 1, true) == -1) {
             Writes.swap(arr, left, right, 1, true, false);
         }
-        if (Reads.compareValues(arr[mid], arr[left]) == -1) {
+        if (Reads.compareIndices(arr, mid, left, 1, true) == -1) {
             Writes.swap(arr, mid, left, 1, true, false);
         }
-        if (Reads.compareValues(arr[right], arr[mid]) == -1) {
+        if (Reads.compareIndices(arr, right, mid, 1, true) == -1) {
             Writes.swap(arr, right, mid, 1, true, false);
         }
         middle = mid;
@@ -111,7 +111,7 @@ public final class IntroSort extends Sort {
         }
     }
 
-    private void introsortLoop(int[] a, int lo, int hi, int depthLimit, int depth) {
+    private void introsortLoop(int[] a, int lo, int hi, int depthLimit) {
         while (hi - lo > sizeThreshold) {
             if (depthLimit == 0) {
                 Highlights.clearAllMarks();
@@ -120,9 +120,7 @@ public final class IntroSort extends Sort {
             }
             depthLimit--;
             int p = partition(a, lo, hi, medianof3(a, lo, lo + ((hi - lo) / 2), hi - 1));
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            introsortLoop(a, p, hi, depthLimit, depth);
+            introsortLoop(a, p, hi, depthLimit);
             hi = p;
         }
         return;
@@ -132,7 +130,7 @@ public final class IntroSort extends Sort {
     public void runSort(int[] array, int length, int bucketCount) {
         heapSorter = new MaxHeapSort(this.arrayVisualizer);
 
-        introsortLoop(array, 0, length, 2 * floorLogBaseTwo(length), 0);
+        introsortLoop(array, 0, length, 2 * floorLogBaseTwo(length));
         Highlights.clearAllMarks();
 
         InsertionSort sort = new InsertionSort(this.arrayVisualizer);

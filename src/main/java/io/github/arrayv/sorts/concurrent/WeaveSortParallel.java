@@ -7,6 +7,7 @@ public final class WeaveSortParallel extends Sort {
     private int[] arr;
     private int length;
     private double DELAY = 1;
+
     public WeaveSortParallel(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
         this.setSortListName("Weave (Parallel)");
@@ -22,10 +23,12 @@ public final class WeaveSortParallel extends Sort {
 
     private class SortThread extends Thread {
         private int start, gap;
+
         SortThread(int start, int gap) {
             this.start = start;
             this.gap = gap;
         }
+
         public void run() {
             WeaveSortParallel.this.wrapper(this.start, this.gap);
         }
@@ -33,11 +36,13 @@ public final class WeaveSortParallel extends Sort {
 
     private class CircleThread extends Thread {
         private int start, stop, gap;
+
         CircleThread(int start, int stop, int gap) {
             this.start = start;
             this.stop = stop;
             this.gap = gap;
         }
+
         public void run() {
             WeaveSortParallel.this.circle(this.start, this.stop, this.gap);
         }

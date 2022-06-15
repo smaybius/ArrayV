@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 
 /*
 
-CODED FOR ARRAYV BY PCBOYGAMES
+CODED FOR ARRAYV BY PCBOYGAMES 
 
 ------------------------------
 - SORTING ALGORITHM MADHOUSE -

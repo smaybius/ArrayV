@@ -5,8 +5,9 @@ import io.github.arrayv.sorts.templates.Sort;
 
 public final class SplaySort extends Sort {
 
-    //Splay sort is an adaptive algorithm based on splay tree data structure
-    //It is O(n log n) in the average/worst case, and O(n) in the best case when the data is mostly sorted
+    // Splay sort is an adaptive algorithm based on splay tree data structure
+    // It is O(n log n) in the average/worst case, and O(n) in the best case when
+    // the data is mostly sorted
 
     public SplaySort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
@@ -22,7 +23,8 @@ public final class SplaySort extends Sort {
         this.setBogoSort(false);
     }
 
-    // Splay tree code retrieved from https://www.geeksforgeeks.org/splay-tree-set-2-insert-delete/
+    // Splay tree code retrieved from
+    // https://www.geeksforgeeks.org/splay-tree-set-2-insert-delete/
 
     final private class Node {
         int key;
@@ -41,7 +43,8 @@ public final class SplaySort extends Sort {
     private Node treeWrite(Node element, int at) {
         Node node = new Node(0);
 
-        if(at > 0 && at < this.length) Highlights.markArray(1, at - 1);
+        if (at > 0 && at < this.length)
+            Highlights.markArray(1, at - 1);
         Writes.changeAuxWrites(1);
         Writes.startLap();
         node = element;
@@ -78,7 +81,7 @@ public final class SplaySort extends Sort {
 
         if (Reads.compareValues(root.key, key) == 1) {
             if (root.left == null) {
-            return root;
+                return root;
             }
 
             if (Reads.compareValues(root.left.key, key) == 1) {
@@ -93,7 +96,7 @@ public final class SplaySort extends Sort {
             return (root.left == null) ? root : rightRotate(root, depth);
         } else {
             if (root.right == null) {
-            return root;
+                return root;
             }
 
             if (Reads.compareValues(root.right.key, key) == 1) {
@@ -139,7 +142,7 @@ public final class SplaySort extends Sort {
     }
 
     private void treeIns(int arr[]) {
-        for(int i = 0; i < this.length; i++) {
+        for (int i = 0; i < this.length; i++) {
             Highlights.markArray(2, i);
             this.insert(arr[i]);
         }

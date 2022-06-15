@@ -214,20 +214,6 @@ public enum Distributions {
                 array[i] = (int) (n * (Math.sin(c * i) + 1) / 2);
         }
     },
-    SINE_CONTINUOUS {
-        public String getName() {
-            return "Continuous Sine Wave";
-        }
-
-        @Override
-        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
-            int currentLen = arrayVisualizer.getCurrentLength();
-            int n = currentLen - 1;
-
-            for (int i = 0; i < currentLen; i++)
-                array[i] = (int) (n * (Math.sin(i / 16) + 1) / 2);
-        }
-    },
     COSINE {
         public String getName() {
             return "Cosine Wave";
@@ -243,20 +229,6 @@ public enum Distributions {
                 array[i] = (int) (n * (Math.cos(c * i) + 1) / 2);
         }
     },
-    COSINE_CONTINUOUS {
-        public String getName() {
-            return "Continuous Cosine Wave";
-        }
-
-        @Override
-        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
-            int currentLen = arrayVisualizer.getCurrentLength();
-            int n = currentLen - 1;
-
-            for (int i = 0; i < currentLen; i++)
-                array[i] = (int) (n * (Math.cos(i / 16) + 1) / 2);
-        }
-    },
     TANGENT {
         public String getName() {
             return "Tangent Wave";
@@ -266,17 +238,81 @@ public enum Distributions {
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int currentLen = arrayVisualizer.getCurrentLength();
             int n = currentLen - 1;
+            double c = Math.PI / n;
+
+            for (int i = 0; i < currentLen; i++) {
+                if (Math.tan(c * i) + (n / 2) + 1 > currentLen)
+                    array[i] = currentLen;
+                else if (Math.tan(c * i) + (n / 2) + 1 < 0)
+                    array[i] = 0;
+                else
+                    array[i] = (int) (n * (Math.tan(c * i) + 1) / 32) + (n / 2);
+            }
+
+        }
+    },
+    COTANGENT {
+        public String getName() {
+            return "Cotangent Wave";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            int n = currentLen - 1;
+            double c = Math.PI / n;
+
+            for (int i = 0; i < currentLen; i++) {
+                if (1 / Math.tan(c * i) + (n / 2) + 1 > currentLen)
+                    array[i] = currentLen;
+                else if (1 / Math.tan(c * i) + (n / 2) + 1 < 0)
+                    array[i] = 0;
+                else
+                    array[i] = (int) (n * (1 / Math.tan(c * i) + 1) / 32) + (n / 2);
+            }
+
+        }
+    },
+    SECANT {
+        public String getName() {
+            return "Secant Wave";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            int n = currentLen - 1;
             double c = 2 * Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (Math.tan(c * i) + 1 > currentLen)
+                if (1 / Math.sin(c * i) + (n / 2) + 1 > currentLen)
                     array[i] = currentLen;
-                else if (Math.tan(c * i) + 1 < 0)
+                else if (1 / Math.sin(c * i) + (n / 2) + 1 < 0)
                     array[i] = 0;
                 else
-                    array[i] = (int) (n * (Math.tan(c * i) + 1) / 16);
+                    array[i] = (int) (n * (1 / Math.sin(c * i) + 1) / 32) + (n / 2);
             }
+        }
+    },
+    COSECANT {
+        public String getName() {
+            return "Cosecant Wave";
+        }
 
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            int n = currentLen - 1;
+            double c = 2 * Math.PI / n;
+
+            for (int i = 0; i < currentLen; i++) {
+                if (1 / Math.cos(c * i) + (n / 2) + 1 > currentLen)
+                    array[i] = currentLen;
+                else if (1 / Math.cos(c * i) + (n / 2) + 1 < 0)
+                    array[i] = 0;
+                else
+                    array[i] = (int) (n * (1 / Math.cos(c * i) + 1) / 32) + (n / 2);
+            }
         }
     },
     PERLIN_NOISE {
@@ -514,7 +550,7 @@ public enum Distributions {
     },
     FSD {// fly straight dangit (OEIS A133058)
         public String getName() {
-            return "Fly Straight, Damnit!";
+            return "OEIS \"Fly Straight, Damnit!\" Function";
         }
 
         @Override
@@ -623,6 +659,121 @@ public enum Distributions {
                         break;
                 }
             }
+        }
+    },
+    WEIERSTRASS {
+        @Override
+        public String getName() {
+            return "Weierstrass Function";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int n = arrayVisualizer.getCurrentLength();
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < 10; j++) {
+                    array[i] = n * (int) (0.5 * (Math.pow(7, -j * 0.75) * Math.cos((Math.pow(7, j) * Math.PI * i))));
+                }
+        }
+    },
+    QUESTIONMARK {
+        @Override
+        public String getName() {
+            return "Minkowski's Question Mark Function";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int n = arrayVisualizer.getCurrentLength();
+            for (int i = 0; i < n; i++) {
+                array[i] += minkowski(i);
+            }
+        }
+
+        private int minkowski(int x) {
+            if (x > 1 || x < 0)
+                return (int) Math.floor(x) + (int) minkowski(x - (int) Math.floor(x));
+            int p = x;
+            int q = 1;
+            int r = p + 1;
+            int s = 1;
+            int d = 1;
+            int y = p;
+
+            while (true) {
+                d /= 2;
+                if (y + d == y)
+                    break;
+
+                int m = p + r;
+                if (m < 0 || p < 0)
+                    break;
+
+                int n = q + s;
+                if (n < 0)
+                    break;
+                if (x < m / n) {
+                    r = m;
+                    s = n;
+                } else {
+                    y += d;
+                    p = m;
+                    q = n;
+                }
+            }
+            return y + d;
+        }
+
+        private int minkowski_inv(int x) {
+            if (x > 1 || x < 0)
+                return (int) (Math.floor(x) + minkowski_inv(x - (int) Math.floor(x)));
+            if (x == 1 || x == 0)
+                return x;
+            List<Integer> contFrac = new ArrayList<Integer>();
+            int curr = 0;
+            int count = 1;
+            int i = 0;
+            while (true) {
+                x *= 2;
+                if (curr == 0) {
+                    if (x < 1) {
+                        count++;
+                    } else {
+                        i++;
+                        contFrac.add(0);
+                        contFrac.set(i, count);
+
+                        i++;
+                        count = 1;
+                        curr = 1;
+                        x--;
+                    }
+                } else {
+                    if (x > 1) {
+                        count++;
+                        x--;
+                    } else {
+                        contFrac.add(0);
+                        contFrac.set(i, count);
+
+                        i++;
+                        count = 1;
+                        curr = 0;
+                    }
+                }
+                if (x == Math.floor(x)) {
+                    contFrac.set(i, count);
+                    break;
+                }
+
+                if (i == 151)
+                    break;
+            }
+            int ret = 1 / contFrac.get(i);
+            for (int j = i - 1; j > -1; j--) {
+                contFrac.set(j, 1 / ret);
+            }
+            return 1 / ret;
         }
     },
     CUSTOM {

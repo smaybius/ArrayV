@@ -47,7 +47,8 @@ public class IterativeTopDownMergeSort extends Sort {
 
     private static int ceilPowerOfTwo(int x) {
         --x;
-        for (int i=16; i>0; i>>=1) x |= x>>i;
+        for (int i = 16; i > 0; i >>= 1)
+            x |= x >> i;
         return ++x;
     }
 
@@ -88,10 +89,11 @@ public class IterativeTopDownMergeSort extends Sort {
     }
 
     protected void mergeSort(int[] array, int[] tmp, int length) {
-        if (length<1<<15)
-            for (int subarrayCount=ceilPowerOfTwo(length); subarrayCount>1; subarrayCount>>=1)
-                for (int i=0; i<subarrayCount; i+=2)
-                    merge(array, tmp, length*i/subarrayCount, length*(i+1)/subarrayCount, length*(i+2)/subarrayCount);
+        if (length < 1 << 15)
+            for (int subarrayCount = ceilPowerOfTwo(length); subarrayCount > 1; subarrayCount >>= 1)
+                for (int i = 0; i < subarrayCount; i += 2)
+                    merge(array, tmp, length * i / subarrayCount, length * (i + 1) / subarrayCount,
+                            length * (i + 2) / subarrayCount);
         else
             runSortLarge(array, tmp, length);
     }
@@ -103,32 +105,31 @@ public class IterativeTopDownMergeSort extends Sort {
         Writes.deleteExternalArray(tmp);
     }
 
-    // implements "rational numbers" instead of multiplication/division but pretty hacky
+    // implements "rational numbers" instead of multiplication/division but pretty
+    // hacky
     private void runSortLarge(int[] array, int[] tmp, int length) {
-        for (
-            int subarrayCount=ceilPowerOfTwo(length), wholeI=length/subarrayCount, fracI=length%subarrayCount;
-            subarrayCount>1;
-        ) {
-            for (int whole=0, frac=0; whole<length;) {
+        for (int subarrayCount = ceilPowerOfTwo(length), wholeI = length / subarrayCount,
+                fracI = length % subarrayCount; subarrayCount > 1;) {
+            for (int whole = 0, frac = 0; whole < length;) {
                 int start = whole;
                 whole += wholeI;
                 frac += fracI;
-                if (frac>=subarrayCount) {
+                if (frac >= subarrayCount) {
                     ++whole;
                     frac -= subarrayCount;
                 }
                 int mid = whole;
                 whole += wholeI;
                 frac += fracI;
-                if (frac>=subarrayCount) {
+                if (frac >= subarrayCount) {
                     ++whole;
                     frac -= subarrayCount;
                 }
                 merge(array, tmp, start, mid, whole);
             }
-            subarrayCount>>=1;
-            wholeI<<=1;
-            if (fracI>=subarrayCount) {
+            subarrayCount >>= 1;
+            wholeI <<= 1;
+            if (fracI >= subarrayCount) {
                 ++wholeI;
                 fracI -= subarrayCount;
             }

@@ -2,6 +2,7 @@ package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.IndexedRotations;
 
 /*
  *
@@ -46,27 +47,8 @@ public final class RotateLSDRadixSort extends Sort {
 
 	private int base;
 
-	private void multiSwap(int[] array, int a, int b, int len) {
-		for (int i = 0; i < len; i++)
-			Writes.swap(array, a + i, b + i, 0.5, true, false);
-	}
-
 	private void rotate(int[] array, int a, int m, int b) {
-		int l = m - a, r = b - m;
-
-		while (l > 0 && r > 0) {
-			if (r < l) {
-				this.multiSwap(array, m - r, m, r);
-				b -= r;
-				m -= r;
-				l -= r;
-			} else {
-				this.multiSwap(array, a, m, l);
-				a += l;
-				m += l;
-				r -= l;
-			}
-		}
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private int binSearch(int[] array, int a, int b, int d, int p) {
@@ -92,10 +74,11 @@ public final class RotateLSDRadixSort extends Sort {
 
 		this.rotate(array, m1, m, m2);
 		m = m1 + (m2 - m);
-		Writes.recordDepth(depth++);
-		Writes.recursion(2);
-		this.merge(array, m, m2, b, dm, db, p, depth);
-		this.merge(array, a, m1, m, da, dm, p, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.merge(array, m, m2, b, dm, db, p, depth + 1);
+		Writes.recursion();
+		this.merge(array, a, m1, m, da, dm, p, depth + 1);
 	}
 
 	private void mergeSort(int[] array, int a, int b, int p, int depth) {
@@ -103,10 +86,11 @@ public final class RotateLSDRadixSort extends Sort {
 			return;
 
 		int m = (a + b) / 2;
-		Writes.recordDepth(depth++);
-		Writes.recursion(2);
-		this.mergeSort(array, a, m, p, depth);
-		this.mergeSort(array, m, b, p, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.mergeSort(array, a, m, p, depth + 1);
+		Writes.recursion();
+		this.mergeSort(array, m, b, p, depth + 1);
 
 		this.merge(array, a, m, b, 0, this.base, p, depth);
 	}

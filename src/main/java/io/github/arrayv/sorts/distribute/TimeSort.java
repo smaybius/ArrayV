@@ -44,7 +44,7 @@ public final class TimeSort extends Sort {
         super(arrayVisualizer);
 
         this.setSortListName("Time");
-        //this.setRunAllID("Time Sort");
+        // this.setRunAllID("Time Sort");
         this.setRunAllSortsName("Time Sort, Mul 10");
         this.setRunSortName("Timesort");
         this.setCategory("Distribution Sorts");
@@ -56,7 +56,7 @@ public final class TimeSort extends Sort {
         this.setQuestion("Enter delay per number in milliseconds:", 10);
     }
 
-    private synchronized void report(int[] array, int a){
+    private synchronized void report(int[] array, int a) {
         Writes.write(array, next, a, 0, true, false);
         next++;
     }
@@ -72,14 +72,14 @@ public final class TimeSort extends Sort {
 
         final int[] tmp = Writes.createExternalArray(sortLength);
 
-        for(int i = 0; i < sortLength; i++) {
+        for (int i = 0; i < sortLength; i++) {
             Writes.write(tmp, i, array[i], 0.25, true, true);
         }
 
         double temp = Delays.getDisplayedDelay();
         Delays.updateDelayForTimeSort(magnitude);
 
-        for(int i = 0; i < sortLength; i++){
+        for (int i = 0; i < sortLength; i++) {
             final int index = i;
             threads.add(new Thread("TimeSort-" + i) {
                 @Override
@@ -87,13 +87,11 @@ public final class TimeSort extends Sort {
                     int a = tmp[index];
 
                     try {
-                        Thread.sleep(a*A);
+                        Thread.sleep(a * A);
                         Writes.addTime(A);
-                    }
-                    catch (InterruptedException ex) {
+                    } catch (InterruptedException ex) {
                         Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    catch (IllegalArgumentException ex) {
+                    } catch (IllegalArgumentException ex) {
                         JErrorPane.invokeErrorMessage(ex);
                     }
                     TimeSort.this.report(array, a);
@@ -101,16 +99,14 @@ public final class TimeSort extends Sort {
             });
         }
 
-        for(Thread t : threads)
+        for (Thread t : threads)
             t.start();
 
         try {
             Thread.sleep(sortLength * A);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, e);
-        }
-        catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             JErrorPane.invokeErrorMessage(ex);
         }
 

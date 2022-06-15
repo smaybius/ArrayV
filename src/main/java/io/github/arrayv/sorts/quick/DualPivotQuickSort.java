@@ -13,7 +13,7 @@ public final class DualPivotQuickSort extends Sort {
         this.setSortListName("Dual-Pivot Quick");
         this.setRunAllSortsName("Dual-Pivot Quick Sort");
         this.setRunSortName("Dual-Pivot Quicksort");
-        this.setCategory("Exchange Sorts");
+        this.setCategory("Quick Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -101,17 +101,17 @@ public final class DualPivotQuickSort extends Sort {
         Writes.swap(array, great + 1, right, 1, true, false);
 
         // subarrays
-        Writes.recordDepth(depth++);
-        Writes.recursion(1);
-        this.dualPivot(array, left, less - 2, divisor, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        this.dualPivot(array, left, less - 2, divisor, depth + 1);
         if (pivot1 < pivot2) {
-            Writes.recordDepth(depth++);
-            Writes.recursion(1);
-            this.dualPivot(array, less, great, divisor, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.dualPivot(array, less, great, divisor, depth + 1);
         }
-        Writes.recordDepth(depth++);
-        Writes.recursion(1);
-        this.dualPivot(array, great + 2, right, divisor, depth);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        this.dualPivot(array, great + 2, right, divisor, depth + 1);
     }
 
     @Override

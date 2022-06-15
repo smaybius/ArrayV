@@ -10,7 +10,7 @@ public final class LLQuickSort extends Sort {
         this.setSortListName("Left/Left Quick");
         this.setRunAllSortsName("Quick Sort, Left/Left Pointers");
         this.setRunSortName("Left/Left Quicksort");
-        this.setCategory("Exchange Sorts");
+        this.setCategory("Quick Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -37,10 +37,11 @@ public final class LLQuickSort extends Sort {
     private void quickSort(int[] array, int lo, int hi, int depth) {
         if (lo < hi) {
             int p = this.partition(array, lo, hi);
-            Writes.recordDepth(depth++);
-            Writes.recursion(2);
-            this.quickSort(array, lo, p - 1, depth);
-            this.quickSort(array, p + 1, hi, depth);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.quickSort(array, lo, p - 1, depth + 1);
+            Writes.recursion();
+            this.quickSort(array, p + 1, hi, depth + 1);
         }
     }
 

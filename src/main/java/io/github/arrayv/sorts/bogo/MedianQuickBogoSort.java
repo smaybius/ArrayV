@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
 
 /*
- *
+ * 
 MIT License
 
 Copyright (c) 2021 EmeraldBlock

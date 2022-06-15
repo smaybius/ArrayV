@@ -39,7 +39,7 @@ public final class StableQuickSort extends Sort {
         this.setSortListName("Stable Quick");
         this.setRunAllSortsName("Stable Quick Sort");
         this.setRunSortName("Stable Quicksort");
-        this.setCategory("Exchange Sorts");
+        this.setCategory("Quick Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -52,7 +52,7 @@ public final class StableQuickSort extends Sort {
 
     private void copy(ArrayVList list, int[] array, int startIndex) {
         for (int num : list) {
-            Writes.write(array, startIndex++, num, 0.25, false, false);
+            Writes.write(array, startIndex++, num, 0.25, true, false);
             Highlights.markArray(1, startIndex);
         }
     }
@@ -84,7 +84,7 @@ public final class StableQuickSort extends Sort {
 
         int newPivotIndex = start + leftList.size();
 
-        Writes.write(array, newPivotIndex, pivotValue, 0.25, false, false);
+        Writes.write(array, newPivotIndex, pivotValue, 0.25, true, false);
         Highlights.markArray(1, newPivotIndex);
 
         this.copy(rightList, array, newPivotIndex + 1);

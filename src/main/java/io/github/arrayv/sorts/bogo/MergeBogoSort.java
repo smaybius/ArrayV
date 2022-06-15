@@ -6,7 +6,7 @@ import io.github.arrayv.sorts.templates.BogoSorting;
 /*
  *
 MIT License
-
+ 
 Copyright (c) 2021 EmeraldBlock
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

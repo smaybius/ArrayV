@@ -33,10 +33,10 @@ public final class TableSort extends Sort {
 	public TableSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
 
-		this.setSortListName("Table");
-		this.setRunAllSortsName("Table Sort");
-		this.setRunSortName("Tablesort");
-		this.setCategory("Exchange Sorts");
+		this.setSortListName("Table Quick");
+		this.setRunAllSortsName("Table Quick Sort");
+		this.setRunSortName("Table Quicksort");
+		this.setCategory("Quick Sorts");
 		this.setBucketSort(false);
 		this.setRadixSort(false);
 		this.setUnreasonablySlow(false);
@@ -96,10 +96,11 @@ public final class TableSort extends Sort {
 		this.medianOfThree(array, table, a, b);
 		int p = this.partition(array, table, a + 1, b, a);
 		Writes.swap(table, a, p, 1, true, true);
-		Writes.recordDepth(depth++);
-		Writes.recursion(2);
-		this.quickSort(array, table, a, p, depth);
-		this.quickSort(array, table, p + 1, b, depth);
+		Writes.recordDepth(depth);
+		Writes.recursion();
+		this.quickSort(array, table, a, p, depth + 1);
+		Writes.recursion();
+		this.quickSort(array, table, p + 1, b, depth + 1);
 	}
 
 	@Override

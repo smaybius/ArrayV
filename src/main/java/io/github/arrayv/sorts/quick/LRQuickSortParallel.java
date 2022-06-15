@@ -10,7 +10,7 @@ public final class LRQuickSortParallel extends Sort {
 		this.setSortListName("Left/Right Quick (Parallel)");
 		this.setRunAllSortsName("Parallel Quick Sort, Left/Right Pointers");
 		this.setRunSortName("Parallel Left/Right Quicksort");
-		this.setCategory("Exchange Sorts");
+		this.setCategory("Quick Sorts");
 		this.setBucketSort(false);
 		this.setRadixSort(false);
 		this.setUnreasonablySlow(false);
