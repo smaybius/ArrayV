@@ -141,7 +141,7 @@ public final class LazierestSort extends Sort {
 		int i = a, j = m, k;
 
 		while (i < j && j < b) {
-			if (Reads.compareValues(array[i], array[j]) == 1) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
 				k = this.leftExpSearch(array, j + 1, b, array[i]);
 				IndexedRotations.cycleReverse(array, i, j, k, 0.75, true, false);
 
@@ -156,7 +156,7 @@ public final class LazierestSort extends Sort {
 		int i = m - 1, j = b - 1, k;
 
 		while (j > i && i >= a) {
-			if (Reads.compareValues(array[i], array[j]) > 0) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
 				k = this.rightExpSearch(array, a, i, array[j]);
 				this.rotate(array, k, i + 1, j + 1);
 

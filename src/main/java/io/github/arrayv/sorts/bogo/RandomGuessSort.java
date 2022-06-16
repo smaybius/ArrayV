@@ -34,7 +34,7 @@ public final class RandomGuessSort extends BogoSorting {
                 Highlights.markArray(2, i + 1);
                 Delays.sleep(this.delay);
                 int comp = Reads.compareIndices(array, loops[i], loops[i + 1], this.delay, true);
-                if (comp < 0 || comp == 0 && loops[i] < loops[i + 1])
+                if (comp < 0 || comp == 0 && Reads.compareIndices(loops, i, i + 1, 0.1, true) < 0)
                     continue;
                 sorted = false;
                 break;

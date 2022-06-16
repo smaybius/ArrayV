@@ -94,7 +94,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 				Highlights.markArray(1, p);
 				int loc = this.leftBinSearch(array, a1, b1, array[p]);
 
-				if (loc == b1 || Reads.compareValues(array[p], array[loc]) != 0) {
+				if (loc == b1 || Reads.compareIndices(array, p, loc, 0.1, true) != 0) {
 					pEnd = p + 1;
 					break;
 				}
@@ -104,10 +104,10 @@ public final class ChaliceSort extends BlockMergeSorting {
 					Highlights.markArray(1, i);
 					int loc = this.leftBinSearch(array, a1, b1, array[i]);
 
-					if (loc == b1 || Reads.compareValues(array[i], array[loc]) != 0) {
+					if (loc == b1 || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
 						loc = this.leftBinSearch(array, p, pEnd, array[i]);
 
-						if (loc == pEnd || Reads.compareValues(array[i], array[loc]) != 0) {
+						if (loc == pEnd || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
 							this.rotate(array, p, pEnd, i);
 
 							int len1 = i - pEnd;
@@ -128,7 +128,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 				Highlights.markArray(1, i);
 				int loc = this.leftBinSearch(array, p, pEnd, array[i]);
 
-				if (loc == pEnd || Reads.compareValues(array[i], array[loc]) != 0) {
+				if (loc == pEnd || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
 					this.rotate(array, p, pEnd, i);
 
 					int len1 = i - pEnd;
@@ -160,6 +160,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 					this.rotate(array, pEnd, t[0], t[1]);
 
 					t[0] = pEnd;
+					Writes.changeAuxWrites(1);
 					pEnd += keys;
 
 					this.mergeBWExt(array, tmp, p, t[0], pEnd); // merge can be done inplace + stable
@@ -226,6 +227,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 					this.rotate(array, pEnd, t[0], t[1]);
 
 					t[0] = pEnd;
+					Writes.changeAuxWrites(1);
 					pEnd += bits;
 
 					break;
@@ -310,7 +312,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 		while (p > b + 1 && b >= m) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[b], array[i]) >= 0)
+			if (Reads.compareIndices(array, b, i, 0.1, true) >= 0)
 				Writes.swap(array, --p, b--, 1, true, false);
 			else
 				Writes.swap(array, --p, i--, 1, true, false);
@@ -327,7 +329,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 			while (a < i && m < b) {
 				Highlights.markArray(2, m);
 
-				if (Reads.compareValues(array[a], array[m]) <= 0)
+				if (Reads.compareIndices(array, a, m, 0.1, true) <= 0)
 					Writes.swap(array, p++, a++, 1, true, false);
 				else
 					Writes.swap(array, p++, m++, 1, true, false);
@@ -344,7 +346,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 		while (p > b + 1 && b >= m) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[b], array[i]) >= 0)
+			if (Reads.compareIndices(array, b, i, 0.1, true) >= 0)
 				Writes.write(array, --p, array[b--], 1, true, false);
 			else
 				Writes.write(array, --p, array[i--], 1, true, false);
@@ -361,7 +363,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 			while (a < i && m < b) {
 				Highlights.markArray(2, m);
 
-				if (Reads.compareValues(array[a], array[m]) <= 0)
+				if (Reads.compareIndices(array, a, m, 0.1, true) <= 0)
 					Writes.write(array, p++, array[a++], 1, true, false);
 				else
 					Writes.write(array, p++, array[m++], 1, true, false);
@@ -377,7 +379,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 		while (a < m) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[a], array[i]) < cmp)
+			if (Reads.compareIndices(array, a, i, 0.1, true) < cmp)
 				Writes.write(array, p++, array[a++], 1, true, false);
 			else
 				Writes.write(array, p++, array[i++], 1, true, false);
@@ -392,7 +394,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 		while (a < m && i < b) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[a], array[i]) <= 0)
+			if (Reads.compareIndices(array, a, i, 0.1, true) <= 0)
 				Writes.write(array, p++, array[a++], 1, true, false);
 			else
 				Writes.write(array, p++, array[i++], 1, true, false);
@@ -419,8 +421,8 @@ public final class ChaliceSort extends BlockMergeSorting {
 
 	private void blockCycle(int[] array, int a, int t, int tIdx, int tLen, int bLen) {
 		for (int i = 0; i < tLen - 1; i++) {
-			if (Reads.compareValues(array[t + i], array[tIdx + i]) > 0 ||
-					(i > 0 && Reads.compareValues(array[t + i], array[tIdx + i - 1]) < 0)) {
+			if (Reads.compareIndices(array, t + i, tIdx + i, 0.1, true) > 0 ||
+					(i > 0 && Reads.compareIndices(array, t + i, tIdx + i - 1, 0.1, true) < 0)) {
 
 				Writes.arraycopy(array, a + i * bLen, array, a - bLen, bLen, 1, true, false);
 
@@ -452,7 +454,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 		int i = a + bLen - 1, j = m + bLen - 1, ti = t, tj = t + tl, tp = tIdx;
 
 		while (ti < t + tl && tj < t + tLen) {
-			if (Reads.compareValues(array[i], array[j]) <= 0) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
 				Writes.swap(array, tp++, ti++, 1, true, false);
 				i += bLen;
 			} else {
@@ -513,8 +515,8 @@ public final class ChaliceSort extends BlockMergeSorting {
 
 	private void blockCycleEasy(int[] array, int a, int t, int tIdx, int tLen, int bLen) {
 		for (int i = 0; i < tLen - 1; i++) {
-			if (Reads.compareValues(array[t + i], array[tIdx + i]) > 0 ||
-					(i > 0 && Reads.compareValues(array[t + i], array[tIdx + i - 1]) < 0)) {
+			if (Reads.compareIndices(array, t + i, tIdx + i, 0.1, true) > 0 ||
+					(i > 0 && Reads.compareIndices(array, t + i, tIdx + i - 1, 0.1, true) < 0)) {
 
 				int next = this.leftBinSearch(array, tIdx, tIdx + tLen, array[t + i]) - tIdx;
 
@@ -565,7 +567,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 		int i = a1 + bLen - 1, j = m + bLen - 1, ti = tIdx, tj = tIdx + tl, tp = t;
 
 		while (ti < tIdx + tl && tj < tIdx + tLen) {
-			if (Reads.compareValues(array[i], array[j]) <= 0) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
 				Writes.swap(array, ti++, tp++, 1, true, false);
 				i += bLen;
 			} else {

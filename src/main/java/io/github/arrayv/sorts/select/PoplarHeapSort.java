@@ -59,7 +59,7 @@ public class PoplarHeapSort extends Sort {
 
             // Compare first so we can avoid 2 moves for
             // an element already positioned correctly
-            if (Reads.compareValues(array[sift], array[sift_1]) == -1) {
+            if (Reads.compareIndices(array, sift, sift_1, 0.2, true) == -1) {
                 int tmp = array[sift];
                 do {
                     Writes.write(array, sift, array[sift_1], 0.25, true, false);
@@ -89,10 +89,10 @@ public class PoplarHeapSort extends Sort {
 
         while (true) {
             int max_root = root;
-            if (Reads.compareValues(array[max_root], array[child_root1]) == -1) {
+            if (Reads.compareIndices(array, max_root, child_root1, 0.1, true) == -1) {
                 max_root = child_root1;
             }
-            if (Reads.compareValues(array[max_root], array[child_root2]) == -1) {
+            if (Reads.compareIndices(array, max_root, child_root2, 0.1, true) == -1) {
                 max_root = child_root2;
             }
             if (max_root == root)
@@ -123,7 +123,7 @@ public class PoplarHeapSort extends Sort {
             int root = it + poplar_size - 1;
             if (root == last_root)
                 break;
-            if (Reads.compareValues(array[bigger], array[root]) == -1) {
+            if (Reads.compareIndices(array, bigger, root, 0.1, true) == -1) {
                 bigger = root;
                 bigger_size = poplar_size;
             }

@@ -291,7 +291,7 @@ public final class SqrtSort extends Sort {
 
         for (int dist = 1; dist < len; dist += 2) {
             extraDist = 0;
-            if (Reads.compareValues(arr[pos + (dist - 1)], arr[pos + dist]) > 0)
+            if (Reads.compareIndices(arr, pos + (dist - 1), pos + dist, 0.2, true) > 0)
                 extraDist = 1;
 
             Writes.write(arr, pos + dist - 3, arr[pos + dist - 1 + extraDist], 1, true, auxwrite);
@@ -369,9 +369,10 @@ public final class SqrtSort extends Sort {
                 leftIndex = tagIndex - 1;
 
                 for (int rightIndex = tagIndex; rightIndex < blockCount; rightIndex++) {
-                    int rightComp = Reads.compareValues(arr[blockPos + leftIndex * regBlockLen],
-                            arr[blockPos + rightIndex * regBlockLen]);
-                    if (rightComp > 0 || (rightComp == 0 && tags[leftIndex] > tags[rightIndex]))
+                    int rightComp = Reads.compareIndices(arr, blockPos + leftIndex * regBlockLen,
+                            blockPos + rightIndex * regBlockLen, 0.2, true);
+                    if (rightComp > 0
+                            || (rightComp == 0 && Reads.compareIndices(tags, leftIndex, rightIndex, 0.2, true) > 0))
                         leftIndex = rightIndex;
                 }
 
@@ -388,8 +389,8 @@ public final class SqrtSort extends Sort {
                 lastLen = leftOver % regBlockLen;
 
             if (lastLen != 0) {
-                while (aBlockCount < blockCount && Reads.compareValues(arr[blockPos + blockCount * regBlockLen],
-                        arr[blockPos + (blockCount - aBlockCount - 1) * regBlockLen]) < 0) {
+                while (aBlockCount < blockCount && Reads.compareIndices(arr, blockPos + blockCount * regBlockLen,
+                        blockPos + (blockCount - aBlockCount - 1) * regBlockLen, 0.2, true) < 0) {
                     aBlockCount++;
                 }
             }

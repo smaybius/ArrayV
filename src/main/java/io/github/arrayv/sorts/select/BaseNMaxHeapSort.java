@@ -25,10 +25,10 @@ public final class BaseNMaxHeapSort extends Sort {
             for (int i = left + 1; i < left + base; i++) {
                 if (i >= stop)
                     break;
-                if (Reads.compareValues(arr[maxIndex], arr[i]) == -1)
+                if (Reads.compareIndices(arr, maxIndex, i, 0.2, true) == -1)
                     maxIndex = i;
             }
-            if (Reads.compareValues(arr[node], arr[maxIndex]) == -1) {
+            if (Reads.compareIndices(arr, node, maxIndex, 0.2, true) == -1) {
                 Writes.swap(arr, node, maxIndex, sleep, true, false);
                 this.siftDown(arr, base, maxIndex, stop, sleep);
             }

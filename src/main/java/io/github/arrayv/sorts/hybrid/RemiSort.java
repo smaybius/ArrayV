@@ -212,7 +212,9 @@ public final class RemiSort extends MultiWayMergeSorting {
 			t++;
 
 		for (int i = 1, j = a; j < p[0]; i++) {
+			Reads.addComparison();
 			while (p[i] < pa[i]) {
+				Reads.addComparison();
 				Writes.write(keys, t++, p[i] / bLen - bLen, 0, false, true);
 				while (keys[t] != -1)
 					t++;

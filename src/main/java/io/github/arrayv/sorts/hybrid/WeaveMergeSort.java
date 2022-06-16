@@ -2,6 +2,7 @@ package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.sorts.insert.InsertionSort;
 
 /*
  *
@@ -44,21 +45,7 @@ public final class WeaveMergeSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private void weaveInsert(int[] arr, int start, int end) {
-        int pos;
-
-        for (int j = start; j < end; j++) {
-            pos = j;
-
-            Highlights.markArray(1, j);
-            Highlights.clearMark(2);
-
-            while (pos > start && Reads.compareValues(arr[pos], arr[pos - 1]) < 1) {
-                Writes.swap(arr, pos, pos - 1, 0.2, true, false);
-                pos--;
-            }
-        }
-    }
+    InsertionSort insert = new InsertionSort(arrayVisualizer);
 
     private void weaveMerge(int[] arr, int min, int max, int mid) {
         int i = 1;
@@ -69,14 +56,14 @@ public final class WeaveMergeSort extends Sort {
             i++;
         }
 
-        this.weaveInsert(arr, min, max + 1);
+        insert.customInsertSort(arr, min, max + 1, 0.05, false);
     }
 
     private void weaveMergeSort(int[] array, int min, int max, int depth) {
         if (max - min == 0) { // only one element.
             Delays.sleep(1); // no swap
         } else if (max - min == 1) { // only two elements and swaps them
-            if (Reads.compareValues(array[min], array[max]) == 1) {
+            if (Reads.compareIndices(array, min, max, 0.1, true) == 1) {
                 Writes.swap(array, min, max, 0.01, true, false);
             }
         } else {

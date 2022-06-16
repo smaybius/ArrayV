@@ -91,7 +91,7 @@ public final class EctaSort extends Sort {
 		Writes.arraycopy(array, m--, array, p, len, 1, true, false);
 
 		while (m >= a && pEnd >= p) {
-			if (Reads.compareValues(array[m], array[pEnd]) > 0)
+			if (Reads.compareIndices(array, m, pEnd, 0.1, true) > 0)
 				Writes.write(array, --b, array[m--], 1, true, false);
 
 			else
@@ -207,23 +207,28 @@ public final class EctaSort extends Sort {
 
 			for (int k = 0; k < bLen; k++) {
 				if (i < m && j < b) {
-					if (Reads.compareValues(array[i], array[j]) <= 0) {
+					if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
 						Writes.write(array, p[c] + k, array[i++], 1, true, false);
 						s[0]++;
+						Writes.changeAuxWrites(1);
 					} else {
 						Writes.write(array, p[c] + k, array[j++], 1, true, false);
 						s[1]++;
+						Writes.changeAuxWrites(1);
 					}
 				} else if (i < m) {
 					Writes.write(array, p[c] + k, array[i++], 1, true, false);
 					s[0]++;
+					Writes.changeAuxWrites(1);
 				} else {
 					Writes.write(array, p[c] + k, array[j++], 1, true, false);
 					s[1]++;
+					Writes.changeAuxWrites(1);
 				}
 			}
 			p[c] += bLen;
 			s[c] -= bLen;
+			Writes.changeAuxWrites(2);
 
 			Highlights.markArray(2, tc);
 			Writes.write(tags, tc++, c == 0 ? t++ : -1, 1, false, true);
@@ -251,23 +256,28 @@ public final class EctaSort extends Sort {
 
 			for (int k = 1; k <= bLen; k++) {
 				if (i >= m && j >= a) {
-					if (Reads.compareValues(array[i], array[j]) >= 0) {
+					if (Reads.compareIndices(array, i, j, 0.2, true) >= 0) {
 						Writes.write(array, p[c] - k, array[i--], 1, true, false);
 						s[0]++;
+						Writes.changeAuxWrites(1);
 					} else {
 						Writes.write(array, p[c] - k, array[j--], 1, true, false);
 						s[1]++;
+						Writes.changeAuxWrites(1);
 					}
 				} else if (i >= m) {
 					Writes.write(array, p[c] - k, array[i--], 1, true, false);
 					s[0]++;
+					Writes.changeAuxWrites(1);
 				} else {
 					Writes.write(array, p[c] - k, array[j--], 1, true, false);
 					s[1]++;
+					Writes.changeAuxWrites(1);
 				}
 			}
 			p[c] -= bLen;
 			s[c] -= bLen;
+			Writes.changeAuxWrites(1);
 
 			Highlights.markArray(2, tc);
 			Writes.write(tags, tc++, c == 0 ? t++ : -1, 1, false, true);

@@ -41,7 +41,7 @@ public final class TriangularHeapSort extends Sort {
 
 				break;
 			}
-			int max = (this.Reads.compareValues(array[left], array[right]) >= 0) ? left : right;
+			int max = (this.Reads.compareIndices(array, left, right, 0.2, true) >= 0) ? left : right;
 
 			this.Highlights.markArray(2, max);
 			if (this.Reads.compareValues(array[max], temp) == 1) {

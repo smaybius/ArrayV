@@ -42,13 +42,13 @@ public final class TernaryHeapSort extends Sort {
         int middleChild = TernaryHeapSort.middleBranch(i);
         int largest;
 
-        largest = leftChild <= heapSize && Reads.compareValues(array[leftChild], array[i]) > 0 ? leftChild : i;
+        largest = leftChild <= heapSize && Reads.compareIndices(array, leftChild, i, 0.1, true) > 0 ? leftChild : i;
 
-        if (rightChild <= heapSize && Reads.compareValues(array[rightChild], array[largest]) > 0) {
+        if (rightChild <= heapSize && Reads.compareIndices(array, rightChild, largest, 0.1, true) > 0) {
             largest = rightChild;
         }
 
-        if (middleChild <= heapSize && Reads.compareValues(array[middleChild], array[largest]) > 0) {
+        if (middleChild <= heapSize && Reads.compareIndices(array, middleChild, largest, 0.1, true) > 0) {
             largest = middleChild;
         }
 

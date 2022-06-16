@@ -51,7 +51,7 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private int circCompareIndices(int[] array, int a, int b) {
-		return Reads.compareValues(array[a % n], array[b % n]);
+		return Reads.compareIndices(array, a % n, b % n, 0.1, true);
 	}
 
 	private void shiftFW(int[] array, int a, int m, int b) {

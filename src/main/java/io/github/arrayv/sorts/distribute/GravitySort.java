@@ -82,6 +82,7 @@ public final class GravitySort extends Sort {
 				Delays.sleep(delay);
 
 				int inc = (i >= length - y[j] ? 1 : 0) - (x[i] >= j ? 1 : 0);
+				Reads.addComparison();
 
 				// update the main array
 				Writes.write(array, i, array[i] + inc, delay, true, false);

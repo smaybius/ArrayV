@@ -38,7 +38,7 @@ public final class BadSort extends Sort {
                     Highlights.markArray(2, k);
                     Delays.sleep(0.05);
 
-                    if (Reads.compareValues(array[j], array[k]) == 1) {
+                    if (Reads.compareIndices(array, j, k, 0.1, true) == 1) {
                         isShortest = false;
                         break;
                     }

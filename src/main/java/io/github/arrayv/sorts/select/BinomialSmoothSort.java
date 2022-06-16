@@ -32,9 +32,9 @@ public final class BinomialSmoothSort extends Sort {
         int choice = height(node) - (root ? 0 : 1);
         if (parent)
             for (int child = choice - 1; child >= 0; child--)
-                if (Reads.compareValues(array[node - (1 << choice)], array[node - (1 << child)]) != 1)
+                if (Reads.compareIndices(array, node - (1 << choice), node - (1 << child), 0.2, true) != 1)
                     choice = child;
-        if (Reads.compareValues(array[node - (1 << choice)], array[node]) != 1)
+        if (Reads.compareIndices(array, node - (1 << choice), node, 0.2, true) != 1)
             return;
         Writes.swap(array, node, node - (1 << choice), .65, true, false);
         Writes.recordDepth(depth);

@@ -50,7 +50,7 @@ public final class ReadSort extends BogoSorting {
 
     public void bogoSwapTSoS(int[] array, int start, int end, int[] aux, double sleep) {
         for (int k = 0; k < (end - start); k += 2) {
-            if (Reads.compareValues(array[k], array[k + 1]) > 0) {
+            if (Reads.compareIndices(array, k, k + 1, 0.1, true) > 0) {
                 Writes.write(aux, k, array[k + 1], sleep, false, true);
                 Writes.write(aux, k + 1, array[k], sleep, false, true);
             } else {
@@ -59,9 +59,7 @@ public final class ReadSort extends BogoSorting {
             }
         }
         for (int k = 0; k < (end - start); k += 2) {
-            if (Reads.compareValues(aux[k], aux[k + 1]) < 0) {
-                Highlights.markArray(3, k);
-                Highlights.markArray(4, k + 1);
+            if (Reads.compareIndices(array, k, k + 1, 0.1, true) < 0) {
                 Writes.swap(array, aux[k], aux[k + 1], sleep, true, false);
             }
         }

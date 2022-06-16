@@ -192,7 +192,7 @@ public final class ParallelGrailSort extends Sort {
 		int i = a, j = m;
 
 		while (i < m && j < b) {
-			if (Reads.compareValues(array[i], array[j]) < (fwEq ? 1 : 0))
+			if (Reads.compareIndices(array, i, j, 0.2, true) < (fwEq ? 1 : 0))
 				Writes.swap(array, p++, i++, 1, true, false);
 
 			else
@@ -210,7 +210,7 @@ public final class ParallelGrailSort extends Sort {
 		int i = a, j = m, k;
 
 		while (i < j && j < b) {
-			if (Reads.compareValues(array[i], array[j]) > (fwEq ? 0 : -1)) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) > (fwEq ? 0 : -1)) {
 				k = fwEq ? this.leftBinSearch(j + 1, b, array[i])
 						: this.rightBinSearch(j + 1, b, array[i]);
 
@@ -229,7 +229,7 @@ public final class ParallelGrailSort extends Sort {
 		int i = m - 1, j = b - 1, k;
 
 		while (j > i && i >= a) {
-			if (Reads.compareValues(array[i], array[j]) > (fwEq ? 0 : -1)) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) > (fwEq ? 0 : -1)) {
 				k = fwEq ? this.rightBinSearch(a, i, array[j])
 						: this.leftBinSearch(a, i, array[j]);
 
@@ -251,7 +251,7 @@ public final class ParallelGrailSort extends Sort {
 			Delays.sleep(1);
 			int loc = this.leftBinSearch(p, pEnd, array[i]);
 
-			if (pEnd == loc || Reads.compareValues(array[i], array[loc]) != 0) {
+			if (pEnd == loc || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
 				this.rotate(p, pEnd, i);
 				int inc = i - pEnd;
 				loc += inc;
@@ -272,10 +272,10 @@ public final class ParallelGrailSort extends Sort {
 			int min = j;
 
 			for (int i = min + bLen; i < b; i += bLen) {
-				int cmp = Reads.compareValues(array[i], array[min]);
+				int cmp = Reads.compareIndices(array, i, min, 0.1, true);
 
 				if (cmp < 0 || (cmp == 0
-						&& Reads.compareValues(array[t + (i - a) / bLen], array[t + (min - a) / bLen]) < 0))
+						&& Reads.compareIndices(array, t + (i - a) / bLen, t + (min - a) / bLen, 0.1, true) < 0))
 					min = i;
 			}
 
@@ -350,7 +350,7 @@ public final class ParallelGrailSort extends Sort {
 			if (frag != curr) {
 				boolean tmp = frag;
 
-				if (f == i || Reads.compareValues(array[i - 1], array[i + bLen - 1]) < (frag ? 1 : 0))
+				if (f == i || Reads.compareIndices(array, i - 1, i + bLen - 1, 0.1, true) < (frag ? 1 : 0))
 					frag = curr;
 
 				f = this.inPlaceMergeFW(f, i, i + bLen, tmp);

@@ -206,7 +206,7 @@ public final class AdaptiveGrailSort extends Sort {
             Delays.sleep(1);
             int loc = this.leftBinarySearch(array, p, pEnd, array[i]);
 
-            if (pEnd == loc || Reads.compareValues(array[i], array[loc]) != 0) {
+            if (pEnd == loc || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
                 this.rotate(array, p, pEnd, i);
                 int inc = i - pEnd;
                 loc += inc;
@@ -232,7 +232,7 @@ public final class AdaptiveGrailSort extends Sort {
             Delays.sleep(1);
             int loc = this.leftBinarySearch(array, p, pEnd, array[i]);
 
-            if (pEnd == loc || Reads.compareValues(array[i], array[loc]) != 0) {
+            if (pEnd == loc || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
                 this.rotate(array, i + 1, p, pEnd);
                 int inc = p - (i + 1);
                 loc -= inc;
@@ -280,7 +280,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = 0, j = m, k = a;
 
         while (i < pLen && j < b) {
-            if (Reads.compareValues(array[p + i], array[j]) <= 0)
+            if (Reads.compareIndices(array, p + i, j, 0.1, true) <= 0)
                 Writes.swap(array, k++, p + (i++), 1, true, false);
             else
                 Writes.swap(array, k++, j++, 1, true, false);
@@ -302,7 +302,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = pLen - 1, j = m - 1, k = b - 1;
 
         while (i >= 0 && j >= a) {
-            if (Reads.compareValues(array[p + i], array[j]) >= 0)
+            if (Reads.compareIndices(array, p + i, j, 0.1, true) >= 0)
                 Writes.swap(array, k--, p + (i--), 1, true, false);
             else
                 Writes.swap(array, k--, j--, 1, true, false);
@@ -315,7 +315,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = a, j = m, k;
 
         while (i < j && j < b) {
-            if (Reads.compareValues(array[i], array[j]) > 0) {
+            if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
                 k = this.leftBinarySearch(array, j + 1, b, array[i]);
                 this.rotate(array, i, j, k);
 
@@ -330,7 +330,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = m - 1, j = b - 1, k;
 
         while (j > i && i >= a) {
-            if (Reads.compareValues(array[i], array[j]) > 0) {
+            if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
                 k = this.rightBinarySearch(array, a, i, array[j]);
                 this.rotate(array, k, i + 1, j + 1);
 
@@ -349,11 +349,11 @@ public final class AdaptiveGrailSort extends Sort {
     }
 
     private boolean checkSorted(int[] array, int a, int m, int b) {
-        return Reads.compareValues(array[m - 1], array[m]) > 0;
+        return Reads.compareIndices(array, m - 1, m, 0.1, true) > 0;
     }
 
     private boolean checkReverseBounds(int[] array, int a, int m, int b) {
-        if (Reads.compareValues(array[a], array[b - 1]) == 1) {
+        if (Reads.compareIndices(array, a, b - 1, 0.1, true) == 1) {
             this.rotate(array, a, m, b);
             return false;
         }
@@ -367,7 +367,7 @@ public final class AdaptiveGrailSort extends Sort {
     }
 
     private Subarray grailGetSubarray(int[] array, int t, int mKey) {
-        if (Reads.compareValues(array[t], array[mKey]) < 0)
+        if (Reads.compareIndices(array, t, mKey, 0.1, true) < 0)
             return Subarray.LEFT;
 
         else
@@ -384,7 +384,7 @@ public final class AdaptiveGrailSort extends Sort {
             for (int i = Math.max(lCount - r, j + 1); i < k; i++) {
                 int comp = Reads.compareIndices(array, p + d + i * bLen, p + d + min * bLen, 2, true);
 
-                if (comp < 0 || (comp == 0 && Reads.compareValues(array[t + i], array[t + min]) < 0))
+                if (comp < 0 || (comp == 0 && Reads.compareIndices(array, t + i, t + min, 0.1, true) < 0))
                     min = i;
             }
 
@@ -408,7 +408,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = mKey, j = i + 1, k = p + 1;
 
         while (j < b) {
-            if (Reads.compareValues(array[j], array[p]) < 0)
+            if (Reads.compareIndices(array, j, p, 0.1, true) < 0)
                 Writes.swap(array, i++, j, 1, true, false);
 
             else
@@ -424,7 +424,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = mKey, j = i + 1;
 
         while (j < b) {
-            if (Reads.compareValues(array[j], array[i]) < 0)
+            if (Reads.compareIndices(array, j, i, 0.1, true) < 0)
                 this.insertTo(array, j, i++);
 
             j++;
@@ -436,7 +436,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = a, j = m;
 
         while (i < m && j < b) {
-            if (Reads.compareValues(array[i], array[j]) <= 0)
+            if (Reads.compareIndices(array, i, j, 0.2, true) <= 0)
                 Writes.swap(array, p++, i++, 1, true, false);
 
             else
@@ -454,7 +454,7 @@ public final class AdaptiveGrailSort extends Sort {
         int i = a, j = m;
 
         while (i < m && j < b) {
-            if (Reads.compareValues(array[i], array[j]) < 0)
+            if (Reads.compareIndices(array, i, j, 0.2, true) < 0)
                 Writes.swap(array, p++, i++, 1, true, false);
 
             else
@@ -526,7 +526,7 @@ public final class AdaptiveGrailSort extends Sort {
      * int i = a, j = m, k;
      * 
      * while(i < j && j < b) {
-     * if(Reads.compareValues(array[i], array[j]) > 0) {
+     * if(Reads.compareIndices(array, i, j, 0.2, true) > 0) {
      * k = this.leftBinarySearch(array, j+1, b, array[i]);
      * this.rotate(array, i, j, k);
      * 
@@ -543,7 +543,7 @@ public final class AdaptiveGrailSort extends Sort {
      * int i = a, j = m, k;
      * 
      * while(i < j && j < b) {
-     * if(Reads.compareValues(array[i], array[j]) >= 0) {
+     * if(Reads.compareIndices(array, i, j, 0.2, true) >= 0) {
      * k = this.rightBinarySearch(array, j+1, b, array[i]);
      * this.rotate(array, i, j, k);
      * 
@@ -580,7 +580,7 @@ public final class AdaptiveGrailSort extends Sort {
 
                 if (frag == Subarray.LEFT) {
                     while (i < m2 && m2 < b2) {
-                        if (Reads.compareValues(array[i], array[m2]) > 0) {
+                        if (Reads.compareIndices(array, i, m2, 0.1, true) > 0) {
                             k = this.leftBinarySearch(array, m2 + 1, b2, array[i]);
                             this.rotate(array, i, m2, k);
 
@@ -591,7 +591,7 @@ public final class AdaptiveGrailSort extends Sort {
                     }
                 } else {
                     while (i < m2 && m2 < b2) {
-                        if (Reads.compareValues(array[i], array[m2]) >= 0) {
+                        if (Reads.compareIndices(array, i, m2, 0.1, true) >= 0) {
                             k = this.rightBinarySearch(array, m2 + 1, b2, array[i]);
                             this.rotate(array, i, m2, k);
 

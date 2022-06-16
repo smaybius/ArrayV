@@ -35,7 +35,7 @@ public final class WeakHeapSort extends Sort {
      * Merge Weak Heap
      */
     public void weakHeapMerge(int[] array, int[] bits, int i, int j) {
-        if (Reads.compareValues(array[i], array[j]) == -1) {
+        if (Reads.compareIndices(array, i, j, 0.2, true) == -1) {
             this.toggleBitwiseFlag(bits, j);
             Writes.swap(array, i, j, 1, true, false);
         }

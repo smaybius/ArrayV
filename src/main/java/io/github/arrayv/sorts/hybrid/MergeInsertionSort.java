@@ -91,7 +91,7 @@ public final class MergeInsertionSort extends Sort {
 		int k = 1;
 		while (2 * k <= length) {
 			for (int i = 2 * k - 1; i < length; i += 2 * k)
-				if (Reads.compareValues(array[i - k], array[i]) > 0)
+				if (Reads.compareIndices(array, i - k, i, 0.1, true) > 0)
 					this.blockSwap(array, i - k, i, k, 1);
 
 			k *= 2;

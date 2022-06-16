@@ -19,12 +19,12 @@ final public class FibonacciHeapSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private int[] FIB = new int[44]; // fib(47) > Integer.MAX_VALUE
+    private int[] FIB = Writes.createExternalArray(44); // fib(47) > Integer.MAX_VALUE
 
     public void genFib() {
         FIB[0] = FIB[1] = 1;
         for (int i = 2; i < FIB.length; i++) {
-            FIB[i] = FIB[i - 2] + FIB[i - 1];
+            Writes.write(FIB, i, FIB[i - 2] + FIB[i - 1], 0, false, true);
         }
     }
 
@@ -38,7 +38,7 @@ final public class FibonacciHeapSort extends Sort {
             if (j < a)
                 order--;
             else {
-                if (Reads.compareValues(array[b], array[j]) > 0) {
+                if (Reads.compareIndices(array, b, j, 0.1, true) > 0) {
                     Writes.swap(array, b, j, 1, true, false);
                     order -= 2;
                 } else {
@@ -77,8 +77,11 @@ final public class FibonacciHeapSort extends Sort {
     public void fibHeapify(int[] array, int start, int end) {
         genFib();
         int j = 1;
-        while (FIB[j] <= end - start)
+        Reads.addComparison();
+        while (FIB[j] <= end - start) {
+            Reads.addComparison();
             j++;
+        }
         for (int i = start; i < end; i++) {
             fastsift(array, start, i);
         }

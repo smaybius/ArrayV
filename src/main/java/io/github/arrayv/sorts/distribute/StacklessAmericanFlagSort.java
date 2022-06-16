@@ -67,7 +67,7 @@ public final class StacklessAmericanFlagSort extends Sort {
 		for (int i = 0; i < r - 1; i++) {
 			int pos = a + offs[i];
 
-			if (cnts[i] > offs[i]) {
+			if (Reads.compareValues(cnts[i], offs[i]) > 0) {
 				Highlights.markArray(2, pos);
 				int t = array[pos];
 
@@ -78,7 +78,7 @@ public final class StacklessAmericanFlagSort extends Sort {
 					int t1 = array[a + cnts[digit]];
 					Writes.write(array, a + cnts[digit], t, 0.5, true, false);
 					t = t1;
-				} while (cnts[i] > offs[i]);
+				} while (Reads.compareValues(cnts[i], offs[i]) > 0);
 
 				Highlights.clearMark(2);
 			}

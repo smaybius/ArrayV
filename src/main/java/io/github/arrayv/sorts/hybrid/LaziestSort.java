@@ -117,7 +117,7 @@ public final class LaziestSort extends Sort {
 		int i = a, j = m, k;
 
 		while (i < j && j < b) {
-			if (Reads.compareValues(array[i], array[j]) == 1) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
 				k = this.leftExpSearch(array, j + 1, b, array[i]);
 				this.rotate(array, i, j, k);
 

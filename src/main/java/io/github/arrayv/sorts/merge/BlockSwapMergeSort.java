@@ -54,7 +54,7 @@ public final class BlockSwapMergeSort extends Sort {
         int a = 0, b = Math.min(mid - start, end - mid), m = a + (b - a) / 2;
 
         while (b > a) {
-            if (Reads.compareValues(array[mid - m - 1], array[mid + m]) == 1)
+            if (Reads.compareIndices(array, mid - m - 1, mid + m, 0.2, true) == 1)
                 a = m + 1;
             else
                 b = m;

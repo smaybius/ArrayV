@@ -78,7 +78,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 		int i = a, j = m, k;
 
 		while (i < j && j < b) {
-			if (Reads.compareValues(array[i], array[j]) > 0) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
 				k = j;
 				do
 					k++;
@@ -99,7 +99,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 		int i = m - 1, j = b - 1, k;
 
 		while (j > i && i >= a) {
-			if (Reads.compareValues(array[i], array[j]) > 0) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
 				k = i;
 				do
 					k--;

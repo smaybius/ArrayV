@@ -96,7 +96,7 @@ public final class YujisBufferedMergeSort2 extends Sort {
 
 		if (useBinarySearch) {
 			while (i < m - a && j < b) {
-				if (Reads.compareValues(array[j], array[p + i]) == -1) {
+				if (Reads.compareIndices(array, j, p + i, 0.1, true) == -1) {
 					int q = this.binarySearch(array, j, b, array[p + i], true);
 					while (j < q)
 						Writes.swap(array, k++, j++, 1, true, false);
@@ -108,7 +108,7 @@ public final class YujisBufferedMergeSort2 extends Sort {
 			}
 		} else {
 			while (i < m - a && j < b) {
-				if (Reads.compareValues(array[p + i], array[j]) <= 0) {
+				if (Reads.compareIndices(array, p + i, j, 0.1, true) <= 0) {
 					Writes.swap(array, k++, p + (i++), 1, true, false);
 				} else {
 					Writes.swap(array, k++, j++, 1, true, false);

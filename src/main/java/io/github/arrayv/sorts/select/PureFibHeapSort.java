@@ -19,12 +19,12 @@ final public class PureFibHeapSort extends Sort {
 		this.setBogoSort(false);
 	}
 
-	private int[] FIB = new int[46]; // fib(47) > Integer.MAX_VALUE
+	private int[] FIB = Writes.createExternalArray(46); // fib(47) > Integer.MAX_VALUE
 
 	public void genFib() {
 		FIB[0] = FIB[1] = 1;
 		for (int i = 2; i < FIB.length; i++) {
-			FIB[i] = FIB[i - 2] + FIB[i - 1];
+			Writes.write(FIB, i, FIB[i - 2] + FIB[i - 1], 0, false, true);
 		}
 	}
 
@@ -57,8 +57,11 @@ final public class PureFibHeapSort extends Sort {
 	public void fibHeapify(int[] array, int start, int end) {
 		genFib();
 		int j = 1;
-		while (FIB[j] <= end - start)
+		Reads.addComparison();
+		while (FIB[j] <= end - start) {
+			Reads.addComparison();
 			j++;
+		}
 		for (int i = start + 1; i <= end; i++) {
 			sift(array, start, i);
 		}

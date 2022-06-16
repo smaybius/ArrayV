@@ -53,17 +53,17 @@ public final class FlanSort extends MultiWayMergeSorting {
 	private final int R = 4;
 
 	private int medianOfThree(int[] array, int a, int m, int b) {
-		if (Reads.compareValues(array[m], array[a]) > 0) {
-			if (Reads.compareValues(array[m], array[b]) < 0)
+		if (Reads.compareIndices(array, m, a, 0.1, true) > 0) {
+			if (Reads.compareIndices(array, m, b, 0.1, true) < 0)
 				return m;
-			if (Reads.compareValues(array[a], array[b]) > 0)
+			if (Reads.compareIndices(array, a, b, 0.1, true) > 0)
 				return a;
 			else
 				return b;
 		} else {
-			if (Reads.compareValues(array[m], array[b]) > 0)
+			if (Reads.compareIndices(array, m, b, 0.1, true) > 0)
 				return m;
-			if (Reads.compareValues(array[a], array[b]) < 0)
+			if (Reads.compareIndices(array, a, b, 0.1, true) < 0)
 				return a;
 			else
 				return b;
@@ -240,7 +240,8 @@ public final class FlanSort extends MultiWayMergeSorting {
 
 			int bLoc = this.leftBlockSearch(array, p + G, pEnd - (G + 1), array[i]); // search gap location
 
-			if (Reads.compareValues(array[i], array[bLoc]) == 0) { // handle equal values to prevent worst case O(n^2)
+			if (Reads.compareIndices(array, i, bLoc, 0.1, true) == 0) { // handle equal values to prevent worst case
+																		// O(n^2)
 				int eqEnd = this.rightBlockSearch(array, bLoc + (G + 1), pEnd - (G + 1), array[i]); // find the endpoint
 																									// of the gaps with
 																									// equal head

@@ -44,13 +44,18 @@ public final class OutOfPlaceHeapSort extends Sort {
 		this.setBogoSort(false);
 	}
 
-	//source: https://en.wikipedia.org/wiki/Heapsort#Bottom-up_heapsort
+	// source: https://en.wikipedia.org/wiki/Heapsort#Bottom-up_heapsort
 
 	private void siftDown(int[] array, int i, int b) {
 		int j = i;
-		for(; 2*j + 1 < b; j = 2*j + 2 < b ? (Reads.compareValues(array[2*j + 2], array[2*j + 1]) > 0 ? 2*j + 2 : 2*j + 1) : 2*j + 1);
-		for(; Reads.compareValues(array[i], array[j]) > 0; j = (j-1)/2);
-		for(; j > i; j = (j-1)/2) Writes.swap(array, i, j, 1, true, false);
+		for (; 2 * j + 1 < b; j = 2 * j + 2 < b
+				? (Reads.compareIndices(array, 2 * j + 2, 2 * j + 1, 0.2, true) > 0 ? 2 * j + 2 : 2 * j + 1)
+				: 2 * j + 1)
+			;
+		for (; Reads.compareIndices(array, i, j, 0.2, true) > 0; j = (j - 1) / 2)
+			;
+		for (; j > i; j = (j - 1) / 2)
+			Writes.swap(array, i, j, 1, true, false);
 	}
 
 	private void findNext(int[] array, int b) {
@@ -58,38 +63,35 @@ public final class OutOfPlaceHeapSort extends Sort {
 		int l = 1;
 		int r = 2;
 
-		while(r < b && !(array[l] == -1 && array[r] == -1)) {
-			if(array[l] == -1) {
+		while (r < b && !(array[l] == -1 && array[r] == -1)) {
+			if (array[l] == -1) {
 				Writes.swap(array, i, r, 1, true, false);
 				i = r;
-			}
-			else if(array[r] == -1) {
+			} else if (array[r] == -1) {
+				Writes.swap(array, i, l, 1, true, false);
+				i = l;
+			} else if (Reads.compareIndices(array, r, l, 0.2, true) > 0) {
+				Writes.swap(array, i, r, 1, true, false);
+				i = r;
+			} else {
 				Writes.swap(array, i, l, 1, true, false);
 				i = l;
 			}
-			else if(Reads.compareValues(array[r], array[l]) > 0) {
-				Writes.swap(array, i, r, 1, true, false);
-				i = r;
-			}
-			else {
-				Writes.swap(array, i, l, 1, true, false);
-				i = l;
-			}
-			l = 2*i + 1;
-			r = l+1;
+			l = 2 * i + 1;
+			r = l + 1;
 		}
-		if(l < b && array[l] != -1)
+		if (l < b && array[l] != -1)
 			Writes.swap(array, i, l, 1, true, false);
 	}
 
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) {
-		for(int i = (length-1)/2; i >= 0; i--)
+		for (int i = (length - 1) / 2; i >= 0; i--)
 			this.siftDown(array, i, length);
 
 		int[] tmp = Writes.createExternalArray(length);
 
-		for(int i = length-1; i >= 0; i--) {
+		for (int i = length - 1; i >= 0; i--) {
 			Writes.write(tmp, i, array[0], 0, true, true);
 			Writes.write(array, 0, -1, 1, false, false);
 

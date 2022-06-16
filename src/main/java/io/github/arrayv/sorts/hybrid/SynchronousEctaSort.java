@@ -243,7 +243,9 @@ final public class SynchronousEctaSort extends BlockMergeSorting {
 
 			i -= j2;
 			int c = 0, e = i + j;
+			Reads.addComparison();
 			while (p[0] < e) {
+				Reads.addComparison();
 				Writes.arraycopy(tmp, c * bLen, array, p[0], bLen, 1, true, false);
 				Writes.write(idx, c++, p[0] / bLen, 1, false, true);
 				Writes.write(p, 0, p[0] + bLen, 1, false, true);

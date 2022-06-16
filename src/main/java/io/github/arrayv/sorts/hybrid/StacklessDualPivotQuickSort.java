@@ -59,20 +59,20 @@ public final class StacklessDualPivotQuickSort extends Sort {
 		int i = a, j = b;
 
 		for (int k = i + 1; k < j; k++) {
-			if (Reads.compareValues(array[k], array[b]) < 0)
+			if (Reads.compareIndices(array, k, b, 0.1, true) < 0)
 				Writes.swap(array, k, ++i, 1, true, false);
 
-			else if (Reads.compareValues(array[k], array[a]) >= 0) {
+			else if (Reads.compareIndices(array, k, a, 0.1, true) >= 0) {
 				do {
 					j--;
 					Highlights.markArray(3, j);
 					Delays.sleep(1);
-				} while (j > k && Reads.compareValues(array[j], array[a]) >= 0);
+				} while (j > k && Reads.compareIndices(array, j, a, 0.1, true) >= 0);
 
 				Writes.swap(array, k, j, 1, true, false);
 				Highlights.clearMark(3);
 
-				if (Reads.compareValues(array[k], array[b]) < 0)
+				if (Reads.compareIndices(array, k, b, 0.1, true) < 0)
 					Writes.swap(array, k, ++i, 1, true, false);
 			}
 		}

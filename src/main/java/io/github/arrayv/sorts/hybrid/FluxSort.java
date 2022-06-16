@@ -84,43 +84,54 @@ public final class FluxSort extends QuadSorting {
 
 		val = (Reads.compareIndices(array, v0, v1, 1, true) + 1) / 2;
 		t[0] = val;
+		Writes.changeAuxWrites(1);
 		t[1] = val ^ 1;
+		Writes.changeAuxWrites(1);
 		val = (Reads.compareIndices(array, v0, v2, 1, true) + 1) / 2;
 		t[0] += val;
+		Writes.changeAuxWrites(val);
 		t[2] = val ^ 1;
 		val = (Reads.compareIndices(array, v0, v3, 1, true) + 1) / 2;
 		t[0] += val;
+		Writes.changeAuxWrites(val);
 		t[3] = val ^ 1;
+		Writes.changeAuxWrites(1);
 		val = (Reads.compareIndices(array, v0, v4, 1, true) + 1) / 2;
 		t[0] += val;
-
+		Writes.changeAuxWrites(val);
 		if (t[0] == 2)
 			return v0;
 
 		val = (Reads.compareIndices(array, v1, v2, 1, true) + 1) / 2;
 		t[1] += val;
+		Writes.changeAuxWrites(val);
 		t[2] += val ^ 1;
+		Writes.changeAuxWrites(val ^ 1);
 		val = (Reads.compareIndices(array, v1, v3, 1, true) + 1) / 2;
 		t[1] += val;
+		Writes.changeAuxWrites(val);
 		t[3] += val ^ 1;
+		Writes.changeAuxWrites(val ^ 1);
 		val = (Reads.compareIndices(array, v1, v4, 1, true) + 1) / 2;
 		t[1] += val;
-
+		Writes.changeAuxWrites(val);
 		if (t[1] == 2)
 			return v1;
 
 		val = (Reads.compareIndices(array, v2, v3, 1, true) + 1) / 2;
 		t[2] += val;
+		Writes.changeAuxWrites(val);
 		t[3] += val ^ 1;
+		Writes.changeAuxWrites(val ^ 1);
 		val = (Reads.compareIndices(array, v2, v4, 1, true) + 1) / 2;
 		t[2] += val;
-
+		Writes.changeAuxWrites(val);
 		if (t[2] == 2)
 			return v2;
 
 		val = (Reads.compareIndices(array, v3, v4, 1, true) + 1) / 2;
 		t[3] += val;
-
+		Writes.changeAuxWrites(val);
 		return t[3] == 2 ? v3 : v4;
 	}
 
@@ -131,14 +142,17 @@ public final class FluxSort extends QuadSorting {
 		val = (Reads.compareIndices(array, v0, v1, 1, true) + 1) / 2;
 		t[0] = val;
 		t[1] = val ^ 1;
+		Writes.changeAuxWrites(2);
 		val = (Reads.compareIndices(array, v0, v2, 1, true) + 1) / 2;
 		t[0] += val;
+		Writes.changeAuxWrites(val);
 
 		if (t[0] == 1)
 			return v0;
 
 		val = (Reads.compareIndices(array, v1, v2, 1, true) + 1) / 2;
 		t[1] += val;
+		Writes.changeAuxWrites(val);
 
 		return t[1] == 1 ? v1 : v2;
 	}

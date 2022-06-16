@@ -147,7 +147,7 @@ public abstract class BlockMergeSorting extends Sort {
 			Delays.sleep(1);
 			int loc = this.leftBinSearch(array, p, pEnd, array[i]);
 
-			if (pEnd == loc || Reads.compareValues(array[i], array[loc]) != 0) {
+			if (pEnd == loc || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
 				this.rotate(array, p, pEnd, i);
 				int inc = i - pEnd;
 				loc += inc;
@@ -172,7 +172,7 @@ public abstract class BlockMergeSorting extends Sort {
 			Delays.sleep(1);
 			int loc = this.leftBinSearch(array, p, pEnd, array[i]);
 
-			if (pEnd == loc || Reads.compareValues(array[i], array[loc]) != 0) {
+			if (pEnd == loc || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
 				this.rotate(array, i + 1, p, pEnd);
 				int inc = p - (i + 1);
 				loc -= inc;
@@ -193,7 +193,7 @@ public abstract class BlockMergeSorting extends Sort {
 	}
 
 	protected boolean boundCheck(int[] array, int a, int m, int b) {
-		return m >= b || Reads.compareValues(array[m - 1], array[m]) <= 0;
+		return m >= b || Reads.compareIndices(array, m - 1, m, 0.1, true) <= 0;
 	}
 
 	protected void mergeBW(int[] array, int a, int m, int b, int p) {
@@ -206,7 +206,7 @@ public abstract class BlockMergeSorting extends Sort {
 		int i = pLen - 1, j = m - 1, k = b - 1;
 
 		while (i >= 0 && j >= a) {
-			if (Reads.compareValues(array[p + i], array[j]) >= 0)
+			if (Reads.compareIndices(array, p + i, j, 0.1, true) >= 0)
 				Writes.swap(array, k--, p + (i--), 1, true, false);
 			else
 				Writes.swap(array, k--, j--, 1, true, false);
@@ -219,7 +219,7 @@ public abstract class BlockMergeSorting extends Sort {
 		int i = a, j = m;
 
 		while (i < m && j < b) {
-			if (Reads.compareValues(array[i], array[j]) <= 0)
+			if (Reads.compareIndices(array, i, j, 0.2, true) <= 0)
 				Writes.swap(array, p++, i++, 1, true, false);
 			else
 				Writes.swap(array, p++, j++, 1, true, false);
@@ -231,8 +231,8 @@ public abstract class BlockMergeSorting extends Sort {
 	}
 
 	protected void pingPongMerge(int[] array, int a, int m1, int m2, int m3, int b, int p) {
-		if (Reads.compareValues(array[m1 - 1], array[m1]) > 0
-				|| (m3 < b && Reads.compareValues(array[m3 - 1], array[m3]) > 0)) {
+		if (Reads.compareIndices(array, m1 - 1, m1, 0.2, true) > 0
+				|| (m3 < b && Reads.compareIndices(array, m3 - 1, m3, 0.2, true) > 0)) {
 			int p1 = p + m2 - a, pEnd = p + b - a;
 
 			this.mergeTo(array, a, m1, m2, p);
@@ -282,7 +282,7 @@ public abstract class BlockMergeSorting extends Sort {
 		while (a < m && i < b) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[a], array[i]) <= 0)
+			if (Reads.compareIndices(array, a, i, 0.1, true) <= 0)
 				Writes.swap(array, p++, a++, 1, true, false);
 			else
 				Writes.swap(array, p++, i++, 1, true, false);
@@ -301,7 +301,7 @@ public abstract class BlockMergeSorting extends Sort {
 		while (b >= m && i >= a) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[b], array[i]) >= 0)
+			if (Reads.compareIndices(array, b, i, 0.1, true) >= 0)
 				Writes.swap(array, --p, b--, 1, true, false);
 			else
 				Writes.swap(array, --p, i--, 1, true, false);
@@ -319,7 +319,7 @@ public abstract class BlockMergeSorting extends Sort {
 		while (a < m && i < b) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[a], array[i]) <= 0)
+			if (Reads.compareIndices(array, a, i, 0.1, true) <= 0)
 				Writes.write(array, p++, array[a++], 1, true, false);
 			else
 				Writes.write(array, p++, array[i++], 1, true, false);
@@ -338,7 +338,7 @@ public abstract class BlockMergeSorting extends Sort {
 		while (b >= m && i >= a) {
 			Highlights.markArray(2, i);
 
-			if (Reads.compareValues(array[b], array[i]) >= 0)
+			if (Reads.compareIndices(array, b, i, 0.1, true) >= 0)
 				Writes.write(array, --p, array[b--], 1, true, false);
 			else
 				Writes.write(array, --p, array[i--], 1, true, false);

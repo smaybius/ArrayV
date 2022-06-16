@@ -81,7 +81,7 @@ public final class BufferPartitionMergeSort extends Sort {
 		int i = a, j = m, k;
 
 		while (i < j && j < b) {
-			if (Reads.compareValues(array[i], array[j]) > 0) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
 				k = j;
 				while (++k < b && Reads.compareIndices(array, i, k, 0, false) > 0)
 					;

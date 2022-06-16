@@ -49,10 +49,10 @@ public final class BottomUpHeapSort extends Sort {
 	public void siftDown(int[] array, int i, int b) {
 		int j = i;
 		for (; 2 * j + 1 < b; j = 2 * j + 2 < b
-				? (Reads.compareValues(array[2 * j + 2], array[2 * j + 1]) > 0 ? 2 * j + 2 : 2 * j + 1)
+				? (Reads.compareIndices(array, 2 * j + 2, 2 * j + 1, 0.05, true) > 0 ? 2 * j + 2 : 2 * j + 1)
 				: 2 * j + 1)
 			;
-		for (; Reads.compareValues(array[i], array[j]) > 0; j = (j - 1) / 2)
+		for (; Reads.compareIndices(array, i, j, 0.2, true) > 0; j = (j - 1) / 2)
 			;
 		for (; j > i; j = (j - 1) / 2)
 			Writes.swap(array, i, j, 1, true, false);

@@ -96,7 +96,7 @@ public abstract class PDQSorting extends Sort {
 
             // Compare first so we can avoid 2 moves for an element already positioned
             // correctly.
-            if (Reads.compareValues(array[sift], array[siftMinusOne]) < 0) {
+            if (Reads.compareIndices(array, sift, siftMinusOne, 0.2, true) < 0) {
                 int tmp = array[sift];
                 do {
                     Writes.write(array, sift--, array[siftMinusOne], sleep, true, false);
@@ -123,7 +123,7 @@ public abstract class PDQSorting extends Sort {
 
             // Compare first so we can avoid 2 moves for an element already positioned
             // correctly.
-            if (Reads.compareValues(array[sift], array[siftMinusOne]) < 0) {
+            if (Reads.compareIndices(array, sift, siftMinusOne, 0.2, true) < 0) {
                 int tmp = array[sift];
 
                 do {
@@ -156,7 +156,7 @@ public abstract class PDQSorting extends Sort {
 
             // Compare first so we can avoid 2 moves for an element already positioned
             // correctly.
-            if (Reads.compareValues(array[sift], array[siftMinusOne]) < 0) {
+            if (Reads.compareIndices(array, sift, siftMinusOne, 0.2, true) < 0) {
                 int tmp = array[sift];
 
                 do {
@@ -171,7 +171,7 @@ public abstract class PDQSorting extends Sort {
     }
 
     private void pdqSortTwo(int[] array, int a, int b) {
-        if (Reads.compareValues(array[b], array[a]) < 0) {
+        if (Reads.compareIndices(array, b, a, 0.1, true) < 0) {
             Writes.swap(array, a, b, 1, true, false);
         }
         Highlights.clearMark(2);
@@ -618,7 +618,7 @@ public abstract class PDQSorting extends Sort {
             // the left partition, greater elements in the right partition. We do not have
             // to
             // recurse on the left partition, since it's sorted (all equal).
-            if (!leftmost && !(Reads.compareValues(array[begin - 1], array[begin]) < 0)) {
+            if (!leftmost && !(Reads.compareIndices(array, begin - 1, begin, 0.1, true) < 0)) {
                 begin = this.pdqPartLeft(array, begin, end) + 1;
                 continue;
             }

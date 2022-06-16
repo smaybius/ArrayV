@@ -50,8 +50,6 @@ public final class FlashSort extends Sort {
             int big;
             int bigIndex;
 
-            Highlights.markArray(1, i);
-
             // which is bigger A(i) or A(i+1)
             if (Reads.compareIndices(array, i, i + 1, 1, true) == -1) {
                 small = array[i];
@@ -71,8 +69,6 @@ public final class FlashSort extends Sort {
             if (small < min) {
                 min = small;
             }
-
-            Delays.sleep(1);
         }
 
         // do the last element

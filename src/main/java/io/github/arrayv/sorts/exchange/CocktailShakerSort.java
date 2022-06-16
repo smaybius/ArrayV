@@ -60,15 +60,10 @@ public final class CocktailShakerSort extends Sort {
                 Delays.sleep(sleep / 2);
             }
             for (int j = end + start - i - 1; j > i; j--) {
-                if (Reads.compareValues(array[j], array[j - 1]) == -1) {
+                if (Reads.compareIndices(array, j, j - 1, sleep / 2, true) == -1) {
                     Writes.swap(array, j, j - 1, sleep, true, false);
                     sorted = false;
                 }
-
-                Highlights.markArray(1, j);
-                Highlights.markArray(2, j - 1);
-
-                Delays.sleep(sleep / 2);
             }
             if (sorted)
                 break;
