@@ -51,7 +51,7 @@ public final class AsynchronousSort extends Sort {
 
         int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (int i = 0; i < length; i++) {
-            Writes.write(ext, i, array[i], 0.5, false, true);
+            Writes.write(ext, i, array[i], 0.5, true, true);
             if (array[i] < min) {
                 min = array[i];
             }

@@ -67,27 +67,8 @@ public final class LazierestSort extends Sort {
 		Writes.write(array, b, temp, 0.5, true, false);
 	}
 
-	private void multiSwap(int[] array, int a, int b, int len) {
-		for (int i = 0; i < len; i++)
-			Writes.swap(array, a + i, b + i, 1, true, false);
-	}
-
 	private void rotate(int[] array, int a, int m, int b) {
-		int l = m - a, r = b - m;
-
-		while (l > 0 && r > 0) {
-			if (r < l) {
-				this.multiSwap(array, m - r, m, r);
-				b -= r;
-				m -= r;
-				l -= r;
-			} else {
-				this.multiSwap(array, a, m, l);
-				a += l;
-				m += l;
-				r -= l;
-			}
-		}
+		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
 	}
 
 	private int leftBinSearch(int[] array, int a, int b, int val) {

@@ -16,7 +16,8 @@ public final class QuickSortPartitions extends Sort {
         this.setUnreasonablySlow(false);
         this.setUnreasonableLimit(0);
         this.setBogoSort(false);
-        this.setQuestion("Enter partition (0 for Lomuto, 1 for Hoare, 2 for modified Lomuto, 3 for modified Hoare):",
+        this.setQuestion(
+                "Enter partition (0 for Lomuto, 1 for Hoare, 2 for modified Lomuto, 3 for modified Hoare, 4 for fulcrum, 5 for QuickSelect):",
                 0);
     }
 
@@ -121,8 +122,7 @@ public final class QuickSortPartitions extends Sort {
         }
     }
 
-    public int partitionFulcrum(int[] array, int nmemb) {
-        int head = 0;
+    public int partitionFulcrum(int[] array, int head, int nmemb) {
         int tail = nmemb - 1;
         int piv = array[nmemb / 2];
         int cnt = nmemb;
@@ -168,6 +168,8 @@ public final class QuickSortPartitions extends Sort {
                 return ModifiedLomuto(array, lo, hi);
             case 3:
                 return ModifiedHoare(array, lo, hi);
+            case 4:
+                return partitionFulcrum(array, lo, hi);
             default:
                 return HoarePartition(array, lo, hi);
         }

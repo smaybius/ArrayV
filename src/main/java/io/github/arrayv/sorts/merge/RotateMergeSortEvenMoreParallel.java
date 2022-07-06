@@ -2,13 +2,12 @@ package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
-import io.github.arrayv.utils.IndexedRotations;
 
 /*
- *
+ * 
 The MIT License (MIT)
 
-Copyright (c) 2020 aphitorite
+Copyright (c) 2020-2021 aphitorite
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -29,14 +28,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
 
-public final class RotateMergeSortParallel extends Sort {
-	public RotateMergeSortParallel(ArrayVisualizer arrayVisualizer) {
+final public class RotateMergeSortEvenMoreParallel extends Sort {
+	public RotateMergeSortEvenMoreParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
 
-		this.setSortListName("Rotate Merge (Parallel)");
-		this.setRunAllSortsName("Parallel Rotate Merge Sort");
-		// this.setRunAllID("In-Place Merge Sort with Rotations");
-		this.setRunSortName(/* "In-Place */"Parallel Rotate Mergesort");
+		this.setSortListName("Rotate Merge (Even More Parallel)");
+		this.setRunAllSortsName("Even More Parallel Rotate Merge Sort");
+		this.setRunSortName("Even More Parallel Rotate Mergesort");
 		this.setCategory("Merge Sorts");
 		this.setBucketSort(false);
 		this.setRadixSort(false);
@@ -56,7 +54,7 @@ public final class RotateMergeSortParallel extends Sort {
 		}
 
 		public void run() {
-			RotateMergeSortParallel.this.rotateMergeSort(this.a, this.b);
+			RotateMergeSortEvenMoreParallel.this.rotateMergeSort(this.a, this.b);
 		}
 	}
 
@@ -70,12 +68,73 @@ public final class RotateMergeSortParallel extends Sort {
 		}
 
 		public void run() {
-			RotateMergeSortParallel.this.rotateMerge(a, m, b);
+			RotateMergeSortEvenMoreParallel.this.rotateMerge(a, m, b);
+		}
+	}
+
+	private class ParallelReversal extends Thread {
+		private int a, b;
+
+		ParallelReversal(int a, int b) {
+			this.a = a;
+			this.b = b;
+		}
+
+		public void run() {
+			RotateMergeSortEvenMoreParallel.this.parallelReversal(a, b);
+		}
+	}
+
+	private class ParallelSwap extends Thread {
+		private int a, b;
+
+		ParallelSwap(int a, int b) {
+			this.a = a;
+			this.b = b;
+		}
+
+		public void run() {
+			Writes.swap(array, a, b, 1, true, false);
+		}
+	}
+
+	private void parallelReversal(int a, int b) {
+		int n = (b - a) / 2;
+		ParallelSwap[] t = new ParallelSwap[n];
+
+		for (int i = 0; i < n; i++)
+			t[i] = new ParallelSwap(a++, --b);
+
+		for (ParallelSwap s : t)
+			s.start();
+		try {
+			for (ParallelSwap s : t)
+				s.join();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		}
 	}
 
 	private void rotate(int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		ParallelReversal l = new ParallelReversal(a, m);
+		ParallelReversal r = new ParallelReversal(m, b);
+
+		l.run();
+		r.run();
+		try {
+			l.join();
+			r.join();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		ParallelReversal last = new ParallelReversal(a, b);
+		last.start();
+		try {
+			last.join();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	private int binarySearch(int a, int b, int value, boolean left) {

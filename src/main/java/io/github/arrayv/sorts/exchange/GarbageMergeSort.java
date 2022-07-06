@@ -32,7 +32,7 @@ final public class GarbageMergeSort extends Sort {
         this.setSortListName("Garbage Merge");
         this.setRunAllSortsName("Garbage Merge Sort");
         this.setRunSortName("Garbage Merge Sort");
-        this.setCategory("Exchange Sorts");
+        this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);

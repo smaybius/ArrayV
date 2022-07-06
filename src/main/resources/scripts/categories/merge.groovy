@@ -1,6 +1,6 @@
 import io.github.arrayv.prompts.SortPrompt
 
-SortPrompt.setSortThreadForCategory('Merge Sorts', 24) {
+SortPrompt.setSortThreadForCategory('Merge Sorts', 25) {
     run MergeSort go 2048.numbers, 1.5.speed
     run MergeSortParallel go 2048.numbers, 1.5.speed
     run IterativeTopDownMergeSort go 2048.numbers, 1.5.speed
@@ -14,6 +14,7 @@ SortPrompt.setSortThreadForCategory('Merge Sorts', 24) {
     run BlockSwapMergeSort go 256.numbers, 0.1.speed
     run RotateMergeSort go 512.numbers, 0.2.speed
     run RotateMergeSortParallel go 512.numbers, 0.2.speed
+    run RotateMergeSortEvenMoreParallel go 512.numbers, 0.2.speed
     run StacklessRotateMergeSort go 512.numbers, 0.2.speed
     run AndreySort go 2048.numbers
     run NewShuffleMergeSort go 1024.numbers
@@ -24,5 +25,5 @@ SortPrompt.setSortThreadForCategory('Merge Sorts', 24) {
     run OptimizedPancakeSort go 1024.numbers
     run OutOfPlaceWeaveMergeSort go 2048.numbers
     run Split16Merge go 512.numbers
-    run TransposeModuloWeaveMergeSort go 1024.numbers
+    run TransposeModuloWeaveMergeSort go 2048.numbers, 0.5.speed
 }

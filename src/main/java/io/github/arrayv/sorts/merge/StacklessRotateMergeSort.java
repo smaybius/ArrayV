@@ -45,7 +45,7 @@ public final class StacklessRotateMergeSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.griesMills(array, a, m, b, 0.5, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	// @param c - select c smallest elements
@@ -62,7 +62,7 @@ public final class StacklessRotateMergeSort extends Sort {
 			while (r1 < r2) {
 				int ml = (r1 + r2) / 2;
 
-				if (Reads.compareIndices(array, m - (c - ml), b - ml - 1, 0.2, true) > 0)
+				if (Reads.compareIndices(array, m - (c - ml), b - ml - 1, 1, true) > 0)
 					r2 = ml;
 				else
 					r1 = ml + 1;
@@ -76,7 +76,7 @@ public final class StacklessRotateMergeSort extends Sort {
 			while (r1 < r2) {
 				int ml = (r1 + r2) / 2;
 
-				if (Reads.compareIndices(array, a + ml, m + (c - ml) - 1, 0.2, true) > 0)
+				if (Reads.compareIndices(array, a + ml, m + (c - ml) - 1, 1, true) > 0)
 					r2 = ml;
 				else
 					r1 = ml + 1;

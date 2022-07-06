@@ -2,6 +2,7 @@ package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.IndexedRotations;
 
 /*
  *
@@ -44,33 +45,15 @@ public final class RotateMergeSort extends Sort {
 		this.setBogoSort(false);
 	}
 
-	private void multiSwap(int[] array, int a, int b, int len) {
-		for (int i = 0; i < len; i++)
-			Writes.swap(array, a + i, b + i, 1, true, false);
-	}
-
 	private void rotate(int[] array, int a, int m, int b) {
-		int l = m - a, r = b - m;
-
-		while (l > 0 && r > 0) {
-			if (r < l) {
-				this.multiSwap(array, m - r, m, r);
-				b -= r;
-				m -= r;
-				l -= r;
-			} else {
-				this.multiSwap(array, a, m, l);
-				a += l;
-				m += l;
-				r -= l;
-			}
-		}
+		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
 	}
 
 	private int binarySearch(int[] array, int a, int b, int value, boolean left) {
 		while (a < b) {
 			int m = a + (b - a) / 2;
-
+			Highlights.markArray(1, m);
+			Delays.sleep(1);
 			boolean comp = left ? Reads.compareValues(value, array[m]) <= 0
 					: Reads.compareValues(value, array[m]) < 0;
 

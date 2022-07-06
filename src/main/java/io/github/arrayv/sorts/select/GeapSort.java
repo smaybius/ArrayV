@@ -24,10 +24,10 @@ final public class GeapSort extends HeapSorting {
             while (j >= start) {
                 int next = ((j + start - 2) / 2),
                         child = ((j + start) / 2);
-                if (child >= start && next >= start && Reads.compareIndices(array, child, next, 0.2, true) == 1)
-                    Writes.swap(array, child, next, sleep, true, false);
-                if (next >= start && Reads.compareIndices(array, next, j, 0.2, true) == -1)
-                    Writes.swap(array, j, child, sleep, true, false);
+                if (child >= start && next >= start && Reads.compareIndices(array, child, next, sleep / 8, true) == 1)
+                    Writes.swap(array, child, next, 0, true, false);
+                if (next >= start && Reads.compareIndices(array, next, j, sleep / 8, true) == -1)
+                    Writes.swap(array, j, child, 0, true, false);
                 j = next;
             }
         }
@@ -38,7 +38,7 @@ final public class GeapSort extends HeapSorting {
         this.makeGeap(array, 0, length, 2);
         for (int i = length - 1; i >= 0; i--) {
             Writes.swap(array, 0, --length, 1, true, false);
-            this.makeGeap(array, 0, length, 2);
+            this.makeGeap(array, 0, length, 1);
         }
     }
 }

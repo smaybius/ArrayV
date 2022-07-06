@@ -44,7 +44,7 @@ final public class PureFibHeapSort extends Sort {
 				if (m < a)
 					m = a;
 				for (int i = m; i < j; i++) {
-					if (i >= a && Reads.compareIndices(array, l, i, 1, true) > 0)
+					if (i >= a && Reads.compareIndices(array, l, i, 0.01, true) > 0)
 						l = i;
 				}
 				Writes.swap(array, l, n, 1, true, false);
@@ -76,5 +76,6 @@ final public class PureFibHeapSort extends Sort {
 		}
 		InsertionSort i = new InsertionSort(arrayVisualizer);
 		i.customInsertSort(array, 0, length, 1, false);
+		Writes.deleteExternalArray(FIB);
 	}
 }

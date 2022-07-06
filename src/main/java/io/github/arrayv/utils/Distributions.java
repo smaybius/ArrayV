@@ -623,6 +623,32 @@ public enum Distributions {
                 array[i] = 2 * (n % (i + 1));
         }
     },
+    DIGITS_PROD {
+        public String getName() {
+            return "Product of Digits";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int n = arrayVisualizer.getCurrentLength();
+            int max = 0;
+
+            for (int j = 0; j < n; j++) {
+                array[j] = 1;
+
+                for (int i = j; i > 0; i /= 10)
+                    if (i % 10 > 0)
+                        array[j] *= i % 10;
+
+                if (array[j] > max)
+                    max = array[j];
+            }
+            double scale = (double) (n - 1) / max;
+
+            for (int i = 0; i < n; i++)
+                array[i] = (int) (array[i] * scale);
+        }
+    },
     TOTIENT { // O(n)
         @Override
         public String getName() {
@@ -670,110 +696,103 @@ public enum Distributions {
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int n = arrayVisualizer.getCurrentLength();
-            for (int i = 0; i < n; i++)
+            double c = Math.PI / n; // <-- removed factor of 2
+            final double offset = 0.0; // <-- phase adjustment
+            double frequency = 24000;
+            double sampleRate = 48000;
+            double increment = frequency * Math.PI / sampleRate;
+            double phase = 0;
+            double b = 3;
+            double a = 0.5;
+            for (int i = 0; i < n; i++) {
+                array[i] = n / 2; // <-- ensure all points on curve are non-negative
                 for (int j = 0; j < 10; j++) {
-                    array[i] = n * (int) (0.5 * (Math.pow(7, -j * 0.75) * Math.cos((Math.pow(7, j) * Math.PI * i))));
+                    array[i] += (int) (n * (Math.pow(b, -j * a) * Math.cos((Math.pow(b, j) * phase * c))) / 4); // <--
+                                                                                                                // phase
+                                                                                                                // adjustment
+                                                                                                                // applied
+                                                                                                                // here
                 }
+                phase += increment;
+            }
         }
     },
-    QUESTIONMARK {
+    SIERPINSKI {
         @Override
         public String getName() {
-            return "Minkowski's Question Mark Function";
+            return "Sierpinski Triangle";
         }
 
         @Override
-        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
-            int n = arrayVisualizer.getCurrentLength();
+        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            triangleRec(array, 0, currentLen, 0, currentLen);
+        }
+
+        public void triangleRec(int[] array, int a, int b, int v1, int v2) {
+            if (b - a < 3)
+                return;
+
+            int vm = (v1 + v2) / 2, t1 = (a + a + b) / 3, t2 = (a + b + b + 2) / 3;
+            ;
+            for (int i = t1; i < t2; i++)
+                array[i] = vm;
+
+            triangleRec(array, a, t1, v1, vm);
+            triangleRec(array, t1, t2, vm, v2);
+            triangleRec(array, t2, b, v1, vm);
+        }
+    },
+    SIGMOID {
+        @Override
+        public String getName() {
+            return "Sigmoid Function";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
+            double n = ArrayVisualizer.getCurrentLength();
+
             for (int i = 0; i < n; i++) {
-                array[i] += minkowski(i);
+                double x = i / n;
+                // array[i] = (int)(n * (Math.pow(x,3) * (3*x * (2*x - 5) + 10)));
+                array[i] = (int) (-n * (Math.pow(x, 4) * (2 * x * (5 * x * (2 * x - 7) + 42) - 35)));
             }
         }
-
-        private int minkowski(int x) {
-            if (x > 1 || x < 0)
-                return (int) Math.floor(x) + (int) minkowski(x - (int) Math.floor(x));
-            int p = x;
-            int q = 1;
-            int r = p + 1;
-            int s = 1;
-            int d = 1;
-            int y = p;
-
-            while (true) {
-                d /= 2;
-                if (y + d == y)
-                    break;
-
-                int m = p + r;
-                if (m < 0 || p < 0)
-                    break;
-
-                int n = q + s;
-                if (n < 0)
-                    break;
-                if (x < m / n) {
-                    r = m;
-                    s = n;
-                } else {
-                    y += d;
-                    p = m;
-                    q = n;
-                }
-            }
-            return y + d;
+    },
+    VERT_SIG {
+        @Override
+        public String getName() {
+            return "Vertical Sigmoid";
         }
 
-        private int minkowski_inv(int x) {
-            if (x > 1 || x < 0)
-                return (int) (Math.floor(x) + minkowski_inv(x - (int) Math.floor(x)));
-            if (x == 1 || x == 0)
-                return x;
-            List<Integer> contFrac = new ArrayList<Integer>();
-            int curr = 0;
-            int count = 1;
-            int i = 0;
-            while (true) {
-                x *= 2;
-                if (curr == 0) {
-                    if (x < 1) {
-                        count++;
-                    } else {
-                        i++;
-                        contFrac.add(0);
-                        contFrac.set(i, count);
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
+            double n = ArrayVisualizer.getCurrentLength();
+            double k = 1 / 4d;
 
-                        i++;
-                        count = 1;
-                        curr = 1;
-                        x--;
-                    }
-                } else {
-                    if (x > 1) {
-                        count++;
-                        x--;
-                    } else {
-                        contFrac.add(0);
-                        contFrac.set(i, count);
-
-                        i++;
-                        count = 1;
-                        curr = 0;
-                    }
-                }
-                if (x == Math.floor(x)) {
-                    contFrac.set(i, count);
-                    break;
-                }
-
-                if (i == 151)
-                    break;
+            for (int i = 0; i < n; i++) {
+                double x = i / n;
+                array[i] = (int) (n
+                        * (0.5 * (Math.signum(x - 0.5) * (1 - Math.pow((1 - 2 * Math.abs(x - 0.5)), k)) + 1)));
             }
-            int ret = 1 / contFrac.get(i);
-            for (int j = i - 1; j > -1; j--) {
-                contFrac.set(j, 1 / ret);
+        }
+    },
+    EXP {
+        @Override
+        public String getName() {
+            return "Exponential Function";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
+            double n = ArrayVisualizer.getCurrentLength();
+            double m = 16;
+
+            for (int i = 0; i < n; i++) {
+                double x = i / n;
+                array[i] = (int) (n * ((Math.pow(2, m * x) - 1) / (Math.pow(2, m) - 1)));
             }
-            return 1 / ret;
         }
     },
     CUSTOM {

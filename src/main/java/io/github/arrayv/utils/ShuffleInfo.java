@@ -66,7 +66,7 @@ public final class ShuffleInfo {
             return false;
         }
         if (o instanceof ShuffleInfo) {
-            ShuffleInfo other = (ShuffleInfo)o;
+            ShuffleInfo other = (ShuffleInfo) o;
             if (this.isDistribution != other.isDistribution) {
                 return false;
             }
@@ -115,6 +115,8 @@ public final class ShuffleInfo {
             Highlights Highlights = arrayVisualizer.getHighlights();
             Writes Writes = arrayVisualizer.getWrites();
             this.shuffle.shuffleArray(array, arrayVisualizer, Delays, Highlights, Writes);
+            arrayVisualizer.getArrays().subList(1, arrayVisualizer.getArrays().size()).clear();
+            Writes.clearAllocAmount();
         }
     }
 }

@@ -54,7 +54,7 @@ public final class BlockSwapMergeSort extends Sort {
         int a = 0, b = Math.min(mid - start, end - mid), m = a + (b - a) / 2;
 
         while (b > a) {
-            if (Reads.compareIndices(array, mid - m - 1, mid + m, 0.2, true) == 1)
+            if (Reads.compareIndices(array, mid - m - 1, mid + m, 1, true) == 1)
                 a = m + 1;
             else
                 b = m;
@@ -63,6 +63,11 @@ public final class BlockSwapMergeSort extends Sort {
         }
 
         return m;
+    }
+
+    public void multiSwapMerge(int[] array, int start, int mid, int end) { // backwards compatibility with extra sorts
+                                                                           // pack
+        multiSwapMerge(array, start, mid, end, 0);
     }
 
     public void multiSwapMerge(int[] array, int start, int mid, int end, int depth) {

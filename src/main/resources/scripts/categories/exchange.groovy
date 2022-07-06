@@ -10,9 +10,9 @@ SortPrompt.setSortThreadForCategory('Exchange Sorts', 27) {
     run DandelionSort go 512.numbers, 2.speed
     run ReverseGnomeSort go 512.numbers, 0.5.speed
     run OddEvenSort go 512.numbers
-    run SwapMapSort go 512.numbers, 0.5.speed
+    run SwapMapSort go 512.numbers, 0.25.speed
     run CombSort go 1024.numbers, 130.buckets
-    run SplitCenterSort go 512.numbers, 0.5.speed
+    run SplitCenterSort go 512.numbers, 0.25.speed
     run OptimizedStoogeSort go 512.numbers
     run OptimizedStoogeSortStudio go 512.numbers
     run FunSort go 256.numbers, 2.speed
@@ -23,7 +23,7 @@ SortPrompt.setSortThreadForCategory('Exchange Sorts', 27) {
     run CircleSortParallel go 1024.numbers
     run CircloidSort go 1024.numbers
     run CompleteGraphSort go 1024.numbers
-    run WeirdInsertionSort go 512.numbers
+    run WeirdInsertionSort go 512.numbers, 1.75.speed
     run PseudoHeapSort go 1024.numbers, 2.speed
     run WiggleSort go 512.numbers
     run SandpaperSort go 512.numbers

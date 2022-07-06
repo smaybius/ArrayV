@@ -18,7 +18,7 @@ final public class ScrollHeapHunterSort extends HeapSorting {
         this.setSortListName("Scroll Heap Hunter");
         this.setRunAllSortsName("Scroll Heap Hunter Sort");
         this.setRunSortName("Scroll Heap Hunter Sort");
-        this.setCategory("Impractical Sorts");
+        this.setCategory("Selection Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

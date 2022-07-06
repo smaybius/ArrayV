@@ -26,6 +26,7 @@ SortPrompt.setSortThreadForCategory('Impractical Sorts', 44) {
     run NapoleonSortResolve go 128.numbers
     run ReflectionSort go 256.numbers
     run XSort go 128.numbers
+     run ReadSort go 128.numbers
 
     // Bogosorts
     def oldSofterSounds = arrayv.sounds.softerSounds

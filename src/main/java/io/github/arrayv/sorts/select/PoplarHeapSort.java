@@ -62,7 +62,7 @@ public class PoplarHeapSort extends Sort {
             if (Reads.compareIndices(array, sift, sift_1, 0.2, true) == -1) {
                 int tmp = array[sift];
                 do {
-                    Writes.write(array, sift, array[sift_1], 0.25, true, false);
+                    Writes.write(array, sift, array[sift_1], 0, true, false);
                 } while (--sift != first && Reads.compareValues(tmp, array[--sift_1]) == -1);
                 Writes.write(array, sift, tmp, 0.25, true, false);
             }
@@ -98,7 +98,7 @@ public class PoplarHeapSort extends Sort {
             if (max_root == root)
                 return;
 
-            Writes.swap(array, root, max_root, 0.75, true, false);
+            Writes.swap(array, root, max_root, 0.02, true, false);
             Highlights.clearMark(2);
 
             size /= 2;
@@ -136,7 +136,7 @@ public class PoplarHeapSort extends Sort {
         // If a poplar root was bigger than the last one, exchange
         // them and sift
         if (bigger != last_root) {
-            Writes.swap(array, bigger, last_root, 0.75, true, false);
+            Writes.swap(array, bigger, last_root, 0.02, true, false);
             Highlights.clearMark(2);
             this.sift(array, bigger - (bigger_size - 1), bigger_size);
         }

@@ -15,7 +15,7 @@ public final class BadSort extends Sort {
         this.setSortListName("Bad");
         this.setRunAllSortsName("Bad Sort");
         this.setRunSortName("Badsort");
-        this.setCategory("Selection Sorts");
+        this.setCategory("Impractical Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);

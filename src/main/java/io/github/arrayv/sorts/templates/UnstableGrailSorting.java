@@ -2,6 +2,7 @@ package io.github.arrayv.sorts.templates;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.exchange.OptimizedGnomeSort;
+import io.github.arrayv.utils.Rotations;
 
 /*
  *
@@ -66,16 +67,7 @@ public abstract class UnstableGrailSorting extends Sort {
     }
 
     protected void grailRotate(int[] array, int pos, int lenA, int lenB) {
-        while (lenA != 0 && lenB != 0) {
-            if (lenA <= lenB) {
-                this.grailMultiSwap(array, pos, pos + lenA, lenA);
-                pos += lenA;
-                lenB -= lenA;
-            } else {
-                this.grailMultiSwap(array, pos + (lenA - lenB), pos + lenA, lenB);
-                lenA -= lenB;
-            }
-        }
+        Rotations.cycleReverse(array, pos, lenA, lenB, 1, true, false);
     }
 
     private void grailInsertSort(int[] arr, int pos, int len) {

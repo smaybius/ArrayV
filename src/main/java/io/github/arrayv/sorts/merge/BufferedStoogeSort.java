@@ -18,7 +18,6 @@ public final class BufferedStoogeSort extends Sort {
 	 */
 	public BufferedStoogeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-		// TODO Auto-generated constructor stub
 		this.setSortListName("Buffered Stooge");
 		this.setRunAllSortsName("Buffered Stooge Sort");
 		this.setRunSortName("Buffered Stoogesort");
@@ -93,7 +92,6 @@ public final class BufferedStoogeSort extends Sort {
 
 	@Override
 	public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-		// TODO Auto-generated method stub
 		wrapper(array, 0, sortLength, 0);
 
 	}

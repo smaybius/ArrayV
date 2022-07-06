@@ -239,7 +239,7 @@ public final class AATreeSort extends Sort {
 		}
 
 		// Write the contents of the tree to a temporary array
-		int[] tempArray = Writes.createExternalArray(length);
+		int[] tempArray = new int[length];
 		root.writeToArray(tempArray, 0);
 		Highlights.clearMark(1); // No more elements being transferred to temporary array
 

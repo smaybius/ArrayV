@@ -6,19 +6,15 @@ import io.github.arrayv.sorts.templates.MultiWayMergeSorting;
 /*
  *
 MIT License
-
 Copyright (c) 2021 aphitorite
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -171,7 +167,7 @@ public final class RemiSort extends MultiWayMergeSorting {
 				this.siftDown(array, heap, pa, heap[0], 0, size);
 		}
 		int t = 0, cnt = 0, c = 0;
-		while (pa[c] - p[c] < bLen)
+		while (Reads.compareValues(pa[c] - p[c], bLen) < 0)
 			c++;
 
 		do {
@@ -193,7 +189,7 @@ public final class RemiSort extends MultiWayMergeSorting {
 				Writes.write(keys, t++, (c > 0) ? p[c] / bLen - bLen - 1 : -1, 0, false, true);
 
 				c = cnt = 0;
-				while (pa[c] - p[c] < bLen)
+				while (Reads.compareValues(pa[c] - p[c], bLen) < 0)
 					c++;
 			}
 		} while (size > 0);
@@ -212,9 +208,7 @@ public final class RemiSort extends MultiWayMergeSorting {
 			t++;
 
 		for (int i = 1, j = a; j < p[0]; i++) {
-			Reads.addComparison();
-			while (p[i] < pa[i]) {
-				Reads.addComparison();
+			while (Reads.compareValues(p[i], pa[i]) < 0) {
 				Writes.write(keys, t++, p[i] / bLen - bLen, 0, false, true);
 				while (keys[t] != -1)
 					t++;
@@ -253,11 +247,12 @@ public final class RemiSort extends MultiWayMergeSorting {
 		int[] keys = Writes.createExternalArray(rLen);
 		int[] buf = Writes.createExternalArray(rLen);
 
-		int[] heap = Writes.createExternalArray(rCnt);
-		int[] p = Writes.createExternalArray(rCnt);
-		int[] pa = Writes.createExternalArray(rCnt);
+		int[] heap = new int[rCnt];
+		int[] p = new int[rCnt];
+		int[] pa = new int[rCnt];
 
 		int alloc = 3 * rCnt;
+		Writes.changeAllocAmount(alloc);
 
 		for (int i = 0; i < keys.length; i++)
 			Writes.write(keys, i, i, 1, true, true);

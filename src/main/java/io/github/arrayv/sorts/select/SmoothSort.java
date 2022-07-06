@@ -50,16 +50,16 @@ public final class SmoothSort extends Sort {
                 break;
 
             if (Reads.compareIndices(A, lf, rt, 0.2, true) >= 0) {
-                Writes.write(A, head, A[lf], 0.65, true, false);
+                Writes.write(A, head, A[lf], 0.02, true, false);
                 head = lf;
                 pshift -= 1;
             } else {
-                Writes.write(A, head, A[rt], 0.65, true, false);
+                Writes.write(A, head, A[rt], 0.02, true, false);
                 head = rt;
                 pshift -= 2;
             }
         }
-        Writes.write(A, head, val, 0.65, true, false);
+        Writes.write(A, head, val, 0.02, true, false);
 
         Highlights.clearMark(2);
         Highlights.clearMark(3);
@@ -89,7 +89,7 @@ public final class SmoothSort extends Sort {
                         Reads.compareIndices(A, lf, stepson, 0.2, true) >= 0)
                     break;
             }
-            Writes.write(A, head, A[stepson], 0.65, true, false);
+            Writes.write(A, head, A[stepson], 0.02, true, false);
 
             Highlights.clearMark(2);
             Highlights.clearMark(3);

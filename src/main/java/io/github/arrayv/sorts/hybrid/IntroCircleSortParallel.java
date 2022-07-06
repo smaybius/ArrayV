@@ -1,6 +1,7 @@
-package io.github.arrayv.sorts.exchange;
+package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -29,14 +30,14 @@ SOFTWARE.
  *
  */
 
-final public class CircleSortParallel extends Sort {
-	public CircleSortParallel(ArrayVisualizer arrayVisualizer) {
+final public class IntroCircleSortParallel extends Sort {
+	public IntroCircleSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
 
-		this.setSortListName("Circle (Parallel)");
-		this.setRunAllSortsName("Parallel Circle Sort");
-		this.setRunSortName("Parallel Circlesort");
-		this.setCategory("Exchange Sorts");
+		this.setSortListName("Intro Circle (Parallel)");
+		this.setRunAllSortsName("Parallel Intro Circle Sort");
+		this.setRunSortName("Parallel Intro Circlesort");
+		this.setCategory("Hybrid Sorts");
 		this.setBucketSort(false);
 		this.setRadixSort(false);
 		this.setUnreasonablySlow(false);
@@ -58,7 +59,7 @@ final public class CircleSortParallel extends Sort {
 		}
 
 		public void run() {
-			CircleSortParallel.this.circleSort(a, b);
+			IntroCircleSortParallel.this.circleSort(a, b);
 		}
 	}
 
@@ -95,14 +96,22 @@ final public class CircleSortParallel extends Sort {
 	public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
 		this.array = array;
 		this.end = sortLength;
-		this.swapped = true;
-		int n = 1;
-		for (; n < sortLength; n *= 2)
-			;
+        int threshold = 0, n = 1;
+        for (; n < sortLength; n *= 2, threshold++)
+            ;
 
-		while (swapped) {
+        threshold /= 2;
+        int iterations = 0;
+
+        do {
 			swapped = false;
+            iterations++;
 			this.circleSort(0, n);
-		}
+            if (iterations >= threshold) {
+                InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
+                binaryInserter.customInsertSort(array, 0, sortLength, 0.5, false);
+                break;
+            }
+        } while (swapped);
 	}
 }

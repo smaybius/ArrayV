@@ -44,7 +44,7 @@ public abstract class MultiWayMergeSorting extends Sort {
 			int min = nxt + (this.keyLessThan(src, pa, heap[nxt], heap[nxt + 1]) ? 0 : 1);
 
 			if (this.keyLessThan(src, pa, heap[min], t)) {
-				Writes.write(heap, r, heap[min], 0.25, true, true);
+				Writes.write(heap, r, heap[min], 0, false, true);
 				r = min;
 			} else
 				break;
@@ -52,10 +52,10 @@ public abstract class MultiWayMergeSorting extends Sort {
 		int min = 2 * r + 1;
 
 		if (min < size && this.keyLessThan(src, pa, heap[min], t)) {
-			Writes.write(heap, r, heap[min], 0.25, true, true);
+			Writes.write(heap, r, heap[min], 0, false, true);
 			r = min;
 		}
-		Writes.write(heap, r, t, 0.25, true, true);
+		Writes.write(heap, r, t, 0, false, true);
 	}
 
 	protected void kWayMerge(int[] src, int[] dest, int[] heap, int[] pa, int[] pb, int size, boolean auxWrite) {

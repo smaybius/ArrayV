@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.hybrid;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.IndexedRotations;
 
 /*
  *
@@ -81,21 +82,7 @@ public final class ParallelBlockMergeSort extends Sort {
 	}
 
 	private void rotate(int a, int m, int b) {
-		int l = m - a, r = b - m;
-
-		while (l > 0 && r > 0) {
-			if (r < l) {
-				this.multiSwap(m - r, m, r);
-				b -= r;
-				m -= r;
-				l -= r;
-			} else {
-				this.multiSwap(a, m, l);
-				a += l;
-				m += l;
-				r -= l;
-			}
-		}
+		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
 	}
 
 	private void inPlaceMergeFW(int a, int m, int b) {

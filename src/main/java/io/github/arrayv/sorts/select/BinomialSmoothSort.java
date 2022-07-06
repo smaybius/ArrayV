@@ -36,7 +36,7 @@ public final class BinomialSmoothSort extends Sort {
                     choice = child;
         if (Reads.compareIndices(array, node - (1 << choice), node, 0.2, true) != 1)
             return;
-        Writes.swap(array, node, node - (1 << choice), .65, true, false);
+        Writes.swap(array, node, node - (1 << choice), 0, true, false);
         Writes.recordDepth(depth);
         Writes.recursion();
         thrift(array, node - (1 << choice), (node - (1 << choice)) % 2 == 1, choice == height(node), depth + 1);

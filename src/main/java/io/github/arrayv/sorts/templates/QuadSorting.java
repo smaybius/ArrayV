@@ -288,7 +288,7 @@ public abstract class QuadSorting extends Sort {
             Highlights.markArray(2, ptl);
             Highlights.markArray(3, ptr);
 
-            if (Reads.compareIndices(from, ptl, ptr, 0.2, true) <= 0)
+            if (Reads.compareValues(from[ptl], from[ptr]) <= 0)
                 Writes.write(dest, auxP++, from[ptl++], 1, true, true);
 
             else
@@ -298,7 +298,7 @@ public abstract class QuadSorting extends Sort {
         Highlights.markArray(2, ptl);
         Highlights.markArray(3, ptr);
 
-        if (Reads.compareIndices(from, ptl, ptr, 0.2, true) <= 0)
+        if (Reads.compareValues(from[ptl], from[ptr]) <= 0)
             Writes.write(dest, auxP, from[ptl], 1, true, true);
 
         else
@@ -312,7 +312,7 @@ public abstract class QuadSorting extends Sort {
             Highlights.markArray(2, ptl);
             Highlights.markArray(3, ptr);
 
-            if (Reads.compareIndices(from, ptl, ptr, 0.2, true) > 0)
+            if (Reads.compareValues(from[ptl], from[ptr]) > 0)
                 Writes.write(dest, auxP--, from[ptl--], 1, true, true);
 
             else
@@ -322,7 +322,7 @@ public abstract class QuadSorting extends Sort {
         Highlights.markArray(2, ptl);
         Highlights.markArray(3, ptr);
 
-        if (Reads.compareIndices(from, ptl, ptr, 0.2, true) > 0)
+        if (Reads.compareValues(from[ptl], from[ptr]) > 0)
             Writes.write(dest, auxP, from[ptl], 1, true, true);
 
         else
@@ -343,7 +343,7 @@ public abstract class QuadSorting extends Sort {
             Highlights.markArray(2, ptl);
             Highlights.markArray(3, ptr);
 
-            if (Reads.compareIndices(from, ptl, ptr, 0.2, true) <= 0)
+            if (Reads.compareValues(from[ptl], from[ptr]) <= 0)
                 Writes.write(dest, mainP++, from[ptl++], 1, true, false);
 
             else
@@ -353,7 +353,7 @@ public abstract class QuadSorting extends Sort {
         Highlights.markArray(2, ptl);
         Highlights.markArray(3, ptr);
 
-        if (Reads.compareIndices(from, ptl, ptr, 0.2, true) <= 0)
+        if (Reads.compareValues(from[ptl], from[ptr]) <= 0)
             Writes.write(dest, mainP, from[ptl], 1, true, false);
 
         else
@@ -367,7 +367,7 @@ public abstract class QuadSorting extends Sort {
             Highlights.markArray(2, ptl);
             Highlights.markArray(3, ptr);
 
-            if (Reads.compareIndices(from, ptl, ptr, 0.2, true) > 0)
+            if (Reads.compareValues(from[ptl], from[ptr]) > 0)
                 Writes.write(dest, mainP--, from[ptl--], 1, true, false);
 
             else
@@ -377,7 +377,7 @@ public abstract class QuadSorting extends Sort {
         Highlights.markArray(2, ptl);
         Highlights.markArray(3, ptr);
 
-        if (Reads.compareIndices(from, ptl, ptr, 0.2, true) > 0)
+        if (Reads.compareValues(from[ptl], from[ptr]) > 0)
             Writes.write(dest, mainP, from[ptl], 1, true, false);
 
         else
@@ -498,10 +498,10 @@ public abstract class QuadSorting extends Sort {
             Delays.sleep(1);
         }
 
-        if (Reads.compareIndices(from, r - 1, e - 1, 0.2, !toAux) <= 0) {
+        if (Reads.compareValues(from[r - 1], from[e - 1]) <= 0) {
             leftFirst: do {
                 for (int i = 0; i < 3; i++) {
-                    if (Reads.compareIndices(from, l, r, 0.2, !toAux) <= 0) {
+                    if (Reads.compareValues(from[l], from[r]) <= 0) {
                         if (toAux) {
                             Highlights.markArray(1, l);
                             Highlights.markArray(2, r);
@@ -533,7 +533,7 @@ public abstract class QuadSorting extends Sort {
         else {
             rightFirst: do {
                 for (int i = 0; i < 3; i++) {
-                    if (Reads.compareIndices(from, l, r, 0.2, !toAux) > 0) {
+                    if (Reads.compareValues(from[l], from[r]) > 0) {
                         if (toAux) {
                             Highlights.markArray(1, l);
                             Highlights.markArray(2, r);

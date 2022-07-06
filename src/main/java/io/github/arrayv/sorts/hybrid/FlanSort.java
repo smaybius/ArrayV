@@ -290,8 +290,6 @@ public final class FlanSort extends MultiWayMergeSorting {
 		int[] pa = Writes.createExternalArray(G + 2);
 		int[] heap = Writes.createExternalArray(G + 2);
 
-		int alloc = pa.length + heap.length;
-
 		int a = 0, b = length;
 
 		while (b - a >= 32) {
@@ -385,6 +383,7 @@ public final class FlanSort extends MultiWayMergeSorting {
 			}
 		}
 		this.binaryInsertion(array, a, b);
-		Writes.changeAllocAmount(-alloc);
+		Writes.deleteExternalArray(pa);
+		Writes.deleteExternalArray(heap);
 	}
 }

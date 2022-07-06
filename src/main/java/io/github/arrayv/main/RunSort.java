@@ -55,7 +55,7 @@ public final class RunSort {
         this.sounds = arrayVisualizer.getSounds();
         this.realTimer = arrayVisualizer.getTimer();
 
-        this.inputOptions = new Object[]{"Enter", "Use default"};
+        this.inputOptions = new Object[] { "Enter", "Use default" };
     }
 
     private String getTimeSortEstimate(int bucketCount) {
@@ -76,25 +76,33 @@ public final class RunSort {
                 if (hours >= 24) {
                     days = Math.round(hours / 24);
 
-                    if (days < 2)  timeUnit = "day";
-                    else           timeUnit = "days";
+                    if (days < 2)
+                        timeUnit = "day";
+                    else
+                        timeUnit = "days";
 
                     timeString = "" + arrayVisualizer.getNumberFormat().format(days) + " " + timeUnit + " ";
                 } else {
-                    if (hours < 2) timeUnit = "hour";
-                    else           timeUnit = "hours";
+                    if (hours < 2)
+                        timeUnit = "hour";
+                    else
+                        timeUnit = "hours";
 
                     timeString = "" + hours + " " + timeUnit + " ";
                 }
             } else {
-                if (minutes < 2) timeUnit = "minute";
-                else             timeUnit = "minutes";
+                if (minutes < 2)
+                    timeUnit = "minute";
+                else
+                    timeUnit = "minutes";
 
                 timeString = "" + minutes + " " + timeUnit + " ";
             }
         } else {
-            if (seconds < 2) timeUnit = "second";
-            else             timeUnit = "seconds";
+            if (seconds < 2)
+                timeUnit = "second";
+            else
+                timeUnit = "seconds";
 
             timeString = "" + seconds + " " + timeUnit + " ";
         }
@@ -112,7 +120,8 @@ public final class RunSort {
         if (arrayVisualizer.isActive())
             return;
 
-        //TODO: This code is bugged! It causes the program to forget the sleep ratio specified by the user!
+        // TODO: This code is bugged! It causes the program to forget the sleep ratio
+        // specified by the user!
         if (delayOps.skipped()) {
             delayOps.setSleepRatio(1);
             delayOps.changeSkipped(false);
@@ -153,7 +162,8 @@ public final class RunSort {
                                 extra = 16;
                             }
                         }
-                        if (extra < 2) extra = 2;
+                        if (extra < 2)
+                            extra = 2;
                     } else {
                         extra = 0;
                     }
@@ -163,34 +173,47 @@ public final class RunSort {
                     if (sort.getRunSortName().equals("Timesort")) {
                         Object[] options = { "Continue", "Cancel" };
 
-                        int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(), "Time Sort will take at least " + getTimeSortEstimate(extra)
-                                                                 + "to complete. Once it starts, you cannot skip this sort.", "Warning!", 2, JOptionPane.WARNING_MESSAGE,
-                                                                 null, options, options[1]);
+                        int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
+                                "Time Sort will take at least " + getTimeSortEstimate(extra)
+                                        + "to complete. Once it starts, you cannot skip this sort.",
+                                "Warning!", 2, JOptionPane.WARNING_MESSAGE,
+                                null, options, options[1]);
 
-                        if (warning == 0) goAhead = true;
-                        else goAhead = false;
-                    } else if (sort.isUnreasonablySlow() && arrayVisualizer.getCurrentLength() > sort.getUnreasonableLimit()) {
+                        if (warning == 0)
+                            goAhead = true;
+                        else
+                            goAhead = false;
+                    } else if (sort.isUnreasonablySlow()
+                            && arrayVisualizer.getCurrentLength() > sort.getUnreasonableLimit()) {
                         goAhead = false;
 
                         Object[] options = { "Let's see how bad " + sort.getRunSortName() + " is!", "Cancel" };
 
                         if (sort.isBogoSort()) {
-                            int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(), "Even at a high speed, "
-                                                                    + sort.getRunSortName() + "ing " + arrayVisualizer.getCurrentLength()
-                                                                    + " numbers will almost certainly not finish in a reasonable amount of time. "
-                                                                    + "Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE,
-                                                                    null, options, options[1]);
-                            if (warning == 0) goAhead = true;
-                            else goAhead = false;
+                            int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
+                                    "Even at a high speed, "
+                                            + sort.getRunSortName() + "ing " + arrayVisualizer.getCurrentLength()
+                                            + " numbers will almost certainly not finish in a reasonable amount of time. "
+                                            + "Are you sure you want to continue?",
+                                    "Warning!", 2, JOptionPane.WARNING_MESSAGE,
+                                    null, options, options[1]);
+                            if (warning == 0)
+                                goAhead = true;
+                            else
+                                goAhead = false;
                         } else {
-                            int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(), "Even at a high speed, "
-                                                                    + sort.getRunSortName() + "ing " + arrayVisualizer.getCurrentLength()
-                                                                    + " numbers will not finish in a reasonable amount of time. "
-                                                                    + "Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE,
-                                                                    null, options, options[1]);
+                            int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
+                                    "Even at a high speed, "
+                                            + sort.getRunSortName() + "ing " + arrayVisualizer.getCurrentLength()
+                                            + " numbers will not finish in a reasonable amount of time. "
+                                            + "Are you sure you want to continue?",
+                                    "Warning!", 2, JOptionPane.WARNING_MESSAGE,
+                                    null, options, options[1]);
 
-                            if (warning == 0) goAhead = true;
-                            else goAhead = false;
+                            if (warning == 0)
+                                goAhead = true;
+                            else
+                                goAhead = false;
                         }
                     } else {
                         goAhead = true;
@@ -200,7 +223,8 @@ public final class RunSort {
                         if (sort.getRunSortName().equals("In-Place LSD Radix")) {
                             sounds.changeVolume(0.01); // Here to protect your ears :)
                         }
-
+                        arrayVisualizer.getArrays().subList(1, arrayVisualizer.getArrays().size()).clear();
+                        arrayVisualizer.getWrites().clearAllocAmount();
                         arrayManager.toggleMutableLength(false);
                         arrayManager.refreshArray(array, arrayVisualizer.getCurrentLength(), arrayVisualizer);
 
@@ -217,7 +241,8 @@ public final class RunSort {
                             sort.runSort(array, arrayVisualizer.getCurrentLength(), extra);
                         } catch (StopSort e) {
                         } catch (OutOfMemoryError e) {
-                            JErrorPane.invokeCustomErrorMessage(sort.getRunAllSortsName() + " ran out of memory: " + e.getMessage());
+                            JErrorPane.invokeCustomErrorMessage(
+                                    sort.getRunAllSortsName() + " ran out of memory: " + e.getMessage());
                             throw new RuntimeException(e);
                         }
 
@@ -226,10 +251,9 @@ public final class RunSort {
                         else if (networks) {
                             ArrayList<Integer> indicesList = arrayVisualizer.getReads().getNetworkIndices();
                             SortingNetworkGenerator.encodeNetworkAndDisplay(
-                                sort.getClass().getSimpleName(),
-                                indicesList,
-                                arrayVisualizer.getCurrentLength()
-                            );
+                                    sort.getClass().getSimpleName(),
+                                    indicesList,
+                                    arrayVisualizer.getCurrentLength());
                         }
                     } else {
                         arrayManager.initializeArray(array);
@@ -241,7 +265,8 @@ public final class RunSort {
                 arrayManager.toggleMutableLength(true);
                 sounds.changeVolume(storeVol);
                 sounds.toggleSound(false);
-                System.gc(); // Reduce RAM usage from any high-memory tasks (e.g. visualizing a sorting network)
+                System.gc(); // Reduce RAM usage from any high-memory tasks (e.g. visualizing a sorting
+                             // network)
             }
         });
 

@@ -47,7 +47,7 @@ public final class StacklessTopDownMergeSort extends Sort {
 	private void merge(int[] array, int[] tmp, int a, int m, int b) {
 		int s = b - m;
 
-		Writes.arraycopy(array, m, tmp, 0, s, 1, false, true);
+		Writes.arraycopy(array, m, tmp, 0, s, 1, true, true);
 
 		int i = s - 1, j = m - 1;
 

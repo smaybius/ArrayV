@@ -64,7 +64,7 @@ final public class FibonacciHeapSort extends Sort {
                 if (m < a)
                     m = a;
                 for (int i = 0; i < FIB[order - 2] && m + i < j; i++) {
-                    if (Reads.compareIndices(array, l, m + i, 1, true) > 0)
+                    if (Reads.compareIndices(array, l, m + i, 0.01, true) > 0)
                         l = m + i;
                 }
                 Writes.swap(array, l, n, 1, true, false);
@@ -96,5 +96,6 @@ final public class FibonacciHeapSort extends Sort {
         }
         InsertionSort i = new InsertionSort(arrayVisualizer);
         i.customInsertSort(array, 0, length, 1, false);
+        Writes.deleteExternalArray(FIB);
     }
 }

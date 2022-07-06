@@ -13,7 +13,7 @@ public final class SillySort extends Sort {
 		this.setSortListName("Silly");
 		this.setRunAllSortsName("Silly Sort");
 		this.setRunSortName("Sillysort");
-		this.setCategory("Exchange Sorts");
+		this.setCategory("Impractical Sorts");
 		this.setBucketSort(false);
 		this.setRadixSort(false);
 		this.setUnreasonablySlow(true);

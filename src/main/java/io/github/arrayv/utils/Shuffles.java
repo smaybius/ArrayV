@@ -33,7 +33,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
 public enum Shuffles {
     RANDOM {
         // If you want to learn why the random shuffle was changed,
@@ -357,9 +356,11 @@ public enum Shuffles {
             int[] temp = Writes.createExternalArray(currentLen);
 
             for (int j = 0; j < count; j++)
-                for (int i = j; i < currentLen; i += count)
+                for (int i = j; i < currentLen; i += count) {
+                    Highlights.markArray(2, i);
                     Writes.write(temp, k++, array[i], delay ? 1 : 0, true, true);
-
+                }
+            Highlights.clearMark(2);
             for (int i = 0; i < currentLen; i++)
                 Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
             Writes.deleteExternalArray(temp);
@@ -434,6 +435,44 @@ public enum Shuffles {
 
         }
     },
+    INCREASING_REVERSALS {
+        public String getName() {
+            return "Increasingly Reversed";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            boolean delay = arrayVisualizer.shuffleEnabled();
+
+            this.sort(array, 0, currentLen, delay ? 0.5 : 0, Writes);
+            Highlights.clearMark(2);
+            for (int i = 1; i < currentLen - 1; i *= 2) {
+                Writes.reversal(array, i, i * 2, delay ? 0.5 : 0, true, false);
+            }
+
+        }
+    },
+    INCREASING_SWAPS { // TODO: Is this accurate?
+        public String getName() {
+            return "Increasingly Swapped";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            boolean delay = arrayVisualizer.shuffleEnabled();
+
+            this.sort(array, 0, currentLen, delay ? 0.5 : 0, Writes);
+            Highlights.clearMark(2);
+            for (int i = 1; i < currentLen - 1; i *= 2) {
+                Writes.swap(array, i, i * 2, delay ? 0.5 : 0, true, false);
+            }
+
+        }
+    },
     STRANGE_PASS {
         public String getName() {
             return "First Strange Pass";
@@ -473,7 +512,7 @@ public enum Shuffles {
             }
         }
     },
-    SAWTOOTH {
+    SAWTOOTH { // TODO: Make the highlights to aux more accurate
         public String getName() {
             return "Sawtooth";
         }
@@ -489,9 +528,11 @@ public enum Shuffles {
             int[] temp = Writes.createExternalArray(currentLen);
 
             for (int j = 0; j < count; j++)
-                for (int i = j; i < currentLen; i += count)
+                for (int i = j; i < currentLen; i += count) {
+                    Highlights.markArray(2, i);
                     Writes.write(temp, k++, array[i], delay ? 1 : 0, true, true);
-
+                }
+            Highlights.clearMark(2);
             for (int i = 0; i < currentLen; i++)
                 Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
             Writes.deleteExternalArray(temp);
@@ -510,11 +551,14 @@ public enum Shuffles {
             int[] temp = Writes.createExternalArray(currentLen);
 
             for (int i = 0, j = 0; i < currentLen; i += 2) {
+                Highlights.markArray(2, i);
                 Writes.write(temp, j++, array[i], delay ? 1 : 0, true, true);
             }
             for (int i = 1, j = currentLen; i < currentLen; i += 2) {
+                Highlights.markArray(2, i);
                 Writes.write(temp, --j, array[i], delay ? 1 : 0, true, true);
             }
+            Highlights.clearMark(2);
             for (int i = 0; i < currentLen; i++) {
                 Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
             }
@@ -536,15 +580,53 @@ public enum Shuffles {
             Writes.reversal(array, 0, currentLen - 1, delay ? 1 : 0, true, false);
             Highlights.clearMark(2);
             for (int i = 0, j = 0; i < currentLen; i += 2) {
+                Highlights.markArray(2, i);
                 Writes.write(temp, j++, array[i], delay ? 1 : 0, true, true);
             }
             for (int i = 1, j = currentLen; i < currentLen; i += 2) {
+                Highlights.markArray(2, i);
                 Writes.write(temp, --j, array[i], delay ? 1 : 0, true, true);
             }
+            Highlights.clearMark(2);
             for (int i = 0; i < currentLen; i++) {
                 Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
             }
             Writes.deleteExternalArray(temp);
+        }
+    },
+    PENULTIMATE_FINAL_BITONIC {
+        public String getName() {
+            return "Penultimate Final Bitonic Pass";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            Reads reads = arrayVisualizer.getReads();
+            boolean delay = arrayVisualizer.shuffleEnabled();
+            int count = 2;
+
+            int k = 0;
+            int[] temp = Writes.createExternalArray(currentLen);
+
+            for (int j = 0; j < count; j++)
+                for (int i = j; i < currentLen; i += count) {
+                    Highlights.markArray(2, i);
+                    Writes.write(temp, k++, array[i], delay ? 1 : 0, true, true);
+                }
+            Highlights.clearMark(2);
+
+            for (int i = 0; i < currentLen; i++)
+                Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
+            Writes.deleteExternalArray(temp);
+            for (int i = 0, j = currentLen - 1; i < currentLen / 2; i++, j--) {
+                Highlights.markArray(1, i);
+                Highlights.markArray(2, j);
+                Delays.sleep(delay ? 0.01 : 0);
+                if (reads.compareIndices(array, i, j, 1, true) > 0)
+                    Writes.swap(array, i, j, delay ? 1 : 0, true, false);
+            }
         }
     },
     TRIANGLE_WAVE {
@@ -560,11 +642,14 @@ public enum Shuffles {
             int[] temp = Writes.createExternalArray(currentLen);
 
             for (int i = 0, j = 0; i < currentLen; i += 2) {
+                Highlights.markArray(2, i);
                 Writes.write(temp, j++, array[i], delay ? 1 : 0, true, true);
             }
             for (int i = 1, j = currentLen; i < currentLen; i += 2) {
+                Highlights.markArray(2, i);
                 Writes.write(temp, --j, array[i], delay ? 1 : 0, true, true);
             }
+            Highlights.clearMark(2);
             for (int i = 0; i < currentLen; i++) {
                 Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
             }
@@ -585,7 +670,63 @@ public enum Shuffles {
             }
         }
     },
-    INTERLACED {
+    REVERSE_FINAL_MERGE {
+        public String getName() {
+            return "Reverse Final Merge Pass";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            boolean delay = arrayVisualizer.shuffleEnabled();
+            int count = 2;
+
+            int k = 0;
+            int[] temp = Writes.createExternalArray(currentLen);
+
+            for (int j = 0; j < count; j++)
+                for (int i = j; i < currentLen; i += count) {
+                    Highlights.markArray(2, i);
+                    Writes.write(temp, k++, array[i], delay ? 1 : 0, true, true);
+                }
+            Highlights.clearMark(2);
+
+            for (int i = 0; i < currentLen; i++)
+                Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
+            Writes.deleteExternalArray(temp);
+            Writes.reversal(array, 0, currentLen, delay ? 1 : 0, true, false);
+        }
+    },
+    REVERSE_SAWTOOTH {
+        public String getName() {
+            return "Reverse Sawtooth";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            boolean delay = arrayVisualizer.shuffleEnabled();
+            int count = 4;
+
+            int k = 0;
+            int[] temp = Writes.createExternalArray(currentLen);
+
+            for (int j = 0; j < count; j++)
+                for (int i = j; i < currentLen; i += count) {
+                    Highlights.markArray(2, i);
+                    Writes.write(temp, k++, array[i], delay ? 1 : 0, true, true);
+                }
+            Highlights.clearMark(2);
+
+            for (int i = 0; i < currentLen; i++)
+                Writes.write(array, i, temp[i], delay ? 1 : 0, true, false);
+            Writes.deleteExternalArray(temp);
+            Writes.reversal(array, 0, currentLen, delay ? 1 : 0, true, false);
+        }
+    },
+    INTERLACED { // TODO: accurate write highlights
         public String getName() {
             return "Interlaced";
         }
@@ -628,6 +769,38 @@ public enum Shuffles {
                 Writes.swap(array, i, currentLen - i - 1, 0, true, false);
                 if (arrayVisualizer.shuffleEnabled())
                     Delays.sleep(1);
+            }
+        }
+    },
+    DIAMOND {
+        public String getName() {
+            return "Diamond Input";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            boolean delay = arrayVisualizer.shuffleEnabled();
+
+            for (int i = 0; i < currentLen / 2; i += 2) {
+                Writes.swap(array, i, currentLen - i - 1, 0, true, false);
+                if (arrayVisualizer.shuffleEnabled())
+                    Delays.sleep(delay ? 1 : 0);
+            }
+            int a = 0, m = (currentLen + 1) / 2;
+
+            if (currentLen % 2 == 0)
+                while (m < currentLen)
+                    Writes.swap(array, a++, m++, delay ? 1 : 0, true, false);
+            else {
+                Highlights.clearMark(2);
+                int temp = array[a];
+                while (m < currentLen) {
+                    Writes.write(array, a++, array[m], delay ? 0.5 : 0, true, false);
+                    Writes.write(array, m++, array[a], delay ? 0.5 : 0, true, false);
+                }
+                Writes.write(array, a, temp, delay ? 0.5 : 0, true, false);
             }
         }
     },
@@ -682,10 +855,12 @@ public enum Shuffles {
                 Writes.write(counts, (array[i] & mask) + 1, counts[(array[i] & mask) + 1] + 1, delay ? 1 : 0, true,
                         true);
 
-            for (int i = 1; i < counts.length; i++)
+            for (int i = 1; i < counts.length; i++) {
+                Highlights.markArray(2, i);
                 Writes.write(counts, i, counts[i] + counts[i - 1], delay ? 1 : 0, true,
                         true);
-
+            }
+            Highlights.clearMark(2);
             for (int i = 0; i < currentLen; i++)
                 Writes.write(array, counts[tmp[i] & mask]++, tmp[i], delay ? 1 : 0, true, false);
             Writes.deleteExternalArray(counts);
@@ -697,37 +872,42 @@ public enum Shuffles {
             return "Recursive Final Radix";
         }
 
+        int[] temp;
+
         @Override
         public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
                 Writes Writes) {
             int currentLen = arrayVisualizer.getCurrentLength();
             boolean delay = arrayVisualizer.shuffleEnabled();
-
-            weaveRec(array, 0, currentLen, 1, delay ? 0.5 : 0, Writes, 0);
+            temp = Writes.createExternalArray(currentLen / 2);
+            weaveRec(array, 0, currentLen, 1, delay ? 0.5 : 0, Writes, Highlights, 0);
+            Writes.deleteExternalArray(temp);
         }
 
-        public void weaveRec(int[] array, int pos, int length, int gap, double delay, Writes Writes, int depth) {
+        public void weaveRec(int[] array, int pos, int length, int gap, double delay, Writes Writes,
+                Highlights highlights, int depth) {
             if (length < 2)
                 return;
 
             int mod2 = length % 2;
             length -= mod2;
             int mid = length / 2;
-            int[] temp = Writes.createExternalArray(mid);
 
-            for (int i = pos, j = 0; i < pos + gap * mid; i += gap, j++)
+            for (int i = pos, j = 0; i < pos + gap * mid; i += gap, j++) {
+                highlights.markArray(2, i);
                 Writes.write(temp, j, array[i], delay, true, true);
-
+            }
+            highlights.clearMark(2);
             for (int i = pos + gap * mid, j = pos, k = 0; i < pos + gap * length; i += gap, j += 2 * gap, k++) {
                 Writes.write(array, j, array[i], delay, true, false);
                 Writes.write(array, j + gap, temp[k], delay, true, false);
             }
-            Writes.deleteExternalArray(temp);
+
             Writes.recordDepth(depth);
             Writes.recursion();
-            weaveRec(array, pos, mid + mod2, 2 * gap, delay / 2, Writes, depth + 1);
+            weaveRec(array, pos, mid + mod2, 2 * gap, delay / 2, Writes, highlights, depth + 1);
             Writes.recursion();
-            weaveRec(array, pos + gap, mid, 2 * gap, delay / 2, Writes, depth + 1);
+            weaveRec(array, pos + gap, mid, 2 * gap, delay / 2, Writes, highlights, depth + 1);
         }
     },
     HALF_ROTATION {
@@ -806,7 +986,7 @@ public enum Shuffles {
 
         @Override
         public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
-                Writes Writes) {
+                Writes Writes) { // TODO: accurate highlights
             int currentLen = arrayVisualizer.getCurrentLength();
             boolean delay = arrayVisualizer.shuffleEnabled();
             int[] temp = Writes.copyOfArray(array, currentLen);
@@ -825,31 +1005,28 @@ public enum Shuffles {
 
             Queue<Subarray> q = new LinkedList<Subarray>();
             q.add(new Subarray(0, currentLen));
-            Highlights.markArray(1, 0);
-            Highlights.markArray(2, currentLen);
-            Delays.sleep(1);
-            Writes.changeAuxWrites(1);
             Writes.changeAllocAmount(1);
+            Writes.changeAuxWrites(1);
             int i = 0;
 
             while (!q.isEmpty()) {
                 Subarray sub = q.poll();
-                Writes.changeAuxWrites(1);
                 Writes.changeAllocAmount(-1);
+                Writes.changeAuxWrites(1);
                 if (sub.start != sub.end) {
                     int mid = (sub.start + sub.end) / 2;
+
                     Writes.write(array, i, temp[mid], delay ? 1 : 0, true, false);
                     if (arrayVisualizer.shuffleEnabled())
                         Delays.sleep(1);
                     i++;
                     q.add(new Subarray(sub.start, mid));
-                    Writes.changeAuxWrites(1);
-                    Writes.changeAllocAmount(1);
                     q.add(new Subarray(mid + 1, sub.end));
-                    Writes.changeAuxWrites(1);
-                    Writes.changeAllocAmount(1);
+                    Writes.changeAllocAmount(2);
+                    Writes.changeAuxWrites(2);
                 }
             }
+            Highlights.clearMark(2);
             Writes.deleteExternalArray(temp);
         }
     },
@@ -1042,9 +1219,7 @@ public enum Shuffles {
             int currentLen = arrayVisualizer.getCurrentLength();
 
             TernaryHeapSort heapSort = new TernaryHeapSort(arrayVisualizer);
-            for (int i = currentLen / 2; i >= 1; i--) {
-                heapSort.buildMaxTernaryHeap(array, currentLen);
-            }
+            heapSort.buildMaxTernaryHeap(array, currentLen);
         }
     },
     BINOMIAL_HEAPIFIED {
@@ -1122,7 +1297,7 @@ public enum Shuffles {
             int length = arrayVisualizer.getCurrentLength();
             boolean delay = arrayVisualizer.shuffleEnabled();
             GeapSort heapSort = new GeapSort(arrayVisualizer);
-            heapSort.makeGeap(array, 0, length, delay ? 0.5 : 0);
+            heapSort.makeGeap(array, 0, length, delay ? 0.1 : 0);
         }
     },
     PURE_FIBONACCI_HEAPIFIED {
@@ -1153,16 +1328,16 @@ public enum Shuffles {
         private Reads Reads;
 
         class Node {
-            private int index;
+            public int index;
             private boolean tournament;
-            private Node childLeft = null, childRight = null, winner = null;
+            public Node childLeft = null, childRight = null, winner = null;
 
-            Node(int index) {
+            public Node(int index) {
                 this.index = index;
                 this.tournament = false;
             }
 
-            Node(boolean tournament) {
+            public Node(boolean tournament) {
                 this.index = -1;
                 this.tournament = tournament;
             }
@@ -1225,17 +1400,17 @@ public enum Shuffles {
         }
 
         @Override
-        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays delays, Highlights highlights,
-                Writes writes) {
-            int currentLen = arrayVisualizer.getCurrentLength();
-            boolean delay = arrayVisualizer.shuffleEnabled();
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            boolean delay = ArrayVisualizer.shuffleEnabled();
             this.array = array;
-            this.Reads = arrayVisualizer.getReads();
+            this.Reads = ArrayVisualizer.getReads();
             Node winner = traverse(0, currentLen - 1);
             Queue<Node> nodes = new LinkedList<Node>();
             nodes.add(winner);
             boolean[] struck = new boolean[currentLen];
-            int[] heap = writes.createExternalArray(currentLen);
+            int[] heap = Writes.createExternalArray(currentLen);
             int i = 0;
             while (!nodes.isEmpty()) {
                 Node t = nodes.poll();
@@ -1246,15 +1421,15 @@ public enum Shuffles {
                         nodes.add(t.loser());
                     continue;
                 }
-                writes.write(heap, i++, array[t.index], delay ? 0.5 : 0, true, true);
+                Writes.write(heap, i++, array[t.index], delay ? 1 : 0, true, false);
                 struck[t.index] = true;
                 if (t.winner != null)
                     nodes.add(t.winner);
                 if (t.loser() != null)
                     nodes.add(t.loser());
             }
-            writes.arraycopy(heap, 0, array, 0, currentLen, delay ? 0.5 : 0, true, false);
-            writes.deleteExternalArray(heap);
+            Writes.arraycopy(heap, 0, array, 0, currentLen, delay ? 1 : 0, true, false);
+            Writes.deleteExternalArray(heap);
         }
     },
     SMOOTH {
@@ -1410,6 +1585,33 @@ public enum Shuffles {
             }
         }
     },
+    SCROLL_HEAPIFIED {
+        public String getName() {
+            return "Scroll Heap Hunterified";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            int length = arrayVisualizer.getCurrentLength();
+            Reads Reads = arrayVisualizer.getReads();
+            MinHeapSort heapSort = new MinHeapSort(arrayVisualizer);
+            shuffle(array, 0, length, 0.5, Writes);
+            int j = 0;
+            int k = length - 1;
+            while (Reads.compareIndices(array, j, k, 0, true) <= 0 && k > j)
+                k--;
+            if (k != j) {
+                for (int i = k; i >= j; i--) {
+                    Highlights.markArray(3, i + 1);
+                    Highlights.markArray(4, j);
+                    heapSort.heapify(array, i, k + 1, 0, false);
+                }
+            }
+            j++;
+            Highlights.clearAllMarks();
+        }
+    },
     CIRCLE {
         public String getName() {
             return "First Circle Pass";
@@ -1483,7 +1685,7 @@ public enum Shuffles {
             // sort the smaller and larger of the pairs separately with pigeonhole sort
             for (int m = 0; m < 2; m++) {
                 for (int k = m; k < currentLen; k += 2)
-                    Writes.write(temp, array[k], temp[array[k]] + 1, delay ? 1 : 0, true, true);
+                    Writes.write(temp, array[k], temp[array[k]] + 1, delay ? 0.2 : 0, true, true);
 
                 int i = 0, j = m;
                 while (true) {
@@ -1495,10 +1697,43 @@ public enum Shuffles {
                     Writes.write(array, j, i, delay ? 0.5 : 0, true, false);
 
                     j += 2;
-                    Writes.write(temp, i, temp[i] - 1, delay ? 1 : 0, true, true);
+                    Writes.write(temp, i, temp[i] - 1, delay ? 0.2 : 0, true, true);
                 }
             }
             Writes.deleteExternalArray(temp);
+        }
+    },
+    PAIRWISED {
+        public String getName() {
+            return "Pairwised";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays Delays, Highlights Highlights,
+                Writes Writes) {
+            Reads reads = arrayVisualizer.getReads();
+            int length = arrayVisualizer.getCurrentLength();
+            boolean delay = arrayVisualizer.shuffleEnabled();
+
+            int a = 1;
+            int b = 0;
+            int c = 0;
+            shuffle(array, 0, length, delay ? 0.5 : 0, Writes);
+            while (a < length) {
+                b = a;
+                c = 0;
+                while (b < length) {
+                    if (reads.compareIndices(array, b - a, b, delay ? 0.05 : 0, true) == 1) {
+                        Writes.swap(array, b - a, b, delay ? 0.05 : 0, true, false);
+                    }
+                    c = (c + 1) % a;
+                    b++;
+                    if (c == 0) {
+                        b += a;
+                    }
+                }
+                a *= 2;
+            }
         }
     },
     REC_REV {
@@ -1575,7 +1810,7 @@ public enum Shuffles {
 
             int[] temp = Writes.copyOfArray(array, currentLen);
             for (int i = 0; i < currentLen; i++)
-                Writes.write(array, i, temp[triangle[i]], delay ? 1 : 0, true, false);
+                Writes.write(array, i, temp[triangle[i]], delay ? 0.5 : 0, true, false);
             Writes.deleteExternalArray(temp);
             Writes.deleteExternalArray(triangle);
         }
@@ -1584,23 +1819,23 @@ public enum Shuffles {
             if (b - a < 2)
                 return;
             if (b - a == 2) {
-                Writes.write(array, a + 1, array[a + 1] + 1, sleep, true, true);
+                Writes.write(array, a + 1, array[a + 1] + 1, sleep / 2, true, true);
                 return;
             }
 
             int h = (b - a) / 3, t1 = (a + a + b) / 3, t2 = (a + b + b + 2) / 3;
             for (int i = a; i < t1; i++)
-                Writes.write(array, i, array[i] + h, sleep, true, true);
+                Writes.write(array, i, array[i] + h, sleep / 2, true, true);
 
             for (int i = t1; i < t2; i++)
-                Writes.write(array, i, array[i] + 2 * h, sleep, true, true);
+                Writes.write(array, i, array[i] + 2 * h, sleep / 2, true, true);
             Writes.recordDepth(depth);
             Writes.recursion();
-            triangleRec(array, a, t1, sleep, Writes, depth + 1);
+            triangleRec(array, a, t1, sleep / 2, Writes, depth + 1);
             Writes.recursion();
-            triangleRec(array, t1, t2, sleep, Writes, depth + 1);
+            triangleRec(array, t1, t2, sleep / 2, Writes, depth + 1);
             Writes.recursion();
-            triangleRec(array, t2, b, sleep, Writes, depth + 1);
+            triangleRec(array, t2, b, sleep / 2, Writes, depth + 1);
         }
     },
     TRIANGULAR {
@@ -1625,8 +1860,10 @@ public enum Shuffles {
                     k *= 2;
                 }
                 Writes.write(triangle, i, triangle[j] + 1, delay ? 1 : 0, true, true);
-                if (Reads.compareValues(triangle[i], max) > 0)
+                if (Reads.compareValues(triangle[i], max) > 0) {
+                    Highlights.markArray(2, i);
                     max = triangle[i];
+                }
             }
             int[] cnt = Writes.createExternalArray(max + 1);
 
@@ -1645,6 +1882,7 @@ public enum Shuffles {
             Writes.deleteExternalArray(temp);
             Writes.deleteExternalArray(cnt);
             Writes.deleteExternalArray(triangle);
+            Highlights.clearMark(2);
         }
     },
     ANTI_CIRCLE {
@@ -1736,6 +1974,7 @@ public enum Shuffles {
         Reads Reads;
         Writes Writes;
         Highlights Highlights;
+        Delays Delays;
         boolean delay;
         double sleep;
 
@@ -1774,6 +2013,7 @@ public enum Shuffles {
             this.Reads = arrayVisualizer.getReads();
             this.Writes = Writes;
             this.Highlights = Highlights;
+            this.Delays = Delays;
 
             int[] copy = Writes.createExternalArray(currentLen);
 
@@ -1782,9 +2022,9 @@ public enum Shuffles {
             temp = Writes.createExternalArray(currentLen);
             gas = currentLen;
             for (int i = 0; i < currentLen; i++) {
-                Writes.write(copy, i, array[i], sleep, true, false);
-                Writes.write(array, i, i, sleep, true, false);
-                Writes.write(temp, i, gas, sleep, true, true);
+                Writes.write(copy, i, array[i], sleep / 4, true, false);
+                Writes.write(array, i, i, sleep / 4, true, false);
+                Writes.write(temp, i, gas, sleep / 4, true, true);
             }
 
             pdqLoop(array, 0, currentLen, false, PDQSorting.pdqLog(currentLen), 0);
@@ -1806,23 +2046,33 @@ public enum Shuffles {
 
             a = ap;
             b = bp;
-
+            Highlights.markArray(2, a);
+            Highlights.markArray(3, b);
+            Delays.sleep(sleep);
             if (temp[a] == gas && temp[b] == gas)
                 if (a == candidate)
                     Writes.write(temp, a, frozen++, sleep, true, true);
                 else
                     Writes.write(temp, b, frozen++, sleep, true, true);
-
+            Highlights.clearMark(3);
+            Highlights.markArray(2, a);
+            Delays.sleep(sleep);
             if (temp[a] == gas) {
                 candidate = a;
+                Highlights.clearAllMarks();
                 return 1;
             }
-
+            Highlights.markArray(2, b);
+            Delays.sleep(sleep);
             if (temp[b] == gas) {
                 candidate = b;
+                Highlights.clearAllMarks();
                 return -1;
             }
-
+            Highlights.markArray(2, a);
+            Highlights.markArray(3, b);
+            Delays.sleep(sleep);
+            Highlights.clearAllMarks();
             if (temp[a] < temp[b])
                 return -1;
             if (temp[a] > temp[b])
@@ -1930,6 +2180,7 @@ public enum Shuffles {
                 }
                 Highlights.markArray(1, start + root - 1);
                 Highlights.markArray(2, start + leaf - 1);
+                Delays.sleep(sleep);
                 if (compare(array[start + root - 1], array[start + leaf - 1]) == compareVal) {
                     Writes.swap(array, start + root - 1, start + leaf - 1, sleep, true, false);
                     root = leaf;
@@ -2128,7 +2379,7 @@ public enum Shuffles {
         }
 
         public void rotate(int[] array, int a, int m, int b, double sleep, Writes Writes) {
-            IndexedRotations.holyGriesMills(array, a, m, b, sleep, true, false);
+            IndexedRotations.cycleReverse(array, a, m, b, sleep / 2, true, false);
         }
 
         public void push(int[] array, int a, int b, int bLen, double sleep, Writes Writes, int depth) {
@@ -2445,11 +2696,11 @@ public enum Shuffles {
         int[] holes = new int[size];
 
         for (int i = start; i < end; i++)
-            Writes.write(holes, array[i] - min, holes[array[i] - min] + 1, 0.25, true, true);
+            Writes.write(holes, array[i] - min, holes[array[i] - min] + 1, 0, false, true);
 
         for (int i = 0, j = start; i < size; i++) {
             while (holes[i] > 0) {
-                Writes.write(holes, i, holes[i] - 1, 0.25, true, true);
+                Writes.write(holes, i, holes[i] - 1, 0, false, true);
                 Writes.write(array, j, i + min, sleep, true, false);
                 j++;
             }
