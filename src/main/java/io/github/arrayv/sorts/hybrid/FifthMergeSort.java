@@ -30,7 +30,8 @@ SOFTWARE.
 
 public final class FifthMergeSort extends Sort {
     protected final class IndexPair {
-        public int aEnd, bEnd;
+        public final int aEnd;
+        public final int bEnd;
 
         public IndexPair(int aEnd, int bEnd) {
             this.aEnd = aEnd;
@@ -55,7 +56,8 @@ public final class FifthMergeSort extends Sort {
     }
 
     protected void mergeInPlaceForwards(int[] array, int buffer, int start, int mid, int end) {
-        int left = start, right = mid;
+        int left = start;
+        int right = mid;
         while (left < mid && right < end) {
             if (Reads.compareIndices(array, left, right, 0.5, true) <= 0) {
                 Writes.write(array, buffer++, array[left++], 0.5, false, false);
@@ -75,8 +77,9 @@ public final class FifthMergeSort extends Sort {
         }
     }
 
-    protected IndexPair mergeInPlaceBackwards(int[] array, int buffer, int bufferLen, int mid, int end) {
-        int left = mid - 1, right = end - 1;
+    protected IndexPair mergeInPlaceBackwards(int[] array, int buffer, int mid, int end) {
+        int left = mid - 1;
+        int right = end - 1;
         while (buffer > right && right >= mid) {
             if (Reads.compareIndices(array, left, right, 0.5, true) > 0) {
                 Highlights.markArray(3, buffer);
@@ -121,7 +124,8 @@ public final class FifthMergeSort extends Sort {
     }
 
     protected void merge(int[] array, int[] buffer, int chunkOffset, int start, int mid, int end, boolean fromBuffer) {
-        int[] from, to;
+        int[] from;
+        int[] to;
         int writepos;
         if (fromBuffer) {
             from = buffer;
@@ -136,7 +140,8 @@ public final class FifthMergeSort extends Sort {
             writepos = start - chunkOffset;
         }
 
-        int left = start, right = mid;
+        int left = start;
+        int right = mid;
         while (left < mid && right < end) {
             Delays.sleep(0.5);
             if (Reads.compareIndices(from, left, right, 0, !fromBuffer) <= 0) {
@@ -205,7 +210,7 @@ public final class FifthMergeSort extends Sort {
             mergeInPlaceForwards(array, start - bufferLen, start, start + fifthLen, start + twoFifths);
         }
 
-        IndexPair finalMerge = mergeInPlaceBackwards(array, currentLength - 1, bufferLen, twoFifths, 2 * twoFifths);
+        IndexPair finalMerge = mergeInPlaceBackwards(array, currentLength - 1, twoFifths, 2 * twoFifths);
         if (finalMerge.bEnd > 0) {
             mergeForwardsWithBuffer(array, array, bufferLen, 0, finalMerge.aEnd, twoFifths, currentLength);
         }

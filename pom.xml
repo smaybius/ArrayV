@@ -29,6 +29,7 @@
       <artifactId>groovy</artifactId>
       <version>4.0.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
   </dependencies>
 
   <licenses>

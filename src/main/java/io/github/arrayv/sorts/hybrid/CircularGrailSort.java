@@ -76,7 +76,8 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		int l = m - a, r = b - m;
+		int l = m - a;
+		int r = b - m;
 
 		while (l > 0 && r > 0) {
 			if (r < l) {
@@ -94,7 +95,9 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private void inPlaceMerge(int[] array, int a, int m, int b) {
-		int i = a, j = m, k;
+		int i = a;
+		int j = m;
+		int k;
 
 		while (i < j && j < b) {
 			if (this.circCompareIndices(array, i, j) > 0) {
@@ -112,7 +115,8 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private int merge(int[] array, int p, int a, int m, int b, boolean full) {
-		int i = a, j = m;
+		int i = a;
+		int j = m;
 
 		while (i < m && j < b) {
 			if (this.circCompareIndices(array, i, j) <= 0)
@@ -183,7 +187,10 @@ public final class CircularGrailSort extends Sort {
 		for (; bLen * bLen < length; bLen *= 2)
 			;
 
-		int i = bLen, j = 1, len = length - i, b = length;
+		int i = bLen;
+		int j = 1;
+		int len = length - i;
+		int b = length;
 
 		while (j <= bLen) {
 			for (; i + 2 * j < b; i += 2 * j)

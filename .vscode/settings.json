@@ -8,5 +8,6 @@
         "jdk.*",
         "org.graalvm.*",
         "io.micrometer.shaded.*"
-    ]
+    ],
+    "java.format.settings.url": "./eclipse-java-google-style.xml"
 }

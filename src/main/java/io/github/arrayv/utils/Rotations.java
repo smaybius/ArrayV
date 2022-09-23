@@ -12,7 +12,8 @@ public final class Rotations {
     }
 
     // utility functions
-    private static void swapBlocksBackwards(int[] array, int a, int b, int len, double pause, boolean mark, boolean auxwrite) {
+    private static void swapBlocksBackwards(int[] array, int a, int b, int len, double pause, boolean mark,
+            boolean auxwrite) {
         for (int i = 0; i < len; i++) {
             Writes.swap(array, a + len - i - 1, b + len - i - 1, pause, mark, auxwrite);
         }
@@ -24,18 +25,22 @@ public final class Rotations {
         }
     }
 
-    private static void shiftForwards(int[] array, int start, int length, double pause, boolean mark, boolean auxwrite) {
+    private static void shiftForwards(int[] array, int start, int length, double pause, boolean mark,
+            boolean auxwrite) {
         int temp = array[start];
-        if (mark) Highlights.clearMark(2);
+        if (mark)
+            Highlights.clearMark(2);
         for (int i = 0; i < length; i++) {
             Writes.write(array, start + i, array[start + i + 1], pause, mark, auxwrite);
         }
         Writes.write(array, start + length, temp, pause, mark, auxwrite);
     }
 
-    private static void shiftBackwards(int[] array, int start, int length, double pause, boolean mark, boolean auxwrite) {
+    private static void shiftBackwards(int[] array, int start, int length, double pause, boolean mark,
+            boolean auxwrite) {
         int temp = array[start + length];
-        if (mark) Highlights.clearMark(2);
+        if (mark)
+            Highlights.clearMark(2);
         for (int i = length; i > 0; i--) {
             Writes.write(array, start + i, array[start + i - 1], pause, mark, auxwrite);
         }
@@ -52,9 +57,9 @@ public final class Rotations {
         return old;
     }
 
-
     // rotation algorithms
-    public static void griesMills(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean auxwrite) {
+    public static void griesMills(int[] array, int pos, int lenA, int lenB, double pause, boolean mark,
+            boolean auxwrite) {
         while (lenA != 0 && lenB != 0) {
             if (lenA <= lenB) {
                 blockSwap(array, pos, pos + lenA, lenA, pause, mark, auxwrite);
@@ -67,21 +72,24 @@ public final class Rotations {
         }
     }
 
-    public static void threeReversal(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean auxwrite) {
+    public static void threeReversal(int[] array, int pos, int lenA, int lenB, double pause, boolean mark,
+            boolean auxwrite) {
         Writes.reversal(array, pos, pos + lenA - 1, pause, mark, auxwrite);
         Writes.reversal(array, pos + lenA, pos + lenA + lenB - 1, pause, mark, auxwrite);
         Writes.reversal(array, pos, pos + lenA + lenB - 1, pause, mark, auxwrite);
     }
 
-    public static void holyGriesMills(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean auxwrite) {
+    public static void holyGriesMills(int[] array, int pos, int lenA, int lenB, double pause, boolean mark,
+            boolean auxwrite) {
         while (lenA > 1 && lenB > 1) {
             while (lenA <= lenB) {
                 blockSwap(array, pos, pos + lenA, lenA, pause, mark, auxwrite);
-                pos  += lenA;
+                pos += lenA;
                 lenB -= lenA;
             }
 
-            if (lenA <= 1 || lenB <= 1) break;
+            if (lenA <= 1 || lenB <= 1)
+                break;
 
             while (lenA > lenB) {
                 swapBlocksBackwards(array, pos + lenA - lenB, pos + lenA, lenB, pause, mark, auxwrite);
@@ -101,7 +109,7 @@ public final class Rotations {
         while (lenB > 1 && lenA > 1) {
             if (lenB < lenA) {
                 blockSwap(array, pos, pos + lenA, lenB, pause, mark, auxwrite);
-                pos  += lenB;
+                pos += lenB;
                 lenA -= lenB;
             } else {
                 swapBlocksBackwards(array, pos, pos + lenB, lenA, pause, mark, auxwrite);
@@ -109,57 +117,61 @@ public final class Rotations {
             }
         }
 
-        if      (lenB == 1) shiftBackwards(array, pos, lenA, pause, mark, auxwrite);
-        else if (lenA == 1) shiftForwards(array, pos, lenB, pause, mark, auxwrite);
+        if (lenB == 1)
+            shiftBackwards(array, pos, lenA, pause, mark, auxwrite);
+        else if (lenA == 1)
+            shiftForwards(array, pos, lenB, pause, mark, auxwrite);
     }
 
     // by Scandum and Control
-    public static void cycleReverse(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean auxwrite) {
-        if (lenA < 1 || lenB < 1) return;
+    public static void cycleReverse(int[] array, int pos, int lenA, int lenB, double pause, boolean mark,
+            boolean auxwrite) {
+        if (lenA < 1 || lenB < 1)
+            return;
 
-        int a = pos,
-            b = pos + lenA - 1,
-            c = pos + lenA,
-            d = pos + lenA + lenB - 1;
+        int a = pos;
+        int b = pos + lenA - 1;
+        int c = pos + lenA;
+        int d = pos + lenA + lenB - 1;
         int swap;
 
         while (a < b && c < d) {
             swap = array[b];
-            Writes.write(array, b--, array[a], pause/2d, mark, auxwrite);
-            Writes.write(array, a++, array[c], pause/2d, mark, auxwrite);
-            Writes.write(array, c++, array[d], pause/2d, mark, auxwrite);
-            Writes.write(array, d--, swap,     pause/2d, mark, auxwrite);
+            Writes.write(array, b--, array[a], pause / 2d, mark, auxwrite);
+            Writes.write(array, a++, array[c], pause / 2d, mark, auxwrite);
+            Writes.write(array, c++, array[d], pause / 2d, mark, auxwrite);
+            Writes.write(array, d--, swap, pause / 2d, mark, auxwrite);
         }
         while (a < b) {
             swap = array[b];
-            Writes.write(array, b--, array[a], pause/2d, mark, auxwrite);
-            Writes.write(array, a++, array[d], pause/2d, mark, auxwrite);
-            Writes.write(array, d--, swap,     pause/2d, mark, auxwrite);
+            Writes.write(array, b--, array[a], pause / 2d, mark, auxwrite);
+            Writes.write(array, a++, array[d], pause / 2d, mark, auxwrite);
+            Writes.write(array, d--, swap, pause / 2d, mark, auxwrite);
         }
         while (c < d) {
             swap = array[c];
-            Writes.write(array, c++, array[d], pause/2d, mark, auxwrite);
-            Writes.write(array, d--, array[a], pause/2d, mark, auxwrite);
-            Writes.write(array, a++, swap,     pause/2d, mark, auxwrite);
+            Writes.write(array, c++, array[d], pause / 2d, mark, auxwrite);
+            Writes.write(array, d--, array[a], pause / 2d, mark, auxwrite);
+            Writes.write(array, a++, swap, pause / 2d, mark, auxwrite);
         }
-        if (a < d) { //dont count reversals that dont do anything
+        if (a < d) { // dont count reversals that dont do anything
             Writes.reversal(array, a, d, pause, mark, auxwrite);
             Highlights.clearMark(2);
         }
     }
 
-    public static void juggling(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean auxwrite) {
+    public static void juggling(int[] array, int pos, int lenA, int lenB, double pause, boolean mark,
+            boolean auxwrite) {
         int length = lenA + lenB;
         lenA %= length;
 
-        if (lenA == 0) return;
+        if (lenA == 0)
+            return;
 
         for (int cnt = 0,
-                 index = 0,
-                 value = array[pos + index],
-                 startIndex = index;
-            cnt < length; cnt++
-        ) {
+                index = 0,
+                value = array[pos + index],
+                startIndex = index; cnt < length; cnt++) {
             int nextIndex = mapIndex(index, lenA, length);
 
             value = swap(array, pos + nextIndex, value, pause, mark, auxwrite);
@@ -173,11 +185,16 @@ public final class Rotations {
         }
     }
 
-    //by Scandum
+    // by Scandum
     public static void bridge(int[] array, int pos, int left, int right, double pause, boolean mark, boolean auxwrite) {
-        if (left < 1 || right < 1) return;
+        if (left < 1 || right < 1)
+            return;
 
-        int pta = pos, ptb = pos + left, ptc = pos + right, ptd = ptb + right, alloc;
+        int pta = pos;
+        int ptb = pos + left;
+        int ptc = pos + right;
+        int ptd = ptb + right;
+        int alloc;
 
         if (left < right) {
             int bridge = right - left;
@@ -192,8 +209,8 @@ public final class Rotations {
                 Writes.arraycopy(array, ptb, swap, 0, bridge, pause, mark, true);
 
                 while (loop-- > 0) {
-                    Writes.write(array, --ptc, array[--ptd], pause/2d, mark, auxwrite);
-                    Writes.write(array,   ptd, array[--ptb], pause/2d, mark, auxwrite);
+                    Writes.write(array, --ptc, array[--ptd], pause / 2d, mark, auxwrite);
+                    Writes.write(array, ptd, array[--ptb], pause / 2d, mark, auxwrite);
                 }
                 Writes.arraycopy(swap, 0, array, pta, bridge, pause, mark, auxwrite);
             } else {
@@ -218,8 +235,8 @@ public final class Rotations {
                 Writes.arraycopy(array, ptc, swap, 0, bridge, pause, mark, true);
 
                 while (loop-- > 0) {
-                    Writes.write(array, ptc++, array[pta],   pause/2d, mark, auxwrite);
-                    Writes.write(array, pta++, array[ptb++], pause/2d, mark, auxwrite);
+                    Writes.write(array, ptc++, array[pta], pause / 2d, mark, auxwrite);
+                    Writes.write(array, pta++, array[ptb++], pause / 2d, mark, auxwrite);
                 }
                 Writes.arraycopy(swap, 0, array, ptd - bridge, bridge, pause, mark, auxwrite);
             } else {

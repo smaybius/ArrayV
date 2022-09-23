@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.templates;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.utils.Searches;
 
 /*
  *
@@ -34,39 +35,8 @@ public abstract class BinaryInsertionSorting extends Sort {
     }
 
     protected void binaryInsertSort(int[] array, int start, int end, double compSleep, double writeSleep) {
-        for (int i = start; i < end; i++) {
-            int num = array[i];
-            int lo = start, hi = i;
-
-            while (lo < hi) {
-                int mid = lo + ((hi - lo) / 2); // avoid int overflow!
-                Highlights.markArray(1, lo);
-                Highlights.markArray(2, mid);
-                Highlights.markArray(3, hi);
-
-                Delays.sleep(compSleep);
-
-                if (Reads.compareValues(num, array[mid]) < 0) { // do NOT move equal elements to right of inserted
-                                                                // element; this maintains stability!
-                    hi = mid;
-                } else {
-                    lo = mid + 1;
-                }
-            }
-
-            Highlights.clearMark(3);
-
-            // item has to go into position lo
-
-            int j = i - 1;
-
-            while (j >= lo) {
-                Writes.write(array, j + 1, array[j], writeSleep, true, false);
-                j--;
-            }
-            Writes.write(array, lo, num, writeSleep, true, false);
-
-            Highlights.clearAllMarks();
-        }
+        for (int i = start + 1; i < end; i++)
+            Searches.insertTo(array, i, Searches.rightBinSearch(array, start, i, array[i], compSleep), writeSleep,
+                    false);
     }
 }

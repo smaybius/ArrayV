@@ -59,10 +59,10 @@ import io.github.arrayv.utils.Writes;
  */
 
 public final class TimSorting {
-    private Delays Delays;
-    private Highlights Highlights;
-    private Reads Reads;
-    private Writes Writes;
+    private Delays delays;
+    private Highlights highlights;
+    private Reads reads;
+    private Writes writes;
 
     /**
      * This is the minimum sized sequence that will be merged. Shorter
@@ -123,7 +123,7 @@ public final class TimSorting {
      * so we could cut the storage for this, but it's a minor amount,
      * and keeping all the info explicit simplifies the code.
      */
-    private int stackSize = 0; // Number of pending runs on stack
+    private int stackSize; // Number of pending runs on stack
     private final int[] runBase;
     private final int[] runLen;
 
@@ -134,7 +134,7 @@ public final class TimSorting {
     // Easy patch for preventing gallop and merge methods from going out-of-bounds
     private void markArray(int marker, int markPosition) {
         if (markPosition >= 0 && markPosition < this.len) {
-            this.Highlights.markArray(marker, markPosition);
+            this.highlights.markArray(marker, markPosition);
         }
     }
 
@@ -147,13 +147,13 @@ public final class TimSorting {
         this.a = a;
         this.len = currentLen;
 
-        this.Delays = arrayVisualizer.getDelays();
-        this.Highlights = arrayVisualizer.getHighlights();
-        this.Reads = arrayVisualizer.getReads();
-        this.Writes = arrayVisualizer.getWrites();
+        this.delays = arrayVisualizer.getDelays();
+        this.highlights = arrayVisualizer.getHighlights();
+        this.reads = arrayVisualizer.getReads();
+        this.writes = arrayVisualizer.getWrites();
 
         // Allocate temp storage (which may be increased later if necessary)
-        int[] newArray = Writes.createExternalArray(
+        int[] newArray = writes.createExternalArray(
                 this.len < 2 * INITIAL_TMP_STORAGE_LENGTH ? this.len >>> 1 : INITIAL_TMP_STORAGE_LENGTH);
         this.tmp = newArray;
         /*
@@ -166,16 +166,16 @@ public final class TimSorting {
          * computation below must be changed if MIN_MERGE is decreased. See
          * the MIN_MERGE declaration above for more information.
          */
-        int stackLen = (this.len < 120 ? 5 : this.len < 1542 ? 10 : this.len < 119151 ? 19 : 40);
-        this.runBase = Writes.createExternalArray(stackLen);
-        this.runLen = Writes.createExternalArray(stackLen);
+        int stackLen = (this.len < 120 ? 5 : this.len < 1542 ? 10 : this.len < 119_151 ? 19 : 40);
+        this.runBase = writes.createExternalArray(stackLen);
+        this.runLen = writes.createExternalArray(stackLen);
     }
 
     public void customSort(int[] a, int start, int length) {
         TimSorting.sort(this, a, start, length);
-        this.Writes.deleteExternalArray(this.tmp);
-        this.Writes.deleteExternalArray(this.runBase);
-        this.Writes.deleteExternalArray(this.runLen);
+        this.writes.deleteExternalArray(this.tmp);
+        this.writes.deleteExternalArray(this.runBase);
+        this.writes.deleteExternalArray(this.runLen);
     }
 
     /*
@@ -185,9 +185,9 @@ public final class TimSorting {
      */
     public static void sort(TimSorting timSort, int[] a, int length) {
         sort(timSort, a, 0, length);
-        timSort.Writes.deleteExternalArray(timSort.tmp);
-        timSort.Writes.deleteExternalArray(timSort.runBase);
-        timSort.Writes.deleteExternalArray(timSort.runLen);
+        timSort.writes.deleteExternalArray(timSort.tmp);
+        timSort.writes.deleteExternalArray(timSort.runBase);
+        timSort.writes.deleteExternalArray(timSort.runLen);
     }
 
     static void sort(TimSorting timSort, int[] a, int lo, int hi) {
@@ -252,7 +252,6 @@ public final class TimSorting {
     // TimSort
     // outfits it with a start index and uses the arraycopy method
 
-    @SuppressWarnings("fallthrough")
     private static void binarySort(TimSorting ts, int[] a, int lo, int hi, int start) {
         if (start == lo)
             start++;
@@ -273,7 +272,7 @@ public final class TimSorting {
                 // Another good way to prevent integer overflow with left + right!
                 int mid = (left + right) >>> 1;
 
-                if (ts.Reads.compareValues(pivot, a[mid]) < 0)
+                if (ts.reads.compareValues(pivot, a[mid]) < 0)
                     right = mid;
                 else
                     left = mid + 1;
@@ -290,14 +289,15 @@ public final class TimSorting {
             // Switch is just an optimization for arraycopy in default case
             switch (n) {
                 case 2:
-                    ts.Writes.write(a, left + 2, a[left + 1], 1, true, false);
+                    ts.writes.write(a, left + 2, a[left + 1], 1, true, false);
+                    break;
                 case 1:
-                    ts.Writes.write(a, left + 1, a[left], 1, true, false);
+                    ts.writes.write(a, left + 1, a[left], 1, true, false);
                     break;
                 default:
-                    ts.Writes.arraycopy(a, left, a, left + 1, n, 1, true, false);
+                    ts.writes.arraycopy(a, left, a, left + 1, n, 1, true, false);
             }
-            ts.Writes.write(a, left, pivot, 1, true, false);
+            ts.writes.write(a, left, pivot, 1, true, false);
         }
     }
 
@@ -332,17 +332,17 @@ public final class TimSorting {
             return 1;
 
         // Find end of run, and reverse range if descending
-        if (ts.Reads.compareValues(a[runHi++], a[lo]) < 0) { // Descending
-            while (runHi < hi && ts.Reads.compareValues(a[runHi], a[runHi - 1]) < 0) {
+        if (ts.reads.compareValues(a[runHi++], a[lo]) < 0) { // Descending
+            while (runHi < hi && ts.reads.compareValues(a[runHi], a[runHi - 1]) < 0) {
                 ts.markArray(1, runHi);
-                ts.Delays.sleep(1);
+                ts.delays.sleep(1);
                 runHi++;
             }
             reverseRange(ts, a, lo, runHi);
         } else { // Ascending
-            while (runHi < hi && ts.Reads.compareValues(a[runHi], a[runHi - 1]) >= 0) {
+            while (runHi < hi && ts.reads.compareValues(a[runHi], a[runHi - 1]) >= 0) {
                 ts.markArray(1, runHi);
-                ts.Delays.sleep(1);
+                ts.delays.sleep(1);
                 runHi++;
             }
         }
@@ -357,8 +357,8 @@ public final class TimSorting {
      * @param hi the index after the last element in the range to be reversed
      */
     private static void reverseRange(TimSorting ts, int[] a, int lo, int hi) {
-        ts.Writes.reversal(a, lo, hi - 1, 1, true, false);
-        ts.Highlights.clearMark(2);
+        ts.writes.reversal(a, lo, hi - 1, 1, true, false);
+        ts.highlights.clearMark(2);
     }
 
     /**
@@ -396,7 +396,7 @@ public final class TimSorting {
     private void pushRun(int runBase, int runLen) {
         this.runBase[this.stackSize] = runBase;
         this.runLen[this.stackSize] = runLen;
-        Writes.changeAuxWrites(2);
+        writes.changeAuxWrites(2);
         this.stackSize++;
     }
 
@@ -419,15 +419,15 @@ public final class TimSorting {
     private void mergeCollapse() {
         while (this.stackSize > 1) {
             int n = this.stackSize - 2;
-            Reads.addComparison();
-            Reads.addComparison();
+            reads.addComparison();
+            reads.addComparison();
             if ((n >= 1 && this.runLen[n - 1] <= this.runLen[n] + this.runLen[n + 1]) ||
                     (n >= 2 && this.runLen[n - 2] <= this.runLen[n] + this.runLen[n - 1])) {
-                Reads.addComparison();
+                reads.addComparison();
                 if (this.runLen[n - 1] < this.runLen[n + 1])
                     n--;
             } else if (this.runLen[n] > this.runLen[n + 1]) {
-                Reads.addComparison();
+                reads.addComparison();
                 break; // Invariant is established
             }
             mergeAt(n);
@@ -441,7 +441,7 @@ public final class TimSorting {
     private void mergeForceCollapse() {
         while (this.stackSize > 1) {
             int n = this.stackSize - 2;
-            Reads.addComparison();
+            reads.addComparison();
             if (n > 0 && this.runLen[n - 1] < this.runLen[n + 1])
                 n--;
             mergeAt(n);
@@ -456,8 +456,8 @@ public final class TimSorting {
      * @param i stack index of the first of the two runs to merge
      */
     private void mergeAt(int i) {
-        this.Highlights.clearMark(1);
-        this.Highlights.clearMark(2);
+        this.highlights.clearMark(1);
+        this.highlights.clearMark(2);
 
         int base1 = this.runBase[i];
         int len1 = this.runLen[i];
@@ -470,11 +470,11 @@ public final class TimSorting {
          * in this merge). The current run (i+1) goes away in any case.
          */
         this.runLen[i] = len1 + len2;
-        Writes.changeAuxWrites(1);
+        writes.changeAuxWrites(1);
         if (i == this.stackSize - 3) {
             this.runBase[i + 1] = this.runBase[i + 2];
             this.runLen[i + 1] = this.runLen[i + 2];
-            Writes.changeAuxWrites(2);
+            writes.changeAuxWrites(2);
         }
         this.stackSize--;
 
@@ -502,8 +502,8 @@ public final class TimSorting {
         else
             mergeHi(this, base1, len1, base2, len2);
 
-        this.Highlights.clearMark(1);
-        this.Highlights.clearMark(2);
+        this.highlights.clearMark(1);
+        this.highlights.clearMark(2);
     }
 
     /**
@@ -530,23 +530,23 @@ public final class TimSorting {
         int ofs = 1;
 
         ts.markArray(3, base + hint);
-        ts.Delays.sleep(1);
+        ts.delays.sleep(1);
 
-        if (ts.Reads.compareValues(key, a[base + hint]) > 0) {
+        if (ts.reads.compareValues(key, a[base + hint]) > 0) {
             // Gallop right until a[base+hint+lastOfs] < key <= a[base+hint+ofs]
             int maxOfs = len - hint;
 
             ts.markArray(3, base + hint + ofs);
-            ts.Delays.sleep(1);
+            ts.delays.sleep(1);
 
-            while (ofs < maxOfs && ts.Reads.compareValues(key, a[base + hint + ofs]) > 0) {
+            while (ofs < maxOfs && ts.reads.compareValues(key, a[base + hint + ofs]) > 0) {
                 lastOfs = ofs;
                 ofs = (ofs * 2) + 1;
                 if (ofs <= 0) // int overflow
                     ofs = maxOfs;
 
                 ts.markArray(3, base + hint + ofs);
-                ts.Delays.sleep(1);
+                ts.delays.sleep(1);
             }
             if (ofs > maxOfs)
                 ofs = maxOfs;
@@ -559,16 +559,16 @@ public final class TimSorting {
             final int maxOfs = hint + 1;
 
             ts.markArray(3, base + hint - ofs);
-            ts.Delays.sleep(1);
+            ts.delays.sleep(1);
 
-            while (ofs < maxOfs && ts.Reads.compareValues(key, a[base + hint - ofs]) <= 0) {
+            while (ofs < maxOfs && ts.reads.compareValues(key, a[base + hint - ofs]) <= 0) {
                 lastOfs = ofs;
                 ofs = (ofs * 2) + 1;
                 if (ofs <= 0) // int overflow
                     ofs = maxOfs;
 
                 ts.markArray(3, base + hint - ofs);
-                ts.Delays.sleep(1);
+                ts.delays.sleep(1);
             }
             if (ofs > maxOfs)
                 ofs = maxOfs;
@@ -589,14 +589,14 @@ public final class TimSorting {
             int m = lastOfs + ((ofs - lastOfs) >>> 1);
 
             ts.markArray(3, base + m);
-            ts.Delays.sleep(1);
+            ts.delays.sleep(1);
 
-            if (ts.Reads.compareValues(key, a[base + m]) > 0)
+            if (ts.reads.compareValues(key, a[base + m]) > 0)
                 lastOfs = m + 1; // a[base + m] < key
             else
                 ofs = m; // key <= a[base + m]
         }
-        ts.Highlights.clearMark(3);
+        ts.highlights.clearMark(3);
         return ofs;
     }
 
@@ -619,23 +619,23 @@ public final class TimSorting {
         int lastOfs = 0;
 
         ts.markArray(3, base + hint);
-        ts.Delays.sleep(1);
+        ts.delays.sleep(1);
 
-        if (ts.Reads.compareValues(key, a[base + hint]) < 0) {
+        if (ts.reads.compareValues(key, a[base + hint]) < 0) {
             // Gallop left until a[b+hint - ofs] <= key < a[b+hint - lastOfs]
             int maxOfs = hint + 1;
 
             ts.markArray(3, base + hint - ofs);
-            ts.Delays.sleep(1);
+            ts.delays.sleep(1);
 
-            while (ofs < maxOfs && ts.Reads.compareValues(key, a[base + hint - ofs]) < 0) {
+            while (ofs < maxOfs && ts.reads.compareValues(key, a[base + hint - ofs]) < 0) {
                 lastOfs = ofs;
                 ofs = (ofs * 2) + 1;
                 if (ofs <= 0) // int overflow
                     ofs = maxOfs;
 
                 ts.markArray(3, base + hint - ofs);
-                ts.Delays.sleep(1);
+                ts.delays.sleep(1);
             }
             if (ofs > maxOfs)
                 ofs = maxOfs;
@@ -649,16 +649,16 @@ public final class TimSorting {
             int maxOfs = len - hint;
 
             ts.markArray(3, base + hint + ofs);
-            ts.Delays.sleep(1);
+            ts.delays.sleep(1);
 
-            while (ofs < maxOfs && ts.Reads.compareValues(key, a[base + hint + ofs]) >= 0) {
+            while (ofs < maxOfs && ts.reads.compareValues(key, a[base + hint + ofs]) >= 0) {
                 lastOfs = ofs;
                 ofs = (ofs * 2) + 1;
                 if (ofs <= 0) // int overflow
                     ofs = maxOfs;
 
                 ts.markArray(3, base + hint + ofs);
-                ts.Delays.sleep(1);
+                ts.delays.sleep(1);
             }
             if (ofs > maxOfs)
                 ofs = maxOfs;
@@ -678,14 +678,14 @@ public final class TimSorting {
             int m = lastOfs + ((ofs - lastOfs) >>> 1);
 
             ts.markArray(3, base + m);
-            ts.Delays.sleep(1);
+            ts.delays.sleep(1);
 
-            if (ts.Reads.compareValues(key, a[base + m]) < 0)
+            if (ts.reads.compareValues(key, a[base + m]) < 0)
                 ofs = m; // key < a[b + m]
             else
                 lastOfs = m + 1; // a[b + m] <= key
         }
-        ts.Highlights.clearMark(3);
+        ts.highlights.clearMark(3);
         return ofs;
     }
 
@@ -709,23 +709,23 @@ public final class TimSorting {
         // Copy first run into temp array
         int[] a = ts.a; // For performance
         int[] tmp = ensureCapacity(len1);
-        ts.Writes.arraycopy(a, base1, tmp, 0, len1, 1, true, true);
+        ts.writes.arraycopy(a, base1, tmp, 0, len1, 1, true, true);
 
         int cursor1 = 0; // Indexes into tmp array
         int cursor2 = base2; // Indexes int a
         int dest = base1; // Indexes int a
 
         // Move first element of second run and deal with degenerate cases
-        ts.Writes.write(a, dest++, a[cursor2++], 1, false, false);
+        ts.writes.write(a, dest++, a[cursor2++], 1, false, false);
         ts.markArray(1, dest);
         ts.markArray(2, cursor2);
         if (--len2 == 0) {
-            ts.Writes.arraycopy(tmp, cursor1, a, dest, len1, 1, true, false);
+            ts.writes.arraycopy(tmp, cursor1, a, dest, len1, 1, true, false);
             return;
         }
         if (len1 == 1) {
-            ts.Writes.arraycopy(a, cursor2, a, dest, len2, 1, true, false);
-            ts.Writes.write(a, dest + len2, tmp[cursor1], 1, false, false); // Last elt of run 1 to end of merge
+            ts.writes.arraycopy(a, cursor2, a, dest, len2, 1, true, false);
+            ts.writes.write(a, dest + len2, tmp[cursor1], 1, false, false); // Last elt of run 1 to end of merge
             ts.markArray(1, dest + len2);
             return;
         }
@@ -739,8 +739,8 @@ public final class TimSorting {
              * winning consistently.
              */
             do {
-                if (ts.Reads.compareValues(a[cursor2], tmp[cursor1]) < 0) {
-                    ts.Writes.write(a, dest++, a[cursor2++], 1, false, false);
+                if (ts.reads.compareValues(a[cursor2], tmp[cursor1]) < 0) {
+                    ts.writes.write(a, dest++, a[cursor2++], 1, false, false);
                     ts.markArray(1, dest);
                     ts.markArray(2, cursor2);
                     count2++;
@@ -748,7 +748,7 @@ public final class TimSorting {
                     if (--len2 == 0)
                         break outer;
                 } else {
-                    ts.Writes.write(a, dest++, tmp[cursor1++], 1, false, false);
+                    ts.writes.write(a, dest++, tmp[cursor1++], 1, false, false);
                     ts.markArray(1, dest);
                     count1++;
                     count2 = 0;
@@ -765,14 +765,14 @@ public final class TimSorting {
             do {
                 count1 = gallopRight(ts, a[cursor2], tmp, cursor1, len1, 0);
                 if (count1 != 0) {
-                    ts.Writes.arraycopy(tmp, cursor1, a, dest, count1, 1, true, false);
+                    ts.writes.arraycopy(tmp, cursor1, a, dest, count1, 1, true, false);
                     dest += count1;
                     cursor1 += count1;
                     len1 -= count1;
                     if (len1 <= 1) // len1 == 1 || len1 == 0
                         break outer;
                 }
-                ts.Writes.write(a, dest++, a[cursor2++], 1, false, false);
+                ts.writes.write(a, dest++, a[cursor2++], 1, false, false);
                 ts.markArray(1, dest);
                 ts.markArray(2, cursor2);
                 if (--len2 == 0)
@@ -780,19 +780,19 @@ public final class TimSorting {
 
                 count2 = gallopLeft(ts, tmp[cursor1], a, cursor2, len2, 0);
                 if (count2 != 0) {
-                    ts.Writes.arraycopy(a, cursor2, a, dest, count2, 1, true, false);
+                    ts.writes.arraycopy(a, cursor2, a, dest, count2, 1, true, false);
                     dest += count2;
                     cursor2 += count2;
                     len2 -= count2;
                     if (len2 == 0)
                         break outer;
                 }
-                ts.Writes.write(a, dest++, tmp[cursor1++], 1, false, false);
+                ts.writes.write(a, dest++, tmp[cursor1++], 1, false, false);
                 ts.markArray(1, dest);
                 if (--len1 == 1)
                     break outer;
                 minGallop--;
-            } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
+            } while (count1 >= MIN_GALLOP || count2 >= MIN_GALLOP);
             if (minGallop < 0)
                 minGallop = 0;
             minGallop += 2; // Penalize for leaving gallop mode
@@ -800,14 +800,14 @@ public final class TimSorting {
         ts.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
 
         if (len1 == 1) {
-            ts.Writes.arraycopy(a, cursor2, a, dest, len2, 1, true, false);
-            ts.Writes.write(a, dest + len2, tmp[cursor1], 1, false, false); // Last elt of run 1 to end of merge
+            ts.writes.arraycopy(a, cursor2, a, dest, len2, 1, true, false);
+            ts.writes.write(a, dest + len2, tmp[cursor1], 1, false, false); // Last elt of run 1 to end of merge
             ts.markArray(1, dest + len2);
         } else if (len1 == 0) {
             throw new IllegalArgumentException(
                     "Comparison method violates its general contract!");
         } else {
-            ts.Writes.arraycopy(tmp, cursor1, a, dest, len1, 1, true, false);
+            ts.writes.arraycopy(tmp, cursor1, a, dest, len1, 1, true, false);
         }
     }
 
@@ -826,25 +826,25 @@ public final class TimSorting {
         // Copy second run into temp array
         int[] a = ts.a; // For performance
         int[] tmp = ensureCapacity(len2);
-        ts.Writes.arraycopy(a, base2, tmp, 0, len2, 1, true, true);
+        ts.writes.arraycopy(a, base2, tmp, 0, len2, 1, true, true);
 
         int cursor1 = base1 + len1 - 1; // Indexes into a
         int cursor2 = len2 - 1; // Indexes into tmp array
         int dest = base2 + len2 - 1; // Indexes into a
 
         // Move last element of first run and deal with degenerate cases
-        ts.Writes.write(a, dest--, a[cursor1--], 1, false, false);
+        ts.writes.write(a, dest--, a[cursor1--], 1, false, false);
         ts.markArray(1, dest);
         ts.markArray(2, cursor1);
         if (--len1 == 0) {
-            ts.Writes.arraycopy(tmp, 0, a, dest - (len2 - 1), len2, 1, true, false);
+            ts.writes.arraycopy(tmp, 0, a, dest - (len2 - 1), len2, 1, true, false);
             return;
         }
         if (len2 == 1) {
             dest -= len1;
             cursor1 -= len1;
-            ts.Writes.arraycopy(a, cursor1 + 1, a, dest + 1, len1, 1, true, false);
-            ts.Writes.write(a, dest, tmp[cursor2], 1, false, false);
+            ts.writes.arraycopy(a, cursor1 + 1, a, dest + 1, len1, 1, true, false);
+            ts.writes.write(a, dest, tmp[cursor2], 1, false, false);
             ts.markArray(1, dest);
             return;
         }
@@ -859,8 +859,8 @@ public final class TimSorting {
              * appears to win consistently.
              */
             do {
-                if (ts.Reads.compareValues(tmp[cursor2], a[cursor1]) < 0) {
-                    ts.Writes.write(a, dest--, a[cursor1--], 1, false, false);
+                if (ts.reads.compareValues(tmp[cursor2], a[cursor1]) < 0) {
+                    ts.writes.write(a, dest--, a[cursor1--], 1, false, false);
                     ts.markArray(1, dest);
                     ts.markArray(2, cursor1);
                     count1++;
@@ -868,7 +868,7 @@ public final class TimSorting {
                     if (--len1 == 0)
                         break outer;
                 } else {
-                    ts.Writes.write(a, dest--, tmp[cursor2--], 1, false, false);
+                    ts.writes.write(a, dest--, tmp[cursor2--], 1, false, false);
                     ts.markArray(1, dest);
                     count2++;
                     count1 = 0;
@@ -888,11 +888,11 @@ public final class TimSorting {
                     dest -= count1;
                     cursor1 -= count1;
                     len1 -= count1;
-                    ts.Writes.arraycopy(a, cursor1 + 1, a, dest + 1, count1, 1, true, false);
+                    ts.writes.arraycopy(a, cursor1 + 1, a, dest + 1, count1, 1, true, false);
                     if (len1 == 0)
                         break outer;
                 }
-                ts.Writes.write(a, dest--, tmp[cursor2--], 1, false, false);
+                ts.writes.write(a, dest--, tmp[cursor2--], 1, false, false);
                 ts.markArray(1, dest);
                 if (--len2 == 1)
                     break outer;
@@ -902,17 +902,17 @@ public final class TimSorting {
                     dest -= count2;
                     cursor2 -= count2;
                     len2 -= count2;
-                    ts.Writes.arraycopy(tmp, cursor2 + 1, a, dest + 1, count2, 1, true, false);
+                    ts.writes.arraycopy(tmp, cursor2 + 1, a, dest + 1, count2, 1, true, false);
                     if (len2 <= 1) // len2 == 1 || len2 == 0
                         break outer;
                 }
-                ts.Writes.write(a, dest--, a[cursor1--], 1, false, false);
+                ts.writes.write(a, dest--, a[cursor1--], 1, false, false);
                 ts.markArray(1, dest);
                 ts.markArray(2, cursor1);
                 if (--len1 == 0)
                     break outer;
                 minGallop--;
-            } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
+            } while (count1 >= MIN_GALLOP || count2 >= MIN_GALLOP);
             if (minGallop < 0)
                 minGallop = 0;
             minGallop += 2; // Penalize for leaving gallop mode
@@ -922,14 +922,14 @@ public final class TimSorting {
         if (len2 == 1) {
             dest -= len1;
             cursor1 -= len1;
-            ts.Writes.arraycopy(a, cursor1 + 1, a, dest + 1, len1, 1, true, false);
-            ts.Writes.write(a, dest, tmp[cursor2], 1, false, false); // Move first elt of run2 to front of merge
+            ts.writes.arraycopy(a, cursor1 + 1, a, dest + 1, len1, 1, true, false);
+            ts.writes.write(a, dest, tmp[cursor2], 1, false, false); // Move first elt of run2 to front of merge
             ts.markArray(1, dest);
         } else if (len2 == 0) {
             throw new IllegalArgumentException(
                     "Comparison method violates its general contract!");
         } else {
-            ts.Writes.arraycopy(tmp, 0, a, dest - (len2 - 1), len2, 1, true, false);
+            ts.writes.arraycopy(tmp, 0, a, dest - (len2 - 1), len2, 1, true, false);
         }
     }
 
@@ -955,8 +955,8 @@ public final class TimSorting {
                 newSize = minCapacity;
             else
                 newSize = Math.min(newSize, this.len >>> 1);
-            int[] newArray = Writes.createExternalArray(newSize);
-            Writes.deleteExternalArray(this.tmp);
+            int[] newArray = writes.createExternalArray(newSize);
+            writes.deleteExternalArray(this.tmp);
             this.tmp = newArray;
         }
         return this.tmp;

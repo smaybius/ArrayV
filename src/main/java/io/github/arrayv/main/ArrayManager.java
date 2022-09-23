@@ -136,6 +136,7 @@ public final class ArrayManager {
      * @see #setShuffleSingle(Shuffles)
      * @see #setShuffle(ShuffleGraph)
      */
+    @Deprecated
     public void setShuffle(Shuffles choice) {
         this.setShuffleSingle(choice);
     }
@@ -180,7 +181,7 @@ public final class ArrayManager {
         return this.shuffle.contains(new ShuffleInfo(shuffle));
     }
 
-    public void shuffleArray(int[] array, int currentLen, ArrayVisualizer arrayVisualizer) {
+    public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer) {
         this.initializeArray(array);
 
         String tmp = arrayVisualizer.getHeading();
@@ -249,7 +250,7 @@ public final class ArrayManager {
 
         arrayVisualizer.setHeading("");
         if (!arrayVisualizer.useAntiQSort()) {
-            this.shuffleArray(array, currentLen, arrayVisualizer);
+            this.shuffleArray(array, arrayVisualizer);
             arrayVisualizer.getArrays().subList(1, arrayVisualizer.getArrays().size()).clear();
             arrayVisualizer.getWrites().clearAllocAmount();
             if (arrayVisualizer.doingStabilityCheck())

@@ -2,6 +2,8 @@ package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.GrailSorting;
+import io.github.arrayv.utils.IndexedRotations;
+import io.github.arrayv.utils.Searches;
 
 public final class BlockInsertionSort extends GrailSorting {
     public BlockInsertionSort(ArrayVisualizer arrayVisualizer) {
@@ -18,45 +20,63 @@ public final class BlockInsertionSort extends GrailSorting {
         this.setBogoSort(false);
     }
 
-    private int rightBinSearch(int[] array, int a, int b, int val) {
-        while (a < b) {
-            int m = a + (b - a) / 2;
-
-            if (Reads.compareValues(val, array[m]) < 0)
-                b = m;
-            else
-                a = m + 1;
-        }
-
-        return a;
-    }
-
-    private int rightExpSearch(int[] array, int a, int b, int val) {
-        int i = 1;
-        while (b - i >= a && Reads.compareValues(val, array[b - i]) < 0) {
-            i *= 2;
-        }
-        return rightBinSearch(array, Math.max(a, b - i + 1), b - i / 2, val);
-    }
-
-    private void insertTo(int[] array, int a, int b, double delay, boolean auxwrite) {
+    private void rotate(int[] array, int a, int m, int b) {
         Highlights.clearMark(2);
-        int temp = array[a];
-        while (a > b)
-            Writes.write(array, a, array[--a], delay / 2, true, false);
-        Writes.write(array, b, temp, delay / 2, true, false);
+        IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
+    }
+
+    private void inPlaceMerge(int[] array, int a, int m, int b) {
+        int i = a;
+        int j = m;
+        int k;
+
+        while (i < j && j < b) {
+            if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
+                k = Searches.leftExpSearch(array, j + 1, b, array[i], 0);
+                this.rotate(array, i, j, k);
+
+                i += k - j;
+                j = k;
+            } else
+                i++;
+        }
+    }
+
+    private void inPlaceMergeBW(int[] array, int a, int m, int b) {
+        int i = m - 1;
+        int j = b - 1;
+        int k;
+
+        while (j > i && i >= a) {
+            if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
+                k = Searches.rightExpSearch(array, a, i, array[j], 0);
+                this.rotate(array, k, i + 1, j + 1);
+
+                j -= (i + 1) - k;
+                i = k - 1;
+            } else
+                j--;
+        }
+    }
+
+    private void mergeWithoutBuf(int[] array, int a, int m, int b) {
+        if (m - a > b - m)
+            this.inPlaceMergeBW(array, a, m, b);
+        else
+            this.inPlaceMerge(array, a, m, b);
     }
 
     private void insert2(int[] array, int a, int l, int r, double delay) { // credit to aphitorite for making it binary
                                                                            // instead of
         // linear
-        int t1 = array[l], t2 = array[r];
+        int t1 = array[l];
+        int t2 = array[r];
 
-        int m1 = rightExpSearch(array, a, l, t2);
+        int m1 = Searches.rightExpSearch(array, a, l, t2, delay);
         Writes.arraycopy(array, m1, array, m1 + 2, l - m1, delay / 2, true, false);
         Writes.write(array, m1 + 1, t2, delay, true, false);
 
-        int m2 = rightExpSearch(array, a, m1, t1);
+        int m2 = Searches.rightExpSearch(array, a, m1, t1, delay);
         Writes.arraycopy(array, m2, array, m2 + 1, m1 - m2, delay / 2, true, false);
         Writes.write(array, m2, t1, delay / 2, true, false);
     }
@@ -77,7 +97,9 @@ public final class BlockInsertionSort extends GrailSorting {
     }
 
     public void insertionSort(int[] array, int a, int b, double delay, boolean auxwrite) {
-        int i, j, len;
+        int i;
+        int j;
+        int len;
         i = findRun(array, a, b, delay, auxwrite);
         while (i < b) {
             j = findRun(array, i, b, delay, auxwrite);
@@ -88,19 +110,20 @@ public final class BlockInsertionSort extends GrailSorting {
                     // Could replace it with the grailLazyMerge, but keeping this to make sure it's
                     // perfectly swapless regardless of rotation used
                 } else {
-                    insertTo(array, i, this.rightExpSearch(array, a, i, array[i]), delay, auxwrite); // taken from
-                                                                                                     // Laziest Stable
+                    Searches.insertTo(array, i, Searches.rightExpSearch(array, a, i, array[i], delay), delay, auxwrite); // taken
+                    // from
+                    // Laziest Stable
                 }
 
             } else {
-                grailMergeWithoutBuffer(array, a, i - a, len);
+                mergeWithoutBuf(array, a, i - a, j);
             }
             i = j;
         }
     }
 
     public void customInsertSort(int[] array, int start, int end, double delay, boolean auxwrite) {
-        insertionSort(array, start, end, delay, false);
+        insertionSort(array, start, end, delay, auxwrite);
     }
 
     @Override

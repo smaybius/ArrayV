@@ -59,9 +59,10 @@ public enum Distributions {
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int currentLen = arrayVisualizer.getCurrentLength();
-            Random random = new Random();
 
-            int l = 0, r, t = Math.min(currentLen, 8);
+            int l = 0;
+            int r;
+            int t = Math.min(currentLen, 8);
             for (int i = 0; i < t; i++)
                 if (random.nextDouble() < 0.5)
                     l++;
@@ -99,7 +100,6 @@ public enum Distributions {
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int currentLen = arrayVisualizer.getCurrentLength();
-            Random random = new Random();
 
             for (int i = 0; i < currentLen; i++)
                 array[i] = random.nextInt(currentLen);
@@ -143,7 +143,7 @@ public enum Distributions {
             double mid = (currentLen - 1) / 2d;
 
             for (int i = 0; i < currentLen; i++)
-                array[i] = (int) (Math.pow(i - mid, power) / Math.pow(mid, power - 1) + mid);
+                array[i] = (int) (Math.pow(i - mid, power) / Math.pow(mid, power - 1d) + mid);
         }
     },
     QUINTIC {
@@ -158,7 +158,7 @@ public enum Distributions {
             double mid = (currentLen - 1) / 2d;
 
             for (int i = 0; i < currentLen; i++)
-                array[i] = (int) (Math.pow(i - mid, power) / Math.pow(mid, power - 1) + mid);
+                array[i] = (int) (Math.pow(i - mid, power) / Math.pow(mid, power - 1d) + mid);
         }
     },
     CBRT {
@@ -173,8 +173,8 @@ public enum Distributions {
             double h = currentLen / 2d;
 
             for (int i = 0; i < currentLen; i++) {
-                double val = i / h - 1,
-                        root = val < 0 ? -Math.pow(-val, 1d / p) : Math.pow(val, 1d / p);
+                double val = i / h - 1;
+                double root = val < 0 ? -Math.pow(-val, 1d / p) : Math.pow(val, 1d / p);
 
                 array[i] = (int) (h * (root + 1));
             }
@@ -192,8 +192,8 @@ public enum Distributions {
             double h = currentLen / 2d;
 
             for (int i = 0; i < currentLen; i++) {
-                double val = i / h - 1,
-                        root = val < 0 ? -Math.pow(-val, 1d / p) : Math.pow(val, 1d / p);
+                double val = i / h - 1;
+                double root = val < 0 ? -Math.pow(-val, 1d / p) : Math.pow(val, 1d / p);
 
                 array[i] = (int) (h * (root + 1));
             }
@@ -241,9 +241,9 @@ public enum Distributions {
             double c = Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (Math.tan(c * i) + (n / 2) + 1 > currentLen)
+                if (Math.tan(c * i) + (n / 2d) + 1 > currentLen)
                     array[i] = currentLen;
-                else if (Math.tan(c * i) + (n / 2) + 1 < 0)
+                else if (Math.tan(c * i) + (n / 2d) + 1 < 0)
                     array[i] = 0;
                 else
                     array[i] = (int) (n * (Math.tan(c * i) + 1) / 32) + (n / 2);
@@ -263,9 +263,9 @@ public enum Distributions {
             double c = Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (1 / Math.tan(c * i) + (n / 2) + 1 > currentLen)
+                if (1 / Math.tan(c * i) + (n / 2d) + 1 > currentLen)
                     array[i] = currentLen;
-                else if (1 / Math.tan(c * i) + (n / 2) + 1 < 0)
+                else if (1 / Math.tan(c * i) + (n / 2d) + 1 < 0)
                     array[i] = 0;
                 else
                     array[i] = (int) (n * (1 / Math.tan(c * i) + 1) / 32) + (n / 2);
@@ -285,9 +285,9 @@ public enum Distributions {
             double c = 2 * Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (1 / Math.sin(c * i) + (n / 2) + 1 > currentLen)
+                if (1 / Math.sin(c * i) + (n / 2d) + 1 > currentLen)
                     array[i] = currentLen;
-                else if (1 / Math.sin(c * i) + (n / 2) + 1 < 0)
+                else if (1 / Math.sin(c * i) + (n / 2d) + 1 < 0)
                     array[i] = 0;
                 else
                     array[i] = (int) (n * (1 / Math.sin(c * i) + 1) / 32) + (n / 2);
@@ -306,13 +306,45 @@ public enum Distributions {
             double c = 2 * Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (1 / Math.cos(c * i) + (n / 2) + 1 > currentLen)
+                if (1 / Math.cos(c * i) + (n / 2d) + 1 > currentLen)
                     array[i] = currentLen;
-                else if (1 / Math.cos(c * i) + (n / 2) + 1 < 0)
+                else if (1 / Math.cos(c * i) + (n / 2d) + 1 < 0)
                     array[i] = 0;
                 else
                     array[i] = (int) (n * (1 / Math.cos(c * i) + 1) / 32) + (n / 2);
             }
+        }
+    },
+    SINC {
+        public String getName() {
+            return "Sinc Function";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            int n = currentLen - 1;
+            double c = 16.0 * Math.PI / n;
+            double mid = (c * n) / 2.0;
+
+            for (int i = 0; i < n; i++)
+                array[i] = (int) ((n / 1.15) * sinc(c * i, -mid) + 1);
+
+            double min = array[0];
+            for (int i = 0; i < n; i++) {
+                if (array[i] < min)
+                    min = array[i];
+            }
+            for (int i = 0; i < n; i++) {
+                array[i] -= min;
+            }
+        }
+
+        private double sinc(double x, double phs) {
+            double y = x + phs;
+            if (y == 0)
+                return 1;
+            return Math.sin(y) / y;
         }
     },
     PERLIN_NOISE {
@@ -323,12 +355,11 @@ public enum Distributions {
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int currentLen = arrayVisualizer.getCurrentLength();
-            Random random = new Random();
 
             int[] perlinNoise = new int[currentLen];
 
-            float step = 1f / currentLen;
-            float randomStart = (float) (random.nextInt(currentLen));
+            double step = 1d / currentLen;
+            float randomStart = random.nextInt(currentLen);
             int octave = (int) (Math.log(currentLen) / Math.log(2));
 
             for (int i = 0; i < currentLen; i++) {
@@ -423,7 +454,8 @@ public enum Distributions {
                 ;
             boolean[] digits = new boolean[floorLog2 + 2];
 
-            int i, j;
+            int i;
+            int j;
             for (i = 0; i + step <= currentLen; i += step) {
                 for (j = 0; digits[j]; j++)
                     ;
@@ -500,7 +532,8 @@ public enum Distributions {
                 return;
             }
 
-            int t1 = (a + a + b) / 3, t2 = (a + b + b + 2) / 3;
+            int t1 = (a + a + b) / 3;
+            int t2 = (a + b + b + 2) / 3;
 
             for (int i = t1; i < t2; i++)
                 array[i] = mid;
@@ -586,7 +619,6 @@ public enum Distributions {
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int currentLen = arrayVisualizer.getCurrentLength();
-            Random random = new Random();
 
             for (int i = 0; i < currentLen; i++) {
                 int r = random.nextInt(currentLen - i) + i;
@@ -602,7 +634,6 @@ public enum Distributions {
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int currentLen = arrayVisualizer.getCurrentLength();
-            Random random = new Random();
 
             for (int i = 1; i < currentLen; i++) {
                 int r = random.ints(0, i).findFirst().getAsInt();
@@ -643,7 +674,7 @@ public enum Distributions {
                 if (array[j] > max)
                     max = array[j];
             }
-            double scale = (double) (n - 1) / max;
+            double scale = (double) (n - 1) / (max != 0 ? max : 1);
 
             for (int i = 0; i < n; i++)
                 array[i] = (int) (array[i] * scale);
@@ -660,7 +691,7 @@ public enum Distributions {
             int n = arrayVisualizer.getCurrentLength();
 
             int[] minPrimeFactors = new int[n];
-            List<Integer> primes = new ArrayList<Integer>();
+            List<Integer> primes = new ArrayList<>();
 
             array[0] = 0;
             array[1] = 1;
@@ -673,16 +704,16 @@ public enum Distributions {
                 }
 
                 for (int prime : primes) {
-                    if (i * prime >= n)
-                        break;
+                    if (i * prime < n) {
 
-                    boolean last = prime == minPrimeFactors[i];
+                        boolean last = prime == minPrimeFactors[i];
 
-                    minPrimeFactors[i * prime] = prime;
-                    array[i * prime] = array[i] * (last ? prime : prime - 1);
+                        minPrimeFactors[i * prime] = prime;
+                        array[i * prime] = array[i] * (last ? prime : prime - 1);
 
-                    if (last)
-                        break;
+                        if (last)
+                            break;
+                    }
                 }
             }
         }
@@ -696,24 +727,22 @@ public enum Distributions {
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
             int n = arrayVisualizer.getCurrentLength();
-            double c = Math.PI / n; // <-- removed factor of 2
-            final double offset = 0.0; // <-- phase adjustment
-            double frequency = 24000;
-            double sampleRate = 48000;
-            double increment = frequency * Math.PI / sampleRate;
-            double phase = 0;
+
+            double c = 4 * Math.PI / n; // <-- removed factor of 2
             double b = 3;
             double a = 0.5;
             for (int i = 0; i < n; i++) {
-                array[i] = n / 2; // <-- ensure all points on curve are non-negative
                 for (int j = 0; j < 10; j++) {
-                    array[i] += (int) (n * (Math.pow(b, -j * a) * Math.cos((Math.pow(b, j) * phase * c))) / 4); // <--
-                                                                                                                // phase
-                                                                                                                // adjustment
-                                                                                                                // applied
-                                                                                                                // here
+                    array[i] += (int) (n * (Math.pow(b, -j * a) * Math.cos((Math.pow(b, j) * i * c))) / 5);
                 }
-                phase += increment;
+            }
+            int min = array[0];
+            for (int i = 0; i < n; i++) {
+                if (array[i] < min)
+                    min = array[i];
+            }
+            for (int i = 0; i < n; i++) {
+                array[i] -= min;
             }
         }
     },
@@ -724,8 +753,8 @@ public enum Distributions {
         }
 
         @Override
-        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
-            int currentLen = ArrayVisualizer.getCurrentLength();
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLen = arrayVisualizer.getCurrentLength();
             triangleRec(array, 0, currentLen, 0, currentLen);
         }
 
@@ -733,8 +762,9 @@ public enum Distributions {
             if (b - a < 3)
                 return;
 
-            int vm = (v1 + v2) / 2, t1 = (a + a + b) / 3, t2 = (a + b + b + 2) / 3;
-            ;
+            int vm = (v1 + v2) / 2;
+            int t1 = (a + a + b) / 3;
+            int t2 = (a + b + b + 2) / 3;
             for (int i = t1; i < t2; i++)
                 array[i] = vm;
 
@@ -750,12 +780,11 @@ public enum Distributions {
         }
 
         @Override
-        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
-            double n = ArrayVisualizer.getCurrentLength();
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            double n = arrayVisualizer.getCurrentLength();
 
             for (int i = 0; i < n; i++) {
                 double x = i / n;
-                // array[i] = (int)(n * (Math.pow(x,3) * (3*x * (2*x - 5) + 10)));
                 array[i] = (int) (-n * (Math.pow(x, 4) * (2 * x * (5 * x * (2 * x - 7) + 42) - 35)));
             }
         }
@@ -767,8 +796,8 @@ public enum Distributions {
         }
 
         @Override
-        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
-            double n = ArrayVisualizer.getCurrentLength();
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            double n = arrayVisualizer.getCurrentLength();
             double k = 1 / 4d;
 
             for (int i = 0; i < n; i++) {
@@ -785,8 +814,8 @@ public enum Distributions {
         }
 
         @Override
-        public void initializeArray(int[] array, ArrayVisualizer ArrayVisualizer) {
-            double n = ArrayVisualizer.getCurrentLength();
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            double n = arrayVisualizer.getCurrentLength();
             double m = 16;
 
             for (int i = 0; i < n; i++) {
@@ -836,7 +865,10 @@ public enum Distributions {
 
     public abstract String getName();
 
+    protected Random random = new Random();
+
     public void selectDistribution(int[] array, ArrayVisualizer arrayVisualizer) {
+        // TODO document why this method is empty
     }
 
     public abstract void initializeArray(int[] array, ArrayVisualizer arrayVisualizer);

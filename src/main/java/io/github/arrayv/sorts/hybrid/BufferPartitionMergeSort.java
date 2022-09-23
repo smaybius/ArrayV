@@ -60,7 +60,9 @@ public final class BufferPartitionMergeSort extends Sort {
 	}
 
 	private void inPlaceMerge(int[] array, int a, int m, int b) {
-		int i = a, j = m, k;
+		int i = a;
+		int j = m;
+		int k;
 
 		while (i < j && j < b) {
 			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
@@ -211,7 +213,9 @@ public final class BufferPartitionMergeSort extends Sort {
 		if (len < 2)
 			return;
 
-		int i, pos, j = getMinLevel(len);
+		int i;
+		int pos;
+		int j = getMinLevel(len);
 
 		for (i = a; i + j <= b; i += j)
 			this.binInsSort.customBinaryInsert(array, i, i + j, 0.25);

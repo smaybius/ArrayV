@@ -62,7 +62,9 @@ public final class ImprovedBlockSelectionSort extends Sort {
 	}
 
 	private int inPlaceMerge(int[] array, int a, int m, int b) {
-		int i = a, j = m, k;
+		int i = a;
+		int j = m;
+		int k;
 
 		while (i < j && j < b) {
 			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
@@ -83,7 +85,9 @@ public final class ImprovedBlockSelectionSort extends Sort {
 	}
 
 	private void inPlaceMergeBW(int[] array, int a, int m, int b) {
-		int i = m - 1, j = b - 1, k;
+		int i = m - 1;
+		int j = b - 1;
+		int k;
 
 		while (j > i && i >= a) {
 			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
@@ -117,7 +121,8 @@ public final class ImprovedBlockSelectionSort extends Sort {
 	}
 
 	private void blockSelect(int[] array, int a, int m, int b, int bLen) {
-		int k = a, j = m;
+		int k = a;
+		int j = m;
 
 		while (k < m && Reads.compareIndices(array, k, m, 0.5, true) <= 0)
 			k += bLen;
@@ -155,12 +160,13 @@ public final class ImprovedBlockSelectionSort extends Sort {
 
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) {
-		for (int i, j = 1; j < length; j *= 2) {
-			int bLen = sqrt(j), n = j,
-					b = length - length % bLen;
+		for (int j = 1; j < length; j *= 2) {
+			int bLen = sqrt(j);
+			int n = j;
+			int b = length - length % bLen;
 
 			while (n > 16) {
-				for (i = 0; i + j < b; i += 2 * j)
+				for (int i = 0; i + j < b; i += 2 * j)
 					for (int k = i; k + n < Math.min(i + 2 * j, b); k += n)
 						this.blockSelect(array, k, k + n, Math.min(k + 2 * n, b), bLen);
 
@@ -168,7 +174,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 				bLen = sqrt(bLen);
 			}
 
-			for (i = 0; i + j < b; i += 2 * j)
+			for (int i = 0; i + j < b; i += 2 * j)
 				for (int k = i, f = i; k + n < Math.min(i + 2 * j, b); k += n)
 					f = this.inPlaceMerge(array, f, k + n, Math.min(k + 2 * n, b));
 

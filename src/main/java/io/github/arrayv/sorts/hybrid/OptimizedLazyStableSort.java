@@ -54,7 +54,8 @@ public final class OptimizedLazyStableSort extends GrailSorting {
         this.setBogoSort(false);
     }
 
-    protected void grailLazyStableSort(int[] arr, int pos, int len) {
+    @Override
+    public void grailLazyStableSort(int[] arr, int pos, int len) {
         BlockInsertionSort insert = new BlockInsertionSort(arrayVisualizer);
         int dist;
         for (dist = 0; dist + 16 < len; dist += 16)
@@ -67,13 +68,13 @@ public final class OptimizedLazyStableSort extends GrailSorting {
             int right = len - 2 * part;
 
             while (left <= right) {
-                this.grailMergeWithoutBuffer(arr, pos + left, part, part);
+                this.grailLazyMerge(arr, pos + left, part, part);
                 left += 2 * part;
             }
 
             int rest = len - left;
             if (rest > part) {
-                this.grailMergeWithoutBuffer(arr, pos + left, part, rest - part);
+                this.grailLazyMerge(arr, pos + left, part, rest - part);
             }
         }
     }

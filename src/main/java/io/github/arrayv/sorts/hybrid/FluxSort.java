@@ -49,10 +49,11 @@ public final class FluxSort extends QuadSorting {
 		this.setBogoSort(false);
 	}
 
-	private final int FLUX_OUT = 24;
+	private static final int FLUX_OUT = 24;
 
 	private boolean fluxAnalyze(int[] array, int nmemb) {
-		int cnt, balance = 0;
+		int cnt;
+		int balance = 0;
 		int pta;
 
 		pta = 0;
@@ -158,7 +159,12 @@ public final class FluxSort extends QuadSorting {
 	}
 
 	private int medianOfFifteen(int[] array, int ptx, int nmemb) {
-		int v0, v1, v2, v3, v4, div = nmemb / 16;
+		int v0;
+		int v1;
+		int v2;
+		int v3;
+		int v4;
+		int div = nmemb / 16;
 
 		v0 = this.medianOfThree(array, ptx + div * 2, ptx + div * 1, ptx + div * 3);
 		v1 = this.medianOfThree(array, ptx + div * 5, ptx + div * 4, ptx + div * 6);
@@ -170,7 +176,10 @@ public final class FluxSort extends QuadSorting {
 	}
 
 	private int medianOfNine(int[] array, int ptx, int nmemb) {
-		int v0, v1, v2, div = nmemb / 16;
+		int v0;
+		int v1;
+		int v2;
+		int div = nmemb / 16;
 
 		v0 = this.medianOfThree(array, ptx + div * 2, ptx + div * 1, ptx + div * 4);
 		v1 = this.medianOfThree(array, ptx + div * 8, ptx + div * 6, ptx + div * 10);
@@ -181,8 +190,13 @@ public final class FluxSort extends QuadSorting {
 
 	private void fluxPartition(int[] array, int[] swap, int[] main, int start, int nmemb, int depth) {
 		int val;
-		int aSize, sSize;
-		int pta, pts, ptx, pte, piv;
+		int aSize;
+		int sSize;
+		int pta;
+		int pts;
+		int ptx;
+		int pte;
+		int piv;
 
 		ptx = main == array ? start : 0;
 

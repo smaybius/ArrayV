@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.hybrid;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.IndexedRotations;
+import io.github.arrayv.utils.Searches;
 
 /*
  *
@@ -44,64 +45,24 @@ public final class LaziestSort extends Sort {
 		this.setBogoSort(false);
 	}
 
-	private void insertTo(int[] array, int a, int b) {
-		Highlights.clearMark(2);
-		int temp = array[a];
-		while (a > b)
-			Writes.write(array, a, array[--a], 0.5, true, false);
-		Writes.write(array, b, temp, 0.5, true, false);
-	}
-
-	private void rotate(int[] array, int a, int m, int b) {
+	private static void rotate(int[] array, int a, int m, int b) {
 		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
 	}
 
-	private int leftBinSearch(int[] array, int a, int b, int val) {
-		while (a < b) {
-			int m = a + (b - a) / 2;
-
-			if (Reads.compareValues(val, array[m]) <= 0)
-				b = m;
-			else
-				a = m + 1;
-		}
-
-		return a;
-	}
-
-	private int rightBinSearch(int[] array, int a, int b, int val) {
-		while (a < b) {
-			int m = a + (b - a) / 2;
-
-			if (Reads.compareValues(val, array[m]) < 0)
-				b = m;
-			else
-				a = m + 1;
-		}
-
-		return a;
-	}
-
-	private int leftExpSearch(int[] array, int a, int b, int val) {
-		int i = 1;
-		while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) > 0)
-			i *= 2;
-
-		return this.leftBinSearch(array, a + i / 2, Math.min(b, a - 1 + i), val);
-	}
-
-	private void binaryInsertion(int[] array, int a, int b) {
+	private static void binaryInsertion(int[] array, int a, int b) {
 		for (int i = a + 1; i < b; i++)
-			this.insertTo(array, i, this.rightBinSearch(array, a, i, array[i]));
+			Searches.insertTo(array, i, Searches.rightBinSearch(array, a, i, array[i], 0.5), 0.5, false);
 	}
 
-	private void inPlaceMerge(int[] array, int a, int m, int b) {
-		int i = a, j = m, k;
+	private void inPlaceMerge(int[] array, int start, int mid, int end) {
+		int i = start;
+		int j = mid;
+		int k;
 
-		while (i < j && j < b) {
+		while (i < j && j < end) {
 			if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
-				k = this.leftExpSearch(array, j + 1, b, array[i]);
-				this.rotate(array, i, j, k);
+				k = Searches.leftExpSearch(array, j + 1, end, array[i], 0.5);
+				rotate(array, i, j, k);
 
 				i += k - j;
 				j = k;
@@ -110,18 +71,19 @@ public final class LaziestSort extends Sort {
 		}
 	}
 
-	protected void laziestStableSort(int[] array, int start, int end) {
+	void laziestStableSort(int[] array, int start, int end) {
 		int len = end - start;
 		if (len <= 16) {
-			this.binaryInsertion(array, start, end);
+			binaryInsertion(array, start, end);
 			return;
 		}
 
-		int i, blockLen = Math.max(16, (int) Math.sqrt(len));
+		int i;
+		int blockLen = Math.max(16, (int) Math.sqrt(len));
 		for (i = start; i + 2 * blockLen < end; i += blockLen) {
-			this.binaryInsertion(array, i, i + blockLen);
+			binaryInsertion(array, i, i + blockLen);
 		}
-		this.binaryInsertion(array, i, end);
+		binaryInsertion(array, i, end);
 
 		while (i - blockLen >= start) {
 			this.inPlaceMerge(array, i - blockLen, i, end);

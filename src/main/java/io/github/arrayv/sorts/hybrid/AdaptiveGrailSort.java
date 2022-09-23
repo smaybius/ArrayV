@@ -348,7 +348,7 @@ public final class AdaptiveGrailSort extends Sort {
             this.inPlaceMerge(array, a, m, b);
     }
 
-    private boolean checkSorted(int[] array, int a, int m, int b) {
+    private boolean checkSorted(int[] array, int m) {
         return Reads.compareIndices(array, m - 1, m, 0.1, true) > 0;
     }
 
@@ -362,7 +362,7 @@ public final class AdaptiveGrailSort extends Sort {
     }
 
     private boolean checkBounds(int[] array, int a, int m, int b) {
-        return this.checkSorted(array, a, m, b)
+        return this.checkSorted(array, m)
                 && this.checkReverseBounds(array, a, m, b);
     }
 
@@ -669,7 +669,7 @@ public final class AdaptiveGrailSort extends Sort {
     }
 
     private void smartInPlaceMerge(int[] array, int a, int m, int b) {
-        if (this.checkSorted(array, a, m, b))
+        if (this.checkSorted(array, m))
             this.inPlaceMergeBW(array, a, m, b);
     }
 

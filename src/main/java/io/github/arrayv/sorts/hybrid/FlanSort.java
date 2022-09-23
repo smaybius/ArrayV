@@ -49,8 +49,9 @@ public final class FlanSort extends MultiWayMergeSorting {
 	// unstable sorting algorithm performing an average of
 	// O(n log n) comparisons and O(n) moves in O(1) memory
 
-	private final int G = 14;
-	private final int R = 4;
+	private static final int G = 14;
+	private static final int R = 4;
+	Random rng = new Random();
 
 	private int medianOfThree(int[] array, int a, int m, int b) {
 		if (Reads.compareIndices(array, m, a, 0.1, true) > 0) {
@@ -191,11 +192,11 @@ public final class FlanSort extends MultiWayMergeSorting {
 	}
 
 	private void retrieve(int[] array, int i, int p, int pEnd, int bsv, boolean bw) {
-		int j = i - 1, m;
+		int j = i - 1;
+		int m;
 
-		for (int k = pEnd - (G + 1); k > p + G;) {
+		for (int k = pEnd - (G + 1) - 1; k > p + G; k -= G + 1) {
 			m = this.rightBinSearch(array, k - G, k, bsv, bw) - 1;
-			k -= G + 1;
 
 			while (m >= k)
 				Writes.swap(array, j--, m--, 1, true, false);
@@ -215,13 +216,13 @@ public final class FlanSort extends MultiWayMergeSorting {
 			return;
 		}
 
-		Random rng = new Random();
-
 		int s = len;
 		while (s >= 32)
 			s = (s - 1) / R + 1;
 
-		int i = a + s, j = a + R * s, pEnd = p + (s + 1) * (G + 1) + G;
+		int i = a + s;
+		int j = a + R * s;
+		int pEnd = p + (s + 1) * (G + 1) + G;
 		this.binaryInsertion(array, a, i);
 		for (int k = 0; k < s; k++) // scatter elements to make G sized gaps b/w them
 			Writes.swap(array, a + k, p + k * (G + 1) + G, 1, true, false);
@@ -290,13 +291,17 @@ public final class FlanSort extends MultiWayMergeSorting {
 		int[] pa = Writes.createExternalArray(G + 2);
 		int[] heap = Writes.createExternalArray(G + 2);
 
-		int a = 0, b = length;
+		int a = 0;
+		int b = length;
 
 		while (b - a >= 32) {
 			int piv = array[this.medianOfThreeNinthers(array, a, b)];
 
 			// partition -> [a][E > piv][i][E == piv][j][E < piv][b]
-			int i1 = a, i = a - 1, j = b, j1 = b;
+			int i1 = a;
+			int i = a - 1;
+			int j = b;
+			int j1 = b;
 
 			for (;;) {
 				while (++i < j) {
@@ -335,7 +340,10 @@ public final class FlanSort extends MultiWayMergeSorting {
 				}
 			}
 
-			int left = i - a, right = b - j, m, kCnt = 0;
+			int left = i - a;
+			int right = b - j;
+			int m;
+			int kCnt = 0;
 
 			if (left <= right) { // sort the smaller partition using larger partition as space
 				m = b - left;
