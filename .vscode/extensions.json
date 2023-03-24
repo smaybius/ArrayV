@@ -1,8 +1,7 @@
 {
     "recommendations": [
         "shengchen.vscode-checkstyle",
-        "sonarsource.sonarlint-vscode",
         "visualstudioexptteam.vscodeintellicode",
-        "walkme.Java-extension-pack"
+        "walkme.java-extension-pack"
     ]
 }
