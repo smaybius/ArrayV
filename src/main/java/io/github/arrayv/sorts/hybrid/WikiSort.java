@@ -1,7 +1,8 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.insert.BlockInsertionSort;
+import io.github.arrayv.sortdata.SortMeta;
+import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.sorts.templates.WikiSorting;
 
@@ -34,6 +35,7 @@ For more information, please refer to <http://unlicense.org>
  *
  */
 
+@SortMeta(name = "Wiki", category = "Hybrid Sorts", question = "Enter external buffer size (0 for in-place):", defaultAnswer = 0)
 public class WikiSort extends Sort {
     private WikiSorting wikiSortInstance; // Just like TimSort, WikiSort cannot be simply written off as an abstract
                                           // class, as it creates an
@@ -59,19 +61,6 @@ public class WikiSort extends Sort {
 
     public WikiSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Wiki");
-        // this.setRunAllID("Wiki Sort (Block Merge Sort)");
-        // this.setRunAllSortsName("Wiki Sort [Block Merge Sort]");
-        this.setRunAllSortsName("Wikisort");
-        this.setRunSortName("Wikisort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
-        this.setQuestion("Enter external buffer size (0 for in-place):", 0);
     }
 
     @Override
