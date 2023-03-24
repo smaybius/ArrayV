@@ -12,7 +12,7 @@ public final class SlowSort extends Sort {
         this.setSortListName("Slow");
         this.setRunAllSortsName("Slow Sort");
         this.setRunSortName("Slowsort");
-        this.setCategory("Impractical Sorts");
+        this.setCategory("Exchange Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
@@ -20,31 +20,28 @@ public final class SlowSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private void slowSort(int[] A, int i, int j, int depth) {
-        if (i >= j) {
-            return;
-        }
+	private void slowSort(int[] A, int i, int j) {
+	    if (i >= j) {
+			return;
+		}
 
-        int m = i + ((j - i) / 2);
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        this.slowSort(A, i, m, depth + 1);
-        Writes.recursion();
-        this.slowSort(A, m + 1, j, depth + 1);
+	    int m = i + ((j - i) / 2);
 
-        if (Reads.compareIndices(A, m, j, 0, true) == 1) {
-            Writes.swap(A, m, j, 1, true, false);
-        }
+	    this.slowSort(A, i, m);
+	    this.slowSort(A, m + 1, j);
 
-        Highlights.markArray(1, j);
-        Highlights.markArray(2, m);
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        this.slowSort(A, i, j - 1, depth + 1);
-    }
+	    if (Reads.compareValues(A[m], A[j]) == 1) {
+	        Writes.swap(A, m, j, 1, true, false);
+	    }
+
+	    Highlights.markArray(1, j);
+	    Highlights.markArray(2, m);
+
+	    this.slowSort(A, i, j - 1);
+	}
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.slowSort(array, 0, currentLength - 1, 0);
+        this.slowSort(array, 0, currentLength - 1);
     }
 }

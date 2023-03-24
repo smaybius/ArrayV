@@ -52,8 +52,8 @@ public final class UnstableGrailSort extends UnstableGrailSorting {
         super(arrayVisualizer);
 
         this.setSortListName("Unstable Grail");
-        // this.setRunAllID("Grail Sort (Block Merge Sort)");
-        // this.setRunAllSortsName("Grail Sort [Block Merge Sort]");
+        //this.setRunAllID("Grail Sort (Block Merge Sort)");
+        //this.setRunAllSortsName("Grail Sort [Block Merge Sort]");
         this.setRunAllSortsName("Unstable Grailsort");
         this.setRunSortName("Unstable Grailsort");
         this.setCategory("Hybrid Sorts");

@@ -2,8 +2,7 @@ package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.GrailSorting;
-import io.github.arrayv.utils.IndexedRotations;
-import io.github.arrayv.utils.Searches;
+import io.github.arrayv.utils.Rotations;
 
 public final class BlockInsertionSort extends GrailSorting {
     public BlockInsertionSort(ArrayVisualizer arrayVisualizer) {
@@ -20,114 +19,68 @@ public final class BlockInsertionSort extends GrailSorting {
         this.setBogoSort(false);
     }
 
-    private void rotate(int[] array, int a, int m, int b) {
-        Highlights.clearMark(2);
-        IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
+    protected void grailRotate(int[] array, int pos, int lenA, int lenB) {
+        Rotations.holyGriesMills(array, pos, lenA, lenB, 1, true, false);
     }
 
-    private void inPlaceMerge(int[] array, int a, int m, int b) {
-        int i = a;
-        int j = m;
-        int k;
-
-        while (i < j && j < b) {
-            if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
-                k = Searches.leftExpSearch(array, j + 1, b, array[i], 0);
-                this.rotate(array, i, j, k);
-
-                i += k - j;
-                j = k;
-            } else
-                i++;
+    private void insert1(int[] array, int a, int l) {
+        int tmp = array[l--];
+        while (l >= a && Reads.compareValues(array[l], tmp) > 0) {
+            Writes.write(array, l + 1, array[l], 1, true, false);
+            l--;
         }
+        Writes.write(array, l + 1, tmp, 1, true, false);
     }
 
-    private void inPlaceMergeBW(int[] array, int a, int m, int b) {
-        int i = m - 1;
-        int j = b - 1;
-        int k;
-
-        while (j > i && i >= a) {
-            if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
-                k = Searches.rightExpSearch(array, a, i, array[j], 0);
-                this.rotate(array, k, i + 1, j + 1);
-
-                j -= (i + 1) - k;
-                i = k - 1;
-            } else
-                j--;
+    private void insert2(int[] array, int a, int l, int r) {
+        int tmpL = array[l--];
+        int tmpR = array[r];
+        while (l >= a && Reads.compareValues(array[l], tmpR) > 0) {
+            Writes.write(array, l + 2, array[l], 1, true, false);
+            l--;
         }
+        Writes.write(array, l + 2, tmpR, 1, true, false);
+        while (l >= a && Reads.compareValues(array[l], tmpL) > 0) {
+            Writes.write(array, l + 1, array[l], 1, true, false);
+            l--;
+        }
+        Writes.write(array, l + 1, tmpL, 1, true, false);
     }
 
-    private void mergeWithoutBuf(int[] array, int a, int m, int b) {
-        if (m - a > b - m)
-            this.inPlaceMergeBW(array, a, m, b);
-        else
-            this.inPlaceMerge(array, a, m, b);
-    }
-
-    private void insert2(int[] array, int a, int l, int r, double delay) { // credit to aphitorite for making it binary
-                                                                           // instead of
-        // linear
-        int t1 = array[l];
-        int t2 = array[r];
-
-        int m1 = Searches.rightExpSearch(array, a, l, t2, delay);
-        Writes.arraycopy(array, m1, array, m1 + 2, l - m1, delay / 2, true, false);
-        Writes.write(array, m1 + 1, t2, delay, true, false);
-
-        int m2 = Searches.rightExpSearch(array, a, m1, t1, delay);
-        Writes.arraycopy(array, m2, array, m2 + 1, m1 - m2, delay / 2, true, false);
-        Writes.write(array, m2, t1, delay / 2, true, false);
-    }
-
-    private int findRun(int[] array, int a, int b, double delay, boolean auxwrite) {
+    private int findRun(int[] array, int a, int b) {
         int i = a + 1;
         if (i == b)
             return i;
-        if (Reads.compareIndices(array, i - 1, i++, delay / 4, true) == 1) {
-            while (i < b && Reads.compareIndices(array, i - 1, i, delay / 4, true) == 1)
-                i++;
-            Writes.reversal(array, a, i - 1, delay / 2, true, auxwrite);
-        } else
-            while (i < b && Reads.compareIndices(array, i - 1, i, delay / 4, true) <= 0)
-                i++;
+        if(Reads.compareIndices(array, i - 1, i++, 1, true) == 1) {
+            while(i < b && Reads.compareIndices(array, i - 1, i, 1, true) == 1) i++;
+            Writes.reversal(array, a, i - 1, 1, true, false);
+        }
+        else while(i < b && Reads.compareIndices(array, i - 1, i, 1, true) <= 0) i++;
         Highlights.clearMark(2);
         return i;
     }
 
-    public void insertionSort(int[] array, int a, int b, double delay, boolean auxwrite) {
-        int i;
-        int j;
-        int len;
-        i = findRun(array, a, b, delay, auxwrite);
+    public void insertionSort(int[] array, int a, int b) {
+        int i, j, len;
+        i = findRun(array, a, b);
         while (i < b) {
-            j = findRun(array, i, b, delay, auxwrite);
+            j = findRun(array, i, b);
             len = j - i;
             if (len < 3) {
                 if (len == 2) {
-                    insert2(array, a, i, i + 1, delay);
-                    // Could replace it with the grailLazyMerge, but keeping this to make sure it's
-                    // perfectly swapless regardless of rotation used
+                    insert2(array, a, i, i + 1);
                 } else {
-                    Searches.insertTo(array, i, Searches.rightExpSearch(array, a, i, array[i], delay), delay, auxwrite); // taken
-                    // from
-                    // Laziest Stable
+                    insert1(array, a, i);
                 }
-
             } else {
-                mergeWithoutBuf(array, a, i - a, j);
+                grailMergeWithoutBuffer(array, a, i - a, len);
             }
             i = j;
         }
     }
 
-    public void customInsertSort(int[] array, int start, int end, double delay, boolean auxwrite) {
-        insertionSort(array, start, end, delay, auxwrite);
-    }
-
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        insertionSort(array, 0, currentLength, 1, false);
+        insertionSort(array, 0, currentLength);
     }
 }

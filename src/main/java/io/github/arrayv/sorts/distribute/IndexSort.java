@@ -55,8 +55,7 @@ public final class IndexSort extends Sort {
                 Writes.swap(array, i, array[i] - min, 0.5, true, false);
                 cmpCount++;
             }
-            if (cmpCount >= sortLength - 1)
-                break;
+            if (cmpCount >= sortLength - 1) break;
             Highlights.clearMark(1);
             Highlights.clearMark(2);
             Delays.sleep(1);

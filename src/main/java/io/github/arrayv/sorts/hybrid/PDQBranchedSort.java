@@ -38,12 +38,12 @@ public final class PDQBranchedSort extends PDQSorting {
 
     public void customSort(int[] array, int low, int high) {
         this.newHeapSorter(new MaxHeapSort(this.arrayVisualizer));
-        pdqLoop(array, low, high, false, pdqLog(high - low), 0);
+        pdqLoop(array, low, high, false, pdqLog(high - low));
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
         this.newHeapSorter(new MaxHeapSort(this.arrayVisualizer));
-        pdqLoop(array, 0, currentLength, false, pdqLog(currentLength), 0);
+        pdqLoop(array, 0, currentLength, false, pdqLog(currentLength));
     }
 }

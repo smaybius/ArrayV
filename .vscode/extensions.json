@@ -1,7 +1,6 @@
 {
     "recommendations": [
-        "shengchen.vscode-checkstyle",
-        "visualstudioexptteam.vscodeintellicode",
-        "walkme.java-extension-pack"
+        "vscjava.vscode-java-pack",
+        "shengchen.vscode-checkstyle"
     ]
 }

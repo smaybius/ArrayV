@@ -46,38 +46,31 @@ public final class BlockSwapMergeSort extends Sort {
     }
 
     private void multiSwap(int[] array, int a, int b, int len) {
-        for (int i = 0; i < len; i++)
-            Writes.swap(array, a + i, b + i, 1, true, false);
+        for(int i = 0; i < len; i++)
+            Writes.swap(array, a+i, b+i, 1, true, false);
     }
 
     private int binarySearchMid(int[] array, int start, int mid, int end) {
-        int a = 0, b = Math.min(mid - start, end - mid), m = a + (b - a) / 2;
+        int a = 0, b = Math.min(mid-start, end-mid), m = a+(b-a)/2;
 
-        while (b > a) {
-            if (Reads.compareIndices(array, mid - m - 1, mid + m, 1, true) == 1)
-                a = m + 1;
+        while(b > a) {
+            if(Reads.compareValues(array[mid-m-1], array[mid+m]) == 1)
+                a = m+1;
             else
                 b = m;
 
-            m = a + (b - a) / 2;
+            m = a+(b-a)/2;
         }
 
         return m;
     }
 
-    public void multiSwapMerge(int[] array, int start, int mid, int end) { // backwards compatibility with extra sorts
-                                                                           // pack
-        multiSwapMerge(array, start, mid, end, 0);
-    }
-
-    public void multiSwapMerge(int[] array, int start, int mid, int end, int depth) {
+    public void multiSwapMerge(int[] array, int start, int mid, int end) {
         int m = this.binarySearchMid(array, start, mid, end);
 
-        while (m > 0) {
-            this.multiSwap(array, mid - m, mid, m);
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.multiSwapMerge(array, mid, mid + m, end, depth + 1);
+        while(m > 0) {
+            this.multiSwap(array, mid-m, mid, m);
+            this.multiSwapMerge(array, mid, mid+m, end);
 
             end = mid;
             mid -= m;
@@ -87,14 +80,14 @@ public final class BlockSwapMergeSort extends Sort {
     }
 
     public void multiSwapMergeSort(int[] array, int a, int b) {
-        int len = b - a, i;
+        int len = b-a, i;
 
-        for (int j = 1; j < len; j *= 2) {
-            for (i = a; i + 2 * j <= b; i += 2 * j)
-                this.multiSwapMerge(array, i, i + j, i + 2 * j, 0);
+        for(int j = 1; j < len; j *= 2) {
+            for(i = a; i + 2*j <= b; i += 2*j)
+                this.multiSwapMerge(array, i, i+j, i+2*j);
 
-            if (i + j < b)
-                this.multiSwapMerge(array, i, i + j, b, 0);
+            if(i + j < b)
+                this.multiSwapMerge(array, i, i+j, b);
         }
     }
 

@@ -61,13 +61,12 @@ public final class AATreeSort extends Sort {
 		/**
 		 * Recursively adds an element to the subtree whose root is this node
 		 *
-		 * @param addPointer A pointer to the array telling what element is to be
-		 *                   inserted
+		 * @param addPointer A pointer to the array telling what element is to be inserted
 		 * @return the Node at to be located at this point
 		 */
 		private Node add(int addPointer) {
 			// Case 1: If this is where to add the new element, create a node for it
-			if (this == NULL_NODE) {
+			if(this == NULL_NODE) {
 				Highlights.clearMark(2); // No longer comparing to previous leaves
 				return new Node(array, addPointer); // Create the node and return it
 			}
@@ -78,7 +77,7 @@ public final class AATreeSort extends Sort {
 			Highlights.markArray(2, pointer);
 
 			// Case 2: The element is smaller and thus belongs in the left subtree
-			if (Reads.compareValues(array[addPointer], array[pointer]) == -1) {
+			if(Reads.compareValues(array[addPointer], array[pointer]) == -1) {
 				Delays.sleep(0.25);
 
 				// Recursively get the root of the new left subtree
@@ -94,9 +93,9 @@ public final class AATreeSort extends Sort {
 				Delays.sleep(0.05);
 
 				// This handles the case where left subtree increased in height
-				if (left.level == level) {
-					if (level != right.level) // Often, a skew is all that's needed to
-						return skew(); // keep AA tree properties
+				if(left.level == level) {
+					if(level != right.level) // Often, a skew is all that's needed to
+						return skew();	   // keep AA tree properties
 
 					// Other times, we can skip the case where a skew is immediately
 					// followed by a split (i.e., a right rotation immediately
@@ -128,7 +127,7 @@ public final class AATreeSort extends Sort {
 
 			// This handles the case where right subtree's right subtree increased
 			// in height, requiring a split to keep AA tree properties
-			if (right.right.level == level)
+			if(right.right.level == level)
 				return split();
 
 			// Else, just return this node
@@ -194,15 +193,13 @@ public final class AATreeSort extends Sort {
 		 * the values of the original array to a sorted temporary array
 		 *
 		 * @param tempArray the temporary array to write the contents of the subtree to
-		 * @param location  a pointer to the location in the temporary array to which
-		 *                  the
-		 *                  contents of the current subtree should be written to
+		 * @param location a pointer to the location in the temporary array to which the
+		 * contents of the current subtree should be written to
 		 * @return The size of subtree, used to determine where the next value should be
-		 *         written to.
+		 * written to.
 		 */
 		private int writeToArray(int[] tempArray, int location) {
-			if (this == NULL_NODE)
-				return 0;
+			if(this == NULL_NODE) return 0;
 
 			int leftTreeSize = left.writeToArray(tempArray, location);
 			int newLocation = location + leftTreeSize;
@@ -223,7 +220,7 @@ public final class AATreeSort extends Sort {
 		Node root = NULL_NODE;
 
 		// This loop adds every element of the array to be sorted into the tree
-		for (int i = 0; i < length; i++) {
+		for(int i = 0; i < length; i++) {
 			Highlights.markArray(1, i); // Highlights the element being added
 			Node newRoot = root.add(i);
 
@@ -244,7 +241,7 @@ public final class AATreeSort extends Sort {
 		Highlights.clearMark(1); // No more elements being transferred to temporary array
 
 		// Write the contents of the temporary array back to the main array
-		for (int i = 0; i < length; i++) {
+		for(int i = 0; i < length; i++) {
 			Writes.write(array, i, tempArray[i], 1, true, false);
 		}
 	}

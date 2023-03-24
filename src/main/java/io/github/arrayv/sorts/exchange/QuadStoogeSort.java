@@ -30,7 +30,7 @@ public final class QuadStoogeSort extends Sort {
 
 	}
 
-	private void quadStooge(int[] array, int pos, int len, int depth) {
+	private void quadStooge(int[] array, int pos, int len) {
 		if (len >= 2 && this.Reads.compareIndices(array, pos, pos + len - 1, 0.0025D, true) == 1) {
 			this.Writes.swap(array, pos, pos + len - 1, 0.005D, true, false);
 		}
@@ -41,27 +41,20 @@ public final class QuadStoogeSort extends Sort {
 		int len1 = len / 2;
 		int len2 = (len + 1) / 2;
 		int len3 = (len1 + 1) / 2 + (len2 + 1) / 2;
-		Writes.recordDepth(depth);
-		Writes.recursion();
-		quadStooge(array, pos, len1, depth + 1);
-		Writes.recursion();
-		quadStooge(array, pos + len1, len2, depth + 1);
-		Writes.recursion();
-		quadStooge(array, pos + len1 / 2, len3, depth + 1);
-		Writes.recursion();
-		quadStooge(array, pos + len1, len2, depth + 1);
-		Writes.recursion();
-		quadStooge(array, pos, len1, depth + 1);
+
+		quadStooge(array, pos, len1);
+		quadStooge(array, pos + len1, len2);
+		quadStooge(array, pos + len1 / 2, len3);
+		quadStooge(array, pos + len1, len2);
+		quadStooge(array, pos, len1);
 		if (len > 3) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			quadStooge(array, pos + len1 / 2, len3, depth + 1);
+			quadStooge(array, pos + len1 / 2, len3);
 		}
 	}
 
 	@Override
 	public void runSort(int[] array, int sortLength, int bucketCount) {
-		quadStooge(array, 0, sortLength, 0);
+		quadStooge(array, 0, sortLength);
 
 	}
 

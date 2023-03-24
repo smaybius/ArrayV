@@ -26,11 +26,11 @@ public final class BinomialHeapSort extends Sort {
 			do {
 				focus = maxNode;
 				for (depth = 1; (focus & depth) == 0; depth *= 2) {
-					if (Reads.compareIndices(array, focus - depth - 1, maxNode - 1, 0.2, true) > 0)
+					if (Reads.compareValues(array[focus - depth - 1], array[maxNode - 1]) > 0)
 						maxNode = (focus - depth);
 				}
 				if (focus != maxNode) {
-					Writes.swap(array, focus - 1, maxNode - 1, 0.5, true, false);
+					Writes.swap(array, focus - 1, maxNode - 1, 1, true, false);
 				}
 			} while (focus != maxNode);
 		}
@@ -39,7 +39,7 @@ public final class BinomialHeapSort extends Sort {
 			focus = index;
 			for (depth = 1; focus != 0; depth *= 2) {
 				if ((focus & depth) != 0) {
-					if (Reads.compareIndices(array, focus - 1, maxNode - 1, 0.2, true) > 0)
+					if (Reads.compareValues(array[focus - 1], array[maxNode - 1]) > 0)
 						maxNode = focus;
 					focus -= depth;
 				}
@@ -47,10 +47,10 @@ public final class BinomialHeapSort extends Sort {
 			if (maxNode != index) {
 				focus = index;
 				do {
-					Writes.swap(array, focus - 1, maxNode - 1, 0.5, true, false);
+					Writes.swap(array, focus - 1, maxNode - 1, 1, true, false);
 					focus = maxNode;
 					for (depth = 1; (focus & depth) == 0; depth *= 2) {
-						if (Reads.compareIndices(array, focus - depth - 1, maxNode - 1, 0.2, true) > 0)
+						if (Reads.compareValues(array[focus - depth - 1], array[maxNode - 1]) > 0)
 							maxNode = (focus - depth);
 					}
 				} while (focus != maxNode);

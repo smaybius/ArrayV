@@ -28,9 +28,9 @@ public final class OddEvenMergeSortIterative extends Sort {
             for (int k = p; k > 0; k /= 2)
                 for (int j = k % p; j + k < sortLength; j += k + k)
                     for (int i = 0; i < k; i++)
-                        if ((i + j) / (p + p) == (i + j + k) / (p + p))
-                            if (i + j + k < sortLength)
-                                if (Reads.compareIndices(array, i + j, i + j + k, 0.5, true) > 0)
+                        if ((i + j)/(p + p) == (i + j + k)/(p + p))
+                            if(i + j + k < sortLength)
+                                if(Reads.compareIndices(array, i + j, i + j + k, 0.5, true) > 0)
                                     Writes.swap(array, i + j, i + j + k, 0.5, true, false);
     }
 }

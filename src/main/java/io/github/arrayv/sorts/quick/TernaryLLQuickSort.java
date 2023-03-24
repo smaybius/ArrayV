@@ -6,8 +6,8 @@ import io.github.arrayv.sorts.templates.Sort;
 
 /**
  * @author Timo Bingmann
- *         Implemented in ArrayV by Gaming32
- *         https://github.com/bingmann/sound-of-sorting/blob/master/src/SortAlgo.cpp#L536-L595
+ * Implemented in ArrayV by Gaming32
+ * https://github.com/bingmann/sound-of-sorting/blob/master/src/SortAlgo.cpp#L536-L595
  */
 @SortMeta(
     listName = "Ternary LL Quick",
@@ -42,8 +42,8 @@ public final class TernaryLLQuickSort extends Sort {
             return hi - 1;
 
         return compare(A, lo, mid) < 0
-                ? (compare(A, mid, hi - 1) < 0 ? mid : (compare(A, lo, hi - 1) < 0 ? hi - 1 : lo))
-                : (compare(A, mid, hi - 1) > 0 ? mid : (compare(A, lo, hi - 1) < 0 ? lo : hi - 1));
+            ? (compare(A, mid, hi - 1) < 0 ? mid : (compare(A, lo, hi - 1) < 0 ? hi - 1 : lo))
+            : (compare(A, mid, hi - 1) > 0 ? mid : (compare(A, lo, hi - 1) < 0 ? lo : hi - 1));
     }
 
     private PivotPair partitionTernaryLL(int[] A, int lo, int hi) {
@@ -61,7 +61,8 @@ public final class TernaryLLQuickSort extends Sort {
                 Writes.swap(A, --k, j, 1, true, false);
                 --j;
                 Highlights.markArray(4, k);
-            } else if (cmp < 0) {
+            }
+            else if (cmp < 0) {
                 Writes.swap(A, i++, j, 1, true, false);
                 Highlights.markArray(3, i);
             }
@@ -77,19 +78,17 @@ public final class TernaryLLQuickSort extends Sort {
         return new PivotPair(i, j);
     }
 
-    private void quickSortTernaryLL(int[] A, int lo, int hi, int depth) {
+    private void quickSortTernaryLL(int[] A, int lo, int hi) {
         if (lo + 1 < hi) {
             PivotPair mid = partitionTernaryLL(A, lo, hi);
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            quickSortTernaryLL(A, lo, mid.first, depth + 1);
-            Writes.recursion();
-            quickSortTernaryLL(A, mid.second, hi, depth + 1);
+
+            quickSortTernaryLL(A, lo, mid.first);
+            quickSortTernaryLL(A, mid.second, hi);
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        quickSortTernaryLL(array, 0, currentLength, 0);
+        quickSortTernaryLL(array, 0, currentLength);
     }
 }

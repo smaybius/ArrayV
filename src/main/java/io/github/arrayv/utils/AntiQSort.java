@@ -17,8 +17,7 @@ public class AntiQSort {
     }
 
     public int compare(int ap, int bp) {
-        int a;
-        int b;
+        int a, b;
         if (!this.hasCandidate) {
             this.candidate = 0;
             this.hasCandidate = true;
@@ -27,12 +26,11 @@ public class AntiQSort {
         a = ap;
         b = bp;
 
-        if (data[a] == gas && data[b] == gas) {
+        if (data[a] == gas && data[b] == gas)
             if (a == candidate)
                 data[a] = frozen++;
             else
                 data[b] = frozen++;
-        }
 
         if (data[a] == gas) {
             candidate = a;

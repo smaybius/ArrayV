@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.bogo;
+package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -6,7 +6,7 @@ import io.github.arrayv.sorts.templates.BogoSorting;
 /*
  *
 MIT License
- 
+
 Copyright (c) 2021 EmeraldBlock
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -49,7 +49,7 @@ public final class MergeBogoSort extends BogoSorting {
     }
 
     private void bogoWeave(int[] array, int[] tmp, int start, int mid, int end) {
-        this.bogoCombo(array, start, end, end - mid, false);
+        this.bogoCombo(array, start, end, end-mid, false);
 
         int low = start;
         int high = mid;
@@ -62,18 +62,14 @@ public final class MergeBogoSort extends BogoSorting {
         }
     }
 
-    private void mergeBogo(int[] array, int[] tmp, int start, int end, int depth) {
-        if (start >= end - 1)
-            return;
+    private void mergeBogo(int[] array, int[] tmp, int start, int end) {
+        if (start >= end-1) return;
 
-        int mid = (start + end) / 2;
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        mergeBogo(array, tmp, start, mid, depth + 1);
-        Writes.recursion();
-        mergeBogo(array, tmp, mid, end, depth + 1);
+        int mid = (start+end)/2;
+        mergeBogo(array, tmp, start, mid);
+        mergeBogo(array, tmp, mid, end);
 
-        Writes.arraycopy(array, start, tmp, start, end - start, this.delay, true, true);
+        Writes.arraycopy(array, start, tmp, start, end-start, this.delay, true, true);
 
         while (!this.isRangeSorted(array, start, end))
             bogoWeave(array, tmp, start, mid, end);
@@ -83,7 +79,7 @@ public final class MergeBogoSort extends BogoSorting {
     public void runSort(int[] array, int sortLength, int bucketCount) {
         int[] tmp = Writes.createExternalArray(sortLength);
 
-        mergeBogo(array, tmp, 0, sortLength, 0);
+        mergeBogo(array, tmp, 0, sortLength);
 
         Writes.deleteExternalArray(tmp);
     }

@@ -1,11 +1,11 @@
-package io.github.arrayv.sorts.bogo;
+package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
 
 /*
  *
-MIT License 
+MIT License
 
 Copyright (c) 2021 EmeraldBlock
 
@@ -49,8 +49,8 @@ public final class QuickBogoSort extends BogoSorting {
         this.setBogoSort(true);
     }
 
-    private int quickBogoSwap(int[] array, int start, int pivot, int end) {
-        for (int i = start; i < end; i++) {
+    private int quickBogoSwap(int[] array, int start, int pivot, int end){
+        for(int i = start; i < end; i++) {
             int j = BogoSorting.randInt(i, end);
             if (pivot == i)
                 pivot = j;
@@ -61,25 +61,23 @@ public final class QuickBogoSort extends BogoSorting {
         return pivot;
     }
 
-    private void quickBogo(int[] array, int start, int end, int depth) {
-        if (start >= end - 1)
+    private void quickBogo(int[] array, int start, int end) {
+        if (start >= end-1)
             return;
 
         int pivot = start;
         // worst-case pivot (linear distribution)
         // for (; pivot < end; ++pivot)
-        // if (array[pivot] == (start+end)/2) break;
+        //     if (array[pivot] == (start+end)/2) break;
         while (!isRangePartitioned(array, start, pivot, end))
             pivot = quickBogoSwap(array, start, pivot, end);
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        quickBogo(array, start, pivot, depth + 1);
-        Writes.recursion();
-        quickBogo(array, pivot + 1, end, depth + 1);
+
+        quickBogo(array, start, pivot);
+        quickBogo(array, pivot+1, end);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) {
-        quickBogo(array, 0, sortLength, 0);
+        quickBogo(array, 0, sortLength);
     }
 }

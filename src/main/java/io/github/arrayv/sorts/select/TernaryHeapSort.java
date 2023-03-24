@@ -35,46 +35,45 @@ public final class TernaryHeapSort extends Sort {
         return 3 * i + 3;
     }
 
-    private void maxHeapify(int[] array, int i, int depth) {
+    private void maxHeapify(int[] array, int i) {
 
         int leftChild = TernaryHeapSort.leftBranch(i);
         int rightChild = TernaryHeapSort.rightBranch(i);
         int middleChild = TernaryHeapSort.middleBranch(i);
         int largest;
 
-        largest = leftChild <= heapSize && Reads.compareIndices(array, leftChild, i, 0.1, true) > 0 ? leftChild : i;
+        largest = leftChild <= heapSize && Reads.compareValues(array[leftChild], array[i]) > 0 ? leftChild : i;
 
-        if (rightChild <= heapSize && Reads.compareIndices(array, rightChild, largest, 0.1, true) > 0) {
+        if(rightChild <= heapSize && Reads.compareValues(array[rightChild], array[largest]) > 0) {
             largest = rightChild;
         }
 
-        if (middleChild <= heapSize && Reads.compareIndices(array, middleChild, largest, 0.1, true) > 0) {
+        if(middleChild <= heapSize && Reads.compareValues(array[middleChild], array[largest]) > 0) {
             largest = middleChild;
         }
 
-        if (largest != i) {
+
+        if(largest != i) {
             Writes.swap(array, i, largest, 1, true, false);
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.maxHeapify(array, largest, depth + 1);
+            this.maxHeapify(array, largest);
         }
     }
 
-    public void buildMaxTernaryHeap(int[] array, int length) {
+    private void buildMaxTernaryHeap(int[] array, int length) {
         heapSize = length - 1;
-        for (int i = length - 1 / 3; i >= 0; i--)
-            this.maxHeapify(array, i, 0);
+        for(int i = length - 1  / 3; i >= 0; i--)
+            this.maxHeapify(array, i);
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         this.buildMaxTernaryHeap(array, length);
 
-        for (int i = length - 1; i >= 0; i--) {
-            Writes.swap(array, 0, i, 1, true, false); // add last element on array, i.e heap root
+        for(int i = length - 1; i >= 0; i--){
+            Writes.swap(array, 0, i, 1, true, false); //add last element on array, i.e heap root
 
-            heapSize = heapSize - 1; // shrink heap by 1
-            this.maxHeapify(array, 0, 0);
+            heapSize = heapSize - 1; //shrink heap by 1
+            this.maxHeapify(array, 0);
         }
     }
 }

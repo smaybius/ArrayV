@@ -1,5 +1,5 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
     "java.checkstyle.configuration": "${workspaceFolder}/checkstyle.xml",
     "java.checkstyle.version": "9.3",
     "java.completion.filteredTypes": [
@@ -8,6 +8,5 @@
         "jdk.*",
         "org.graalvm.*",
         "io.micrometer.shaded.*"
-    ],
-    "java.format.settings.url": "./eclipse-java-google-style.xml"
+    ]
 }

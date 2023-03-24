@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.bogo;
+package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -18,8 +18,7 @@ public final class RandomGuessSort extends BogoSorting {
         this.setBogoSort(false);
     }
 
-    // PROGRAMMER'S NOTE: This sort is intentionally bad, it is purposefully
-    // un-optimized.
+    // PROGRAMMER'S NOTE: This sort is intentionally bad, it is purposefully un-optimized.
     // OTHER PROGRAMMER'S NOTE: haha too bad this isn't even the same sort anymore
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
@@ -29,12 +28,12 @@ public final class RandomGuessSort extends BogoSorting {
         while (true) {
             // check if the array is stably sorted (doubles as duplicate-detection)
             boolean sorted = true;
-            for (int i = 0; i < length - 1; ++i) {
+            for (int i = 0; i < length-1; ++i) {
                 Highlights.markArray(1, i);
-                Highlights.markArray(2, i + 1);
+                Highlights.markArray(2, i+1);
                 Delays.sleep(this.delay);
-                int comp = Reads.compareIndices(array, loops[i], loops[i + 1], this.delay, true);
-                if (comp < 0 || comp == 0 && Reads.compareIndices(loops, i, i + 1, 0.1, true) < 0)
+                int comp = Reads.compareIndices(array, loops[i], loops[i+1], this.delay, true);
+                if (comp < 0 || comp == 0 && loops[i] < loops[i+1])
                     continue;
                 sorted = false;
                 break;

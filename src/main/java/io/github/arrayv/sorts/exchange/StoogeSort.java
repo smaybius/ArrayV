@@ -29,25 +29,22 @@ public final class StoogeSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private void stoogeSort(int[] A, int i, int j, int depth) {
-        if (Reads.compareIndices(A, i, j, 0.0025, true) == 1) {
-            Writes.swap(A, i, j, 0.005, true, false);
-        }
+	private void stoogeSort(int[] A, int i, int j) {
+	    if (Reads.compareIndices(A, i, j, 0.0025, true) == 1) {
+	        Writes.swap(A, i, j, 0.005, true, false);
+	    }
 
         if (j - i + 1 >= 3) {
-            int t = (j - i + 1) / 3;
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.stoogeSort(A, i, j - t, depth + 1);
-            Writes.recursion();
-            this.stoogeSort(A, i + t, j, depth + 1);
-            Writes.recursion();
-            this.stoogeSort(A, i, j - t, depth + 1);
-        }
-    }
+	        int t = (j - i + 1) / 3;
+
+	        this.stoogeSort(A, i, j-t);
+	        this.stoogeSort(A, i+t, j);
+	        this.stoogeSort(A, i, j-t);
+	    }
+	}
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.stoogeSort(array, 0, currentLength - 1, 0);
+        this.stoogeSort(array, 0, currentLength - 1);
     }
 }
