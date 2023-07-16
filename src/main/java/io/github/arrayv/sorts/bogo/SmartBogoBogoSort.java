@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -35,8 +35,10 @@ SOFTWARE.
  * This is then simplified so that no copy of the array is needed.
  * <ul>
  * <li>All but the last element of the array are sorted using Bogobogosort.
- * <li>If the last element of the sorted section is no greater than the last element of the array,
- * then the copy is sorted. Otherwise, the array is shuffled and the process is repeated.
+ * <li>If the last element of the sorted section is no greater than the last
+ * element of the array,
+ * then the copy is sorted. Otherwise, the array is shuffled and the process is
+ * repeated.
  * </ul>
  */
 public final class SmartBogoBogoSort extends BogoSorting {
@@ -54,19 +56,22 @@ public final class SmartBogoBogoSort extends BogoSorting {
         this.setBogoSort(true);
     }
 
-    private void smartBogoBogo(int[] array, int length) {
+    private void smartBogoBogo(int[] array, int length, int depth) {
         if (length == 1)
             return;
-
-        smartBogoBogo(array, length-1);
-        while (Reads.compareIndices(array, length-2, length-1, this.delay, true) > 0) {
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        smartBogoBogo(array, length - 1, depth + 1);
+        while (Reads.compareIndices(array, length - 2, length - 1, this.delay, true) > 0) {
             this.bogoSwap(array, 0, length, false);
-            smartBogoBogo(array, length-1);
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            smartBogoBogo(array, length - 1, depth + 1);
         }
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        smartBogoBogo(array, length);
+        smartBogoBogo(array, length, 0);
     }
 }

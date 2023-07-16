@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -44,24 +44,28 @@ public final class DeterministicBogoSort extends BogoSorting {
         this.setBogoSort(true);
     }
 
-    private boolean permutationSort(int[] array, int depth, int length) {
-        if (depth >= length-1)
+    private boolean permutationSort(int[] array, int depth, int length, int recursion) {
+        if (depth >= length - 1)
             return this.isArraySorted(array, length);
 
-        for (int i = length-1; i > depth; --i) {
-            if (permutationSort(array, depth+1, length))
+        for (int i = length - 1; i > depth; --i) {
+            Writes.recordDepth(recursion);
+            Writes.recursion();
+            if (permutationSort(array, depth + 1, length, recursion + 1))
                 return true;
 
-            if ((length-depth)%2 == 0)
+            if ((length - depth) % 2 == 0)
                 Writes.swap(array, depth, i, this.delay, true, false);
             else
-                Writes.swap(array, depth, length-1, this.delay, true, false);
+                Writes.swap(array, depth, length - 1, this.delay, true, false);
         }
-        return permutationSort(array, depth+1, length);
+        Writes.recordDepth(recursion);
+        Writes.recursion();
+        return permutationSort(array, depth + 1, length, recursion + 1);
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        permutationSort(array, 0, length);
+        permutationSort(array, 0, length, 0);
     }
 }

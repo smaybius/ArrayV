@@ -36,36 +36,41 @@ public final class PairwiseSortRecursive extends Sort {
         super(arrayVisualizer);
     }
 
-    private void pairwiserecursive(int[] array, int start, int end, int gap, double sleep) {
-        if (start == end - gap){
+    private void pairwiserecursive(int[] array, int start, int end, int gap, double sleep, int depth) {
+        if (start == end - gap) {
             return;
         }
         int b = start + gap;
-        while (b < end){
-            if(Reads.compareIndices(array, b - gap, b, sleep, true) == 1) {
+        while (b < end) {
+            if (Reads.compareIndices(array, b - gap, b, sleep, true) == 1) {
                 Writes.swap(array, b - gap, b, sleep, true, false);
             }
             b += (2 * gap);
         }
-        if (((end - start) / gap)%2 == 0){
-            this.pairwiserecursive(array, start, end, gap * 2, sleep);
-            this.pairwiserecursive(array, start + gap, end + gap, gap * 2, sleep);
-        }
-        else{
-            this.pairwiserecursive(array, start, end + gap, gap * 2, sleep);
-            this.pairwiserecursive(array, start + gap, end, gap * 2, sleep);
+        if (((end - start) / gap) % 2 == 0) {
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.pairwiserecursive(array, start, end, gap * 2, sleep, depth + 1);
+            Writes.recursion();
+            this.pairwiserecursive(array, start + gap, end + gap, gap * 2, sleep, depth + 1);
+        } else {
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            this.pairwiserecursive(array, start, end + gap, gap * 2, sleep, depth + 1);
+            Writes.recursion();
+            this.pairwiserecursive(array, start + gap, end, gap * 2, sleep, depth + 1);
         }
         int a = 1;
-        while (a < ((end - start) / gap)){
+        while (a < ((end - start) / gap)) {
             a = (a * 2) + 1;
         }
         b = start + gap;
-        while (b + gap < end){
+        while (b + gap < end) {
             int c = a;
-            while (c > 1){
+            while (c > 1) {
                 c /= 2;
-                if (b + (c * gap) < end){
-                    if(Reads.compareIndices(array, b, b + (c * gap), sleep, true) == 1) {
+                if (b + (c * gap) < end) {
+                    if (Reads.compareIndices(array, b, b + (c * gap), sleep, true) == 1) {
                         Writes.swap(array, b, b + (c * gap), sleep, true, false);
                     }
                 }
@@ -76,6 +81,6 @@ public final class PairwiseSortRecursive extends Sort {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.pairwiserecursive(array, 0, sortLength, 1, 0.5);
+        this.pairwiserecursive(array, 0, sortLength, 1, 0.5, 0);
     }
 }

@@ -56,7 +56,8 @@ public final class SwaplessBubbleSort extends Sort {
                     Writes.write(array, j - 1, array[j], 0.075, false, false);
                     last = j;
                 } else {
-                    // This code will also handle incrementing pos so this optimization works next time
+                    // This code will also handle incrementing pos so this optimization works next
+                    // time
                     if (pos + 1 < j)
                         Writes.write(array, j - 1, comp, 0.075, false, false);
                     pos = j;

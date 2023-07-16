@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.exchange;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -30,7 +30,8 @@ SOFTWARE.
  */
 
 /**
- * Bubble Bogosort is like Bubble Sort, but randomly sorts adjacent pairs of elements until the array is sorted.
+ * Bubble Bogosort is like Bubble Sort, but randomly sorts adjacent pairs of
+ * elements until the array is sorted.
  */
 public final class BubbleBogoSort extends BogoSorting {
     public BubbleBogoSort(ArrayVisualizer arrayVisualizer) {
@@ -50,10 +51,10 @@ public final class BubbleBogoSort extends BogoSorting {
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         while (!this.isRangeSorted(array, 0, length, false, true)) {
-            int index = BogoSorting.randInt(0, length-1);
+            int index = BogoSorting.randInt(0, length - 1);
 
-            if (Reads.compareIndices(array, index, index+1, this.delay, true) > 0)
-                Writes.swap(array, index, index+1, this.delay, true, false);
+            if (Reads.compareIndices(array, index, index + 1, this.delay, true) > 0)
+                Writes.swap(array, index, index + 1, this.delay, true, false);
         }
     }
 }

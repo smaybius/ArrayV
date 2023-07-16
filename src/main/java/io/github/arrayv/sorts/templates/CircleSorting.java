@@ -21,7 +21,7 @@ public abstract class CircleSorting extends Sort {
 
     protected int end;
 
-    protected int circleSortRoutine(int[] array, int lo, int hi, int swapCount, double sleep) {
+    protected int circleSortRoutine(int[] array, int lo, int hi, int swapCount, double sleep, int depth) {
         if (lo == hi)
             return swapCount;
 
@@ -38,10 +38,14 @@ public abstract class CircleSorting extends Sort {
             lo++;
             hi--;
         }
-
-        swapCount = this.circleSortRoutine(array, low, low + mid, swapCount, sleep);
-        if(low + mid + 1 < this.end)
-            swapCount = this.circleSortRoutine(array, low + mid + 1, high, swapCount, sleep);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        swapCount = this.circleSortRoutine(array, low, low + mid, swapCount, sleep, depth + 1);
+        if (low + mid + 1 < this.end) {
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            swapCount = this.circleSortRoutine(array, low + mid + 1, high, swapCount, sleep, depth + 1);
+        }
 
         return swapCount;
     }

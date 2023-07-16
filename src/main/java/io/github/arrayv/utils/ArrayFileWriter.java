@@ -33,7 +33,6 @@ public final class ArrayFileWriter {
     }
 
     private static void write(FileWriter writer, int[] array, int length) throws IOException {
-        // FileWriter writer = new FileWriter(outName);
         for (int i = 0; i < length - 1; i++) {
             writer.write(array[i] + " ");
         }

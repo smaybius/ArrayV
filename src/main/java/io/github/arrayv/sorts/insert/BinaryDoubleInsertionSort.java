@@ -45,35 +45,36 @@ public final class BinaryDoubleInsertionSort extends Sort {
 	}
 
 	private int leftBinarySearch(int[] array, int a, int b, int val, double sleep) {
-		while(a < b) {
-			int m = a+(b-a)/2;
+		while (a < b) {
+			int m = a + (b - a) / 2;
 
 			Highlights.markArray(1, a);
 			Highlights.markArray(2, m);
 			Highlights.markArray(3, b);
 			Delays.sleep(sleep);
 
-			if(Reads.compareValues(val, array[m]) <= 0)
+			if (Reads.compareValues(val, array[m]) <= 0)
 				b = m;
 			else
-				a = m+1;
+				a = m + 1;
 		}
 
 		return a;
 	}
+
 	private int rightBinarySearch(int[] array, int a, int b, int val, double sleep) {
-		while(a < b) {
-			int m = a+(b-a)/2;
+		while (a < b) {
+			int m = a + (b - a) / 2;
 
 			Highlights.markArray(1, a);
 			Highlights.markArray(2, m);
 			Highlights.markArray(3, b);
 			Delays.sleep(sleep);
 
-			if(Reads.compareValues(val, array[m]) < 0)
+			if (Reads.compareValues(val, array[m]) < 0)
 				b = m;
 			else
-				a = m+1;
+				a = m + 1;
 		}
 
 		return a;
@@ -82,42 +83,45 @@ public final class BinaryDoubleInsertionSort extends Sort {
 	private void insertToLeft(int[] array, int a, int b, int temp, double sleep) {
 		Highlights.clearMark(2);
 
-		while(a > b) Writes.write(array, a, array[--a], sleep, true, false);
+		while (a > b)
+			Writes.write(array, a, array[--a], sleep, true, false);
 		Writes.write(array, b, temp, sleep, true, false);
 	}
+
 	private void insertToRight(int[] array, int a, int b, int temp, double sleep) {
 		Highlights.clearMark(2);
 
-		while(a < b) Writes.write(array, a, array[++a], sleep, true, false);
+		while (a < b)
+			Writes.write(array, a, array[++a], sleep, true, false);
 		Writes.write(array, a, temp, sleep, true, false);
 	}
 
 	public void doubleInsertion(int[] array, int a, int b, double compSleep, double sleep) {
-		if(b-a < 2) return;
+		if (b - a < 2)
+			return;
 
-		int j = a+(b-a-2)/2+1, i = a+(b-a-1)/2;
+		int j = a + (b - a - 2) / 2 + 1, i = a + (b - a - 1) / 2;
 
-		if(j > i && Reads.compareIndices(array, i, j, compSleep, true) == 1)
+		if (j > i && Reads.compareIndices(array, i, j, compSleep, true) == 1)
 			Writes.swap(array, i, j, compSleep, true, false);
 
 		i--;
 		j++;
 
-		while(j < b) {
-			if(Reads.compareIndices(array, i, j, compSleep, true) == 1) {
+		while (j < b) {
+			if (Reads.compareIndices(array, i, j, compSleep, true) == 1) {
 				int l = array[j];
 				int r = array[i];
 
-				int m = this.rightBinarySearch(array, i+1, j, l, compSleep);
-				this.insertToRight(array, i, m-1, l, sleep);
+				int m = this.rightBinarySearch(array, i + 1, j, l, compSleep);
+				this.insertToRight(array, i, m - 1, l, sleep);
 				this.insertToLeft(array, j, this.leftBinarySearch(array, m, j, r, compSleep), r, sleep);
-			}
-			else {
+			} else {
 				int l = array[i];
 				int r = array[j];
 
-				int m = this.leftBinarySearch(array, i+1, j, l, compSleep);
-				this.insertToRight(array, i, m-1, l, sleep);
+				int m = this.leftBinarySearch(array, i + 1, j, l, compSleep);
+				this.insertToRight(array, i, m - 1, l, sleep);
 				this.insertToLeft(array, j, this.rightBinarySearch(array, m, j, r, compSleep), r, sleep);
 			}
 			i--;

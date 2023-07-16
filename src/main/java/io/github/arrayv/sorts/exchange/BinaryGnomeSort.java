@@ -33,10 +33,10 @@ public final class BinaryGnomeSort extends Sort {
 
                 Delays.sleep(1);
 
-                if (Reads.compareValues(num, array[mid]) < 0) { // do NOT shift equal elements past each other; this maintains stability!
+                if (Reads.compareValues(num, array[mid]) < 0) { // do NOT shift equal elements past each other; this
+                                                                // maintains stability!
                     hi = mid;
-                }
-                else {
+                } else {
                     lo = mid + 1;
                 }
             }

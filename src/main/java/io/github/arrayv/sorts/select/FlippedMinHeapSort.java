@@ -36,7 +36,8 @@ public final class FlippedMinHeapSort extends Sort {
         this.setUnreasonableLimit(0);
         this.setBogoSort(false);
     }
-    private void siftDown(int[] array, int length, int root, int dist) {
+
+    public void siftDown(int[] array, int length, int root, int dist) {
         while (root <= dist / 2) {
             int leaf = 2 * root;
             if (leaf < dist && Reads.compareValues(array[length - leaf], array[length - leaf - 1]) == 1) {
@@ -48,9 +49,11 @@ public final class FlippedMinHeapSort extends Sort {
             if (Reads.compareValues(array[length - root], array[length - leaf]) == 1) {
                 Writes.swap(array, length - root, length - leaf, 0, true, false);
                 root = leaf;
-            } else break;
+            } else
+                break;
         }
     }
+
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         for (int i = length / 2; i >= 1; i--) {

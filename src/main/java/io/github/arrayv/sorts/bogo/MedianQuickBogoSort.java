@@ -1,10 +1,10 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
 
 /*
- *
+ * 
 MIT License
 
 Copyright (c) 2021 EmeraldBlock
@@ -30,7 +30,8 @@ SOFTWARE.
  */
 
 /**
- * Median Quick Bogosort repeatedly shuffles the array until the left and right halves are split.
+ * Median Quick Bogosort repeatedly shuffles the array until the left and right
+ * halves are split.
  * It then recursively sorts each half.
  */
 public final class MedianQuickBogoSort extends BogoSorting {
@@ -48,20 +49,22 @@ public final class MedianQuickBogoSort extends BogoSorting {
         this.setBogoSort(true);
     }
 
-    private void medianQuickBogo(int[] array, int start, int end) {
-        if (start >= end-1)
+    private void medianQuickBogo(int[] array, int start, int end, int depth) {
+        if (start >= end - 1)
             return;
 
-        int mid = (start+end)/2;
+        int mid = (start + end) / 2;
         while (!isRangeSplit(array, start, mid, end))
             this.bogoSwap(array, start, end, false);
-
-        medianQuickBogo(array, start, mid);
-        medianQuickBogo(array, mid, end);
+        Writes.recordDepth(depth);
+        Writes.recursion();
+        medianQuickBogo(array, start, mid, depth + 1);
+        Writes.recursion();
+        medianQuickBogo(array, mid, end, depth + 1);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) {
-        medianQuickBogo(array, 0, sortLength);
+        medianQuickBogo(array, 0, sortLength, 0);
     }
 }

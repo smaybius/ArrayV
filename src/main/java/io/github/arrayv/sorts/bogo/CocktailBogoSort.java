@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -6,7 +6,8 @@ import io.github.arrayv.sorts.templates.BogoSorting;
 /**
  * Cocktail Bogosort is a bidirectional variation of Less Bogosort.
  * It repeatedly shuffles the array,
- * dropping first and last remaining elements when they are in the correct place.
+ * dropping first and last remaining elements when they are in the correct
+ * place.
  */
 public final class CocktailBogoSort extends BogoSorting {
     public CocktailBogoSort(ArrayVisualizer arrayVisualizer) {
@@ -28,14 +29,14 @@ public final class CocktailBogoSort extends BogoSorting {
         int min = 0;
         int max = length;
 
-        while (min < max-1) {
+        while (min < max - 1) {
             if (this.isMinSorted(array, min, max)) {
                 Highlights.markArray(3, min);
                 ++min;
                 continue;
             }
             if (this.isMaxSorted(array, min, max)) {
-                Highlights.markArray(4, max-1);
+                Highlights.markArray(4, max - 1);
                 --max;
                 continue;
             }

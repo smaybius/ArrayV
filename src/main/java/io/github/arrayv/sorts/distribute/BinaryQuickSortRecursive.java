@@ -38,6 +38,6 @@ public final class BinaryQuickSortRecursive extends BinaryQuickSorting {
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         int mostSignificantBit = Reads.analyzeBit(array, sortLength);
-        this.binaryQuickSortRecursive(array, 0, sortLength - 1, mostSignificantBit);
+        this.binaryQuickSortRecursive(array, 0, sortLength - 1, mostSignificantBit, 0);
     }
 }

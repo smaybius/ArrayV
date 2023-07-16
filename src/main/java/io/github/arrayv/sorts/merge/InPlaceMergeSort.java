@@ -45,8 +45,8 @@ public final class InPlaceMergeSort extends Sort {
     }
 
     private void push(int[] array, int low, int high) {
-        for(int i = low; i < high; i++) {
-            if(Reads.compareValues(array[i], array[i + 1]) == 1) {
+        for (int i = low; i < high; i++) {
+            if (Reads.compareIndices(array, i, i + 1, 1, true) == 1) {
                 Writes.swap(array, i, i + 1, 0.035, true, false);
             }
         }
@@ -54,8 +54,8 @@ public final class InPlaceMergeSort extends Sort {
 
     private void merge(int[] array, int min, int max, int mid) {
         int i = min;
-        while(i <= mid) {
-            if(Reads.compareValues(array[i], array[mid + 1]) == 1){
+        while (i <= mid) {
+            if (Reads.compareIndices(array, i, mid + 1, 0.2, true) == 1) {
                 Writes.swap(array, i, mid + 1, 0.035, true, false);
                 push(array, mid + 1, max);
             }
@@ -64,26 +64,26 @@ public final class InPlaceMergeSort extends Sort {
         }
     }
 
-    private void mergeSort(int[] array, int min,int max) {
-        if(max - min == 0) {      //only one element.
-            Delays.sleep(1);      //no swap
-        }
-        else if(max - min == 1) { //only two elements and swaps them
-            if(Reads.compareValues(array[min], array[max]) == 1) {
+    private void mergeSort(int[] array, int min, int max, int depth) {
+        if (max - min == 0) { // only one element.
+            Delays.sleep(1); // no swap
+        } else if (max - min == 1) { // only two elements and swaps them
+            if (Reads.compareIndices(array, min, max, 0.1, true) == 1) {
                 Writes.swap(array, min, max, 0.035, true, false);
             }
-        }
-        else {
-            int mid = ((int) Math.floor((min + max) / 2)); //The midpoint
-
-            mergeSort(array, min, mid);      //sort the left side
-            mergeSort(array, mid + 1, max);  //sort the right side
-            merge(array, min, max, mid);     //combines them
+        } else {
+            int mid = ((int) Math.floor((min + max) / 2)); // The midpoint
+            Writes.recordDepth(depth);
+            Writes.recursion();
+            mergeSort(array, min, mid, depth + 1); // sort the left side
+            Writes.recursion();
+            mergeSort(array, mid + 1, max, depth + 1); // sort the right side
+            merge(array, min, max, mid); // combines them
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.mergeSort(array, 0, currentLength - 1);
+        this.mergeSort(array, 0, currentLength - 1, 0);
     }
 }

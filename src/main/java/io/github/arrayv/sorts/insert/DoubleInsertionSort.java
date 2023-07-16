@@ -71,8 +71,7 @@ public final class DoubleInsertionSort extends Sort {
                     pos--;
                 }
                 Writes.write(array, pos + 1, rightItem, sleep, true, auxwrite);
-            }
-            else {
+            } else {
                 leftItem = array[left];
                 rightItem = array[right];
 

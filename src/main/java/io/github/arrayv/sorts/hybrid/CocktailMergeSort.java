@@ -15,10 +15,14 @@ import io.github.arrayv.sorts.templates.TimSorting;
 // But hey, why not? ;)
 
 public class CocktailMergeSort extends Sort {
-    private TimSorting timSortInstance; // TimSort cannot be simply written off as an abstract class, as it creates an instance of itself
-                                        // in order to track its state. Plus, it contains both instance and static methods, requiring even
-                                        // more refactoring, which would be just doing unnecessary busy work. Instead of what we've done for
-                                        // the rest of the algorithms, we'll favor composition over inheritance here and pass "util" objects
+    private TimSorting timSortInstance; // TimSort cannot be simply written off as an abstract class, as it creates an
+                                        // instance of itself
+                                        // in order to track its state. Plus, it contains both instance and static
+                                        // methods, requiring even
+                                        // more refactoring, which would be just doing unnecessary busy work. Instead of
+                                        // what we've done for
+                                        // the rest of the algorithms, we'll favor composition over inheritance here and
+                                        // pass "util" objects
                                         // to it.
 
     public CocktailMergeSort(ArrayVisualizer arrayVisualizer) {
@@ -42,8 +46,7 @@ public class CocktailMergeSort extends Sort {
 
         if (sortLength == minRunLen) {
             cocktailShaker.runSort(array, sortLength, bucketCount);
-        }
-        else {
+        } else {
             int i = 0;
             for (; i <= (sortLength - minRunLen); i += minRunLen) {
                 cocktailShaker.customSort(array, i, i + minRunLen);

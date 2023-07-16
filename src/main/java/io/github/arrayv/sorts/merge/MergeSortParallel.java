@@ -48,10 +48,12 @@ public final class MergeSortParallel extends Sort {
 
 	private class MergeSort extends Thread {
 		private int a, b;
+
 		MergeSort(int a, int b) {
 			this.a = a;
 			this.b = b;
 		}
+
 		public void run() {
 			MergeSortParallel.this.mergeSort(a, b);
 		}
@@ -60,37 +62,38 @@ public final class MergeSortParallel extends Sort {
 	private void merge(int a, int m, int b) {
 		int i = a, j = m, k = a;
 
-		while(i < m && j < b) {
-			if(Reads.compareValues(array[i], array[j]) <= 0) {
+		while (i < m && j < b) {
+			if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
 				Highlights.markArray(1, i);
 				Writes.write(tmp, k++, array[i++], 1, false, true);
-			}
-			else {
+			} else {
 				Highlights.markArray(2, j);
 				Writes.write(tmp, k++, array[j++], 1, false, true);
 			}
 		}
-		while(i < m) {
+		while (i < m) {
 			Highlights.markArray(1, i);
 			Writes.write(tmp, k++, array[i++], 1, false, true);
 		}
-		while(j < b) {
+		while (j < b) {
 			Highlights.markArray(2, j);
 			Writes.write(tmp, k++, array[j++], 1, false, true);
 		}
 
 		Highlights.clearMark(2);
-		while(a < b) Writes.write(array, a, tmp[a++], 1, true, false);
+		while (a < b)
+			Writes.write(array, a, tmp[a++], 1, true, false);
 	}
 
 	private void mergeSort(int a, int b) {
-		int len = b-a;
+		int len = b - a;
 
-		if(len < 2) return;
+		if (len < 2)
+			return;
 
-		int m = (a+b)/2;
+		int m = (a + b) / 2;
 
-		MergeSort left  = new MergeSort(a, m);
+		MergeSort left = new MergeSort(a, m);
 		MergeSort right = new MergeSort(m, b);
 		left.start();
 		right.start();

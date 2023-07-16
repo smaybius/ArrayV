@@ -11,13 +11,14 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
 
     private static ArrayVisualizer arrayVisualizer;
     // @checkstyle:off StaticVariableNameCheck
-    private static Reads Reads;
-    private static Writes Writes;
+    private static Reads reads;
+    private static Writes writes;
     // @checkstyle:on StaticVariableNameCheck
 
     int[] internal;
     double growFactor;
-    int count, capacity;
+    int count;
+    int capacity;
 
     public ArrayVList() {
         this(DEFAULT_CAPACITY, DEFAULT_GROW_FACTOR);
@@ -30,8 +31,8 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
     public ArrayVList(int capacity, double growFactor) {
         if (arrayVisualizer == null) {
             arrayVisualizer = ArrayVisualizer.getInstance();
-            Reads = arrayVisualizer.getReads();
-            Writes = arrayVisualizer.getWrites();
+            reads = arrayVisualizer.getReads();
+            writes = arrayVisualizer.getWrites();
         }
         this.internal = new int[capacity];
         arrayVisualizer.getArrays().add(internal);
@@ -41,7 +42,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
     }
 
     public void delete() {
-        Writes.changeAllocAmount(-count);
+        writes.changeAllocAmount(-count);
         arrayVisualizer.getArrays().remove(internal);
         this.internal = null;
         this.count = 0;
@@ -77,15 +78,15 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
     public <T> T[] toArray(T[] a) {
         if (a.length < count) {
             for (int i = 0; i < count; i++) {
-                a[i] = (T)Integer.valueOf(internal[i]);
+                a[i] = (T) Integer.valueOf(internal[i]);
             }
             return a;
         }
-        return (T[])toArray();
+        return (T[]) toArray();
     }
 
     protected void grow() {
-        int newCapacity = (int)Math.ceil(capacity * growFactor);
+        int newCapacity = (int) Math.ceil(capacity * growFactor);
         int[] newInternal = new int[newCapacity];
         System.arraycopy(internal, 0, newInternal, 0, count);
         ArrayList<int[]> arrays = arrayVisualizer.getArrays();
@@ -98,8 +99,8 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
         if (count == capacity) {
             grow();
         }
-        Writes.write(internal, count++, e, sleep, mark, true);
-        Writes.changeAllocAmount(1);
+        writes.write(internal, count++, e, sleep, mark, true);
+        writes.changeAllocAmount(1);
         return true;
     }
 
@@ -111,9 +112,9 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
     private void fastRemove(int index) {
         int numMoved = count - index - 1;
         if (numMoved > 0)
-            Writes.arraycopy(internal, index + 1, internal, index, numMoved, 0, false, true);
+            writes.arraycopy(internal, index + 1, internal, index, numMoved, 0, false, true);
         internal[--count] = 0;
-        Writes.changeAllocAmount(-1);
+        writes.changeAllocAmount(-1);
     }
 
     @Override
@@ -159,7 +160,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
     @Override
     public void clear() {
         Arrays.fill(internal, 0, count, 0);
-        Writes.changeAllocAmount(-count);
+        writes.changeAllocAmount(-count);
         count = 0;
     }
 
@@ -171,7 +172,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
     public Integer set(int index, int element, double sleep, boolean mark) {
         rangeCheck(index);
         int old = internal[index];
-        Writes.write(internal, index, element, sleep, mark, true);
+        writes.write(internal, index, element, sleep, mark, true);
         return old;
     }
 
@@ -184,16 +185,17 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
         return "Index: " + index + ", Size: " + this.count;
     }
 
+    @Override
     protected void removeRange(int fromIndex, int toIndex) {
         int numMoved = count - toIndex;
         System.arraycopy(internal, toIndex, internal, fromIndex,
-                         numMoved);
+                numMoved);
 
         int sizeOffset = toIndex - fromIndex;
         int newSize = count - sizeOffset;
         Arrays.fill(internal, newSize, count, 0);
         count = newSize;
-        Writes.changeAllocAmount(-sizeOffset);
+        writes.changeAllocAmount(-sizeOffset);
     }
 
     private void rangeCheck(int index) {
@@ -203,7 +205,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
 
     @Override
     public void add(int index, Integer element) {
-
+        // TODO document why this method is empty
     }
 
     @Override
@@ -222,9 +224,9 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
         if (!(o instanceof Integer)) {
             return -1;
         }
-        int value = (Integer)o;
+        int value = (Integer) o;
         for (int i = 0; i < count; i++) {
-            if (Reads.compareValues(internal[i], value) == 0) {
+            if (reads.compareValues(internal[i], value) == 0) {
                 return i;
             }
         }
@@ -239,9 +241,9 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
         if (!(o instanceof Integer)) {
             return -1;
         }
-        int value = (Integer)o;
+        int value = (Integer) o;
         for (int i = count - 1; i >= 0; i--) {
-            if (Reads.compareValues(internal[i], value) == 0) {
+            if (reads.compareValues(internal[i], value) == 0) {
                 return i;
             }
         }
@@ -279,6 +281,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
             return ArrayVList.this.internal[lastRet = i];
         }
 
+        @Override
         public void remove() {
             if (lastRet < 0)
                 throw new IllegalStateException();
@@ -417,7 +420,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
 
         protected void removeRange(int fromIndex, int toIndex) {
             parent.removeRange(parentOffset + fromIndex,
-                               parentOffset + toIndex);
+                    parentOffset + toIndex);
             this.size -= toIndex - fromIndex;
         }
 
@@ -446,7 +449,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
         }
 
         private String outOfBoundsMsg(int index) {
-            return "Index: "+index+", Size: "+this.size;
+            return "Index: " + index + ", Size: " + this.size;
         }
 
         public Spliterator<Integer> spliterator() {
@@ -461,6 +464,6 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, j
             throw new IndexOutOfBoundsException("toIndex = " + toIndex);
         if (fromIndex > toIndex)
             throw new IllegalArgumentException("fromIndex(" + fromIndex +
-                                               ") > toIndex(" + toIndex + ")");
+                    ") > toIndex(" + toIndex + ")");
     }
 }

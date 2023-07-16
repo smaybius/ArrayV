@@ -57,12 +57,13 @@ public final class TreeSort extends Sort {
 		/**
 		 * Recursively adds an element to the subtree whose root is this node
 		 *
-		 * @param addPointer A pointer to the array telling what element is to be inserted
+		 * @param addPointer A pointer to the array telling what element is to be
+		 *                   inserted
 		 * @return the Node to be added at this point
 		 */
 		private Node add(int addPointer) {
 			// Case 1: If this is where to add the new element, create a node for it
-			if(this == NULL_NODE) {
+			if (this == NULL_NODE) {
 				Highlights.clearMark(1); // No longer comparing to previous leaves
 				return new Node(array, addPointer); // Create the new node and return it
 			}
@@ -73,7 +74,7 @@ public final class TreeSort extends Sort {
 			Highlights.markArray(2, pointer);
 
 			// Case 2: The element is smaller and thus belongs in the left subtree
-			if(Reads.compareValues(array[addPointer], array[pointer]) == -1) {
+			if (Reads.compareValues(array[addPointer], array[pointer]) == -1) {
 				Delays.sleep(0.25);
 
 				// Recursively get the root of the new left subtree
@@ -113,13 +114,15 @@ public final class TreeSort extends Sort {
 		 * the values of the original array to a sorted temporary array
 		 *
 		 * @param tempArray the temporary array to write the contents of the subtree to
-		 * @param location a pointer to the location in the temporary array to which the
-		 * contents of the current subtree should be written to
+		 * @param location  a pointer to the location in the temporary array to which
+		 *                  the
+		 *                  contents of the current subtree should be written to
 		 * @return The size of subtree, used to determine where the next value should be
-		 * written to.
+		 *         written to.
 		 */
 		private int writeToArray(int[] tempArray, int location) {
-			if(this == NULL_NODE) return 0;
+			if (this == NULL_NODE)
+				return 0;
 
 			int leftTreeSize = left.writeToArray(tempArray, location);
 			int newLocation = location + leftTreeSize;
@@ -139,8 +142,8 @@ public final class TreeSort extends Sort {
 		// Creates a tree of size 0, to which all elements will be added
 		Node root = NULL_NODE;
 
-	 // This loop adds every element of the array to be sorted into the tree
-		for(int i = 0; i < length; i++) {
+		// This loop adds every element of the array to be sorted into the tree
+		for (int i = 0; i < length; i++) {
 			Highlights.markArray(1, i);
 			Node newRoot = root.add(i);
 
@@ -161,7 +164,7 @@ public final class TreeSort extends Sort {
 		Highlights.clearMark(1); // No more elements being transferred to temporary array
 
 		// Write the contents of the temporary array back to the main array
-		for(int i = 0; i < length; i++) {
+		for (int i = 0; i < length; i++) {
 			Writes.write(array, i, tempArray[i], 1, true, false);
 		}
 	}

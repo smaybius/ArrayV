@@ -17,7 +17,8 @@ public final class GuessSort extends BogoSorting {
         this.setBogoSort(false);
     }
 
-    // PROGRAMMER'S NOTE: This sort is intentionally bad, it is purposefully un-optimized.
+    // PROGRAMMER'S NOTE: This sort is intentionally bad, it is purposefully
+    // un-optimized.
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         // "nested for-loop" with depth `length` to iterate over all n-tuples of indices

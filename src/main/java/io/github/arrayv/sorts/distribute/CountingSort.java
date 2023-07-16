@@ -61,15 +61,14 @@ public final class CountingSort extends Sort {
         }
 
         for (int i = sortLength - 1; i >= 0; i--) {
-            output[counts[array[i]] - 1] = array[i];
-            counts[array[i]]--;
+            Writes.write(output, counts[array[i]] - 1, array[i], 0.5, true, true);
+            Writes.write(counts, array[i], counts[array[i]] - 1, 0.5, true, true);
         }
 
         // Extra loop to simulate the results from the "output" array being written
         // to the visual array.
         for (int i = sortLength - 1; i >= 0; i--) {
             Writes.write(array, i, output[i], 1, true, false);
-            Writes.changeAuxWrites(1);
         }
 
         Writes.deleteExternalArray(output);

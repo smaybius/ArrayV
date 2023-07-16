@@ -1,4 +1,4 @@
-package io.github.arrayv.sorts.distribute;
+package io.github.arrayv.sorts.bogo;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.BogoSorting;
@@ -49,7 +49,7 @@ public final class BogoSort extends BogoSorting {
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        while(!this.isArraySorted(array, length))
+        while (!this.isArraySorted(array, length))
             this.bogoSwap(array, 0, length, false);
     }
 }

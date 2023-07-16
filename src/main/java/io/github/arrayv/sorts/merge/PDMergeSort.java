@@ -170,7 +170,7 @@ public class PDMergeSort extends Sort {
                 int end = i + 2 >= runCount ? length : (runs[i + 2]);
                 merge(array, runs[i], runs[i + 1], end);
             }
-            for (int i = 1, j = 2; i < runCount; i++, j+=2, runCount--) {
+            for (int i = 1, j = 2; i < runCount; i++, j += 2, runCount--) {
                 Writes.write(runs, i, runs[j], 0.5, true, true);
             }
         }
