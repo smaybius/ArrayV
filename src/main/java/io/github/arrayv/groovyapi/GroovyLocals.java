@@ -1,5 +1,9 @@
 package io.github.arrayv.groovyapi;
 
+import java.util.Map;
+
+import org.codehaus.groovy.runtime.MethodClosure;
+
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import groovy.transform.stc.ClosureParams;
@@ -13,9 +17,6 @@ import io.github.arrayv.sortdata.SortInfo;
 import io.github.arrayv.sortdata.SortNameType;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.Sounds;
-import org.codehaus.groovy.runtime.MethodClosure;
-
-import java.util.Map;
 
 /**
  * This class defines methods and properties directly accessible from within Groovy scripts.
@@ -117,10 +118,21 @@ public final class GroovyLocals {
             public GroovySort() {
             // @checkstyle:on RedundantModifierCheck
                 super(ArrayVisualizer.getInstance());
+
+                // Support the (to be deprecated) method of settings sort metadata in the class
+                this.setSortListName(sortInfo[0].getListName());
+                this.setRunAllSortsName(sortInfo[0].getRunAllName());
+                this.setRunSortName(sortInfo[0].getRunName());
+                this.setCategory(sortInfo[0].getCategory());
+                this.setBucketSort(sortInfo[0].isBucketSort());
+                this.setRadixSort(sortInfo[0].isRadixSort());
+                this.setUnreasonablySlow(sortInfo[0].isSlowSort());
+                this.setUnreasonableLimit(sortInfo[0].getUnreasonableLimit());
+                this.setBogoSort(sortInfo[0].isBogoSort());
             }
 
             @Override
-            public void runSort(int[] array, int sortLength, int bucketCount) {
+            public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
                 switch (sort.getMaximumNumberOfParameters()) {
                     case 2:
                         sort.call(array, sortLength);

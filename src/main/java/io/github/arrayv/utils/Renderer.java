@@ -3,8 +3,6 @@ package io.github.arrayv.utils;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.visuals.VisualStyles;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /*
  *
 MIT License
@@ -35,8 +33,8 @@ SOFTWARE.
 
 public final class Renderer {
     private static final class WindowState {
-        private final boolean windowUpdated;
-        private final boolean windowResized;
+        private boolean windowUpdated;
+        private boolean windowResized;
 
         private WindowState(boolean windowUpdate, boolean windowResize) {
             this.windowUpdated = windowUpdate;
@@ -55,7 +53,7 @@ public final class Renderer {
     private volatile double xScale;
     private volatile double yScale;
 
-    private final AtomicInteger yoffset = new AtomicInteger();
+    private volatile int yoffset;
     private volatile int vsize;
     private volatile boolean auxActive;
 
@@ -85,7 +83,7 @@ public final class Renderer {
         return this.amt;
     }
     public int getYOffset() {
-        return this.yoffset.get();
+        return this.yoffset;
     }
     public int getViewSize() {
         return this.vsize;
@@ -188,7 +186,7 @@ public final class Renderer {
         this.dotw = (int) (2 * (arrayVisualizer.currentWidth()  / 640.0));
 
         this.vsize = (arrayVisualizer.currentHeight() - 96) / (arrayVisualizer.externalArraysEnabled() ? Math.min(arrayVisualizer.getArrays().size(), 7) : 1);
-        this.yoffset.set(96);
+        this.yoffset = 96;
     }
 
     private void updateVisualsPerArray(ArrayVisualizer arrayVisualizer, int[] array, int length) {
@@ -218,7 +216,7 @@ public final class Renderer {
                 if (arrays[i] != null) {
                     this.updateVisualsPerArray(arrayVisualizer, arrays[i], arrays[i].length);
                     visualStyle.drawVisual(arrays[i], arrayVisualizer, this, Highlights);
-                    this.yoffset.addAndGet(this.vsize);
+                    this.yoffset += this.vsize;
                 }
             }
             this.auxActive = false;

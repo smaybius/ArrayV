@@ -1,9 +1,9 @@
 package io.github.arrayv.utils;
 
-import io.github.arrayv.main.ArrayVisualizer;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.arrayv.main.ArrayVisualizer;
 
 public final class ShuffleInfo {
     final boolean isDistribution;
@@ -85,18 +85,15 @@ public final class ShuffleInfo {
 
     public String getName() {
         if (this.isDistribution) {
-            assert this.distribution != null;
             if (warpDistribution)
                 return "Warped " + this.distribution.getName();
             return this.distribution.getName();
         }
-        assert this.shuffle != null;
         return this.shuffle.getName();
     }
 
     public void shuffle(int[] array, ArrayVisualizer arrayVisualizer) {
         if (this.isDistribution) {
-            assert distribution != null;
             Writes Writes = arrayVisualizer.getWrites();
             int currentLen = arrayVisualizer.getCurrentLength();
             double sleep = arrayVisualizer.shuffleEnabled() ? 1 : 0;
@@ -114,7 +111,6 @@ public final class ShuffleInfo {
                 }
             }
         } else {
-            assert shuffle != null;
             Delays Delays = arrayVisualizer.getDelays();
             Highlights Highlights = arrayVisualizer.getHighlights();
             Writes Writes = arrayVisualizer.getWrites();

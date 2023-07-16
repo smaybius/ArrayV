@@ -1,8 +1,8 @@
 package io.github.arrayv.utils;
 
-import io.github.arrayv.main.ArrayVisualizer;
-
 import java.text.DecimalFormat;
+
+import io.github.arrayv.main.ArrayVisualizer;
 
 public final class Statistics {
     private long frameTimeMillis;
@@ -30,7 +30,7 @@ public final class Statistics {
 
     private String segments;
 
-    private final DecimalFormat formatter;
+    private DecimalFormat formatter;
 
     public Statistics(ArrayVisualizer arrayVisualizer) {
         this.formatter = arrayVisualizer.getNumberFormat();
@@ -85,7 +85,8 @@ public final class Statistics {
         int[] rawSegments = this.findSegments(shadowarray, arrayVisualizer.getCurrentLength(),
                 arrayVisualizer.reversedComparator());
         String plural = rawSegments[0] == 1 ? "" : "s";
-        this.segments = rawSegments[1] + "% Sorted (" + rawSegments[0] + " Segment" + plural + ")";
+        this.segments = String.valueOf(rawSegments[1]) + "% Sorted (" + String.valueOf(rawSegments[0]) + " Segment"
+                + plural + ")";
     }
 
     public void setFrameTimeMillis(long frameTimeMillis) {

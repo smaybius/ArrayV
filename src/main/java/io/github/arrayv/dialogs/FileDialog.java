@@ -24,9 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import java.io.File;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 public abstract class FileDialog {
     protected static JFileChooser fileDialog;

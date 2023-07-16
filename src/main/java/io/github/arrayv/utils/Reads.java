@@ -1,10 +1,9 @@
 package io.github.arrayv.utils;
 
-import io.github.arrayv.main.ArrayVisualizer;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
+
+import io.github.arrayv.main.ArrayVisualizer;
 
 /*
  *
@@ -33,21 +32,21 @@ SOFTWARE.
  */
 
 public final class Reads {
-    private final AtomicLong comparisons;
-    private final ArrayList<Integer> networkIndices;
+    private volatile long comparisons;
+    private volatile ArrayList<Integer> networkIndices;
 
-    private final ArrayVisualizer arrayVisualizer;
+    private ArrayVisualizer arrayVisualizer;
 
-    private final DecimalFormat formatter;
+    private DecimalFormat formatter;
 
-    private final Delays Delays;
-    private final Highlights Highlights;
-    private final Timer Timer;
+    private Delays Delays;
+    private Highlights Highlights;
+    private Timer Timer;
 
     public Reads(ArrayVisualizer arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer;
 
-        this.comparisons = new AtomicLong();
+        this.comparisons = 0;
         this.networkIndices = new ArrayList<>();
 
         this.Delays = arrayVisualizer.getDelays();
@@ -58,45 +57,47 @@ public final class Reads {
     }
 
     public void resetStatistics() {
-        this.comparisons.set(0);
+        this.comparisons = 0;
     }
 
     public void addComparison() {
-        this.comparisons.incrementAndGet();
+        this.comparisons++;
     }
 
     public String getStats() {
-        if (this.comparisons.get() < 0) {
-            this.comparisons.set(Long.MIN_VALUE);
+        if (this.comparisons < 0) {
+            this.comparisons = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (this.comparisons.get() == 1) return this.comparisons + " Comparison";
-            else                             return this.formatter.format(this.comparisons) + " Comparisons";
+            if (this.comparisons == 1) return this.comparisons + " Comparison";
+            else                       return this.formatter.format(this.comparisons) + " Comparisons";
         }
     }
 
     public long getComparisons() {
-        return this.comparisons.get();
+        return this.comparisons;
     }
 
     public void setComparisons(long value) {
-        this.comparisons.set(value);
+        this.comparisons = value;
     }
 
     public int compareValues(int left, int right) {
         if (arrayVisualizer.sortCanceled()) throw new StopSort();
-        this.comparisons.incrementAndGet();
+        this.comparisons++;
 
         if (arrayVisualizer.doingStabilityCheck()) {
             left  = arrayVisualizer.getStabilityValue(left);
             right = arrayVisualizer.getStabilityValue(right);
         }
 
-        int cmpVal;
+        int cmpVal = 0;
 
         Timer.startLap("Compare");
 
-        cmpVal = Integer.compare(left, right);
+        if (left > right)      cmpVal =  1;
+        else if (left < right) cmpVal = -1;
+        else                   cmpVal =  0;
 
         Timer.stopLap();
 
@@ -112,13 +113,15 @@ public final class Reads {
 
     public int compareOriginalValues(int left, int right) {
         if (arrayVisualizer.sortCanceled()) throw new StopSort();
-        this.comparisons.incrementAndGet();
+        this.comparisons++;
 
-        int cmpVal;
+        int cmpVal = 0;
 
         Timer.startLap("Compare");
 
-        cmpVal = Integer.compare(left, right);
+        if (left > right)      cmpVal =  1;
+        else if (left < right) cmpVal = -1;
+        else                  cmpVal =  0;
 
         Timer.stopLap();
 

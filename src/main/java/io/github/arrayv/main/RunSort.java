@@ -1,14 +1,17 @@
 package io.github.arrayv.main;
 
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import io.github.arrayv.panes.JEnhancedOptionPane;
 import io.github.arrayv.panes.JErrorPane;
-import io.github.arrayv.sortdata.SortInfo;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.Delays;
+import io.github.arrayv.utils.SortingNetworkGenerator;
+import io.github.arrayv.utils.Sounds;
+import io.github.arrayv.utils.StopSort;
 import io.github.arrayv.utils.Timer;
-import io.github.arrayv.utils.*;
-
-import javax.swing.*;
-import java.util.ArrayList;
 
 /*
  *
@@ -37,13 +40,13 @@ SOFTWARE.
  */
 
 public final class RunSort {
-    private final ArrayManager arrayManager;
-    private final ArrayVisualizer arrayVisualizer;
-    private final Delays delayOps;
-    private final Sounds sounds;
-    private final Timer realTimer;
+    private ArrayManager arrayManager;
+    private ArrayVisualizer arrayVisualizer;
+    private Delays delayOps;
+    private Sounds sounds;
+    private Timer realTimer;
 
-    private final Object[] inputOptions;
+    private Object[] inputOptions;
 
     public RunSort(ArrayVisualizer arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer;
@@ -56,7 +59,7 @@ public final class RunSort {
     }
 
     private String getTimeSortEstimate(int bucketCount) {
-        String timeString;
+        String timeString = "";
         String timeUnit;
 
         int seconds = Math.max(((arrayVisualizer.getCurrentLength() * bucketCount) / 1000), 1);
@@ -65,13 +68,13 @@ public final class RunSort {
         long days;
 
         if (seconds >= 60) {
-            minutes = Math.round(seconds / 60f);
+            minutes = Math.round(seconds / 60);
 
             if (minutes >= 60) {
-                hours = Math.round(minutes / 60f);
+                hours = Math.round(minutes / 60);
 
                 if (hours >= 24) {
-                    days = Math.round(hours / 24f);
+                    days = Math.round(hours / 24);
 
                     if (days < 2)
                         timeUnit = "day";
@@ -107,9 +110,8 @@ public final class RunSort {
         return timeString;
     }
 
-    private int getCustomInput(String text) {
+    private int getCustomInput(String text) throws Exception {
         String input = JEnhancedOptionPane.showInputDialog("Customize Sort", text, this.inputOptions);
-        // noinspection DataFlowIssue
         int integer = Integer.parseInt(input);
         return Math.abs(integer);
     }
@@ -131,23 +133,23 @@ public final class RunSort {
             @Override
             public void run() {
                 try {
-                    SortInfo sortInfo = arrayVisualizer.getSorts()[selection];
-                    int extra;
+                    Sort sort = arrayVisualizer.getSorts()[selection].getFreshInstance();
+                    int extra = 0;
 
-                    if (sortInfo.getQuestion() != null) {
+                    if (sort.getQuestion() != null) {
                         try {
-                            extra = sortInfo.validateAnswer(getCustomInput(sortInfo.getQuestion()));
+                            extra = sort.validateAnswer(getCustomInput(sort.getQuestion()));
                         } catch (Exception e) {
-                            extra = sortInfo.getDefaultAnswer();
+                            extra = sort.getDefaultAnswer();
                         }
-                    } else if (sortInfo.isBucketSort()) {
-                        if (sortInfo.isRadixSort()) {
+                    } else if (sort.usesBuckets()) {
+                        if (sort.isRadixSort()) {
                             try {
                                 extra = getCustomInput("Enter the base for this sort:");
                             } catch (Exception e) {
                                 extra = 4;
                             }
-                        } else if (sortInfo.getRunName().contains("Shatter")) {
+                        } else if (sort.getRunSortName().contains("Shatter")) {
                             try {
                                 extra = getCustomInput("Enter the size for each partition:");
                             } catch (Exception e) {
@@ -168,49 +170,57 @@ public final class RunSort {
 
                     boolean goAhead;
 
-                    if (sortInfo.getRunName().equals("Timesort")) {
+                    if (sort.getRunSortName().equals("Timesort")) {
                         Object[] options = { "Continue", "Cancel" };
 
                         int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
                                 "Time Sort will take at least " + getTimeSortEstimate(extra)
                                         + "to complete. Once it starts, you cannot skip this sort.",
-                                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+                                "Warning!", 2, JOptionPane.WARNING_MESSAGE,
                                 null, options, options[1]);
 
-                        goAhead = warning == 0;
-                    } else if (sortInfo.getUnreasonableLimit() > 0
-                            && arrayVisualizer.getCurrentLength() > sortInfo.getUnreasonableLimit()) {
+                        if (warning == 0)
+                            goAhead = true;
+                        else
+                            goAhead = false;
+                    } else if (sort.isUnreasonablySlow()
+                            && arrayVisualizer.getCurrentLength() > sort.getUnreasonableLimit()) {
+                        goAhead = false;
 
-                        Object[] options = { "Let's see how bad " + sortInfo.getRunName() + " is!", "Cancel" };
+                        Object[] options = { "Let's see how bad " + sort.getRunSortName() + " is!", "Cancel" };
 
-                        int warning;
-                        if (sortInfo.isBogoSort()) {
-                            warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
+                        if (sort.isBogoSort()) {
+                            int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
                                     "Even at a high speed, "
-                                            + sortInfo.getRunName() + "ing " + arrayVisualizer.getCurrentLength()
+                                            + sort.getRunSortName() + "ing " + arrayVisualizer.getCurrentLength()
                                             + " numbers will almost certainly not finish in a reasonable amount of time. "
                                             + "Are you sure you want to continue?",
-                                    "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+                                    "Warning!", 2, JOptionPane.WARNING_MESSAGE,
                                     null, options, options[1]);
+                            if (warning == 0)
+                                goAhead = true;
+                            else
+                                goAhead = false;
                         } else {
-                            warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
+                            int warning = JOptionPane.showOptionDialog(arrayVisualizer.getMainWindow(),
                                     "Even at a high speed, "
-                                            + sortInfo.getRunName() + "ing " + arrayVisualizer.getCurrentLength()
+                                            + sort.getRunSortName() + "ing " + arrayVisualizer.getCurrentLength()
                                             + " numbers will not finish in a reasonable amount of time. "
                                             + "Are you sure you want to continue?",
-                                    "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+                                    "Warning!", 2, JOptionPane.WARNING_MESSAGE,
                                     null, options, options[1]);
 
+                            if (warning == 0)
+                                goAhead = true;
+                            else
+                                goAhead = false;
                         }
-                        goAhead = warning == 0;
                     } else {
                         goAhead = true;
                     }
 
                     if (goAhead) {
-                        Sort sortInstance = sortInfo.getFreshInstance();
-
-                        if (sortInfo.getRunName().equals("In-Place LSD Radix")) {
+                        if (sort.getRunSortName().equals("In-Place LSD Radix")) {
                             sounds.changeVolume(0.01); // Here to protect your ears :)
                         }
                         arrayVisualizer.getArrays().subList(1, arrayVisualizer.getArrays().size()).clear();
@@ -218,29 +228,30 @@ public final class RunSort {
                         arrayManager.toggleMutableLength(false);
                         arrayManager.refreshArray(array, arrayVisualizer.getCurrentLength(), arrayVisualizer);
 
-                        arrayVisualizer.setHeading(sortInfo.getRunName());
-                        arrayVisualizer.setCategory(sortInfo.getCategory());
+                        arrayVisualizer.setHeading(sort.getRunSortName());
+                        arrayVisualizer.setCategory(sort.getCategory());
 
                         realTimer.enableRealTimer();
                         boolean antiq = arrayVisualizer.useAntiQSort();
                         boolean networks = arrayVisualizer.generateSortingNetworks();
                         if (antiq)
                             arrayVisualizer.initAntiQSort();
+
                         try {
-                            sortInstance.runSort(array, arrayVisualizer.getCurrentLength(), extra);
-                        } catch (StopSort ignored) {
+                            sort.runSort(array, arrayVisualizer.getCurrentLength(), extra);
+                        } catch (StopSort e) {
                         } catch (OutOfMemoryError e) {
                             JErrorPane.invokeCustomErrorMessage(
-                                    sortInfo.getRunName() + " ran out of memory: " + e.getMessage());
+                                    sort.getRunAllSortsName() + " ran out of memory: " + e.getMessage());
                             throw new RuntimeException(e);
                         }
 
                         if (antiq)
-                            arrayVisualizer.finishAntiQSort(sortInfo.getClass().getSimpleName());
+                            arrayVisualizer.finishAntiQSort(sort.getClass().getSimpleName());
                         else if (networks) {
                             ArrayList<Integer> indicesList = arrayVisualizer.getReads().getNetworkIndices();
                             SortingNetworkGenerator.encodeNetworkAndDisplay(
-                                    sortInfo.getClass().getSimpleName(),
+                                    sort.getClass().getSimpleName(),
                                     indicesList,
                                     arrayVisualizer.getCurrentLength());
                         }

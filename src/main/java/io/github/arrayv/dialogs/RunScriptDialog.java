@@ -1,6 +1,6 @@
 package io.github.arrayv.dialogs;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /*

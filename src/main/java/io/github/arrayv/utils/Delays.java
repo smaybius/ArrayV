@@ -1,10 +1,9 @@
 package io.github.arrayv.utils;
 
+import java.text.DecimalFormat;
+
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.panes.JErrorPane;
-
-import java.text.DecimalFormat;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  *
@@ -41,12 +40,12 @@ public final class Delays {
 
     private volatile double currentDelay;
     private volatile boolean paused;
-    private final AtomicInteger noStepping = new AtomicInteger();
+    private volatile int noStepping;
     private volatile boolean stepping;
 
-    private final DecimalFormat formatter;
+    private DecimalFormat formatter;
 
-    private final Sounds Sounds;
+    private Sounds Sounds;
 
     public Delays(ArrayVisualizer arrayVisualizer) {
         this.sleepRatio = 1.0;
@@ -62,7 +61,7 @@ public final class Delays {
         if (this.paused && !stepping)
             return "Paused";
 
-        String currDelay;
+        String currDelay = "";
         if (this.currentDelay == 0) {
             currDelay = "0";
         } else if (this.currentDelay < 0.001) {
@@ -120,19 +119,21 @@ public final class Delays {
         this.Sounds.toggleSound(!paused);
     }
     public void togglePaused() {
-        this.changePaused(!this.paused);
+        this.changePaused(!this.paused);;
     }
 
     public void disableStepping() {
-        if (noStepping.incrementAndGet() < 0) {
-            noStepping.set(0);
+        noStepping++;
+        if (noStepping < 0) {
+            noStepping = 0;
             throw new IllegalStateException("Stepping toggle overflow");
         }
     }
 
     public void enableStepping() {
-        if (noStepping.decrementAndGet() < 0) {
-            noStepping.set(0);
+        noStepping--;
+        if (noStepping < 0) {
+            noStepping = 0;
             throw new IllegalStateException("Stepping toggle underflow");
         }
         if (canStep()) {
@@ -142,7 +143,7 @@ public final class Delays {
     }
 
     public boolean canStep() {
-        return noStepping.get() == 0;
+        return noStepping == 0;
     }
 
     public boolean isStepping() {
@@ -169,7 +170,6 @@ public final class Delays {
             // With this for loop, you can change the speed of sorts without waiting for the current delay to finish.
             if (!this.skipped) {
                 while (this.delay >= 1) {
-                    //noinspection BusyWait
                     Thread.sleep(1);
                     if (!this.paused || stepping)
                         this.delay--;

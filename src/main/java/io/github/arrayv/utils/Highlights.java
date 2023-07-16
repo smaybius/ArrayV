@@ -1,10 +1,9 @@
 package io.github.arrayv.utils;
 
+import java.util.Arrays;
+
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.panes.JErrorPane;
-
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  *
@@ -54,13 +53,13 @@ public final class Highlights {
 
                                                 // This way, the program runs more efficiently, and looks pretty. :)
 
-    private final AtomicInteger markCount;
+    private volatile int markCount;
 
     private boolean showFancyFinishes;
     private volatile boolean fancyFinish;
-    private final AtomicInteger trackFinish = new AtomicInteger();
+    private volatile int trackFinish;
 
-    private final ArrayVisualizer arrayVisualizer;
+    private ArrayVisualizer arrayVisualizer;
     private Delays Delays;
 
     public Highlights(ArrayVisualizer arrayVisualizer, int maximumLength) {
@@ -75,7 +74,7 @@ public final class Highlights {
         }
         this.showFancyFinishes = true;
         this.maxHighlightMarked = 0;
-        this.markCount = new AtomicInteger();
+        this.markCount = 0;
 
         Arrays.fill(highlights, -1);
         Arrays.fill(markCounts, (byte)0);
@@ -103,13 +102,13 @@ public final class Highlights {
     }
 
     public int getFancyFinishPosition() {
-        return this.trackFinish.get();
+        return this.trackFinish;
     }
     public void incrementFancyFinishPosition() {
-        this.trackFinish.incrementAndGet();
+        this.trackFinish++;
     }
     public void resetFancyFinish() {
-        this.trackFinish.set(-1); // Magic number that clears the green sweep animation
+        this.trackFinish = -1; // Magic number that clears the green sweep animation
     }
 
     public void toggleAnalysis(boolean analysis) {
@@ -120,14 +119,14 @@ public final class Highlights {
         return this.maxHighlightMarked;
     }
     public int getMarkCount() {
-        return this.markCount.get();
+        return this.markCount;
     }
 
     private void incrementIndexMarkCount(int i) {
         if (i >= markCounts.length) return;
         if (markCounts[i] != (byte)-1) {
             if (markCounts[i] == 0) {
-                markCount.incrementAndGet();
+                markCount++;
             }
             markCounts[i]++;
         }
@@ -145,7 +144,7 @@ public final class Highlights {
                 }
             }
         } else if (markCounts[i] == 0) {
-            markCount.decrementAndGet();
+            markCount--;
         }
         markCounts[i]--;
     }
@@ -211,7 +210,7 @@ public final class Highlights {
         }
         Arrays.fill(this.highlights, 0, this.maxHighlightMarked, -1);
         this.maxHighlightMarked = 0;
-        this.markCount.set(0);
+        this.markCount = 0;
         arrayVisualizer.updateNow();
         Delays.enableStepping();
     }

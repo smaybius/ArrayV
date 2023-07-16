@@ -3,7 +3,7 @@ package io.github.arrayv.utils;
 import io.github.arrayv.main.ArrayVisualizer;
 
 public class AntiQSort {
-    private final ArrayVisualizer arrayVisualizer;
+    private ArrayVisualizer arrayVisualizer;
     private int[] data;
     private int nmemb;
     private int gas;
@@ -44,7 +44,11 @@ public class AntiQSort {
             return -1;
         }
 
-        return Integer.compare(data[a], data[b]);
+        if (data[a] < data[b])
+            return -1;
+        if (data[a] > data[b])
+            return 1;
+        return 0;
     }
 
     public void beginSort(int[] refs, int nmemb) {

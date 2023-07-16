@@ -1,12 +1,12 @@
 package io.github.arrayv.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 import io.github.arrayv.main.ArrayVisualizer;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 /*
  *
@@ -39,25 +39,29 @@ SOFTWARE.
  * @author S630690
  */
 public final class Writes {
-    private final AtomicLong reversals;
-    private final AtomicLong swaps;
-    private final AtomicLong auxWrites;
-    private final AtomicLong writes;
-    private final AtomicLong allocAmount;
+    private volatile long reversals;
+    private volatile long recursions;
+    private volatile long depth;
+    private volatile long swaps;
+    private volatile long auxWrites;
+    private volatile long writes;
+    private volatile long allocAmount;
 
-    private final DecimalFormat formatter;
+    private DecimalFormat formatter;
 
-    private final ArrayVisualizer arrayVisualizer;
-    private final Delays Delays;
-    private final Highlights Highlights;
-    private final Timer Timer;
+    private ArrayVisualizer arrayVisualizer;
+    private Delays Delays;
+    private Highlights Highlights;
+    private Timer Timer;
 
     public Writes(ArrayVisualizer arrayVisualizer) {
-        this.reversals = new AtomicLong();
-        this.swaps = new AtomicLong();
-        this.auxWrites = new AtomicLong();
-        this.writes = new AtomicLong();
-        this.allocAmount = new AtomicLong();
+        this.reversals = 0;
+        this.swaps = 0;
+        this.recursions = 0;
+        this.depth = 0;
+        this.auxWrites = 0;
+        this.writes = 0;
+        this.allocAmount = 0;
 
         this.arrayVisualizer = arrayVisualizer;
         this.Delays = arrayVisualizer.getDelays();
@@ -68,11 +72,13 @@ public final class Writes {
     }
 
     public void resetStatistics() {
-        this.reversals.set(0);
-        this.swaps.set(0);
-        this.auxWrites.set(0);
-        this.writes.set(0);
-        this.allocAmount.set(0);
+        this.recursions = 0;
+        this.depth = 0;
+        this.reversals = 0;
+        this.swaps = 0;
+        this.auxWrites = 0;
+        this.writes = 0;
+        this.allocAmount = 0;
     }
 
     public String getRecursions() {
@@ -100,11 +106,11 @@ public final class Writes {
     }
 
     public String getReversals() {
-        if (this.reversals.get() < 0) {
-            this.reversals.set(Long.MIN_VALUE);
+        if (this.reversals < 0) {
+            this.reversals = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (reversals.get() == 1)
+            if (reversals == 1)
                 return this.reversals + " Reversal";
             else
                 return this.formatter.format(this.reversals) + " Reversals";
@@ -112,11 +118,11 @@ public final class Writes {
     }
 
     public String getSwaps() {
-        if (this.swaps.get() < 0) {
-            this.swaps.set(Long.MIN_VALUE);
+        if (this.swaps < 0) {
+            this.swaps = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (swaps.get() == 1)
+            if (this.swaps == 1)
                 return this.swaps + " Swap";
             else
                 return this.formatter.format(this.swaps) + " Swaps";
@@ -124,11 +130,11 @@ public final class Writes {
     }
 
     public String getAuxWrites() {
-        if (this.auxWrites.get() < 0) {
-            this.auxWrites.set(Long.MIN_VALUE);
+        if (this.auxWrites < 0) {
+            this.auxWrites = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (auxWrites.get() == 1)
+            if (this.auxWrites == 1)
                 return this.auxWrites + " Write to Auxiliary Array(s)";
             else
                 return this.formatter.format(this.auxWrites) + " Writes to Auxiliary Array(s)";
@@ -136,11 +142,11 @@ public final class Writes {
     }
 
     public String getMainWrites() {
-        if (this.writes.get() < 0) {
-            this.writes.set(Long.MIN_VALUE);
+        if (this.writes < 0) {
+            this.writes = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (writes.get() == 1)
+            if (this.writes == 1)
                 return this.writes + " Write to Main Array";
             else
                 return this.formatter.format(this.writes) + " Writes to Main Array";
@@ -148,11 +154,11 @@ public final class Writes {
     }
 
     public String getAllocAmount() {
-        if (this.allocAmount.get() < 0) {
-            this.allocAmount.set(Long.MIN_VALUE);
+        if (this.allocAmount < 0) {
+            this.allocAmount = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (allocAmount.get() == 1)
+            if (this.allocAmount == 1)
                 return this.allocAmount + " Item in External Arrays";
             else
                 return this.formatter.format(this.allocAmount) + " Items in External Arrays";
@@ -160,31 +166,31 @@ public final class Writes {
     }
 
     public void changeAuxWrites(int value) {
-        this.auxWrites.addAndGet(value);
+        this.auxWrites += value;
     }
 
     public void changeWrites(int value) {
-        this.writes.addAndGet(value);
+        this.writes += value;
     }
 
     public void changeAllocAmount(int value) {
-        this.allocAmount.addAndGet(value);
+        this.allocAmount += value;
     }
 
     public void clearAllocAmount() {
-        this.allocAmount.set(0);
+        this.allocAmount = 0;
     }
 
     public void changeReversals(int value) {
-        this.reversals.addAndGet(value);
+        this.reversals += value;
     }
 
     private void updateSwap(boolean auxwrite) {
-        this.swaps.incrementAndGet();
+        this.swaps++;
         if (auxwrite)
-            this.auxWrites.addAndGet(2);
+            this.auxWrites += 2;
         else
-            this.writes.addAndGet(2);
+            this.writes += 2;
     }
 
     private void markSwap(int a, int b) {
@@ -235,7 +241,7 @@ public final class Writes {
     }
 
     public void reversal(int[] array, int start, int length, double sleep, boolean mark, boolean auxwrite) {
-        this.reversals.incrementAndGet();
+        this.reversals++;
 
         for (int i = start; i < start + ((length - start + 1) / 2); i++) {
             this.swap(array, i, start + length - i, sleep, mark, auxwrite);
@@ -263,9 +269,9 @@ public final class Writes {
             Highlights.markArray(1, at);
 
         if (auxwrite)
-            auxWrites.incrementAndGet();
+            auxWrites++;
         else
-            writes.incrementAndGet();
+            writes++;
 
         Timer.startLap("Write");
 
@@ -283,7 +289,7 @@ public final class Writes {
         if (mark)
             Highlights.markArray(1, at);
 
-        auxWrites.incrementAndGet();
+        auxWrites++;
 
         Timer.startLap("Write");
 
@@ -310,9 +316,9 @@ public final class Writes {
             Highlights.markArray(1, x);
 
         if (auxwrite)
-            auxWrites.incrementAndGet();
+            auxWrites++;
         else
-            writes.incrementAndGet();
+            writes++;
 
         Timer.startLap();
 
@@ -330,7 +336,7 @@ public final class Writes {
         if (mark)
             Highlights.markArray(1, x);
 
-        auxWrites.incrementAndGet();
+        auxWrites++;
 
         Timer.startLap();
 
@@ -347,10 +353,9 @@ public final class Writes {
     public void mockWrite(int length, int pos, int val, double pause) {
         if (arrayVisualizer.sortCanceled())
             throw new StopSort();
-        // noinspection MismatchedReadAndWriteOfArray
         int[] mockArray = new int[length];
 
-        this.auxWrites.incrementAndGet();
+        this.auxWrites++;
 
         Timer.startLap();
 
@@ -364,13 +369,13 @@ public final class Writes {
     public void transcribe(int[] array, ArrayList<Integer>[] registers, int start, boolean mark, boolean auxwrite) {
         int total = start;
 
-        for (ArrayList<Integer> register : registers) {
-            for (Integer integer : register) {
-                this.write(array, total++, integer, 0, mark, auxwrite);
+        for (int index = 0; index < registers.length; index++) {
+            for (int i = 0; i < registers[index].size(); i++) {
+                this.write(array, total++, registers[index].get(i), 0, mark, auxwrite);
                 if (mark)
                     Delays.sleep(1);
             }
-            this.arrayListClear(register);
+            this.arrayListClear(registers[index]);
         }
     }
 
@@ -398,7 +403,7 @@ public final class Writes {
         int radix = registers.length;
 
         this.transcribe(tempArray, registers, 0, false, true);
-        auxWrites.addAndGet(-length);
+        auxWrites -= length;
 
         for (int i = 0; i < length; i++) {
             int register = i % radix;
@@ -454,7 +459,7 @@ public final class Writes {
     }
 
     public int[] copyOfArray(int[] original, int newLength) {
-        this.allocAmount.addAndGet(newLength);
+        this.allocAmount += newLength;
         int[] result = Arrays.copyOf(original, newLength);
         arrayVisualizer.getArrays().add(result);
         arrayVisualizer.updateNow();
@@ -462,7 +467,7 @@ public final class Writes {
     }
 
     public int[] copyOfRangeArray(int[] original, int from, int to) {
-        this.allocAmount.addAndGet(to - from);
+        this.allocAmount += to - from;
         int[] result = Arrays.copyOfRange(original, from, to);
         arrayVisualizer.getArrays().add(result);
         arrayVisualizer.updateNow();
@@ -492,7 +497,7 @@ public final class Writes {
     }
 
     public int[] createExternalArray(int length) {
-        this.allocAmount.addAndGet(length);
+        this.allocAmount += length;
         int[] result = new int[length];
         arrayVisualizer.getArrays().add(result);
         arrayVisualizer.updateNow();
@@ -500,20 +505,20 @@ public final class Writes {
     }
 
     public void deleteExternalArray(int[] array) {
-        this.allocAmount.addAndGet(-array.length);
+        this.allocAmount -= array.length;
         arrayVisualizer.getArrays().remove(array);
         arrayVisualizer.updateNow();
     }
 
     public void deleteExternalArrays(int[]... arrays) {
-        this.allocAmount.addAndGet(-Arrays.stream(arrays).reduce(0, (a, b) -> (a + b.length), Integer::sum));
+        this.allocAmount -= Arrays.stream(arrays).reduce(0, (a, b) -> (a + b.length), (a, b) -> a + b);
         List<int[]> visArrays = arrayVisualizer.getArrays();
         Arrays.stream(arrays).forEach(visArrays::remove);
         arrayVisualizer.updateNow();
     }
 
     public void arrayListAdd(List<Integer> aList, int value) {
-        allocAmount.incrementAndGet();
+        allocAmount++;
         aList.add(value);
     }
 
@@ -522,7 +527,7 @@ public final class Writes {
             ((ArrayVList) aList).add(value, sleep, false);
             return;
         }
-        allocAmount.incrementAndGet();
+        allocAmount++;
         aList.add(value);
         if (mockWrite) {
             this.mockWrite(aList.size(), aList.size() - 1, value, sleep);
@@ -532,13 +537,13 @@ public final class Writes {
     }
 
     public void arrayListRemoveAt(List<Integer> aList, int index) {
-        allocAmount.decrementAndGet();
+        allocAmount--;
         aList.remove(index);
     }
 
     public void arrayListClear(List<Integer> aList) {
         if (!(aList instanceof ArrayVList))
-            allocAmount.addAndGet(-aList.size());
+            allocAmount -= aList.size();
         aList.clear();
     }
 
@@ -546,7 +551,7 @@ public final class Writes {
         if (aList instanceof ArrayVList) {
             ((ArrayVList) aList).delete();
         } else {
-            allocAmount.addAndGet(-aList.size());
+            allocAmount -= aList.size();
         }
     }
 

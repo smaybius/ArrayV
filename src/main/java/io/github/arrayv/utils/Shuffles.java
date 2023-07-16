@@ -1,13 +1,12 @@
 package io.github.arrayv.utils;
 
-import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.select.*;
-import io.github.arrayv.sorts.templates.PDQSorting;
-
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+
+import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sorts.select.*;
+import io.github.arrayv.sorts.templates.PDQSorting;
 
 /*
  *
@@ -489,7 +488,7 @@ public enum Shuffles {
             writes.deleteExternalArray(aux);
         }
     },
-    SHUFFLED_FIRST_HALF {
+	SHUFFLED_FIRST_HALF {
         public String getName() {
             return "Scrambled First Half";
         }
@@ -513,7 +512,7 @@ public enum Shuffles {
             writes.arraycopy(aux, 0, array, 0, k, delay ? 0.5 : 0, true, false);
             shuffle(array, 0, j, delay ? 1 : 0, writes);
             writes.deleteExternalArray(aux);
-        }
+		}
     },
     PARTITIONED {
         public String getName() {
@@ -854,8 +853,10 @@ public enum Shuffles {
             int currentLen = arrayVisualizer.getCurrentLength();
             boolean delay = arrayVisualizer.shuffleEnabled();
 
-            int[] referenceArray = new int[currentLen];
-            System.arraycopy(array, 0, referenceArray, 0, currentLen);
+            int[] referenceArray = writes.createExternalArray(currentLen);
+            for (int i = 0; i < currentLen; i++) {
+                writes.write(referenceArray, i, array[i], delay ? 1 : 0, true, true);
+            }
 
             int leftIndex = 1;
             int rightIndex = currentLen - 1;
@@ -1110,8 +1111,8 @@ public enum Shuffles {
             // credit to sam walko/anon
 
             class Subarray {
-                private final int start;
-                private final int end;
+                private int start;
+                private int end;
 
                 Subarray(int start, int end) {
                     this.start = start;
@@ -1161,8 +1162,8 @@ public enum Shuffles {
             // credit to sam walko/anon
 
             class Subarray {
-                private final int start;
-                private final int end;
+                private int start;
+                private int end;
 
                 Subarray(int start, int end) {
                     this.start = start;
@@ -1748,7 +1749,6 @@ public enum Shuffles {
             shuffle(array, 0, currentLen, delay ? 0.5 : 0, writes);
 
             int n = 1;
-            // noinspection StatementWithEmptyBody
             for (; n < currentLen; n *= 2)
                 ;
 
@@ -2107,8 +2107,8 @@ public enum Shuffles {
         int candidate;
 
         final class PDQPair {
-            private final int pivotPosition;
-            private final boolean alreadyPartitioned;
+            private int pivotPosition;
+            private boolean alreadyPartitioned;
 
             private PDQPair(int pivotPos, boolean presorted) {
                 this.pivotPosition = pivotPos;
@@ -2196,8 +2196,15 @@ public enum Shuffles {
                 highlights.clearAllMarks();
                 return -1;
             }
-
-            return Integer.compare(temp[a], temp[b]);
+            highlights.markArray(2, a);
+            highlights.markArray(3, b);
+            delays.sleep(sleep);
+            highlights.clearAllMarks();
+            if (temp[a] < temp[b])
+                return -1;
+            if (temp[a] > temp[b])
+                return 1;
+            return 0;
         }
 
         protected void pdqLoop(int[] array, int begin, int end, boolean branchless, int badAllowed, int depth) {
@@ -2286,7 +2293,7 @@ public enum Shuffles {
         }
 
         private void siftDown(int[] array, int root, int dist, int start, double sleep, boolean isMax) {
-            int compareVal;
+            int compareVal = 0;
 
             if (isMax)
                 compareVal = -1;
@@ -2628,7 +2635,6 @@ public enum Shuffles {
             for (int i = 1; i < len - 1; i++) {
                 int j = d1;
 
-                // noinspection StatementWithEmptyBody
                 for (int k = i, n = d2; (k & 1) == 0; j -= n, k >>= 1, n >>= 1)
                     ;
                 m += j;
@@ -2692,7 +2698,48 @@ public enum Shuffles {
 
         private int pow2lte(int value) {
             int val;
-            // noinspection StatementWithEmptyBody
+            for (val = 1; val <= value; val <<= 1)
+                ;
+            return val >> 1;
+        }
+    },
+    CRAZY_BLOCK_RANDOMLY {
+        @Override
+        public String getName() {
+            return "Randomly w/ Crazy Blocks";
+        }
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays delays, Highlights highlights,
+                Writes writes) {
+            int currentLen = arrayVisualizer.getCurrentLength();
+            int blockSize = pow2lte((int) Math.sqrt(currentLen));
+            currentLen -= currentLen % blockSize;
+            boolean delay = arrayVisualizer.shuffleEnabled();
+            double sleep = delay ? 1 : 0;
+
+            for (int i = 0; i < currentLen; i += blockSize) {
+                int randomIndex = random.nextInt((currentLen - i) / blockSize) * blockSize + i;
+                blockSwap(array, i, randomIndex, blockSize, writes, sleep);
+            }
+
+            for (int i = 0; i < currentLen; i += blockSize) {
+                if (random.nextBoolean()) {
+                    writes.reversal(array, i, i + blockSize - 1, sleep * 4, true, false);
+                }
+            }
+
+        }
+
+        private void blockSwap(int[] array, int a, int b, int len, Writes writes, double sleep) {
+            for (int i = 0; i < len; i++) {
+                if (a != b)
+                    writes.swap(array, a + i, b + i, sleep, true, false);
+            }
+        }
+
+        private int pow2lte(int value) {
+            int val;
             for (val = 1; val <= value; val <<= 1)
                 ;
             return val >> 1;
@@ -2730,7 +2777,6 @@ public enum Shuffles {
 
         private int pow2lte(int value) {
             int val;
-            // noinspection StatementWithEmptyBody
             for (val = 1; val <= value; val <<= 1)
                 ;
             return val >> 1;

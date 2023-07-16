@@ -1,6 +1,10 @@
 package io.github.arrayv.utils.shuffleutils;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.Point;
 import java.util.List;
 
 public class GraphConnection {
