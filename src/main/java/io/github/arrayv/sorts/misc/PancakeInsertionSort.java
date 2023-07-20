@@ -59,7 +59,7 @@ public final class PancakeInsertionSort extends Sort {
     }
 
     private int compare(int[] array, int a, int b) {
-        return Reads.compareIndices(array, a, b, 1, true);
+        return Reads.compareIndices(array, a, b, 0.1, true);
     }
 
     private void flip(int[] array, int i) {

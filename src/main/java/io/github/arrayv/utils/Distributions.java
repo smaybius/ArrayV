@@ -241,12 +241,13 @@ public enum Distributions {
             double c = Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (Math.tan(c * i) + (n / 2d) + 1 > currentLen)
-                    array[i] = currentLen;
-                else if (Math.tan(c * i) + (n / 2d) + 1 < 0)
+                array[i] = (int) (n * (Math.tan(c * i) + 1) / 32) + (n / 2);
+            }
+            for (int i = 0; i < currentLen; i++) {
+                if (array[i] > currentLen)
+                    array[i] = currentLen - 1;
+                else if (array[i] < 0)
                     array[i] = 0;
-                else
-                    array[i] = (int) (n * (Math.tan(c * i) + 1) / 32) + (n / 2);
             }
 
         }
@@ -263,14 +264,14 @@ public enum Distributions {
             double c = Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (1 / Math.tan(c * i) + (n / 2d) + 1 > currentLen)
-                    array[i] = currentLen;
-                else if (1 / Math.tan(c * i) + (n / 2d) + 1 < 0)
-                    array[i] = 0;
-                else
-                    array[i] = (int) (n * (1 / Math.tan(c * i) + 1) / 32) + (n / 2);
+                array[i] = (int) (n * (1 / Math.tan(c * i) + 1) / 32) + (n / 2);
             }
-
+            for (int i = 0; i < currentLen; i++) {
+                if (array[i] > currentLen)
+                    array[i] = currentLen - 1;
+                else if (array[i] < 0)
+                    array[i] = 0;
+            }
         }
     },
     SECANT {
@@ -285,12 +286,13 @@ public enum Distributions {
             double c = 2 * Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (1 / Math.sin(c * i) + (n / 2d) + 1 > currentLen)
-                    array[i] = currentLen;
-                else if (1 / Math.sin(c * i) + (n / 2d) + 1 < 0)
+                array[i] = (int) (n * (1 / Math.sin(c * i) + 1) / 32) + (n / 2);
+            }
+            for (int i = 0; i < currentLen; i++) {
+                if (array[i] > currentLen)
+                    array[i] = currentLen - 1;
+                else if (array[i] < 0)
                     array[i] = 0;
-                else
-                    array[i] = (int) (n * (1 / Math.sin(c * i) + 1) / 32) + (n / 2);
             }
         }
     },
@@ -306,12 +308,13 @@ public enum Distributions {
             double c = 2 * Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                if (1 / Math.cos(c * i) + (n / 2d) + 1 > currentLen)
-                    array[i] = currentLen;
-                else if (1 / Math.cos(c * i) + (n / 2d) + 1 < 0)
+                array[i] = (int) (n * (1 / Math.cos(c * i) + 1) / 32) + (n / 2);
+            }
+            for (int i = 0; i < currentLen; i++) {
+                if (array[i] > currentLen)
+                    array[i] = currentLen - 1;
+                else if (array[i] < 0)
                     array[i] = 0;
-                else
-                    array[i] = (int) (n * (1 / Math.cos(c * i) + 1) / 32) + (n / 2);
             }
         }
     },
@@ -328,7 +331,7 @@ public enum Distributions {
             double mid = (c * n) / 2.0;
 
             for (int i = 0; i < n; i++)
-                array[i] = (int) ((n / 1.15) * sinc(c * i, -mid) + 1);
+                array[i] = (int) ((n / 1.5) * sinc(c * i, -mid) + 1);
 
             double min = array[0];
             for (int i = 0; i < n; i++) {

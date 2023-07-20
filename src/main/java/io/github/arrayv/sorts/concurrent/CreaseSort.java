@@ -46,7 +46,7 @@ public final class CreaseSort extends Sort {
 
     private void compSwap(int[] array, int a, int b) {
         if (Reads.compareIndices(array, a, b, 0.5, true) == 1)
-            Writes.swap(array, a, b, 0.5, true, false);
+            Writes.swap(array, a, b, 0, true, false);
     }
 
     @Override

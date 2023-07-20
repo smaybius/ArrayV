@@ -27,8 +27,8 @@ public final class OddEvenMergeSortRecursive extends Sort {
     }
 
     private void oddEvenMergeCompare(int[] array, int i, int j) {
-        if (Reads.compareIndices(array, i, j, 0.5, true) > 0)
-            Writes.swap(array, i, j, 0.5, true, false);
+        if (Reads.compareIndices(array, i, j, 1, true) > 0)
+            Writes.swap(array, i, j, 0, true, false);
     }
 
     /**

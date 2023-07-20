@@ -19,7 +19,7 @@ final public class FibonacciHeapSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private int[] FIB = Writes.createExternalArray(44); // fib(47) > Integer.MAX_VALUE
+    private int[] FIB = new int[44]; // fib(47) > Integer.MAX_VALUE
 
     public void genFib() {
         FIB[0] = FIB[1] = 1;

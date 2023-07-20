@@ -109,7 +109,7 @@ public final class ThreeSmoothCombSortParallel extends Sort {
 		}
 		for (int i = pos; i + gap < end; i += gap)
 			if (Reads.compareIndices(this.array, i, i + gap, 0.5, true) == 1)
-				Writes.swap(this.array, i, i + gap, 0.5, false, false);
+				Writes.swap(this.array, i, i + gap, 0, false, false);
 	}
 
 	@Override

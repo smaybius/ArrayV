@@ -122,26 +122,28 @@ public final class AdaptiveGrailSort extends Sort {
     private int leftBinarySearch(int[] array, int a, int b, int val) {
         while (a < b) {
             int m = a + (b - a) / 2;
-
+            Highlights.markArray(2, m);
+            Delays.sleep(0.1);
             if (Reads.compareValues(val, array[m]) <= 0)
                 b = m;
             else
                 a = m + 1;
         }
-
+        Highlights.clearMark(2);
         return a;
     }
 
     private int rightBinarySearch(int[] array, int a, int b, int val) {
         while (a < b) {
             int m = a + (b - a) / 2;
-
+            Highlights.markArray(2, m);
+            Delays.sleep(0.1);
             if (Reads.compareValues(val, array[m]) < 0)
                 b = m;
             else
                 a = m + 1;
         }
-
+        Highlights.clearMark(2);
         return a;
     }
 
@@ -149,19 +151,19 @@ public final class AdaptiveGrailSort extends Sort {
         int nKeys = 1, i = a + 1;
 
         // build run at start
-        if (Reads.compareIndices(array, i - 1, i, 1, true) == -1) {
+        if (Reads.compareIndices(array, i - 1, i, 0.1, true) == -1) {
             i++;
             nKeys++;
 
-            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 1, true) == -1) {
+            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 0.1, true) == -1) {
                 i++;
                 nKeys++;
             }
-        } else if (Reads.compareIndices(array, i - 1, i, 1, true) == 1) {
+        } else if (Reads.compareIndices(array, i - 1, i, 0.1, true) == 1) {
             i++;
             nKeys++;
 
-            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 1, true) == 1) {
+            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 0.1, true) == 1) {
                 i++;
                 nKeys++;
             }
@@ -175,19 +177,19 @@ public final class AdaptiveGrailSort extends Sort {
         int nKeys = 1, i = b - 1;
 
         // build run at end
-        if (Reads.compareIndices(array, i - 1, i, 1, true) == -1) {
+        if (Reads.compareIndices(array, i - 1, i, 0.1, true) == -1) {
             i--;
             nKeys++;
 
-            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 1, true) == -1) {
+            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 0.1, true) == -1) {
                 i--;
                 nKeys++;
             }
-        } else if (Reads.compareIndices(array, i - 1, i, 1, true) == 1) {
+        } else if (Reads.compareIndices(array, i - 1, i, 0.1, true) == 1) {
             i--;
             nKeys++;
 
-            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 1, true) == 1) {
+            while (nKeys < n && Reads.compareIndices(array, i - 1, i, 0.1, true) == 1) {
                 i--;
                 nKeys++;
             }
@@ -252,12 +254,12 @@ public final class AdaptiveGrailSort extends Sort {
         int i = a + 1, j = a;
 
         while (i < b) {
-            if (Reads.compareIndices(array, i - 1, i++, 1, true) == 1) {
-                while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) == 1)
+            if (Reads.compareIndices(array, i - 1, i++, 0.1, true) == 1) {
+                while (i < b && Reads.compareIndices(array, i - 1, i, 0.1, true) == 1)
                     i++;
                 Writes.reversal(array, j, i - 1, 1, true, false);
             } else
-                while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) <= 0)
+                while (i < b && Reads.compareIndices(array, i - 1, i, 0.1, true) <= 0)
                     i++;
 
             if (i < b)

@@ -18,9 +18,9 @@ NOTE: Not actually an Insertion sort.
 final public class WeirdInsertionSort extends Sort {
     public WeirdInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-        this.setSortListName("Weird \"Insertion\"");
-        this.setRunAllSortsName("Weird \"Insertion\" Sort");
-        this.setRunSortName("Weird \"Insertion\" Sort");
+        this.setSortListName("Broken Gnome");
+        this.setRunAllSortsName("Broken Gnome Sort");
+        this.setRunSortName("Broken Gnome Sort");
         this.setCategory("Exchange Sorts");
         this.setBucketSort(false);
         this.setRadixSort(false);
@@ -36,8 +36,8 @@ final public class WeirdInsertionSort extends Sort {
             sorted = true;
             for (int i = 1; i < currentLength; i++) {
                 int j = i;
-                while (j > 0 && Reads.compareIndices(array, j - 1, j, 0.05, true) > 0) {
-                    Writes.swap(array, i, j - 1, 0.05, true, false);
+                while (j > 0 && Reads.compareIndices(array, j - 1, j, 0.1, true) > 0) {
+                    Writes.swap(array, i, j - 1, 0, true, false);
                     j--;
                     sorted = false;
                 }

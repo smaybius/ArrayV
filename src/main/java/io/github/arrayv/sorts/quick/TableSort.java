@@ -45,7 +45,7 @@ public final class TableSort extends Sort {
 	}
 
 	private boolean stableComp(int[] array, int[] table, int a, int b) {
-		int comp = Reads.compareIndices(array, table[a], table[b], 0.5, true);
+		int comp = Reads.compareIndices(array, table[a], table[b], 0.1, true);
 
 		return comp > 0 || (comp == 0 && Reads.compareOriginalIndices(table, a, b, 0.5, false) > 0);
 	}

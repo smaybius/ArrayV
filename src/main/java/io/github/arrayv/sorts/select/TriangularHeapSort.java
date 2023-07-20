@@ -70,7 +70,7 @@ public final class TriangularHeapSort extends Sort {
 			this.Writes.swap(array, 0, length - i, 0.5D, true, false);
 			siftDown(array, length - i, 0);
 		}
-		if (this.Reads.compareValues(array[0], array[1]) == 1)
+		if (this.Reads.compareIndices(array, 0, 1, 0.5, true) == 1)
 			this.Writes.swap(array, 0, 1, 0.5D, true, false);
 
 	}

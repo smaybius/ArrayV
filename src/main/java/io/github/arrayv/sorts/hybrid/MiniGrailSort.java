@@ -1,9 +1,9 @@
 package io.github.arrayv.sorts.hybrid;
 
-import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.sorts.insert.BinaryInsertionSort;
+import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.utils.IndexedRotations;
-import io.github.arrayv.sorts.insert.BlockInsertionSort;
 
 /*
  * 
@@ -90,10 +90,12 @@ final public class MiniGrailSort extends Sort {
 		int f = 1, p = b - f;
 
 		for (int i = p; i > a && f < nKeys; i--) {
+			Highlights.markArray(1, i);
+			Delays.sleep(0.5);
 
 			int loc = this.binSearch(array, p, p + f, array[i - 1], true) - p;
 
-			if (loc == f || Reads.compareIndices(array, i - 1, p + loc, 0.25, true) != 0) {
+			if (loc == f || Reads.compareIndices(array, i - 1, p + loc, 0.5, true) != 0) {
 				this.rotate(array, i, p, p + (f++));
 				p = i - 1;
 				this.rotate(array, i - 1, i, p + loc + 1);
@@ -114,7 +116,7 @@ final public class MiniGrailSort extends Sort {
 		int i = pLen - 1, j = m - 1, k = b - 1;
 
 		while (i >= 0 && j >= a) {
-			if (Reads.compareIndices(array, p + i, j, 0.25, true) > cmp)
+			if (Reads.compareIndices(array, p + i, j, 0.5, true) > cmp)
 				Writes.swap(array, k--, p + (i--), 1, true, false);
 			else
 				Writes.swap(array, k--, j--, 1, true, false);
@@ -151,7 +153,7 @@ final public class MiniGrailSort extends Sort {
 		int i = a, j = m;
 
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.25, true) <= 0)
+			if (Reads.compareIndices(array, i, j, 0.5, true) <= 0)
 				Writes.swap(array, p++, i++, 1, true, false);
 			else
 				Writes.swap(array, p++, j++, 1, true, false);
@@ -174,7 +176,7 @@ final public class MiniGrailSort extends Sort {
 		int i1 = ta, j1 = tm, k = ta;
 
 		while (k < j1 && j1 < tb) {
-			if (Reads.compareIndices(array, a + (i1 - ta + 1) * bLen - 1, a + (j1 - ta + 1) * bLen - 1, 0.25,
+			if (Reads.compareIndices(array, a + (i1 - ta + 1) * bLen - 1, a + (j1 - ta + 1) * bLen - 1, 0.5,
 					true) <= 0) {
 				if (i1 > k)
 					this.multiSwap(array, a + (k - ta) * bLen, a + (i1 - ta) * bLen, bLen);
@@ -182,7 +184,7 @@ final public class MiniGrailSort extends Sort {
 
 				i1 = k;
 				for (int i = Math.max(k + 1, tm); i < j1; i++)
-					if (Reads.compareIndices(array, i, i1, 0.25, true) < 0)
+					if (Reads.compareIndices(array, i, i1, 0.5, true) < 0)
 						i1 = i;
 			} else {
 				this.multiSwap(array, a + (k - ta) * bLen, a + (j1 - ta) * bLen, bLen);
@@ -199,7 +201,7 @@ final public class MiniGrailSort extends Sort {
 
 			i1 = k;
 			for (int i = k + 1; i < j1; i++)
-				if (Reads.compareIndices(array, i, i1, 0.25, true) < 0)
+				if (Reads.compareIndices(array, i, i1, 0.5, true) < 0)
 					i1 = i;
 		}
 	}
@@ -212,10 +214,10 @@ final public class MiniGrailSort extends Sort {
 		this.blockSelect(array, a, t, tm, tb, bLen);
 
 		int f = a;
-		boolean left = Reads.compareIndexValue(array, t, mKey, 0.25, true) < 0;
+		boolean left = Reads.compareIndexValue(array, t, mKey, 1, true) < 0;
 
 		for (int i = 1; i < bCnt; i++) {
-			if (left ^ (Reads.compareIndexValue(array, t + i, mKey, 0.25, true) < 0)) {
+			if (left ^ (Reads.compareIndexValue(array, t + i, mKey, 1, true) < 0)) {
 				int nxt = a + i * bLen;
 				int nxtE = this.binSearch(array, nxt, nxt + bLen, array[nxt - 1], left);
 
@@ -227,17 +229,17 @@ final public class MiniGrailSort extends Sort {
 		if (left)
 			this.mergeBlocks(array, f, b1, b, p, left, hasBuf);
 
-		BlockInsertionSort smallSort = new BlockInsertionSort(this.arrayVisualizer);
-		smallSort.customInsertSort(array, t, tb, 0.25, false);
+		BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
+		smallSort.customBinaryInsert(array, t, tb, 0.25);
 	}
 
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) { // TODO: keys sort
 		int a = 0, b = length;
-		BlockInsertionSort smallSort = new BlockInsertionSort(this.arrayVisualizer);
+		BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
 
 		if (length <= 32) {
-			smallSort.customInsertSort(array, a, b, 0.5, false);
+			smallSort.customBinaryInsert(array, a, b, 0.5);
 			return;
 		}
 
@@ -253,7 +255,7 @@ final public class MiniGrailSort extends Sort {
 
 		else if (keys <= 4) { // strat 3: lazy stable
 			for (int i = a; i < b; i += j)
-				smallSort.customInsertSort(array, i, Math.min(i + j, b), 0.25, false);
+				smallSort.customBinaryInsert(array, i, Math.min(i + j, b), 0.25);
 
 			for (; j < length; j *= 2)
 				for (int i = a; i + j < b; i += 2 * j)
@@ -274,7 +276,7 @@ final public class MiniGrailSort extends Sort {
 		// insertion
 
 		for (int i = a; i < b1; i += j)
-			smallSort.customInsertSort(array, i, Math.min(i + j, b1), 0.25, false);
+			smallSort.customBinaryInsert(array, i, Math.min(i + j, b1), 0.25);
 
 		// merging w/ buffer
 
@@ -300,7 +302,7 @@ final public class MiniGrailSort extends Sort {
 				this.mergeBW(array, i, i + j, b1, p, true);
 		}
 
-		smallSort.customInsertSort(array, p, b, 0.25, false);
+		smallSort.customBinaryInsert(array, p, b, 0.25);
 
 		// strat 2
 

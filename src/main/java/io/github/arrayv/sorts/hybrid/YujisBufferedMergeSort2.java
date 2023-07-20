@@ -123,7 +123,7 @@ public final class YujisBufferedMergeSort2 extends Sort {
 	private int merge(int[] array, int a, int m, int b, int p) {
 		int i = a, j = m;
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0, false) <= 0)
+			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0)
 				Writes.swap(array, p++, i++, 1, true, false);
 			else
 				Writes.swap(array, p++, j++, 1, true, false);

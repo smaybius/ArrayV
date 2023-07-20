@@ -62,7 +62,7 @@ public final class StacklessRotateMergeSort extends Sort {
 			while (r1 < r2) {
 				int ml = (r1 + r2) / 2;
 
-				if (Reads.compareIndices(array, m - (c - ml), b - ml - 1, 1, true) > 0)
+				if (Reads.compareIndices(array, m - (c - ml), b - ml - 1, 0.1, true) > 0)
 					r2 = ml;
 				else
 					r1 = ml + 1;
@@ -76,7 +76,7 @@ public final class StacklessRotateMergeSort extends Sort {
 			while (r1 < r2) {
 				int ml = (r1 + r2) / 2;
 
-				if (Reads.compareIndices(array, a + ml, m + (c - ml) - 1, 1, true) > 0)
+				if (Reads.compareIndices(array, a + ml, m + (c - ml) - 1, 0.1, true) > 0)
 					r2 = ml;
 				else
 					r1 = ml + 1;
@@ -99,7 +99,7 @@ public final class StacklessRotateMergeSort extends Sort {
 		int len = b - a;
 
 		for (int i = a + 1; i < b; i += 2)
-			if (Reads.compareIndices(array, i - 1, i, 0.5, true) > 0)
+			if (Reads.compareIndices(array, i - 1, i, 0.1, true) > 0)
 				Writes.swap(array, i - 1, i, 0.5, true, false);
 
 		for (int j = 2; j < len; j *= 2) {
@@ -115,7 +115,7 @@ public final class StacklessRotateMergeSort extends Sort {
 					this.rotateMerge(array, i, Math.min(i + 2 * k, b), k);
 
 			for (int i = a + 1; i < b1; i += 2)
-				if (Reads.compareIndices(array, i - 1, i, 0.5, true) > 0)
+				if (Reads.compareIndices(array, i - 1, i, 0.1, true) > 0)
 					Writes.swap(array, i - 1, i, 0.5, true, false);
 		}
 	}

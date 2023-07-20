@@ -3,7 +3,7 @@ package io.github.arrayv.sorts.hybrid;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
 
-public final class OptimizedRotateMergeSort extends Sort {
+final public class OptimizedRotateMergeSort extends Sort {
     final int MIN_RUN = 32;
 
     int[] tmp;
@@ -232,7 +232,7 @@ public final class OptimizedRotateMergeSort extends Sort {
         return this.monoboundLeft(array, Math.max(a, b - i + 1), b - i / 2, val);
     }
 
-    protected void merge(int[] array, int start, int mid, int end, int depth) {
+    protected void merge(int[] array, int start, int mid, int end) {
         if (start >= mid)
             return;
         end = rightExpSearch(array, mid, end, array[mid - 1]);
@@ -256,11 +256,8 @@ public final class OptimizedRotateMergeSort extends Sort {
                 m3 = (m2++) - (mid - m1);
             }
             rotate(array, m1, mid - m1, m2 - mid);
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            merge(array, m3 + 1, m2, end, depth + 1);
-            Writes.recursion();
-            merge(array, start, m1, m3, depth + 1);
+            merge(array, m3 + 1, m2, end);
+            merge(array, start, m1, m3);
         } else {
             if (end - mid < mid - start) {
                 mergeDown(array, start, mid, end);
@@ -307,10 +304,10 @@ public final class OptimizedRotateMergeSort extends Sort {
         for (gap = MIN_RUN; gap < currentLength; gap = fullMerge) {
             fullMerge = gap * 2;
             for (i = 0; i + fullMerge < currentLength; i += fullMerge) {
-                merge(array, i, i + gap, i + fullMerge, 0);
+                merge(array, i, i + gap, i + fullMerge);
             }
             if (i + gap < currentLength) {
-                merge(array, i, i + gap, currentLength, 0);
+                merge(array, i, i + gap, currentLength);
             }
         }
 

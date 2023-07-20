@@ -465,6 +465,8 @@ public final class ArrayVisualizer {
                     StatisticType.COMPARISONS,
                     StatisticType.SWAPS,
                     StatisticType.REVERSALS,
+                    StatisticType.RECURSION_COUNT,
+                    StatisticType.RECURSION_DEPTH,
                     StatisticType.LINE_BREAK,
                     StatisticType.MAIN_WRITE,
                     StatisticType.AUX_WRITE,

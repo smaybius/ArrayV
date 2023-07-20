@@ -58,7 +58,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private int inPlaceMerge(int[] array, int a, int m, int b) {
@@ -71,7 +71,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 				k = j;
 				do
 					k++;
-				while (k < b && Reads.compareIndices(array, i, k, 0, false) > 0);
+				while (k < b && Reads.compareIndices(array, i, k, 0.2, true) > 0);
 
 				this.rotate(array, i, j, k);
 
@@ -94,7 +94,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 				k = i;
 				do
 					k--;
-				while (k >= a && Reads.compareIndices(array, k, j, 0, false) > 0);
+				while (k >= a && Reads.compareIndices(array, k, j, 0.2, true) > 0);
 
 				this.rotate(array, k + 1, i + 1, j + 1);
 
@@ -110,9 +110,9 @@ public final class ImprovedBlockSelectionSort extends Sort {
 		a += bLen;
 
 		while (a < b) {
-			int comp = Reads.compareIndices(array, a, min, 0, false);
+			int comp = Reads.compareIndices(array, a, min, 0.1, true);
 
-			if (comp == -1 || (comp == 0 && Reads.compareIndices(array, a + bLen - 1, min + bLen - 1, 0, false) == -1))
+			if (comp == -1 || (comp == 0 && Reads.compareIndices(array, a + bLen - 1, min + bLen - 1, 0.1, true) == -1))
 				min = a;
 
 			a += bLen;
@@ -124,7 +124,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 		int k = a;
 		int j = m;
 
-		while (k < m && Reads.compareIndices(array, k, m, 0.5, true) <= 0)
+		while (k < m && Reads.compareIndices(array, k, m, 0.1, true) <= 0)
 			k += bLen;
 		if (k == m)
 			return;
@@ -135,7 +135,7 @@ public final class ImprovedBlockSelectionSort extends Sort {
 		j += bLen;
 
 		while (k < j && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.5, true) <= 0) {
+			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0) {
 				if (k != i)
 					this.multiSwap(array, k, i, bLen);
 				k += bLen;

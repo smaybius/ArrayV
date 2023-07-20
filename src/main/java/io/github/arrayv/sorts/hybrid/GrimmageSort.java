@@ -1,0 +1,53 @@
+package io.github.arrayv.sorts.hybrid;
+
+import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sorts.templates.GrailSorting;
+
+// Image Sorting: Chaos
+final public class GrimmageSort extends GrailSorting {
+    public GrimmageSort(ArrayVisualizer arrayVisualizer) {
+        super(arrayVisualizer);
+
+        this.setSortListName("Grimmage");
+        this.setRunAllSortsName("Grimmage Sort");
+        this.setRunSortName("Grimmage Sort");
+        this.setCategory("Hybrid Sorts");
+        this.setBucketSort(false);
+        this.setRadixSort(false);
+        this.setUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.setBogoSort(false);
+    }
+
+    // This sort gets part of its name from another sort I made,
+    // "Image Sort." It used a really weird method that kind of
+    // ties in with this one.
+    private int seek(int[] array, int start, int end) {
+        int seek = start + 1,
+                direction = Reads.compareIndices(array, start, start + 1, 0.5, true);
+        if (direction == 0)
+            direction = -1;
+        for (int i = start + 2; i < end && seek < end - 1; i++) {
+            if (Reads.compareIndices(array, seek, i, 0.5, true) == direction) {
+                Writes.multiSwap(array, i, ++seek, 0.01, true, false);
+            }
+        }
+        if (direction == 1) {
+            Writes.reversal(array, start, seek, 1, true, false);
+        }
+        return seek;
+    }
+
+    @Override
+    public void runSort(int[] array, int sortLength, int bucketCount) {
+        int k = 0, runs = 1;
+        while (k < sortLength) {
+            int tempK = k;
+            k = this.seek(array, k, sortLength);
+            if (runs > 1) {
+                this.grailLazyMerge(array, 0, tempK, k - tempK);
+            }
+            runs++;
+        }
+    }
+}

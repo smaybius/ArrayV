@@ -84,7 +84,7 @@ public class ImprovedCubeRootQuickSort extends Sort {
 			Writes.write(tmp, loc, array[i], 1, false, true);
 		}
 
-		if (Reads.compareIndices(tmp, 0, c - 1, 1, true) == 0) {
+		if (Reads.compareIndices(tmp, 0, c - 1, 0.1, true) == 0) {
 			int i = a, j = b, piv = tmp[0];
 
 			for (int k = i; k < j; k++) {

@@ -46,7 +46,7 @@ public final class InPlaceMergeSort extends Sort {
 
     private void push(int[] array, int low, int high) {
         for (int i = low; i < high; i++) {
-            if (Reads.compareIndices(array, i, i + 1, 1, true) == 1) {
+            if (Reads.compareIndices(array, i, i + 1, 0.1, true) == 1) {
                 Writes.swap(array, i, i + 1, 0.035, true, false);
             }
         }

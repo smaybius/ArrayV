@@ -47,16 +47,16 @@ class QuadSortBase {
     }
 
     void swapTwo(int[] array, int start) {
-        if (Reads.compareIndices(array, start, start + 1, 1, true) > 0)
+        if (Reads.compareIndices(array, start, start + 1, 0.1, true) > 0)
             Writes.swap(array, start, start + 1, 1, true, false);
     }
 
     void swapThree(int[] array, int start) {
-        if (Reads.compareIndices(array, start, start + 1, 1, true) > 0) {
-            if (Reads.compareIndices(array, start, start + 2, 1, true) <= 0)
+        if (Reads.compareIndices(array, start, start + 1, 0.1, true) > 0) {
+            if (Reads.compareIndices(array, start, start + 2, 0.1, true) <= 0)
                 Writes.swap(array, start, start + 1, 1, true, false);
 
-            else if (Reads.compareIndices(array, start + 1, start + 2, 1, true) > 0)
+            else if (Reads.compareIndices(array, start + 1, start + 2, 0.1, true) > 0)
                 Writes.swap(array, start, start + 2, 1, true, false);
 
             else {
@@ -67,8 +67,8 @@ class QuadSortBase {
             }
         }
 
-        else if (Reads.compareIndices(array, start + 1, start + 2, 1, true) > 0) {
-            if (Reads.compareIndices(array, start, start + 2, 1, true) > 0) {
+        else if (Reads.compareIndices(array, start + 1, start + 2, 0.1, true) > 0) {
+            if (Reads.compareIndices(array, start, start + 2, 0.1, true) > 0) {
                 int temp = array[start + 2];
                 Writes.write(array, start + 2, array[start + 1], 1, true, false);
                 Writes.write(array, start + 1, array[start], 1, true, false);
@@ -82,15 +82,15 @@ class QuadSortBase {
     }
 
     void swapFour(int[] array, int start) {
-        if (Reads.compareIndices(array, start, start + 1, 1, true) > 0)
+        if (Reads.compareIndices(array, start, start + 1, 0.1, true) > 0)
             Writes.swap(array, start, start + 1, 1, true, false);
 
-        if (Reads.compareIndices(array, start + 2, start + 3, 1, true) > 0)
+        if (Reads.compareIndices(array, start + 2, start + 3, 0.1, true) > 0)
             Writes.swap(array, start + 2, start + 3, 1, true, false);
 
-        if (Reads.compareIndices(array, start + 1, start + 2, 1, true) > 0) {
-            if (Reads.compareIndices(array, start, start + 2, 1, true) <= 0) {
-                if (Reads.compareIndices(array, start + 1, start + 3, 1, true) <= 0)
+        if (Reads.compareIndices(array, start + 1, start + 2, 0.1, true) > 0) {
+            if (Reads.compareIndices(array, start, start + 2, 0.1, true) <= 0) {
+                if (Reads.compareIndices(array, start + 1, start + 3, 0.1, true) <= 0)
                     Writes.swap(array, start + 1, start + 2, 1, true, false);
 
                 else {
@@ -101,12 +101,12 @@ class QuadSortBase {
                 }
             }
 
-            else if (Reads.compareIndices(array, start, start + 3, 1, true) > 0) {
+            else if (Reads.compareIndices(array, start, start + 3, 0.1, true) > 0) {
                 Writes.swap(array, start + 1, start + 3, 1, true, false);
                 Writes.swap(array, start, start + 2, 1, true, false);
             }
 
-            else if (Reads.compareIndices(array, start + 1, start + 3, 1, true) <= 0) {
+            else if (Reads.compareIndices(array, start + 1, start + 3, 0.1, true) <= 0) {
                 int temp = array[start + 1];
                 Writes.write(array, start + 1, array[start], 1, true, false);
                 Writes.write(array, start, array[start + 2], 1, true, false);
@@ -128,7 +128,7 @@ class QuadSortBase {
         pta = end++;
         ptt = pta--;
 
-        if (Reads.compareIndices(array, pta, ptt, 1, true) > 0) {
+        if (Reads.compareIndices(array, pta, ptt, 0.1, true) > 0) {
             key = array[ptt];
             Writes.write(array, ptt--, array[pta--], 1, true, false);
 
@@ -150,7 +150,7 @@ class QuadSortBase {
         pta = end++;
         ptt = pta--;
 
-        if (Reads.compareIndices(array, pta, ptt, 1, true) > 0) {
+        if (Reads.compareIndices(array, pta, ptt, 0.1, true) > 0) {
             key = array[ptt];
             Writes.write(array, ptt--, array[pta--], 1, true, false);
 
@@ -252,7 +252,7 @@ public abstract class QuadSorting extends Sort {
             qs.pta = qs.end++;
             qs.ptt = qs.pta--;
 
-            if (Reads.compareIndices(array, qs.pta, qs.ptt, 1, true) <= 0)
+            if (Reads.compareIndices(array, qs.pta, qs.ptt, 0.1, true) <= 0)
                 continue;
 
             int temp = array[qs.ptt];
@@ -410,10 +410,10 @@ public abstract class QuadSorting extends Sort {
         e = start + nmemb - 1;
         r = m--;
 
-        if (Reads.compareIndices(array, m, r, 1, true) <= 0)
+        if (Reads.compareIndices(array, m, r, 0.1, true) <= 0)
             return;
 
-        while (Reads.compareIndices(array, m, e, 1, true) <= 0)
+        while (Reads.compareIndices(array, m, e, 0.1, true) <= 0)
             e--;
 
         Highlights.clearAllMarks();
@@ -665,9 +665,9 @@ public abstract class QuadSorting extends Sort {
 
         swapper: while (count-- > 0) {
             while (true) {
-                if (Reads.compareIndices(array, pta, pta + 1, 1, true) > 0) {
-                    if (Reads.compareIndices(array, pta + 2, pta + 3, 1, true) > 0) {
-                        if (Reads.compareIndices(array, pta + 1, pta + 2, 1, true) > 0) {
+                if (Reads.compareIndices(array, pta, pta + 1, 0.1, true) > 0) {
+                    if (Reads.compareIndices(array, pta + 2, pta + 3, 0.1, true) > 0) {
+                        if (Reads.compareIndices(array, pta + 1, pta + 2, 0.1, true) > 0) {
                             pts = pta;
                             pta += 4;
                             break;
@@ -678,12 +678,12 @@ public abstract class QuadSorting extends Sort {
                     Writes.swap(array, pta, pta + 1, 1, true, false);
                 }
 
-                else if (Reads.compareIndices(array, pta + 2, pta + 3, 1, true) > 0)
+                else if (Reads.compareIndices(array, pta + 2, pta + 3, 0.1, true) > 0)
                     Writes.swap(array, pta + 2, pta + 3, 1, true, false);
 
-                if (Reads.compareIndices(array, pta + 1, pta + 2, 1, true) > 0) {
-                    if (Reads.compareIndices(array, pta, pta + 2, 1, true) <= 0) {
-                        if (Reads.compareIndices(array, pta + 1, pta + 3, 1, true) <= 0)
+                if (Reads.compareIndices(array, pta + 1, pta + 2, 0.1, true) > 0) {
+                    if (Reads.compareIndices(array, pta, pta + 2, 0.1, true) <= 0) {
+                        if (Reads.compareIndices(array, pta + 1, pta + 3, 0.1, true) <= 0)
                             Writes.swap(array, pta + 1, pta + 2, 1, true, false);
 
                         else {
@@ -694,12 +694,12 @@ public abstract class QuadSorting extends Sort {
                         }
                     }
 
-                    else if (Reads.compareIndices(array, pta, pta + 3, 1, true) > 0) {
+                    else if (Reads.compareIndices(array, pta, pta + 3, 0.1, true) > 0) {
                         Writes.swap(array, pta + 1, pta + 3, 1, true, false);
                         Writes.swap(array, pta, pta + 2, 1, true, false);
                     }
 
-                    else if (Reads.compareIndices(array, pta + 1, pta + 3, 1, true) <= 0) {
+                    else if (Reads.compareIndices(array, pta + 1, pta + 3, 0.1, true) <= 0) {
                         temp = array[pta + 1];
                         Writes.write(array, pta + 1, array[pta], 1, true, false);
                         Writes.write(array, pta, array[pta + 2], 1, true, false);
@@ -720,10 +720,10 @@ public abstract class QuadSorting extends Sort {
 
             while (true) {
                 if (count-- > 0) {
-                    if (Reads.compareIndices(array, pta, pta + 1, 1, true) > 0) {
-                        if (Reads.compareIndices(array, pta + 2, pta + 3, 1, true) > 0) {
-                            if (Reads.compareIndices(array, pta + 1, pta + 2, 1, true) > 0) {
-                                if (Reads.compareIndices(array, pta - 1, pta, 1, true) > 0) {
+                    if (Reads.compareIndices(array, pta, pta + 1, 0.1, true) > 0) {
+                        if (Reads.compareIndices(array, pta + 2, pta + 3, 0.1, true) > 0) {
+                            if (Reads.compareIndices(array, pta + 1, pta + 2, 0.1, true) > 0) {
+                                if (Reads.compareIndices(array, pta - 1, pta, 0.1, true) > 0) {
                                     pta += 4;
                                     continue;
                                 }
@@ -733,12 +733,12 @@ public abstract class QuadSorting extends Sort {
                         Writes.swap(array, pta, pta + 1, 1, true, false);
                     }
 
-                    else if (Reads.compareIndices(array, pta + 2, pta + 3, 1, true) > 0)
+                    else if (Reads.compareIndices(array, pta + 2, pta + 3, 0.1, true) > 0)
                         Writes.swap(array, pta + 2, pta + 3, 1, true, false);
 
-                    if (Reads.compareIndices(array, pta + 1, pta + 2, 1, true) > 0) {
-                        if (Reads.compareIndices(array, pta, pta + 2, 1, true) <= 0) {
-                            if (Reads.compareIndices(array, pta + 1, pta + 3, 1, true) <= 0)
+                    if (Reads.compareIndices(array, pta + 1, pta + 2, 0.1, true) > 0) {
+                        if (Reads.compareIndices(array, pta, pta + 2, 0.1, true) <= 0) {
+                            if (Reads.compareIndices(array, pta + 1, pta + 3, 0.1, true) <= 0)
                                 Writes.swap(array, pta + 1, pta + 2, 1, true, false);
 
                             else {
@@ -749,12 +749,12 @@ public abstract class QuadSorting extends Sort {
                             }
                         }
 
-                        else if (Reads.compareIndices(array, pta, pta + 3, 1, true) > 0) {
+                        else if (Reads.compareIndices(array, pta, pta + 3, 0.1, true) > 0) {
                             Writes.swap(array, pta, pta + 2, 1, true, false);
                             Writes.swap(array, pta + 1, pta + 3, 1, true, false);
                         }
 
-                        else if (Reads.compareIndices(array, pta + 1, pta + 3, 1, true) <= 0) {
+                        else if (Reads.compareIndices(array, pta + 1, pta + 3, 0.1, true) <= 0) {
                             temp = array[pta];
                             Writes.write(array, pta, array[pta + 2], 1, true, false);
                             Writes.write(array, pta + 2, array[pta + 1], 1, true, false);
@@ -785,15 +785,15 @@ public abstract class QuadSorting extends Sort {
                 if (pts == start) {
                     switch (nmemb % 4) {
                         case 3:
-                            if (Reads.compareIndices(array, pta + 1, pta + 2, 1, true) <= 0)
+                            if (Reads.compareIndices(array, pta + 1, pta + 2, 0.1, true) <= 0)
                                 break;
 
                         case 2:
-                            if (Reads.compareIndices(array, pta, pta + 1, 1, true) <= 0)
+                            if (Reads.compareIndices(array, pta, pta + 1, 0.1, true) <= 0)
                                 break;
 
                         case 1:
-                            if (Reads.compareIndices(array, pta - 1, pta, 1, true) <= 0)
+                            if (Reads.compareIndices(array, pta - 1, pta, 0.1, true) <= 0)
                                 break;
 
                         case 0:

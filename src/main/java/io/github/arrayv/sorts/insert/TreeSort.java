@@ -74,7 +74,7 @@ public final class TreeSort extends Sort {
 			Highlights.markArray(2, pointer);
 
 			// Case 2: The element is smaller and thus belongs in the left subtree
-			if (Reads.compareValues(array[addPointer], array[pointer]) == -1) {
+			if (Reads.compareIndices(array, addPointer, pointer, 0.5, true) == -1) {
 				Delays.sleep(0.25);
 
 				// Recursively get the root of the new left subtree

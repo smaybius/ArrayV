@@ -59,7 +59,7 @@ public final class FifthMergeSort extends Sort {
         int left = start;
         int right = mid;
         while (left < mid && right < end) {
-            if (Reads.compareIndices(array, left, right, 0.5, true) <= 0) {
+            if (Reads.compareIndices(array, left, right, 0.1, true) <= 0) {
                 Writes.write(array, buffer++, array[left++], 0.5, false, false);
                 Highlights.markArray(3, buffer);
             } else {
@@ -81,7 +81,7 @@ public final class FifthMergeSort extends Sort {
         int left = mid - 1;
         int right = end - 1;
         while (buffer > right && right >= mid) {
-            if (Reads.compareIndices(array, left, right, 0.5, true) > 0) {
+            if (Reads.compareIndices(array, left, right, 0.1, true) > 0) {
                 Highlights.markArray(3, buffer);
                 Writes.write(array, buffer--, array[left--], 0.5, false, false);
             } else {

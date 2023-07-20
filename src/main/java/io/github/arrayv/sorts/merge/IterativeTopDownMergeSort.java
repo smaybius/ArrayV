@@ -60,7 +60,7 @@ public class IterativeTopDownMergeSort extends Sort {
         Highlights.markArray(2, high);
         int nxt = start;
         for (; low < mid && high < end; ++nxt) {
-            if (Reads.compareValues(array[low], array[high]) == 1) {
+            if (Reads.compareIndices(array, low, high, 0.5, true) == 1) {
                 Writes.write(tmp, nxt, array[high++], 1, false, true);
                 Highlights.markArray(2, high);
             } else {

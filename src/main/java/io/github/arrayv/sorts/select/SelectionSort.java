@@ -53,7 +53,7 @@ public final class SelectionSort extends Sort {
                 Highlights.markArray(2, j);
                 Delays.sleep(0.01);
 
-                if (Reads.compareValues(array[j], array[lowestindex]) == -1){
+                if (Reads.compareIndices(array, j, lowestindex, 0.5, true) == -1) {
                     lowestindex = j;
                     Highlights.markArray(1, lowestindex);
                     Delays.sleep(0.01);

@@ -21,7 +21,7 @@ runGroup(shuffles.size() + distributions.size()) { // The number of inputs will 
         
     }
     for (distrib in distributions) {
-        if (distrib != Distributions.LINEAR || distrib != Distributions.CUSTOM) { // Exclude the "no shuffle" shuffle, for being redundant with "sorted".
+        if (distrib != Distributions.LINEAR || distrib != Distributions.CUSTOM) { // Exclude the redundant "linear" and the unnecessary "custom"
             category = distrib.name
             // Reverse the input first if the shuffle doesn't affect sorted inputs.
             if (distrib == Distributions.SIMILAR || distrib == Distributions.SQUARE || distrib == Distributions.SQRT || distrib == Distributions.CUBIC || distrib == Distributions.QUINTIC || distrib == Distributions.CBRT || distrib == Distributions.QTRT || distrib == Distributions.CANTOR || distrib == Distributions.SIGMOID || distrib == Distributions.VERT_SIG || distrib == Distributions.EXP) {

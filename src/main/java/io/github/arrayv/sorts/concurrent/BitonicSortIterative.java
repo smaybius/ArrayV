@@ -39,9 +39,9 @@ public final class BitonicSortIterative extends Sort {
 
                     if ((ij) > i && ij < sortLength) {
                         if ((((i & k) == 0) == m) && Reads.compareIndices(array, i, ij, 0.5, true) > 0)
-                            Writes.swap(array, i, ij, 0.5, true, false);
+                            Writes.swap(array, i, ij, 0, true, false);
                         if ((((i & k) != 0) == m) && Reads.compareIndices(array, i, ij, 0.5, true) < 0)
-                            Writes.swap(array, i, ij, 0.5, true, false);
+                            Writes.swap(array, i, ij, 0, true, false);
                     }
                 }
             }

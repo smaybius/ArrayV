@@ -48,7 +48,7 @@ public final class StacklessDualPivotQuickSort extends Sort {
 	private int partition(int[] array, int a, int b, int p) {
 		int m1 = (a + a + b) / 3, m2 = (a + b + b) / 3;
 
-		if (Reads.compareIndices(array, m1, m2, 1, true) > 0) {
+		if (Reads.compareIndices(array, m1, m2, 0.1, true) > 0) {
 			Writes.swap(array, m1, a, 1, true, false);
 			Writes.swap(array, m2, --b, 1, true, false);
 		} else {
@@ -90,7 +90,7 @@ public final class StacklessDualPivotQuickSort extends Sort {
 		while (a < b) {
 			int m = a + (b - a) / 2;
 
-			if (Reads.compareIndices(array, p, m, 1, true) <= 0)
+			if (Reads.compareIndices(array, p, m, 0.1, true) <= 0)
 				b = m;
 			else
 				a = m + 1;
@@ -141,7 +141,7 @@ public final class StacklessDualPivotQuickSort extends Sort {
 			Writes.swap(array, a - 1, b, 1, true, false);
 
 			med = true;
-			while (a < b1 && Reads.compareIndices(array, a - 1, a, 0.5, true) == 0) {
+			while (a < b1 && Reads.compareIndices(array, a - 1, a, 0.1, true) == 0) {
 				med = false;
 				a++;
 			}

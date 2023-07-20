@@ -26,7 +26,7 @@ public final class IntroSort extends Sort {
 
     private void SwapIfGreater(int[] keys, int a, int b) {
         if (a != b) {
-            if (Reads.compareIndices(keys, a, b, 0.5, true) > 0) {
+            if (Reads.compareIndices(keys, a, b, 0.1, true) > 0) {
                 Writes.swap(keys, a, b, 0, false, false);
             }
         }
@@ -133,7 +133,7 @@ public final class IntroSort extends Sort {
         int child;
         while (i <= n / 2) {
             child = 2 * i;
-            if (child < n && Reads.compareIndices(keys, lo + child - 1, lo + child, 1, true) < 0) {
+            if (child < n && Reads.compareIndices(keys, lo + child - 1, lo + child, 0.1, true) < 0) {
                 child++;
             }
             Highlights.markArray(1, lo + child - 1);

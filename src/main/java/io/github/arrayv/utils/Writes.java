@@ -240,6 +240,25 @@ public final class Writes {
         }
     }
 
+    public void insert(int[] array, int pos, int to, double sleep, boolean mark, boolean auxwrite) {
+        int temp = array[pos];
+        if (to - pos > 0) {
+            for (int i = pos; i < to; i++) {
+                this.write(array, i, array[i + 1], 0, mark, auxwrite);
+                Delays.sleep(sleep);
+            }
+        } else if (to - pos < 0) {
+            for (int i = pos; i > to; i--) {
+                this.write(array, i, array[i - 1], 0, mark, auxwrite);
+                Delays.sleep(sleep);
+            }
+        }
+        if (pos != to) {
+            this.write(array, to, temp, 0, mark, auxwrite);
+            Delays.sleep(sleep);
+        }
+    }
+
     public void reversal(int[] array, int start, int length, double sleep, boolean mark, boolean auxwrite) {
         this.reversals++;
 
@@ -431,7 +450,7 @@ public final class Writes {
 
     /**
      * Method to mimic {@link System#arraycopy(Object, int, Object, int, int)}
-     * 
+     *
      * @see System#arraycopy(Object, int, Object, int, int)
      */
     public void arraycopy(int[] src, int srcPos, int[] dest, int destPos, int length, double sleep, boolean mark,
@@ -475,8 +494,6 @@ public final class Writes {
     }
 
     /**
-     * Same as arraycopy, but used to copy in reverse
-     * 
      * @deprecated Use
      *             {@link Writes#arraycopy(int[], int, int[], int, int, double, boolean, boolean)}
      *             instead

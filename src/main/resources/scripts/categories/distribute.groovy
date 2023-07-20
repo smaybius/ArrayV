@@ -3,6 +3,7 @@ import io.github.arrayv.prompts.SortPrompt
 SortPrompt.setSortThreadForCategory('Distribution Sorts', 26) {
     run CountingSort go 2048.numbers, 1.5.speed
     run OptimizedPigeonholeSort go 2048.numbers, 1.5.speed
+    run MoreOptimizedPigeonholeSort go 2048.numbers, 1.5.speed
     run GravitySort go 1024.numbers
     run ClassicGravitySort go 1024.numbers
     run SimplisticGravitySort go 1024.numbers, 2.speed
@@ -25,6 +26,7 @@ SortPrompt.setSortThreadForCategory('Distribution Sorts', 26) {
     run RotateMSDRadixSort go 1024.numbers, 4.buckets
     run ProxmapSort go 512.numbers
     run FlashSort go 2048.numbers
+    run HashSort go 2048.numbers
     run BinaryQuickSortIterative go 2048.numbers
     run StacklessBinaryQuickSort go 2048.numbers, 2.speed
     run QuickBinaryRadixSort go 2048.numbers

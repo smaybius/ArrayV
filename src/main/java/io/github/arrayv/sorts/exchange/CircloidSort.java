@@ -49,8 +49,8 @@ public final class CircloidSort extends Sort {
         int b = right;
         boolean swapped = false;
         while (a < b) {
-            if (Reads.compareIndices(array, a, b, 0.25, true) == 1) {
-                Writes.swap(array, a, b, 1, true, false);
+            if (Reads.compareIndices(array, a, b, 1, true) == 1) {
+                Writes.swap(array, a, b, 0, true, false);
                 swapped = true;
             }
             a++;

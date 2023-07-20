@@ -75,7 +75,7 @@ public abstract class GrailSorting extends Sort {
     // Variant of the Gries-Mills algorithm, which is basically recursive block
     // swaps.
     public void grailRotate(int[] array, int start, int leftLen, int rightLen) {
-        Rotations.cycleReverse(array, start, leftLen, rightLen, 1, true, false);
+        Rotations.cycleReverse(array, start, leftLen, rightLen, 0.5, true, false);
     }
 
     // Variant of Insertion Sort that utilizes swaps instead of overwrites.
@@ -123,7 +123,7 @@ public abstract class GrailSorting extends Sort {
     }
 
     // cost: 2 * length + idealKeys^2 / 2
-    private int grailCollectKeys(int[] array, int start, int length, int idealKeys) {
+    public int grailCollectKeys(int[] array, int start, int length, int idealKeys) {
         int keysFound = 1; // by itself, the first item in the array is our first unique key
         int firstKey = 0; // the first item in the array is at the first position in the array
         int currKey = 1; // the index used for finding potentially unique items ("keys") in the array
@@ -174,7 +174,7 @@ public abstract class GrailSorting extends Sort {
             int left = start + index - 1;
             int right = start + index;
 
-            if (Reads.compareIndices(array, left, right, 0.5, true) > 0) {
+            if (Reads.compareIndices(array, left, right, 0.1, true) > 0) {
                 grailSwap(array, left - 2, right);
                 grailSwap(array, right - 2, left);
             } else {
@@ -202,7 +202,7 @@ public abstract class GrailSorting extends Sort {
         int end = middle + rightLen;
 
         while (right < end) {
-            if (left == middle || Reads.compareIndices(array, left, right, 0.5, true) > 0) {
+            if (left == middle || Reads.compareIndices(array, left, right, 0.1, true) > 0) {
                 grailSwap(array, buffer, right);
                 right++;
             } else {
@@ -232,7 +232,7 @@ public abstract class GrailSorting extends Sort {
 
         // used to be 'left >= end'
         while (left > end) {
-            if (right == middle || Reads.compareIndices(array, left, right, 0.5, true) > 0) {
+            if (right == middle || Reads.compareIndices(array, left, right, 0.1, true) > 0) {
                 grailSwap(array, buffer, left);
                 left--;
             } else {
@@ -394,7 +394,7 @@ public abstract class GrailSorting extends Sort {
     // the middle, and `buffer` should be the end
 
     private Subarray grailGetSubarray(int[] array, int currentKey, int medianKey) {
-        if (Reads.compareIndices(array, currentKey, medianKey, 0.5, true) < 0) {
+        if (Reads.compareIndices(array, currentKey, medianKey, 0.1, true) < 0) {
             return Subarray.LEFT;
         } else {
             return Subarray.RIGHT;
@@ -409,7 +409,7 @@ public abstract class GrailSorting extends Sort {
         int lastRightFrag = offset + (blockCount * blockLen);
         int prevLeftBlock = lastRightFrag - blockLen;
 
-        while (blocksToMerge < blockCount && Reads.compareIndices(array, lastRightFrag, prevLeftBlock, 0.5, true) < 0) {
+        while (blocksToMerge < blockCount && Reads.compareIndices(array, lastRightFrag, prevLeftBlock, 0.1, true) < 0) {
             blocksToMerge++;
             prevLeftBlock -= blockLen;
         }
@@ -427,7 +427,7 @@ public abstract class GrailSorting extends Sort {
 
         if (leftOrigin == Subarray.LEFT) {
             while (left < middle && right < end) {
-                if (Reads.compareIndices(array, left, right, 0.5, true) <= 0) {
+                if (Reads.compareIndices(array, left, right, 0.1, true) <= 0) {
                     grailSwap(array, buffer, left);
                     left++;
                 } else {
@@ -438,7 +438,7 @@ public abstract class GrailSorting extends Sort {
             }
         } else {
             while (left < middle && right < end) {
-                if (Reads.compareIndices(array, left, right, 0.5, true) < 0) {
+                if (Reads.compareIndices(array, left, right, 0.1, true) < 0) {
                     grailSwap(array, buffer, left);
                     left++;
                 } else {
@@ -469,7 +469,7 @@ public abstract class GrailSorting extends Sort {
         int middle = start + leftLen;
 
         if (leftOrigin == Subarray.LEFT) {
-            if (Reads.compareIndices(array, middle - 1, middle, 0.5, true) > 0) {
+            if (Reads.compareIndices(array, middle - 1, middle, 0.1, true) > 0) {
                 while (leftLen != 0) {
                     int mergeLen = grailBinarySearchLeft(array, middle, rightLen, array[start]);
 
@@ -488,12 +488,12 @@ public abstract class GrailSorting extends Sort {
                         do {
                             start++;
                             leftLen--;
-                        } while (leftLen != 0 && Reads.compareIndices(array, start, middle, 0.5, true) <= 0);
+                        } while (leftLen != 0 && Reads.compareIndices(array, start, middle, 0.1, true) <= 0);
                     }
                 }
             }
         } else {
-            if (Reads.compareIndices(array, middle - 1, middle, 0.5, true) >= 0) {
+            if (Reads.compareIndices(array, middle - 1, middle, 0.1, true) >= 0) {
                 while (leftLen != 0) {
                     int mergeLen = grailBinarySearchRight(array, middle, rightLen, array[start]);
 
@@ -512,7 +512,7 @@ public abstract class GrailSorting extends Sort {
                         do {
                             start++;
                             leftLen--;
-                        } while (leftLen != 0 && Reads.compareIndices(array, start, middle, 0.5, true) < 0);
+                        } while (leftLen != 0 && Reads.compareIndices(array, start, middle, 0.1, true) < 0);
                     }
                 }
             }
@@ -756,7 +756,7 @@ public abstract class GrailSorting extends Sort {
                     do {
                         start++;
                         leftLen--;
-                    } while (leftLen != 0 && Reads.compareIndices(array, start, middle, 0.5, true) <= 0);
+                    } while (leftLen != 0 && Reads.compareIndices(array, start, middle, 0.1, true) <= 0);
                 }
             }
             // INDEXING BUG FIXED: Credit to Anonymous0726 for debugging.
@@ -780,7 +780,7 @@ public abstract class GrailSorting extends Sort {
                     do {
                         rightLen--;
                         end--;
-                    } while (rightLen != 0 && Reads.compareIndices(array, middle - 1, end, 0.5, true) <= 0);
+                    } while (rightLen != 0 && Reads.compareIndices(array, middle - 1, end, 0.1, true) <= 0);
                 }
             }
         }
@@ -791,7 +791,7 @@ public abstract class GrailSorting extends Sort {
             int left = start + index - 1;
             int right = start + index;
 
-            if (Reads.compareIndices(array, left, right, 0.5, true) > 0) {
+            if (Reads.compareIndices(array, left, right, 0.1, true) > 0) {
                 grailSwap(array, left, right);
             }
         }

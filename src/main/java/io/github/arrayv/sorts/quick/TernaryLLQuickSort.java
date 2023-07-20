@@ -33,7 +33,7 @@ public final class TernaryLLQuickSort extends Sort {
     }
 
     private int compare(int[] A, int lo, int hi) {
-        return Reads.compareIndices(A, lo, hi, 0.5, true);
+        return Reads.compareIndices(A, lo, hi, 0.1, true);
     }
 
     // I'll just be using median-of-3 here

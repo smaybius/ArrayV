@@ -75,7 +75,7 @@ public final class RotateMergeSortParallel extends Sort {
 	}
 
 	private void rotate(int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private int binarySearch(int a, int b, int value, boolean left) {

@@ -4,7 +4,7 @@ SortPrompt.setSortThreadForCategory('Concurrent Sorts', 24) {
     // Other
     run FoldSort go 1024.numbers
     run CreaseSort go 1024.numbers
-    run MatrixSort go 256.numbers, 0.667.speed
+    run MatrixSort go 1024.numbers, 2.speed
 
     // Recursive
     run BitonicSortRecursive go 1024.numbers
@@ -21,7 +21,7 @@ SortPrompt.setSortThreadForCategory('Concurrent Sorts', 24) {
     run OddEvenMergeSortParallel go 1024.numbers
     run BoseNelsonSortParallel go 1024.numbers
     run WeaveSortParallel go 1024.numbers
-    run MatrixSortParallel go 1024.numbers
+    run MatrixSortParallel go 1024.numbers, 0.5.speed
 
     // Iterative
     run BitonicSortIterative go 1024.numbers

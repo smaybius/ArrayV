@@ -46,7 +46,7 @@ public final class LaziestSort extends Sort {
 	}
 
 	private static void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private static void binaryInsertion(int[] array, int a, int b) {

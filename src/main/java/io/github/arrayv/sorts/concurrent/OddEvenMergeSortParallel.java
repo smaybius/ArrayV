@@ -76,8 +76,8 @@ public final class OddEvenMergeSortParallel extends Sort {
     }
 
     private void compSwap(int a, int b) {
-        if (Reads.compareIndices(array, a, b, 1, true) == 1)
-            Writes.swap(array, a, b, 1, true, false);
+        if (Reads.compareIndices(array, a, b, 0.5, true) == 1)
+            Writes.swap(array, a, b, 0, true, false);
     }
 
     private void oddEvenMerge(int lo, int m2, int n, int r) {

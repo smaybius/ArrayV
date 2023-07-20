@@ -46,7 +46,7 @@ public final class RotateMergeSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private int binarySearch(int[] array, int a, int b, int value, boolean left) {
@@ -66,7 +66,7 @@ public final class RotateMergeSort extends Sort {
 		return a;
 	}
 
-	private void rotateMerge(int[] array, int a, int m, int b, int depth) {
+	public void rotateMerge(int[] array, int a, int m, int b, int depth) {
 		int m1, m2, m3;
 
 		if (m - a >= b - m) {

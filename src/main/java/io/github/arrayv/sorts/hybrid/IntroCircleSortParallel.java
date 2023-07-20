@@ -96,22 +96,22 @@ final public class IntroCircleSortParallel extends Sort {
 	public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
 		this.array = array;
 		this.end = sortLength;
-        int threshold = 0, n = 1;
-        for (; n < sortLength; n *= 2, threshold++)
-            ;
+		int threshold = 0, n = 1;
+		for (; n < sortLength; n *= 2, threshold++)
+			;
 
-        threshold /= 2;
-        int iterations = 0;
+		threshold /= 2;
+		int iterations = 0;
 
-        do {
+		do {
 			swapped = false;
-            iterations++;
+			iterations++;
 			this.circleSort(0, n);
-            if (iterations >= threshold) {
-                InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
-                binaryInserter.customInsertSort(array, 0, sortLength, 0.5, false);
-                break;
-            }
-        } while (swapped);
+			if (iterations >= threshold) {
+				InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
+				binaryInserter.customInsertSort(array, 0, sortLength, 0.5, false);
+				break;
+			}
+		} while (swapped);
 	}
 }

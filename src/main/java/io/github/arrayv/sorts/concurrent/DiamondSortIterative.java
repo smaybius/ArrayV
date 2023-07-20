@@ -46,7 +46,7 @@ public final class DiamondSortIterative extends Sort {
 
 	private void compSwap(int[] array, int a, int b) {
 		if (Reads.compareIndices(array, a, b, 0.05, true) == 1)
-			Writes.swap(array, a, b, 0.05, true, false);
+			Writes.swap(array, a, b, 0, true, false);
 	}
 
 	@Override

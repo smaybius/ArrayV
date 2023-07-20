@@ -53,7 +53,7 @@ final public class UnstableKotaSort extends BlockMergeSorting {
 
 	@Override
 	protected boolean boundCheck(int[] array, int a, int m, int b) {
-		return Reads.compareIndices(array, m - 1, m, 1, true) <= 0;
+		return Reads.compareIndices(array, m - 1, m, 0.1, true) <= 0;
 	}
 
 	private void blockSelect(int[] array, int a, int b, int bLen) {
@@ -61,9 +61,9 @@ final public class UnstableKotaSort extends BlockMergeSorting {
 			int min = a;
 
 			for (int i = a + bLen; i < b; i += bLen) {
-				int cmp = Reads.compareIndices(array, i, min, 1, true);
+				int cmp = Reads.compareIndices(array, i, min, 0.1, true);
 
-				if (cmp == -1 || (cmp == 0 && Reads.compareIndices(array, i + bLen - 1, min + bLen - 1, 1, true) < 0))
+				if (cmp == -1 || (cmp == 0 && Reads.compareIndices(array, i + bLen - 1, min + bLen - 1, 0.1, true) < 0))
 					min = i;
 			}
 			if (a != min)
@@ -88,7 +88,7 @@ final public class UnstableKotaSort extends BlockMergeSorting {
 		while (r1 < r2) {
 			int ml = (r1 + r2) / 2;
 
-			if (Reads.compareIndices(array, m + ml, a + (bufLen - ml) - 1, 1, true) > 0)
+			if (Reads.compareIndices(array, m + ml, a + (bufLen - ml) - 1, 0.1, true) > 0)
 				r2 = ml;
 			else
 				r1 = ml + 1;
@@ -101,7 +101,7 @@ final public class UnstableKotaSort extends BlockMergeSorting {
 		int c = bLen;
 
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 1, true) <= 0) {
+			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0) {
 				Writes.swap(array, k++, i++, 1, true, false);
 				l++;
 			} else {

@@ -182,7 +182,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 	private int[] findBitsSm(int[] array, int a, int b, int a1, boolean bw, int n) {
 		int p = a, pEnd, cmp = bw ? -1 : 1;
 
-		while (p < b && Reads.compareIndices(array, p, a1, 1, true) != cmp)
+		while (p < b && Reads.compareIndices(array, p, a1, 0.1, true) != cmp)
 			p++;
 		a1++;
 
@@ -190,7 +190,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 			pEnd = p + 1;
 
 			for (int i = pEnd; i < b && pEnd - p < n; i++) {
-				if (Reads.compareIndices(array, i, a1, 1, true) == cmp) {
+				if (Reads.compareIndices(array, i, a1, 0.1, true) == cmp) {
 					this.rotate(array, p, pEnd, i);
 
 					p += i - pEnd;
@@ -492,7 +492,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 
 		int f = a + bLen, a1 = f, bp3 = bp2 + tLen;
 
-		boolean rev = Reads.compareIndices(array, bp1, bp2, 1, true) > 0;
+		boolean rev = Reads.compareIndices(array, bp1, bp2, 0.1, true) > 0;
 
 		while (true) {
 			do {
@@ -502,7 +502,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 				bp1++;
 				bp2++;
 				a1 += bLen;
-			} while (bp2 < bp3 && Reads.compareIndices(array, bp1, bp2, 1, true) == (rev ? 1 : -1));
+			} while (bp2 < bp3 && Reads.compareIndices(array, bp1, bp2, 0.1, true) == (rev ? 1 : -1));
 
 			if (bp2 == bp3) {
 				this.smartTailMerge(array, tmp, f - bLen, f, rev ? f : a1, b);
@@ -602,7 +602,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 
 		int f = a1, a2 = f, bp3 = bp2 + tLen;
 
-		boolean rev = Reads.compareIndices(array, bp1, bp2, 1, true) > 0;
+		boolean rev = Reads.compareIndices(array, bp1, bp2, 0.1, true) > 0;
 
 		while (true) {
 			do {
@@ -612,7 +612,7 @@ public final class ChaliceSort extends BlockMergeSorting {
 				bp1++;
 				bp2++;
 				a2 += bLen;
-			} while (bp2 < bp3 && Reads.compareIndices(array, bp1, bp2, 1, true) == (rev ? 1 : -1));
+			} while (bp2 < bp3 && Reads.compareIndices(array, bp1, bp2, 0.1, true) == (rev ? 1 : -1));
 
 			if (bp2 == bp3) {
 				if (!rev)

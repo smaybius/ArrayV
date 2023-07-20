@@ -93,7 +93,7 @@ public final class QuickSortPartitions extends Sort {
     }
 
     private int ModifiedHoare(int[] a, int p, int r) {
-        if (Reads.compareIndices(a, p, r, 1, true) > 0)
+        if (Reads.compareIndices(a, p, r, 0.1, true) > 0)
             Writes.swap(a, p, r, 1, true, false); // Sentinel at both ends
         int x = a[p]; // x stores the pivot and location p is vacant now.
         while (true) {

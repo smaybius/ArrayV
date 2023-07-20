@@ -30,8 +30,8 @@ public abstract class CircleSorting extends Sort {
         int mid = (hi - lo) / 2;
 
         while (lo < hi) {
-            if (hi < this.end && Reads.compareIndices(array, lo, hi, sleep / 2, true) > 0) {
-                Writes.swap(array, lo, hi, sleep, true, false);
+            if (hi < this.end && Reads.compareIndices(array, lo, hi, sleep, true) > 0) {
+                Writes.swap(array, lo, hi, 0, true, false);
                 swapCount++;
             }
 

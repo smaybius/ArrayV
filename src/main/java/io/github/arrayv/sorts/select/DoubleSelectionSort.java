@@ -51,16 +51,16 @@ public final class DoubleSelectionSort extends Sort {
         int smallest = 0;
         int biggest = 0;
 
-        while(left <= right) {
-            for(int i = left; i <= right; i++) {
+        while (left <= right) {
+            for (int i = left; i <= right; i++) {
                 Highlights.markArray(3, i);
 
-                if(Reads.compareValues(array[i], array[biggest]) == 1) {
+                if (Reads.compareIndices(array, i, biggest, 0.5, true) == 1) {
                     biggest = i;
                     Highlights.markArray(1, biggest);
                     Delays.sleep(0.01);
                 }
-                if(Reads.compareValues(array[i], array[smallest]) == -1) {
+                if (Reads.compareIndices(array, i, smallest, 0.5, true) == -1) {
                     smallest = i;
                     Highlights.markArray(2, smallest);
                     Delays.sleep(0.01);
@@ -68,7 +68,7 @@ public final class DoubleSelectionSort extends Sort {
 
                 Delays.sleep(0.01);
             }
-            if(biggest == left)
+            if (biggest == left)
                 biggest = smallest;
 
             Writes.swap(array, left, smallest, 0.02, true, false);

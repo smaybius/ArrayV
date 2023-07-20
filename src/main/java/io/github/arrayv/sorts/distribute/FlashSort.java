@@ -51,7 +51,7 @@ public final class FlashSort extends Sort {
             int bigIndex;
 
             // which is bigger A(i) or A(i+1)
-            if (Reads.compareIndices(array, i, i + 1, 1, true) == -1) {
+            if (Reads.compareIndices(array, i, i + 1, 0.5, true) == -1) {
                 small = array[i];
                 big = array[i + 1];
                 bigIndex = i + 1;

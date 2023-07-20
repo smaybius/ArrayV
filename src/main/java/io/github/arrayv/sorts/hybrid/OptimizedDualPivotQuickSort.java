@@ -47,7 +47,7 @@ public final class OptimizedDualPivotQuickSort extends Sort {
         if (med2 >= right) {
             med2 = right - 1;
         }
-        if (Reads.compareIndices(array, med1, med2, 1, true) == -1) {
+        if (Reads.compareIndices(array, med1, med2, 0.1, true) == -1) {
             Writes.swap(array, med1, left, 1, true, false);
             Writes.swap(array, med2, right, 1, true, false);
         } else {

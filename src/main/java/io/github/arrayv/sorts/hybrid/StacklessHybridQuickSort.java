@@ -48,13 +48,13 @@ public final class StacklessHybridQuickSort extends Sort {
 	private void medianOfThree(int[] array, int a, int b) {
 		int m = a + (b - 1 - a) / 2;
 
-		if (Reads.compareIndices(array, a, m, 1, true) == 1)
+		if (Reads.compareIndices(array, a, m, 0.1, true) == 1)
 			Writes.swap(array, a, m, 1, true, false);
 
-		if (Reads.compareIndices(array, m, b - 1, 1, true) == 1) {
+		if (Reads.compareIndices(array, m, b - 1, 0.1, true) == 1) {
 			Writes.swap(array, m, b - 1, 1, true, false);
 
-			if (Reads.compareIndices(array, a, m, 1, true) == 1)
+			if (Reads.compareIndices(array, a, m, 0.1, true) == 1)
 				return;
 		}
 
@@ -72,13 +72,13 @@ public final class StacklessHybridQuickSort extends Sort {
 				i++;
 				Highlights.markArray(1, i);
 				Delays.sleep(0.5);
-			} while (i < j && Reads.compareIndices(array, i, a, 0, false) < 0);
+			} while (i < j && Reads.compareIndices(array, i, a, 0.1, true) < 0);
 
 			do {
 				j--;
 				Highlights.markArray(2, j);
 				Delays.sleep(0.5);
-			} while (j >= i && Reads.compareIndices(array, j, a, 0, false) >= 0);
+			} while (j >= i && Reads.compareIndices(array, j, a, 0.1, true) >= 0);
 
 			if (i < j)
 				Writes.swap(array, i, j, 1, true, false);
@@ -94,7 +94,7 @@ public final class StacklessHybridQuickSort extends Sort {
 		while (a < b) {
 			int m = a + (b - a) / 2;
 
-			if (Reads.compareIndices(array, p, m, 1, true) <= 0)
+			if (Reads.compareIndices(array, p, m, 0.1, true) <= 0)
 				b = m;
 			else
 				a = m + 1;
@@ -148,7 +148,7 @@ public final class StacklessHybridQuickSort extends Sort {
 			Writes.swap(array, a - 1, b, 1, true, false);
 
 			med = true;
-			while (a < b1 && Reads.compareIndices(array, a - 1, a, 0.5, true) == 0) {
+			while (a < b1 && Reads.compareIndices(array, a - 1, a, 0.1, true) == 0) {
 				med = false;
 				a++;
 			}

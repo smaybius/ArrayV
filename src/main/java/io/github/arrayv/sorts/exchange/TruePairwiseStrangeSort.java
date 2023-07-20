@@ -43,7 +43,7 @@ public final class TruePairwiseStrangeSort extends Sort {
                 while (c > 1) {
                     c /= 2;
                     if (b + (c * gap) < end) {
-                        if (Reads.compareIndices(array, b, b + (c * gap), 0.5, true) == 1) {
+                        if (Reads.compareIndices(array, b, b + (c * gap), 0.25, true) == 1) {
                             Writes.swap(array, b, b + (c * gap), 0, true, false);
                             swaps++;
                         }

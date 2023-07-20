@@ -2,7 +2,7 @@ import io.github.arrayv.prompts.SortPrompt
 import io.github.arrayv.utils.Shuffles
 
 SortPrompt.setSortThreadForCategory('Hybrid Sorts', 70) {
-    /*run HybridCombSort go 1024.numbers
+    /*run HybridCombSort go 1024.numbers*/
     run IntroCircleSortRecursive go 1024.numbers
     run IntroCircleSortIterative go 1024.numbers
     run PairwiseCircleSort go 1024.numbers
@@ -50,7 +50,7 @@ SortPrompt.setSortThreadForCategory('Hybrid Sorts', 70) {
     run BufferedBlockSelectionMergeSort go 2048.numbers, 2.speed
     run MedianMergeSort go 2048.numbers
     run InPlaceStableCycleSort go 1024.numbers
-    run BufferPartitionMergeSort go 2048.numbers*/
+    run BufferPartitionMergeSort go 2048.numbers
     run QuarterMergeSort go 2048.numbers
     run StableQuarterMergeSort go 2048.numbers
     run FifthMergeSort go 2048.numbers

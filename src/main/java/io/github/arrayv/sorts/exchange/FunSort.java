@@ -74,7 +74,7 @@ public final class FunSort extends Sort {
             do {
                 done = true;
                 int pos = binarySearch(array, 0, length - 1, array[i]);
-                if (Reads.compareIndices(array, pos, i, 0, false) != 0) {
+                if (Reads.compareIndices(array, pos, i, 0.1, true) != 0) {
                     if (i < pos - 1) {
                         Writes.swap(array, i, pos - 1, 1, true, false);
                     } else if (i > pos) {

@@ -30,7 +30,7 @@ public final class MergeExchangeSortIterative extends Sort {
             while (true) {
                 for (int i = 0; i < length - d; i++) {
                     if ((i & p) == r && Reads.compareIndices(array, i, i + d, 0.5, true) == 1) {
-                        Writes.swap(array, i, i + d, 0.5, true, false);
+                        Writes.swap(array, i, i + d, 0, true, false);
                     }
                 }
                 if (q == p)

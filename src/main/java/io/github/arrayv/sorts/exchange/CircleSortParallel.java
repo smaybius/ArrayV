@@ -67,7 +67,7 @@ final public class CircleSortParallel extends Sort {
 			return;
 
 		for (int i = a, j = b - 1; i < j; i++, j--)
-			if (j < this.end && Reads.compareIndices(array, i, j, 0.5, true) > 0) {
+			if (j < this.end && Reads.compareIndices(array, i, j, 1, true) > 0) {
 				Writes.swap(array, i, j, 0, true, false);
 				this.swapped = true;
 			}

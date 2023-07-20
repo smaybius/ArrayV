@@ -61,7 +61,7 @@ public final class ForcedStableQuickSort extends Sort {
 	}
 
 	private boolean stableComp(int[] array, int[] key, int a, int b) {
-		int comp = Reads.compareIndices(array, a, b, 0.5, true);
+		int comp = Reads.compareIndices(array, a, b, 0.1, true);
 
 		return comp > 0 || (comp == 0 && Reads.compareOriginalIndices(key, a, b, 0.5, false) > 0);
 	}

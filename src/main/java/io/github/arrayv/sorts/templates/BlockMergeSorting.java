@@ -81,7 +81,7 @@ public abstract class BlockMergeSorting extends Sort {
 
 	protected void rotate(int[] array, int a, int m, int b) {
 		Highlights.clearMark(2);
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	protected int leftBinSearch(int[] array, int a, int b, int val) {
@@ -117,12 +117,12 @@ public abstract class BlockMergeSorting extends Sort {
 		int i = a + 1, j = a;
 
 		while (i < b) {
-			if (Reads.compareIndices(array, i - 1, i++, 1, true) == 1) {
-				while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) == 1)
+			if (Reads.compareIndices(array, i - 1, i++, 0.1, true) == 1) {
+				while (i < b && Reads.compareIndices(array, i - 1, i, 0.1, true) == 1)
 					i++;
 				Writes.reversal(array, j, i - 1, 1, true, false);
 			} else
-				while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) <= 0)
+				while (i < b && Reads.compareIndices(array, i - 1, i, 0.1, true) <= 0)
 					i++;
 
 			if (i < b) {

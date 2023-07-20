@@ -66,7 +66,7 @@ public final class ThreeSmoothCombSortRecursive extends Sort {
 
         for (int i = pos; i + gap < end; i += gap)
             if (Reads.compareIndices(array, i, i + gap, 0.5, true) == 1)
-                Writes.swap(array, i, i + gap, 0.5, false, false);
+                Writes.swap(array, i, i + gap, 0, false, false);
     }
 
     @Override

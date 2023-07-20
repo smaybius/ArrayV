@@ -56,7 +56,7 @@ public final class BufferPartitionMergeSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private void inPlaceMerge(int[] array, int a, int m, int b) {
@@ -67,7 +67,7 @@ public final class BufferPartitionMergeSort extends Sort {
 		while (i < j && j < b) {
 			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
 				k = j;
-				while (++k < b && Reads.compareIndices(array, i, k, 0, false) > 0)
+				while (++k < b && Reads.compareIndices(array, i, k, 0.1, true) > 0)
 					;
 
 				this.rotate(array, i, j, k);
@@ -82,13 +82,13 @@ public final class BufferPartitionMergeSort extends Sort {
 	private void medianOfThree(int[] array, int a, int b) {
 		int m = a + (b - 1 - a) / 2;
 
-		if (Reads.compareIndices(array, a, m, 1, true) == 1)
+		if (Reads.compareIndices(array, a, m, 0.1, true) == 1)
 			Writes.swap(array, a, m, 1, true, false);
 
-		if (Reads.compareIndices(array, m, b - 1, 1, true) == 1) {
+		if (Reads.compareIndices(array, m, b - 1, 0.1, true) == 1) {
 			Writes.swap(array, m, b - 1, 1, true, false);
 
-			if (Reads.compareIndices(array, a, m, 1, true) == 1)
+			if (Reads.compareIndices(array, a, m, 0.1, true) == 1)
 				return;
 		}
 
@@ -128,13 +128,13 @@ public final class BufferPartitionMergeSort extends Sort {
 				i++;
 				Highlights.markArray(1, i);
 				Delays.sleep(0.5);
-			} while (i < j && Reads.compareIndices(array, i, a, 0, false) == 1);
+			} while (i < j && Reads.compareIndices(array, i, a, 0.1, true) == 1);
 
 			do {
 				j--;
 				Highlights.markArray(2, j);
 				Delays.sleep(0.5);
-			} while (j >= i && Reads.compareIndices(array, j, a, 0, false) == -1);
+			} while (j >= i && Reads.compareIndices(array, j, a, 0.1, true) == -1);
 
 			if (i < j)
 				Writes.swap(array, i, j, 1, true, false);
@@ -174,7 +174,7 @@ public final class BufferPartitionMergeSort extends Sort {
 		int i = a, j = m;
 
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0, false) <= 0)
+			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0)
 				Writes.swap(array, p++, i++, 1, true, false);
 			else
 				Writes.swap(array, p++, j++, 1, true, false);
@@ -190,7 +190,7 @@ public final class BufferPartitionMergeSort extends Sort {
 		int i = a, j = m;
 
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0, false) <= 0)
+			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0)
 				Writes.swap(array, p++, i++, 1, true, false);
 			else
 				Writes.swap(array, p++, j++, 1, true, false);

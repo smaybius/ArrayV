@@ -82,7 +82,7 @@ public final class ParallelBlockMergeSort extends Sort {
 	}
 
 	private void rotate(int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private void inPlaceMergeFW(int a, int m, int b) {
@@ -91,7 +91,7 @@ public final class ParallelBlockMergeSort extends Sort {
 		while (i < j && j < b) {
 			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
 				k = j;
-				while (++k < b && Reads.compareIndices(array, i, k, 0, false) > 0)
+				while (++k < b && Reads.compareIndices(array, i, k, 0.1, true) > 0)
 					;
 
 				this.rotate(i, j, k);
@@ -109,7 +109,7 @@ public final class ParallelBlockMergeSort extends Sort {
 		while (j > i && i >= a) {
 			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
 				k = i;
-				while (--k >= a && Reads.compareIndices(array, k, j, 0, false) > 0)
+				while (--k >= a && Reads.compareIndices(array, k, j, 0.1, true) > 0)
 					;
 
 				this.rotate(k + 1, i + 1, j + 1);
@@ -158,7 +158,7 @@ public final class ParallelBlockMergeSort extends Sort {
 		int p = a, found = 1, pEnd = p + found, i = pEnd;
 
 		while (found < n) {
-			while (i < b && Reads.compareIndices(array, pEnd - 1, i, 1, true) == 0)
+			while (i < b && Reads.compareIndices(array, pEnd - 1, i, 0.1, true) == 0)
 				i++;
 			if (i == b)
 				break;

@@ -90,21 +90,21 @@ public final class Sounds {
 
     private volatile boolean playSound;
     private volatile boolean playSound2; // Yes there're really two fields that are used at different times
-    private int numChannels; //Number of Audio Channels
-    private double pitchMin; //Minimum Pitch
-    private double pitchMax; //Maximum Pitch
+    private int numChannels; // Number of Audio Channels
+    private double pitchMin; // Minimum Pitch
+    private double pitchMax; // Maximum Pitch
     private double soundMultiplier;
     private boolean softerSounds;
 
     private static final int SUSTAIN_PEDAL = 64;
     private static final int REVERB = 91;
 
-    private String defaultSoundbank = "Default (Yamaha XG Sound Set)";
+    private String defaultSoundbank = "Default (Basic Waveforms)";
     private String selectedSoundbank;
 
     private int sineWaveIndex;
-    private static final int DEFAULT_SINE_WAVE_INDEX = 193;
-    private static final int DEFAULT_ROCK_ORGAN_INDEX = 16;
+    private static final int DEFAULT_SINE_WAVE_INDEX = 0;
+    private static final int DEFAULT_ROCK_ORGAN_INDEX = 6;
 
     private volatile LoadingDialog infoMsg;
 
@@ -133,7 +133,8 @@ public final class Sounds {
             if (SOFT_SYNTHESIZER_CLASS != null && SOFT_SYNTHESIZER_CLASS.isInstance(synth)) {
                 Map<String, Object> params = Collections.singletonMap("jitter correction", Boolean.FALSE);
                 try {
-                    Method openMethod = SOFT_SYNTHESIZER_CLASS.getDeclaredMethod("open", SourceDataLine.class, Map.class);
+                    Method openMethod = SOFT_SYNTHESIZER_CLASS.getDeclaredMethod("open", SourceDataLine.class,
+                            Map.class);
                     openMethod.invoke(synth, null, params);
                 } catch (IllegalAccessException e) {
                     synth.open(); // Can't do special opening here. Java 9's module system stops us.
@@ -146,7 +147,8 @@ public final class Sounds {
                 synth.open();
             }
         } catch (MidiUnavailableException e) {
-            JErrorPane.invokeCustomErrorMessage("The default MIDI device is unavailable, possibly because it is already being used by another application.");
+            JErrorPane.invokeCustomErrorMessage(
+                    "The default MIDI device is unavailable, possibly because it is already being used by another application.");
             this.soundEnabled = false;
         } catch (SecurityException e) {
             JErrorPane.invokeErrorMessage(e);
@@ -189,12 +191,14 @@ public final class Sounds {
                                     playNoteCount++;
                                 }
 
-                                //PITCH
-                                double pitch = Sounds.this.array[Math.min(Math.max(i, 0), currentLen - 1)] / (double) currentLen * (pitchMax - pitchMin) + pitchMin;
+                                // PITCH
+                                double pitch = Sounds.this.array[Math.min(Math.max(i, 0), currentLen - 1)]
+                                        / (double) currentLen * (pitchMax - pitchMin) + pitchMin;
                                 int pitchmajor = (int) pitch;
-                                int pitchminor = (int)((pitch-((int)pitch))*8192d)+8192;
+                                int pitchminor = (int) ((pitch - ((int) pitch)) * 8192d) + 8192;
 
-                                int vel = (int) (Math.pow(pitchMax - pitchmajor, 2d) * (Math.pow(noteCount, -0.25)) * 64d * soundMultiplier) / 2; //I'VE SOLVED IT!!
+                                int vel = (int) (Math.pow(pitchMax - pitchmajor, 2d) * (Math.pow(noteCount, -0.25))
+                                        * 64d * soundMultiplier) / 2; // I'VE SOLVED IT!!
 
                                 if (soundMultiplier >= 1 && vel < 256) {
                                     vel *= vel;
@@ -230,6 +234,7 @@ public final class Sounds {
     public int getInstrumentChoice() {
         return this.instrumentChoice;
     }
+
     public void setInstrumentChoice(int choice) {
         this.instrumentChoice = choice;
         this.assignInstruments();
@@ -239,7 +244,7 @@ public final class Sounds {
         return this.selectedSoundbank;
     }
 
-    //TODO: Make infoMsg into reusable class (including Custom Image)
+    // TODO: Make infoMsg into reusable class (including Custom Image)
     public void selectCustomSoundbank(SoundFrame menu) {
         SoundbankDialog dialog = new SoundbankDialog();
         File soundbank = dialog.getFile();
@@ -317,17 +322,9 @@ public final class Sounds {
         instrumentNames.add("a. Default Sound Effect (" + this.formatInstrumentName(rockOrgan) + ")");
 
         this.sineWaveIndex = 0;
-        while (this.sineWaveIndex < instruments.length && !instruments[this.sineWaveIndex].getName().toLowerCase().trim().contains("sine")) {
-            this.sineWaveIndex++;
-        }
-        if (this.sineWaveIndex >= instruments.length && DEFAULT_SINE_WAVE_INDEX < instruments.length) {
-            this.sineWaveIndex = DEFAULT_SINE_WAVE_INDEX;
-        } else if (DEFAULT_SINE_WAVE_INDEX >= instruments.length) {
-            this.sineWaveIndex = 0;
-        }
 
         String sineWave = instruments[this.sineWaveIndex].getName();
-        instrumentNames.add("b. w0rthy's Original Sound Effect (" + this.formatInstrumentName(sineWave) + ")");
+        instrumentNames.add("b. Basic Sound Effect (" + this.formatInstrumentName(sineWave) + ")");
 
         for (int i = 0; i < instruments.length; i++) {
             String nextInstrument = instruments[i].getName();
@@ -346,9 +343,11 @@ public final class Sounds {
         try (BufferedInputStream bis = new BufferedInputStream(stream)) {
             this.synth.loadAllInstruments(MidiSystem.getSoundbank(bis));
         } catch (NullPointerException e) {
-            JErrorPane.invokeCustomErrorMessage("soundfont/sfx.sf2 missing: Couldn't find the default soundbank for the program's sound effects! The OS default will be used instead.");
+            JErrorPane.invokeCustomErrorMessage(
+                    "soundfont/sfx.sf2 missing: Couldn't find the default soundbank for the program's sound effects! The OS default will be used instead.");
         } catch (InvalidMidiDataException e) {
-            JErrorPane.invokeCustomErrorMessage("soundfont/sfx.sf2 invalid or corrupt: The file for the program's default soundbank was not recognized as a proper MIDI soundfont! The OS default will be used instead.");
+            JErrorPane.invokeCustomErrorMessage(
+                    "soundfont/sfx.sf2 invalid or corrupt: The file for the program's default soundbank was not recognized as a proper MIDI soundfont! The OS default will be used instead.");
         } catch (IOException e) {
             JErrorPane.invokeErrorMessage(e);
         }
@@ -363,11 +362,17 @@ public final class Sounds {
         try {
             int programIndex;
 
-            //TODO: Consider making into a method
-            switch(this.instrumentChoice) {
-                case 0:  programIndex = DEFAULT_ROCK_ORGAN_INDEX;      break;
-                case 1:  programIndex = this.sineWaveIndex;            break;
-                default: programIndex = this.instrumentChoice - 2;     break;
+            // TODO: Consider making into a method
+            switch (this.instrumentChoice) {
+                case 0:
+                    programIndex = DEFAULT_ROCK_ORGAN_INDEX;
+                    break;
+                case 1:
+                    programIndex = this.sineWaveIndex;
+                    break;
+                default:
+                    programIndex = this.instrumentChoice - 2;
+                    break;
             }
 
             for (int i = 0; i < this.numChannels; i++) {
@@ -392,27 +397,42 @@ public final class Sounds {
             new Thread("TestInstrumentThread") {
                 @Override
                 public void run() {
-                    switch(Sounds.this.testInstrumentChoice) {
-                        case 0:  Sounds.this.testInstrumentChoice  = DEFAULT_ROCK_ORGAN_INDEX;             break;
-                        case 1:  Sounds.this.testInstrumentChoice  = Sounds.this.sineWaveIndex;            break;
-                        default: Sounds.this.testInstrumentChoice -= 2;                                    break;
+                    switch (Sounds.this.testInstrumentChoice) {
+                        case 0:
+                            Sounds.this.testInstrumentChoice = DEFAULT_ROCK_ORGAN_INDEX;
+                            break;
+                        case 1:
+                            Sounds.this.testInstrumentChoice = Sounds.this.sineWaveIndex;
+                            break;
+                        default:
+                            Sounds.this.testInstrumentChoice -= 2;
+                            break;
                     }
 
                     int savedInstrument;
-                    //TODO: Consider making into a method
-                    switch(Sounds.this.instrumentChoice) {
-                        case 0:  savedInstrument = DEFAULT_ROCK_ORGAN_INDEX;             break;
-                        case 1:  savedInstrument = Sounds.this.sineWaveIndex;            break;
-                        default: savedInstrument = Sounds.this.instrumentChoice - 2;     break;
+                    // TODO: Consider making into a method
+                    switch (Sounds.this.instrumentChoice) {
+                        case 0:
+                            savedInstrument = DEFAULT_ROCK_ORGAN_INDEX;
+                            break;
+                        case 1:
+                            savedInstrument = Sounds.this.sineWaveIndex;
+                            break;
+                        default:
+                            savedInstrument = Sounds.this.instrumentChoice - 2;
+                            break;
                     }
 
                     try {
                         for (int i = 0; i < Sounds.this.numChannels; i++) {
-                            Sounds.this.channels[i].programChange(Sounds.this.synth.getLoadedInstruments()[Sounds.this.testInstrumentChoice].getPatch().getProgram());
+                            Sounds.this.channels[i].programChange(
+                                    Sounds.this.synth.getLoadedInstruments()[Sounds.this.testInstrumentChoice]
+                                            .getPatch().getProgram());
                         }
                         sleep(2000);
                         for (int i = 0; i < Sounds.this.numChannels; i++) {
-                            Sounds.this.channels[i].programChange(Sounds.this.synth.getLoadedInstruments()[savedInstrument].getPatch().getProgram());
+                            Sounds.this.channels[i].programChange(
+                                    Sounds.this.synth.getLoadedInstruments()[savedInstrument].getPatch().getProgram());
                         }
                     } catch (InterruptedException e) {
                         JErrorPane.invokeErrorMessage(e);
@@ -423,22 +443,36 @@ public final class Sounds {
             new Thread("TestInstrumentThread") {
                 @Override
                 public void run() {
-                    switch(Sounds.this.testInstrumentChoice) {
-                        case 0:  Sounds.this.testInstrumentChoice  = DEFAULT_ROCK_ORGAN_INDEX;             break;
-                        case 1:  Sounds.this.testInstrumentChoice  = Sounds.this.sineWaveIndex;            break;
-                        default: Sounds.this.testInstrumentChoice -= 2;                                    break;
+                    switch (Sounds.this.testInstrumentChoice) {
+                        case 0:
+                            Sounds.this.testInstrumentChoice = DEFAULT_ROCK_ORGAN_INDEX;
+                            break;
+                        case 1:
+                            Sounds.this.testInstrumentChoice = Sounds.this.sineWaveIndex;
+                            break;
+                        default:
+                            Sounds.this.testInstrumentChoice -= 2;
+                            break;
                     }
 
                     int savedInstrument;
-                    //TODO: Consider making into a method
-                    switch(Sounds.this.instrumentChoice) {
-                        case 0:  savedInstrument = DEFAULT_ROCK_ORGAN_INDEX;             break;
-                        case 1:  savedInstrument = Sounds.this.sineWaveIndex;            break;
-                        default: savedInstrument = Sounds.this.instrumentChoice - 2;     break;
+                    // TODO: Consider making into a method
+                    switch (Sounds.this.instrumentChoice) {
+                        case 0:
+                            savedInstrument = DEFAULT_ROCK_ORGAN_INDEX;
+                            break;
+                        case 1:
+                            savedInstrument = Sounds.this.sineWaveIndex;
+                            break;
+                        default:
+                            savedInstrument = Sounds.this.instrumentChoice - 2;
+                            break;
                     }
 
                     try {
-                        Sounds.this.channels[0].programChange(Sounds.this.synth.getLoadedInstruments()[Sounds.this.testInstrumentChoice].getPatch().getProgram());
+                        Sounds.this.channels[0].programChange(
+                                Sounds.this.synth.getLoadedInstruments()[Sounds.this.testInstrumentChoice].getPatch()
+                                        .getProgram());
 
                         Sounds.this.channels[0].controlChange(SUSTAIN_PEDAL, 64);
 
@@ -457,83 +491,75 @@ public final class Sounds {
                         Sounds.this.channels[0].controlChange(SUSTAIN_PEDAL, 0);
 
                         /*
-                        int eighth = 200;
-                        int note;
+                         * int eighth = 200;
+                         * int note;
+                         * note = 62;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep(eighth - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 67;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep(eighth - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 69;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep(eighth - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 71;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep((eighth * 2) - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 71;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep(eighth - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 74;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep(eighth - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 69;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep((eighth * 2) - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 69;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep(eighth - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         * note = 71;
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
+                         * Sounds.this.channels[0].noteOn(note, 100);
+                         * sleep(eighth - 10);
+                         * Sounds.this.channels[0].noteOff(note);
+                         * Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
+                         * sleep(10);
+                         */
 
-                        note = 62;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep(eighth - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 67;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep(eighth - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 69;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep(eighth - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 71;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep((eighth * 2) - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 71;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep(eighth - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 74;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep(eighth - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 69;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep((eighth * 2) - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 69;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep(eighth - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-
-                        note = 71;
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 64);
-                        Sounds.this.channels[0].noteOn(note, 100);
-                        sleep(eighth - 10);
-                        Sounds.this.channels[0].noteOff(note);
-                        Sounds.this.channels[0].controlChange(Sounds.this.SUSTAIN_PEDAL, 0);
-                        sleep(10);
-                        */
-
-                        Sounds.this.channels[0].programChange(Sounds.this.synth.getLoadedInstruments()[savedInstrument].getPatch().getProgram());
+                        Sounds.this.channels[0].programChange(
+                                Sounds.this.synth.getLoadedInstruments()[savedInstrument].getPatch().getProgram());
                     } catch (InterruptedException e) {
                         JErrorPane.invokeErrorMessage(e);
                     }
@@ -552,12 +578,14 @@ public final class Sounds {
         this.notifyAll();
     }
 
-    //Double check logic
+    // Double check logic
     public void setSofterSounds(boolean softerSounds) {
         this.softerSounds = softerSounds;
 
-        if (this.softerSounds) this.soundMultiplier = 0.01;
-        else                   this.soundMultiplier = 1;
+        if (this.softerSounds)
+            this.soundMultiplier = 0.01;
+        else
+            this.soundMultiplier = 1;
     }
 
     /**
@@ -568,7 +596,7 @@ public final class Sounds {
         setSofterSounds(val);
     }
 
-    //Double check logic
+    // Double check logic
     public boolean isSofterSounds() {
         return softerSounds;
     }
@@ -576,6 +604,7 @@ public final class Sounds {
     public double getVolume() {
         return this.soundMultiplier;
     }
+
     public void changeVolume(double val) {
         this.soundMultiplier = val;
     }
@@ -586,11 +615,13 @@ public final class Sounds {
                 this.noteDelay = noteFactor;
                 this.soundMultiplier = 1d / noteFactor;
             } else {
-                //Double check logic
+                // Double check logic
                 this.noteDelay = 1;
 
-                if (this.softerSounds) this.soundMultiplier = 0.01;
-                else                   this.soundMultiplier = 1;
+                if (this.softerSounds)
+                    this.soundMultiplier = 0.01;
+                else
+                    this.soundMultiplier = 1;
             }
         }
     }

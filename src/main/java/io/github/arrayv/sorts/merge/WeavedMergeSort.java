@@ -62,7 +62,7 @@ public class WeavedMergeSort extends Sort {
         Highlights.markArray(2, high);
         int nxt = residue;
         for (; low < length && high < length; nxt += modulus) {
-            int cmp = Reads.compareValues(array[low], array[high]);
+            int cmp = Reads.compareIndices(array, low, high, 0.5, true);
             if (cmp == 1 || cmp == 0 && low > high) {
                 Writes.write(tmp, nxt, array[high], 1, false, true);
                 high += dmodulus;

@@ -76,7 +76,7 @@ public final class RankSortParallel extends Sort {
     for (int i = start; i < end; i += step) {
       int index = 0;
       for (int j = 0; j < end; j++) {
-        if (Reads.compareIndices(a, i, j, 1, true) > 0 || (Reads.compareIndices(a, i, j, 1, true) == 0 && (j < i))) {
+        if (Reads.compareIndices(a, i, j, 1, true) > 0 || (Reads.compareIndices(a, i, j, 0.1, true) == 0 && (j < i))) {
           index++;
         }
       }

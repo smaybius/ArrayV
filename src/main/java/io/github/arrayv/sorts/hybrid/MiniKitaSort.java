@@ -73,7 +73,7 @@ final public class MiniKitaSort extends Sort {
 			}
 		}
 		while (Reads.compareValues(tagptrs[0], m) < 0 || Reads.compareValues(tagptrs[1], b) < 0) {
-			l = Reads.compareIndices(cnts, 0, 1, 0, false) < 0 ? 1 : 0;
+			l = Reads.compareIndices(cnts, 0, 1, 0.1, true) < 0 ? 1 : 0;
 			for (c = 0; c++ < block;) {
 				if (Reads.compareValues(tagptrs[0], m) < 0
 						&& (Reads.compareValues(tagptrs[1], b) == 0

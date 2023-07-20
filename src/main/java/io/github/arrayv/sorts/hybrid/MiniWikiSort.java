@@ -52,7 +52,7 @@ final public class MiniWikiSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	private void mergeFW(int[] array, int p, int a, int m, int b, boolean inPlace) {
@@ -193,7 +193,7 @@ final public class MiniWikiSort extends Sort {
 		int r = 1;
 
 		for (int i = a + 1; i < b && r < nKeys; i++)
-			if (Reads.compareIndices(array, i - 1, i, 0.5, true) < 0)
+			if (Reads.compareIndices(array, i - 1, i, 0.1, true) < 0)
 				r++;
 
 		Highlights.clearMark(2);
@@ -204,7 +204,7 @@ final public class MiniWikiSort extends Sort {
 		int p = a, f = 1;
 
 		for (int i = a + 1; f < nKeys; i++)
-			if (Reads.compareIndices(array, i - 1, i, 0.5, true) < 0) {
+			if (Reads.compareIndices(array, i - 1, i, 0.1, true) < 0) {
 				this.rotate(array, p, p + f, i);
 				p = i - f;
 				f++;

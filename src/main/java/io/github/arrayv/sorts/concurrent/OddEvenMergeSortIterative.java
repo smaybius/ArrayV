@@ -35,6 +35,6 @@ public final class OddEvenMergeSortIterative extends Sort {
                         if ((i + j) / (p + p) == (i + j + k) / (p + p))
                             if (i + j + k < sortLength)
                                 if (Reads.compareIndices(array, i + j, i + j + k, 0.5, true) > 0)
-                                    Writes.swap(array, i + j, i + j + k, 0.5, true, false);
+                                    Writes.swap(array, i + j, i + j + k, 0, true, false);
     }
 }

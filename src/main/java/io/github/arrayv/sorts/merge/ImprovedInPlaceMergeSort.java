@@ -63,7 +63,7 @@ public final class ImprovedInPlaceMergeSort extends Sort {
         Highlights.clearMark(1);
         while (i < m && j < b) {
 
-            if (Reads.compareIndices(array, i, j, 1, true) == 1)
+            if (Reads.compareIndices(array, i, j, 0.1, true) == 1)
                 j++;
             else
                 this.push(array, i++, m, j, sleep);

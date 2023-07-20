@@ -23,7 +23,7 @@ public final class StalinSort extends Sort {
         for (int i = 1; i < currentLength; i++) {
             Highlights.markArray(1, i);
             Delays.sleep(0.5);
-            if (Reads.compareValues(array[i - 1], array[i]) > 0) {
+            if (Reads.compareIndices(array, i - 1, i, 0.5, true) > 0) {
                 Writes.write(array, i, array[i - 1], 0.5, true, false);
             }
         }

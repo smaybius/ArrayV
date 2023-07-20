@@ -67,7 +67,7 @@ public abstract class UnstableGrailSorting extends Sort {
     }
 
     protected void grailRotate(int[] array, int pos, int lenA, int lenB) {
-        Rotations.cycleReverse(array, pos, lenA, lenB, 1, true, false);
+        Rotations.cycleReverse(array, pos, lenA, lenB, 0.5, true, false);
     }
 
     private void grailInsertSort(int[] arr, int pos, int len) {

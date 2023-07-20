@@ -53,7 +53,7 @@ public final class OptimizedWeaveMergeSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
 	}
 
 	// pow of 2 only (O(n))
@@ -76,7 +76,7 @@ public final class OptimizedWeaveMergeSort extends Sort {
 		int i = a, j = i + 1;
 
 		while (j < b) {
-			while (i < j && Reads.compareIndices(array, i, j, 0, true) < (right ? 1 : 0))
+			while (i < j && Reads.compareIndices(array, i, j, 0.1, true) < (right ? 1 : 0))
 				i++;
 
 			if (i == j) {
