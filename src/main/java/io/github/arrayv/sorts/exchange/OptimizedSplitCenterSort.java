@@ -19,6 +19,7 @@ final public class OptimizedSplitCenterSort extends Sort {
         this.setRunAllSortsName("Optimized Split Center Sort");
         this.setRunSortName("Optimized Split Center Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

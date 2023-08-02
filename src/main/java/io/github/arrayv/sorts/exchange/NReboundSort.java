@@ -19,21 +19,13 @@ final public class NReboundSort extends Sort {
         this.setRunAllSortsName("Bounce-N Rebound Sort");
         this.setRunSortName("Bounce-N Rebound Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
         this.setUnreasonableLimit(0);
         this.setBogoSort(false);
         this.setQuestion("Enter the bounce for this sort:\n0 = Automatic", 0);
-    }
-
-    protected int log2(int x) {
-        int n = 1;
-        while (1 << n < x)
-            n++;
-        if (1 << n > x)
-            n--;
-        return n;
     }
 
     @Override

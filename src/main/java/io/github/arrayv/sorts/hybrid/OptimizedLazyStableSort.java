@@ -1,8 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.templates.GrailSorting;
-import io.github.arrayv.sorts.insert.BlockInsertionSort;
+import io.github.arrayv.sorts.templates.HolyGrailSorting;
 
 /*
  *
@@ -39,7 +38,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*                                       */
 /*****************************************/
 
-public final class OptimizedLazyStableSort extends GrailSorting {
+public final class OptimizedLazyStableSort extends HolyGrailSorting {
     public OptimizedLazyStableSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
@@ -55,32 +54,7 @@ public final class OptimizedLazyStableSort extends GrailSorting {
     }
 
     @Override
-    public void grailLazyStableSort(int[] arr, int pos, int len) {
-        BlockInsertionSort insert = new BlockInsertionSort(arrayVisualizer);
-        int dist;
-        for (dist = 0; dist + 16 < len; dist += 16)
-            insert.customInsertSort(arr, pos + dist, pos + dist + 16, 1, false);
-        if (dist < len)
-            insert.customInsertSort(arr, pos + dist, pos + len, 1, false);
-
-        for (int part = 16; part < len; part *= 2) {
-            int left = 0;
-            int right = len - 2 * part;
-
-            while (left <= right) {
-                this.grailLazyMerge(arr, pos + left, part, part);
-                left += 2 * part;
-            }
-
-            int rest = len - left;
-            if (rest > part) {
-                this.grailLazyMerge(arr, pos + left, part, rest - part);
-            }
-        }
-    }
-
-    @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.grailLazyStableSort(array, 0, length);
+        lazyStableSort(array, 0, length, this.cmp);
     }
 }

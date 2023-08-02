@@ -23,6 +23,7 @@ public final class MeanPartitionSort extends Sort {
         this.setRunAllSortsName("Mean Partition Sort");
         this.setRunSortName("Mean Partitionsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

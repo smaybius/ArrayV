@@ -19,6 +19,7 @@ final public class DebrisSort extends Sort {
         this.setRunAllSortsName("Debris Sort");
         this.setRunSortName("Debris Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -29,31 +30,27 @@ final public class DebrisSort extends Sort {
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
         int i = 0;
-        int start = 0;
-        int end = 0;
         int first = 1;
         int last = currentLength - 1;
         int nextlast = currentLength - 1;
-        boolean firstfound = false;
         boolean anyrev = true;
         while (anyrev) {
             anyrev = false;
-            firstfound = false;
+            boolean firstfound = false;
             if (first > 0)
                 i = first - 1;
             else
                 i = 0;
-            while (i < last) {
-                start = i;
-                while (Reads.compareIndices(array, i, i + 1, 0.025, true) > 0 && i < last) {
+            for (; i < last; i++) {
+                int start = i;
+                for (; Reads.compareIndices(array, i, i + 1, 0.025, true) > 0 && i < last; i++) {
                     if (!firstfound) {
                         first = i;
                         firstfound = true;
                     }
                     nextlast = i + 1;
-                    i++;
                 }
-                end = i;
+                int end = i;
                 if (start != end) {
                     if (end - start < 3)
                         Writes.swap(array, start, end, 0.075, true, false);
@@ -61,7 +58,6 @@ final public class DebrisSort extends Sort {
                         Writes.reversal(array, start, end, 0.075, true, false);
                     anyrev = true;
                 }
-                i++;
             }
             if (nextlast + 1 < currentLength)
                 last = nextlast + 1;

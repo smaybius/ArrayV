@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
 
 // Replace this with the path of the target algorithm.
-import io.github.arrayv.sorts.distribute.FlightSort;
+import io.github.arrayv.sorts.select.MoreOptimizedOpiumSort;
 
 /*
 
@@ -18,7 +18,7 @@ CODED FOR ARRAYV BY PCBOYGAMES
 final public class BuildAnInsertionSort extends Sort {
 
     // Replace both filenames with the filename of the target algorithm.
-    FlightSort sort = new FlightSort(arrayVisualizer);
+    MoreOptimizedOpiumSort sort = new MoreOptimizedOpiumSort(arrayVisualizer);
 
     // Optional for most sorts, but required for some.
     int NUMBER_Base = 2;
@@ -26,9 +26,10 @@ final public class BuildAnInsertionSort extends Sort {
     public BuildAnInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
         this.setSortListName("Build-An-Insertion");
-        this.setRunAllSortsName("Build-An-Insertion Sort");
-        this.setRunSortName("Build-An-Insertion Sort");
+        this.setRunAllSortsName(sort.getRunAllSortsName() + " as Insertion Sort");
+        this.setRunSortName(sort.getRunSortName() + " as Insertsort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -46,10 +47,7 @@ final public class BuildAnInsertionSort extends Sort {
 
     @Override
     public void runSort(int[] array, int currentLength, int base) {
-        int len = 2;
-        while (len <= currentLength) {
+        for (int len = 2; len <= currentLength; len++)
             method(array, len);
-            len++;
-        }
     }
 }

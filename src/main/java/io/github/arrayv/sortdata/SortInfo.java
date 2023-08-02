@@ -1,14 +1,17 @@
 package io.github.arrayv.sortdata;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.function.Supplier;
-
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.function.IntUnaryOperator;
+import java.util.function.Supplier;
+
 public final class SortInfo {
+    private static final String NAME_MUST_BE_SPECIFIED = "name must be specified unless all three of listName, showcaseName, and runName are specified";
+
     private final int id;
     private final String internalName;
     private final Supplier<? extends Sort> instanceSupplier;
@@ -18,10 +21,12 @@ public final class SortInfo {
     private final String runName;
     private final String runAllName;
     private final String category;
-    private final boolean slowSort;
     private final boolean bogoSort;
     private final boolean radixSort;
     private final boolean bucketSort;
+    private final String question;
+    private final int defaultAnswer;
+    private final IntUnaryOperator answerValidator;
     private final boolean fromExtra;
 
     private SortInfo(int id, SortInfo sort) {
@@ -34,10 +39,12 @@ public final class SortInfo {
         this.runName = sort.runName;
         this.runAllName = sort.runAllName;
         this.category = sort.category;
-        this.slowSort = sort.slowSort;
         this.bogoSort = sort.bogoSort;
         this.radixSort = sort.radixSort;
         this.bucketSort = sort.bucketSort;
+        this.question = sort.question;
+        this.defaultAnswer = sort.defaultAnswer;
+        this.answerValidator = sort.answerValidator;
         this.fromExtra = sort.fromExtra;
     }
 
@@ -46,20 +53,45 @@ public final class SortInfo {
         this.internalName = sortClass.getSimpleName();
         try {
             this.instanceSupplier = new NewSortInstance(sortClass);
+            this.answerValidator = new MethodAnswerValidator(sortClass);
         } catch (NoSuchMethodException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new Error(e);
         }
-        Sort sort = getFreshInstance();
-        this.disabled = !sort.isSortEnabled();
-        this.unreasonableLimit = sort.getUnreasonableLimit();
-        this.listName = sort.getSortListName();
-        this.runName = sort.getRunSortName();
-        this.runAllName = sort.getRunAllSortsName();
-        this.category = sort.getCategory();
-        this.slowSort = sort.isUnreasonablySlow();
-        this.bogoSort = sort.isBogoSort();
-        this.radixSort = sort.isRadixSort();
-        this.bucketSort = sort.usesBuckets();
+        SortMeta metaAnnotation = sortClass.getAnnotation(SortMeta.class);
+        if (metaAnnotation == null) {
+            Sort sort = getFreshInstance();
+            this.disabled = !sort.isSortEnabled();
+            this.unreasonableLimit = sort.getUnreasonableLimit();
+            this.listName = sort.getSortListName();
+            this.runName = sort.getRunSortName();
+            this.runAllName = sort.getRunAllSortsName();
+            this.category = sort.getCategory();
+            this.bogoSort = sort.isBogoSort();
+            this.radixSort = sort.isRadixSort();
+            this.bucketSort = sort.usesBuckets();
+            this.question = sort.getQuestion();
+            this.defaultAnswer = sort.getDefaultAnswer();
+        } else {
+            String name = normalizeName(metaAnnotation);
+            this.disabled = metaAnnotation.disabled();
+            this.unreasonableLimit = metaAnnotation.unreasonableLimit();
+            this.listName = metaAnnotation.listName().isEmpty()
+                    ? requireName(name)
+                    : metaAnnotation.listName();
+            this.runName = metaAnnotation.runName().isEmpty()
+                    ? requireName(name) + "sort"
+                    : metaAnnotation.runName();
+            this.runAllName = metaAnnotation.showcaseName().isEmpty()
+                    ? requireName(name) + " Sort"
+                    : metaAnnotation.showcaseName();
+            this.category = metaAnnotation.category().isEmpty() ? findSortCategory(sortClass)
+                    : metaAnnotation.category();
+            this.bogoSort = metaAnnotation.bogoSort();
+            this.radixSort = metaAnnotation.radixSort();
+            this.bucketSort = metaAnnotation.bucketSort();
+            this.question = metaAnnotation.question().isEmpty() ? null : metaAnnotation.question();
+            this.defaultAnswer = metaAnnotation.defaultAnswer();
+        }
         this.fromExtra = ArrayVisualizer.getInstance().getSortAnalyzer().didSortComeFromExtra(sortClass);
     }
 
@@ -68,37 +100,64 @@ public final class SortInfo {
         this.internalName = sort.getClass().getSimpleName();
         try {
             this.instanceSupplier = new NewSortInstance(sort.getClass());
+            this.answerValidator = new MethodAnswerValidator(sort.getClass());
         } catch (NoSuchMethodException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new Error(e);
         }
-        this.disabled = !sort.isSortEnabled();
-        this.unreasonableLimit = sort.getUnreasonableLimit();
-        this.listName = sort.getSortListName();
-        this.runName = sort.getRunSortName();
-        this.runAllName = sort.getRunAllSortsName();
-        this.category = sort.getCategory();
-        this.slowSort = sort.isUnreasonablySlow();
-        this.bogoSort = sort.isBogoSort();
-        this.radixSort = sort.isRadixSort();
-        this.bucketSort = sort.usesBuckets();
+        SortMeta metaAnnotation = sort.getClass().getAnnotation(SortMeta.class);
+        if (metaAnnotation == null) {
+            this.disabled = !sort.isSortEnabled();
+            this.unreasonableLimit = sort.getUnreasonableLimit();
+            this.listName = sort.getSortListName();
+            this.runName = sort.getRunSortName();
+            this.runAllName = sort.getRunAllSortsName();
+            this.category = sort.getCategory();
+            this.bogoSort = sort.isBogoSort();
+            this.radixSort = sort.isRadixSort();
+            this.bucketSort = sort.usesBuckets();
+            this.question = sort.getQuestion();
+            this.defaultAnswer = sort.getDefaultAnswer();
+        } else {
+            String name = normalizeName(metaAnnotation);
+            this.disabled = metaAnnotation.disabled();
+            this.unreasonableLimit = metaAnnotation.unreasonableLimit();
+            this.listName = metaAnnotation.listName().isEmpty()
+                    ? requireName(name)
+                    : metaAnnotation.listName();
+            this.runName = metaAnnotation.runName().isEmpty()
+                    ? requireName(name) + "sort"
+                    : metaAnnotation.runName();
+            this.runAllName = metaAnnotation.showcaseName().isEmpty()
+                    ? requireName(name) + " Sort"
+                    : metaAnnotation.showcaseName();
+            this.category = metaAnnotation.category().isEmpty() ? findSortCategory(sort.getClass())
+                    : metaAnnotation.category();
+            this.bogoSort = metaAnnotation.bogoSort();
+            this.radixSort = metaAnnotation.radixSort();
+            this.bucketSort = metaAnnotation.bucketSort();
+            this.question = metaAnnotation.question().isEmpty() ? null : metaAnnotation.question();
+            this.defaultAnswer = metaAnnotation.defaultAnswer();
+        }
         this.fromExtra = ArrayVisualizer.getInstance().getSortAnalyzer().didSortComeFromExtra(sort.getClass());
     }
 
     private SortInfo(
-        int id,
-        String internalName,
-        Supplier<? extends Sort> instanceSupplier,
-        boolean disabled,
-        int unreasonableLimit,
-        String listName,
-        String runName,
-        String runAllName,
-        String category,
-        boolean slowSort,
-        boolean bogoSort,
-        boolean radixSort,
-        boolean bucketSort
-    ) {
+            int id,
+            String internalName,
+            Supplier<? extends Sort> instanceSupplier,
+            boolean disabled,
+            int unreasonableLimit,
+            String listName,
+            String runName,
+            String runAllName,
+            String category,
+            boolean slowSort,
+            boolean bogoSort,
+            boolean radixSort,
+            boolean bucketSort,
+            String question,
+            int defaultAnswer,
+            IntUnaryOperator answerValidator) {
         this.id = id;
         this.internalName = internalName;
         this.instanceSupplier = instanceSupplier;
@@ -108,10 +167,12 @@ public final class SortInfo {
         this.runName = runName;
         this.runAllName = runAllName;
         this.category = category;
-        this.slowSort = slowSort;
         this.bogoSort = bogoSort;
         this.radixSort = radixSort;
         this.bucketSort = bucketSort;
+        this.question = question;
+        this.defaultAnswer = defaultAnswer;
+        this.answerValidator = answerValidator;
         this.fromExtra = false; // Built sorts cannot come from extra
     }
 
@@ -121,6 +182,36 @@ public final class SortInfo {
 
     public SortInfo(Sort sort) {
         this(-1, sort);
+    }
+
+    private static String findSortCategory(Class<? extends Sort> sortClass) {
+        Package checkPackage = sortClass.getPackage();
+        if (checkPackage != null) {
+            SortPackageMeta packageMetaAnnotation = checkPackage.getAnnotation(SortPackageMeta.class);
+            if (packageMetaAnnotation != null) {
+                return packageMetaAnnotation.category();
+            }
+        }
+        throw new NullPointerException(
+                "Sort " + sortClass.getSimpleName()
+                        + " does not declare a category, and neither do any of its packages");
+    }
+
+    private static String requireName(String name) {
+        return Objects.requireNonNull(name, NAME_MUST_BE_SPECIFIED);
+    }
+
+    private static String normalizeName(SortMeta meta) {
+        String name = meta.name();
+        if (name.endsWith(" Sort")) {
+            return name.substring(0, name.length() - 5);
+        }
+        if (name.endsWith("sort")) {
+            return name.substring(0, name.length() - 4);
+        }
+        // Cause an NPE if name isn't specified, and all three required names also
+        // aren't
+        return name.isEmpty() ? null : name;
     }
 
     public int getId() {
@@ -159,8 +250,8 @@ public final class SortInfo {
         return category;
     }
 
-    public boolean isSlowSort() {
-        return slowSort;
+    public boolean hasUnreasonableLimit() {
+        return unreasonableLimit > 0;
     }
 
     public boolean isBogoSort() {
@@ -175,8 +266,24 @@ public final class SortInfo {
         return bucketSort;
     }
 
+    public String getQuestion() {
+        return question;
+    }
+
+    public int getDefaultAnswer() {
+        return defaultAnswer;
+    }
+
+    public IntUnaryOperator getAnswerValidator() {
+        return answerValidator;
+    }
+
     public Sort getFreshInstance() {
         return instanceSupplier.get();
+    }
+
+    public int validateAnswer(int answer) {
+        return answerValidator.applyAsInt(answer);
     }
 
     public boolean isFromExtra() {
@@ -185,6 +292,7 @@ public final class SortInfo {
 
     /**
      * Creates a copy of this info with a new ID
+     *
      * @param id The ID for the new instance
      * @return Copied info with new ID
      */
@@ -202,10 +310,10 @@ public final class SortInfo {
 
     public static String[] getCategories(SortInfo[] sorts) {
         HashSet<String> result = new HashSet<>();
-        for (int i = 0; i < sorts.length; i++) {
-            result.add(sorts[i].category);
+        for (SortInfo sort : sorts) {
+            result.add(sort.category);
         }
-        String[] resultArray = result.toArray(new String[result.size()]);
+        String[] resultArray = result.toArray(new String[0]);
         Arrays.sort(resultArray);
         return resultArray;
     }
@@ -217,14 +325,15 @@ public final class SortInfo {
         result = prime * result + (bogoSort ? 1231 : 1237);
         result = prime * result + (bucketSort ? 1231 : 1237);
         result = prime * result + ((category == null) ? 0 : category.hashCode());
+        result = prime * result + defaultAnswer;
         result = prime * result + (disabled ? 1231 : 1237);
         result = prime * result + (fromExtra ? 1231 : 1237);
         result = prime * result + id;
         result = prime * result + ((listName == null) ? 0 : listName.hashCode());
+        result = prime * result + ((question == null) ? 0 : question.hashCode());
         result = prime * result + (radixSort ? 1231 : 1237);
         result = prime * result + ((runAllName == null) ? 0 : runAllName.hashCode());
         result = prime * result + ((runName == null) ? 0 : runName.hashCode());
-        result = prime * result + (slowSort ? 1231 : 1237);
         result = prime * result + unreasonableLimit;
         return result;
     }
@@ -251,6 +360,9 @@ public final class SortInfo {
         } else if (!category.equals(other.category)) {
             return false;
         }
+        if (defaultAnswer != other.defaultAnswer) {
+            return false;
+        }
         if (disabled != other.disabled) {
             return false;
         }
@@ -265,6 +377,13 @@ public final class SortInfo {
                 return false;
             }
         } else if (!listName.equals(other.listName)) {
+            return false;
+        }
+        if (question == null) {
+            if (other.question != null) {
+                return false;
+            }
+        } else if (!question.equals(other.question)) {
             return false;
         }
         if (radixSort != other.radixSort) {
@@ -284,13 +403,7 @@ public final class SortInfo {
         } else if (!runName.equals(other.runName)) {
             return false;
         }
-        if (slowSort != other.slowSort) {
-            return false;
-        }
-        if (unreasonableLimit != other.unreasonableLimit) {
-            return false;
-        }
-        return true;
+        return unreasonableLimit == other.unreasonableLimit;
     }
 
     @Override
@@ -316,26 +429,31 @@ public final class SortInfo {
         private boolean bogoSort = false;
         private boolean radixSort = false;
         private boolean bucketSort = false;
+        private String question = null;
+        private int defaultAnswer = 0;
+        private IntUnaryOperator answerValidator = IntUnaryOperator.identity();
 
         private Builder() {
         }
 
         public SortInfo build() {
             return new SortInfo(
-                id,
-                internalName,
-                Objects.requireNonNull(instanceSupplier, "instanceSupplier"),
-                disabled,
-                unreasonableLimit,
-                Objects.requireNonNull(listName, "listName"),
-                runName != null ? runName : (listName + "sort"),
-                runAllName != null ? runAllName : (listName + " Sort"),
-                Objects.requireNonNull(category, "category"),
-                slowSort,
-                bogoSort,
-                radixSort,
-                bucketSort
-            );
+                    id,
+                    internalName,
+                    Objects.requireNonNull(instanceSupplier, "instanceSupplier"),
+                    disabled,
+                    unreasonableLimit,
+                    Objects.requireNonNull(listName, "listName"),
+                    runName != null ? runName : (listName + "sort"),
+                    runAllName != null ? runAllName : (listName + " Sort"),
+                    Objects.requireNonNull(category, "category"),
+                    slowSort,
+                    bogoSort,
+                    radixSort,
+                    bucketSort,
+                    question,
+                    defaultAnswer,
+                    answerValidator);
         }
 
         public Builder id(int id) {
@@ -400,6 +518,21 @@ public final class SortInfo {
 
         public Builder bucketSort(boolean bucketSort) {
             this.bucketSort = bucketSort;
+            return this;
+        }
+
+        public Builder question(String question) {
+            this.question = question;
+            return this;
+        }
+
+        public Builder defaultAnswer(int defaultAnswer) {
+            this.defaultAnswer = defaultAnswer;
+            return this;
+        }
+
+        public Builder answerValidator(IntUnaryOperator answerValidator) {
+            this.answerValidator = Objects.requireNonNull(answerValidator, "answerValidator");
             return this;
         }
     }

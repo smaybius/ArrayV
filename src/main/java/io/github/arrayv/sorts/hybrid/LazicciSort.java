@@ -11,6 +11,7 @@ final public class LazicciSort extends GrailSorting {
         this.setRunAllSortsName("Lazicci Stable Sort");
         this.setRunSortName("Lazicci Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -54,7 +55,7 @@ final public class LazicciSort extends GrailSorting {
     }
 
     @Override
-    public void grailRotate(int[] array, int pos, int len1, int len2) {
+    protected void grailRotate(int[] array, int pos, int len1, int len2) {
         Rotations.cycleReverse(array, pos, len1, len2, 0.5, true, false);
     }
 
@@ -130,7 +131,7 @@ final public class LazicciSort extends GrailSorting {
                 continue;
             }
             if (d > 0) {
-                grailLazyMerge(array, s, r - s, y - r);
+                grailMergeWithoutBuffer(array, s, r - s, y - r);
             }
             if (d + 1 == z) {
                 s = y;
@@ -144,7 +145,7 @@ final public class LazicciSort extends GrailSorting {
     private void blockBack(int[] array, int start, int run, int end) {
         while (run > start) {
             int r = findSortedRunBW(array, start, run);
-            grailLazyMerge(array, r, run - r, end - run);
+            grailMergeWithoutBuffer(array, r, run - r, end - run);
             run = r;
         }
     }

@@ -11,6 +11,7 @@ final public class PancakeQuickSort extends Sort {
         this.setRunAllSortsName("Panquick Sort (PancakePrinciple-compliant)");
         this.setRunSortName("Respectful Panquick Sort (LL)");
         this.setCategory("Esoteric Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

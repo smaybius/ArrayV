@@ -1,7 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.impractical.SnowballSort;
+import io.github.arrayv.sorts.exchange.SnowballSort;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -20,6 +20,7 @@ public final class SkeadnySort extends Sort {
         this.setRunAllSortsName("Skeadny Sort");
         this.setRunSortName("Skeadny Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);

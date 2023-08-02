@@ -19,6 +19,7 @@ final public class ZigZagSort extends BestForNSorting {
         this.setRunAllSortsName("Zig-Zag Sort");
         this.setRunSortName("Zig-Zag Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

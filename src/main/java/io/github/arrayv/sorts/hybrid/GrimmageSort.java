@@ -12,6 +12,7 @@ final public class GrimmageSort extends GrailSorting {
         this.setRunAllSortsName("Grimmage Sort");
         this.setRunSortName("Grimmage Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -45,7 +46,7 @@ final public class GrimmageSort extends GrailSorting {
             int tempK = k;
             k = this.seek(array, k, sortLength);
             if (runs > 1) {
-                this.grailLazyMerge(array, 0, tempK, k - tempK);
+                this.grailMergeWithoutBuffer(array, 0, tempK, k - tempK);
             }
             runs++;
         }

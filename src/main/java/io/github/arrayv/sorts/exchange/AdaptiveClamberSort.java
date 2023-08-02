@@ -19,6 +19,7 @@ final public class AdaptiveClamberSort extends Sort {
         this.setRunAllSortsName("Adaptive Clamber Sort");
         this.setRunSortName("Adaptive Clambersort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -28,22 +29,11 @@ final public class AdaptiveClamberSort extends Sort {
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        int left = 0;
-        int right = 1;
-        while (right < currentLength) {
-            if (Reads.compareIndices(array, right - 1, right, 0.5, true) > 0) {
-                left = 0;
-                while (left < right) {
-                    if (Reads.compareIndices(array, left, right, 0.5, true) > 0) {
-                        while (left < right) {
-                            Writes.swap(array, left, right, 0.2, true, false);
-                            left++;
-                        }
-                    }
-                    left++;
-                }
-            }
-            right++;
-        }
+        for (int right = 1; right < currentLength; right++)
+            if (Reads.compareIndices(array, right - 1, right, 1, true) > 0)
+                for (int left = 0; left < right; left++)
+                    if (Reads.compareIndices(array, left, right, 0.1, true) > 0)
+                        while (left < right)
+                            Writes.swap(array, left++, right, 0.2, true, false);
     }
 }

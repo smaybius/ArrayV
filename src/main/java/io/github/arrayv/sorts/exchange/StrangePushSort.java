@@ -19,6 +19,7 @@ final public class StrangePushSort extends Sort {
         this.setRunAllSortsName("Strange Push Sort");
         this.setRunSortName("Strange Pushsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -27,6 +28,7 @@ final public class StrangePushSort extends Sort {
         this.setQuestion("Enter the base for this sort:", 2);
     }
 
+    @Override
     public int validateAnswer(int answer) {
         if (answer < 2)
             return 2;

@@ -19,6 +19,7 @@ final public class ClericSortIterative extends IterativeClericSorting {
         this.setRunAllSortsName("Iterative Cleric Sort");
         this.setRunSortName("Iterative Clericsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -33,7 +34,7 @@ final public class ClericSortIterative extends IterativeClericSorting {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.end = sortLength;
+        end = sortLength;
         int n = 1;
         for (; n < sortLength; n *= 2)
             ;

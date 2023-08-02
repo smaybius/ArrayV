@@ -23,6 +23,7 @@ public final class StableMeanPartitionSort extends Sort {
         this.setRunAllSortsName("Stable Mean Partition Sort");
         this.setRunSortName("Stable Mean Partitionsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

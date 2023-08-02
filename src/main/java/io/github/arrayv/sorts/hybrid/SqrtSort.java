@@ -104,7 +104,7 @@ public final class SqrtSort extends Sort {
             Highlights.markArray(2, pos + left);
             Highlights.markArray(3, pos + right);
 
-            if (right < leftLen || Reads.compareValues(arr[pos + left], arr[pos + right]) > 0) {
+            if (right < leftLen || Reads.compareIndices(arr, pos + left, pos + right, 0.5, true) > 0) {
                 Writes.write(arr, pos + (mergedPos--), arr[pos + (left--)], 1, true, auxwrite);
             } else
                 Writes.write(arr, pos + (mergedPos--), arr[pos + (right--)], 1, true, auxwrite);
@@ -131,7 +131,7 @@ public final class SqrtSort extends Sort {
         rightEnd += leftEnd;
 
         while (right < rightEnd) {
-            if (left == leftEnd || Reads.compareValues(arr[pos + left], arr[pos + right]) > 0) {
+            if (left == leftEnd || Reads.compareIndices(arr, pos + left, pos + right, 0.5, true) > 0) {
                 Writes.write(arr, pos + dist++, arr[pos + right++], 1, true, auxwrite);
             } else
                 Writes.write(arr, pos + dist++, arr[pos + left++], 1, true, auxwrite);
@@ -187,7 +187,7 @@ public final class SqrtSort extends Sort {
         int typeFrag = 1 - leftOverFrag; // 1 if inverted
 
         while (left < leftEnd && right < rightEnd) {
-            if (Reads.compareValues(arr[pos + left], arr[pos + right]) - typeFrag < 0) {
+            if (Reads.compareIndices(arr, pos + left, pos + right, 0.5, true) - typeFrag < 0) {
                 Writes.write(arr, pos + dist++, arr[pos + left++], 1, true, auxwrite);
             } else
                 Writes.write(arr, pos + dist++, arr[pos + right++], 1, true, auxwrite);

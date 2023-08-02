@@ -1,14 +1,5 @@
 package io.github.arrayv.groovyapi;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.JOptionPane;
-
 import io.github.arrayv.frames.ArrayFrame;
 import io.github.arrayv.groovyapi.ScriptManager.ScriptThread;
 import io.github.arrayv.groovyapi.exts.RunSortInfoExtension;
@@ -20,55 +11,47 @@ import io.github.arrayv.utils.Delays;
 import io.github.arrayv.utils.StopSort;
 import io.github.arrayv.utils.Timer;
 
+import javax.swing.*;
+import java.util.*;
+
 /**
- * <p>
- * This class is used for running sorting algorithms. You can construct an
- * instance using the
- * {@link GroovyLocals#run(SortInfo)} method, and other {@code run} methods.
- * </p>
+ * <p>This class is used for running sorting algorithms. You can construct an instance using the
+ * {@link GroovyLocals#run(SortInfo)} method, and other {@code run} methods.</p>
  *
- * <p>
- * This class is configured using a map of options. This map can contain a
- * strict set of keys
- * Here is the list of allowed keys and their types:
- * </p>
+ * <p>This class is configured using a map of options. This map can contain a strict set of keys
+ * Here is the list of allowed keys and their types:</p>
  * <ul>
- * <li>{@code numbers} ({@code Integer}) &mdash; The number of values to
- * sort</li>
- * <li>{@code buckets} ({@code Integer}) &mdash; An extra value to pass to the
- * sorting
- * algorithm</li>
- * <li>{@code speed} ({@code Number}) &mdash; The time multiplier of the
- * visual</li>
+ *   <li>{@code numbers} ({@code Integer}) &mdash; The number of values to sort</li>
+ *   <li>{@code buckets} ({@code Integer}) &mdash; An extra value to pass to the sorting
+ *       algorithm</li>
+ *   <li>{@code speed} ({@code Number}) &mdash; The time multiplier of the visual</li>
  * </ul>
- * <p>
- * {@link Map.Entry} values to put into the option map can be obtained using
- * {@link RunSortInfoExtension}.
- * </p>
+ * <p>{@link Map.Entry} values to put into the option map can be obtained using {@link RunSortInfoExtension}.</p>
  *
  * @see GroovyLocals#run(SortInfo)
  * @see RunSortInfoExtension
  */
 public final class RunSortBuilder {
     private static final Set<String> ALLOWED_KEYS = new HashSet<>(Arrays.asList(
-            "numbers",
-            "buckets",
-            "speed"));
+        "numbers",
+        "buckets",
+        "speed"
+    ));
 
     private final SortInfo sort;
     private final Map<String, Object> opts;
     private volatile boolean closed;
     private final Runnable closer = () -> {
-        if (closed)
-            return;
+        if (closed) return;
         removeClosers();
         final String message = this + " never run from Groovy script";
         System.err.println("WARNING: " + message);
         JOptionPane.showMessageDialog(
-                null,
-                message,
-                RunSortBuilder.class.getName(),
-                JOptionPane.WARNING_MESSAGE);
+            null,
+            message,
+            RunSortBuilder.class.getName(),
+            JOptionPane.WARNING_MESSAGE
+        );
     };
     private Map<String, Object> unmodifiableOpts = null;
 
@@ -82,7 +65,7 @@ public final class RunSortBuilder {
         }
 
         if (Thread.currentThread() instanceof ScriptThread) {
-            ((ScriptThread) Thread.currentThread()).closers.add(closer);
+            ((ScriptThread)Thread.currentThread()).closers.add(closer);
         }
         RunGroupContext rgc;
         if ((rgc = RunGroupContext.CONTEXT.get()) != null) {
@@ -92,7 +75,6 @@ public final class RunSortBuilder {
 
     /**
      * The sorting algorithm this builder will run
-     * 
      * @return The sorting algorithm this builder will run
      * @see SortInfo
      */
@@ -102,7 +84,6 @@ public final class RunSortBuilder {
 
     /**
      * The options configured for this builder
-     * 
      * @return The options configured for this builder
      */
     public Map<String, Object> getOpts() {
@@ -116,9 +97,7 @@ public final class RunSortBuilder {
 
     /**
      * Merge the specified options with the options map
-     * 
-     * @param opts The options to merge, generally using Groovy's named argument
-     *             syntax
+     * @param opts The options to merge, generally using Groovy's named argument syntax
      * @return {@code this} for chaining
      * @see RunSortInfoExtension
      */
@@ -133,9 +112,7 @@ public final class RunSortBuilder {
 
     /**
      * Merge the specified options with the options map
-     * 
-     * @param opts The options to merge, generally obtained with
-     *             {@link RunSortInfoExtension}
+     * @param opts The options to merge, generally obtained with {@link RunSortInfoExtension}
      * @return {@code this} for chaining
      * @see RunSortInfoExtension
      */
@@ -149,9 +126,7 @@ public final class RunSortBuilder {
 
     /**
      * Merge the specified options with the options map, and run the sort
-     * 
-     * @param opts The options to merge, generally using Groovy's named argument
-     *             syntax
+     * @param opts The options to merge, generally using Groovy's named argument syntax
      * @see RunSortInfoExtension
      */
     public RunSortBuilder go(Map<String, Object> opts) {
@@ -160,9 +135,7 @@ public final class RunSortBuilder {
 
     /**
      * Merge the specified options with the options map, and run the sort
-     * 
-     * @param opts The options to merge, generally obtained with
-     *             {@link RunSortInfoExtension}
+     * @param opts The options to merge, generally obtained with {@link RunSortInfoExtension}
      * @see RunSortInfoExtension
      */
     @SafeVarargs
@@ -179,41 +152,36 @@ public final class RunSortBuilder {
 
     /**
      * The configured length of the array (key of {@code "numbers"})
-     * 
      * @return The configured length
      * @see RunSortInfoExtension#getNumbers
      */
     public int getLength() {
         // @checkstyle:off LeftCurlyCheck - It's more readable this way, I think
-        return ((Number) opts.computeIfAbsent("numbers", k -> {
-            throw new NullPointerException("numbers");
-        })).intValue();
+        return ((Number)opts.computeIfAbsent("numbers", k -> { throw new NullPointerException("numbers"); })).intValue();
         // @checkstyle:on LeftCurlyCheck
     }
 
     /**
      * The extra value to pass to the sort (key of {@code "buckets"})
-     * 
      * @return The extra value
      * @see RunSortInfoExtension#getBuckets
      */
     public int getBuckets() {
-        return ((Number) opts.getOrDefault("buckets", 0)).intValue();
+        return ((Number)opts.getOrDefault("buckets", 0)).intValue();
     }
 
     /**
      * The speed multiplier of the visual (key of {@code "speed"})
-     * 
      * @return The speed multiplier
      * @see RunSortInfoExtension#getSpeed
      */
     public double getSpeed() {
-        return ((Number) opts.getOrDefault("speed", 1.0)).doubleValue();
+        return ((Number)opts.getOrDefault("speed", 1.0)).doubleValue();
     }
 
     private int calculateLength(int defaultLength, int startingLength) {
         if (startingLength != -1) {
-            return (int) Math.max(defaultLength / 2048d * startingLength, 2);
+            return (int)Math.max(defaultLength / 2048d * startingLength, 2);
         }
         return Math.max(defaultLength, 2);
     }
@@ -235,7 +203,7 @@ public final class RunSortBuilder {
 
     private void removeClosers() {
         if (Thread.currentThread() instanceof ScriptThread) {
-            ((ScriptThread) Thread.currentThread()).closers.remove(closer);
+            ((ScriptThread)Thread.currentThread()).closers.remove(closer);
         }
         RunGroupContext rgc;
         if ((rgc = RunGroupContext.CONTEXT.get()) != null) {
@@ -279,7 +247,7 @@ public final class RunSortBuilder {
         Delays.setSleepRatio(2.5);
 
         int sortLength;
-        if (sort.isSlowSort()) {
+        if (sort.hasUnreasonableLimit()) {
             sortLength = calculateLengthSlow(getLength(), sort.getUnreasonableLimit(), startingLength);
         } else {
             sortLength = calculateLength(getLength(), startingLength);
@@ -288,14 +256,10 @@ public final class RunSortBuilder {
             arrayFrame.setLengthSlider(sortLength);
         }
 
-        arrayVisualizer.getArrays().subList(1, arrayVisualizer.getArrays().size()).clear();
-        arrayVisualizer.getWrites().clearAllocAmount();
-
         arrayManager.refreshArray(array, arrayVisualizer.getCurrentLength(), arrayVisualizer);
 
         if (runGroupContext != null) {
-            arrayVisualizer.setHeading(sort.getRunAllName() + " (Sort " + runGroupContext.nextSort() + " of "
-                    + runGroupContext.getSortCount() + ")");
+            arrayVisualizer.setHeading(sort.getRunAllName() + " (Sort " + runGroupContext.nextSort() + " of " + runGroupContext.getSortCount() + ")");
         } else {
             arrayVisualizer.setHeading(sort.getRunAllName());
         }
@@ -307,7 +271,7 @@ public final class RunSortBuilder {
 
         try {
             sort.getFreshInstance().runSort(array, arrayVisualizer.getCurrentLength(), getBuckets());
-        } catch (StopSort e) {
+        } catch (StopSort ignored) {
         } catch (Exception e) {
             JErrorPane.invokeErrorMessage(e);
         }
@@ -315,7 +279,7 @@ public final class RunSortBuilder {
         arrayVisualizer.endSort();
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 }

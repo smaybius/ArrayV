@@ -25,7 +25,7 @@ public abstract class ClericSorting extends Sort {
         int high = hi;
         int low = lo;
         int mid = (hi - lo) / 2;
-        while (lo < hi) {
+        for (; lo < hi; lo++, hi--) {
             if (hi < end && Reads.compareIndices(array, lo, hi, sleep / 2, true) > 0) {
                 Highlights.markArray(3, lo);
                 Highlights.markArray(4, hi);
@@ -33,8 +33,6 @@ public abstract class ClericSorting extends Sort {
                 Highlights.clearAllMarks();
                 swapCount++;
             }
-            lo++;
-            hi--;
         }
         Writes.recursion();
         swapCount = clericSortRoutine(array, low, low + mid, swapCount, sleep, depth + 1);

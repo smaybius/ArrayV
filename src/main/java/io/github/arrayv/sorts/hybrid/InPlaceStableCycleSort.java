@@ -35,16 +35,16 @@ final public class InPlaceStableCycleSort extends Sort {
     public InPlaceStableCycleSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
-        setSortListName("In-Place Stable Cycle");
-        setRunAllSortsName("In-Place Stable Cycle Sort");
-        setRunSortName("In-Place Stable Cyclesort");
-        setCategory("Hybrid Sorts");
+        this.setSortListName("In-Place Stable Cycle");
+        this.setRunAllSortsName("In-Place Stable Cycle Sort");
+        this.setRunSortName("In-Place Stable Cyclesort");
+        this.setCategory("Hybrid Sorts");
 
-        setBucketSort(false);
-        setRadixSort(false);
-        setUnreasonablySlow(false);
-        setUnreasonableLimit(0);
-        setBogoSort(false);
+        this.setBucketSort(false);
+        this.setRadixSort(false);
+        this.setUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.setBogoSort(false);
     }
 
     // stable sorting algorithm performing a worst case of
@@ -68,13 +68,15 @@ final public class InPlaceStableCycleSort extends Sort {
                 continue;
 
             Highlights.markArray(2, i);
-            Delays.sleep(0.0025);
+            Delays.sleep(0.01);
 
             int cmp = Reads.compareIndices(array, i, r, 0.5, true);
 
             c += cmp == -1 ? 1 : 0;
             ce += cmp <= 0 ? 1 : 0;
         }
+        Highlights.clearMark(2);
+
         return (long) ce << 32 | (long) c;
     }
 
@@ -89,13 +91,13 @@ final public class InPlaceStableCycleSort extends Sort {
                 max = i;
         }
         // max or min might be the median
-        long rank = getRank(array, a, b, min);
+        long rank = this.getRank(array, a, b, min);
         int r = (int) rank, re = (int) (rank >> 32);
 
         if (med >= r && med <= re)
             return array[min];
 
-        rank = getRank(array, a, b, max);
+        rank = this.getRank(array, a, b, max);
         r = (int) rank;
         re = (int) (rank >> 32);
 
@@ -109,7 +111,7 @@ final public class InPlaceStableCycleSort extends Sort {
             if (Reads.compareIndices(array, i, min, 0.5, true) > 0
                     && Reads.compareIndices(array, i, max, 0.5, true) < 0) {
 
-                rank = getRank(array, a, b, i);
+                rank = this.getRank(array, a, b, i);
                 r = (int) rank;
                 re = (int) (rank >> 32);
 
@@ -141,17 +143,17 @@ final public class InPlaceStableCycleSort extends Sort {
             int pCmp = Reads.compareIndexValue(array, i - 1, piv, 1, true);
 
             if (aCnt < bLen && pCmp < 0) {
-                rotate(array, i, p - tCnt, p);
+                this.rotate(array, i, p - tCnt, p);
                 p = i + tCnt++;
                 aCnt++;
             } else if (bCnt < bLen && pCmp > 0) {
-                rotate(array, i, p - tCnt, p);
+                this.rotate(array, i, p - tCnt, p);
                 p = i + tCnt++;
-                rotate(array, i - 1, i, p - bCnt);
+                this.rotate(array, i - 1, i, p - bCnt);
                 bCnt++;
             }
         }
-        rotate(array, p - tCnt, p, b);
+        this.rotate(array, p - tCnt, p, b);
         if (tCnt == 2 * bLen)
             return false;
 
@@ -161,24 +163,26 @@ final public class InPlaceStableCycleSort extends Sort {
 
         // redistribute
         if (aCnt < bLen && bCnt < bLen) {
-            BinaryInsertionSort smallSort = new BinaryInsertionSort(arrayVisualizer);
+            BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
             smallSort.customBinaryInsert(array, b1, b, 0.125);
-            rotate(array, a, b1, b - bCnt);
+            this.rotate(array, a, b1, b - bCnt);
             return true;
         }
+
+        // search equals
+
         int eCnt = 0, eLen = tCnt - bLen;
         p = b1;
 
-        // search equals
         for (int i = b1; eCnt < eLen; i--) {
             if (Reads.compareIndexValue(array, i - 1, piv, 1, true) == 0) {
-                rotate(array, i, p - eCnt, p);
+                this.rotate(array, i, p - eCnt, p);
                 p = i + eCnt++;
                 eCnt++;
             }
         }
-        rotate(array, p - eLen, p, b1);
-        rotate(array, b - 2 * bLen, b1, b - bCnt);
+        this.rotate(array, p - eLen, p, b1);
+        this.rotate(array, b - 2 * bLen, b1, b - bCnt);
 
         return false;
     }
@@ -220,12 +224,12 @@ final public class InPlaceStableCycleSort extends Sort {
                 int j = i;
 
                 for (;;) {
-                    int k = blockCyclePartitionDest(array, a, i, j, b, pa, pb, piv, bLen, cmp);
+                    int k = this.blockCyclePartitionDest(array, a, i, j, b, pa, pb, piv, bLen, cmp);
 
                     Writes.swap(array, pa + (k - a) / bLen, pb + (k - a) / bLen, 0.02, true, false);
                     if (k == i)
                         break;
-                    multiSwap(array, i, k, bLen);
+                    this.multiSwap(array, i, k, bLen);
 
                     j = k;
                 }
@@ -258,29 +262,29 @@ final public class InPlaceStableCycleSort extends Sort {
     }
 
     private void merge(int[] array, int[] cnt, int a, int m, int b, int piv) {
-        int m1 = leftBinSearch(array, m, b, piv);
-        int m2 = rightBinSearch(array, m1, b, piv);
+        int m1 = this.leftBinSearch(array, m, b, piv);
+        int m2 = this.rightBinSearch(array, m1, b, piv);
 
         int aCnt = m1 - m, mCnt = m2 - m1, bCnt = b - m2;
 
-        rotate(array, a + cnt[0], m, m1);
+        this.rotate(array, a + cnt[0], m, m1);
         cnt[0] += aCnt;
 
-        rotate(array, a + cnt[0] + cnt[1], m1, m2);
+        this.rotate(array, a + cnt[0] + cnt[1], m1, m2);
         cnt[1] += mCnt;
         cnt[2] += bCnt;
     }
 
     // optimized for: [ A ][ B ]
     private void mergeEasy(int[] array, int a, int m, int b, int piv) {
-        b = rightBinSearch(array, m, b, piv);
-        int m1 = leftBinSearch(array, a, m, piv);
-        int m2 = rightBinSearch(array, m1, m, piv);
+        b = this.rightBinSearch(array, m, b, piv);
+        int m1 = this.leftBinSearch(array, a, m, piv);
+        int m2 = this.rightBinSearch(array, m1, m, piv);
 
-        rotate(array, m2, m, b);
+        this.rotate(array, m2, m, b);
 
-        b = leftBinSearch(array, m2, b - (m - m2), piv);
-        rotate(array, m1, m2, b);
+        b = this.leftBinSearch(array, m2, b - (m - m2), piv);
+        this.rotate(array, m1, m2, b);
     }
 
     // returns true if u dont have to sort
@@ -288,7 +292,7 @@ final public class InPlaceStableCycleSort extends Sort {
         // create bit buffer
 
         int n = b - a, bLen = (int) Math.sqrt(n - 1) + 1;
-        if (initBitBuffer(array, a, b, piv, bLen))
+        if (this.initBitBuffer(array, a, b, piv, bLen))
             return true;
 
         int b1 = b - 2 * bLen, pa = b1, pb = b1 + bLen;
@@ -297,8 +301,8 @@ final public class InPlaceStableCycleSort extends Sort {
         // partition blocks
 
         for (int i = a; i < b1; i += bLen, cmp = -cmp)
-            blockCyclePartition(array, i, Math.min(i + bLen, b1), pa, pb, piv, 1, cmp);
-        resetBits(array, pa, pb, bLen);
+            this.blockCyclePartition(array, i, Math.min(i + bLen, b1), pa, pb, piv, 1, cmp);
+        this.resetBits(array, pa, pb, bLen);
 
         // type blocks
 
@@ -306,30 +310,30 @@ final public class InPlaceStableCycleSort extends Sort {
         int[] cnt = { 0, 0, 0 };
 
         for (int i = a; i < b1; i += bLen) {
-            merge(array, cnt, p, i, Math.min(i + bLen, b1), piv);
+            this.merge(array, cnt, p, i, Math.min(i + bLen, b1), piv);
 
             while (cnt[0] >= bLen) {
                 cnt[0] -= bLen;
                 p += bLen;
             }
             while (cnt[1] >= bLen) {
-                rotate(array, p, p + cnt[0], p + cnt[0] + bLen);
+                this.rotate(array, p, p + cnt[0], p + cnt[0] + bLen);
                 cnt[1] -= bLen;
                 p += bLen;
             }
             while (cnt[2] >= bLen) {
-                rotate(array, p, p + cnt[0] + cnt[1], p + cnt[0] + cnt[1] + bLen);
+                this.rotate(array, p, p + cnt[0] + cnt[1], p + cnt[0] + cnt[1] + bLen);
                 cnt[2] -= bLen;
                 p += bLen;
             }
         }
-        blockCyclePartition(array, a, p, pa, pb, piv, bLen, 1);
-        resetBits(array, pa, pb, bLen);
+        this.blockCyclePartition(array, a, p, pa, pb, piv, bLen, 1);
+        this.resetBits(array, pa, pb, bLen);
 
         // rotate lesser and eq items + redistribute bits
 
-        mergeEasy(array, p, b1, b, piv);
-        mergeEasy(array, a, p, b, piv);
+        this.mergeEasy(array, p, b1, b, piv);
+        this.mergeEasy(array, a, p, b, piv);
 
         return false;
     }
@@ -371,8 +375,8 @@ final public class InPlaceStableCycleSort extends Sort {
         return d;
     }
 
-    private void stableCycle(int[] array, int a, int b, int p, int piv, int cmp) {
-        for (int i = a; i < b; i++) {
+    private void stableCycle(int[] array, int a1, int b, int p, int piv, int cmp) {
+        for (int i = a1; i < b; i++) {
             int pCmp = Reads.compareValues(array[i], piv);
             boolean bit = pCmp == cmp || pCmp == 0;
 
@@ -381,7 +385,7 @@ final public class InPlaceStableCycleSort extends Sort {
                 int j = i;
 
                 for (;;) {
-                    int k = stableCycleDest(array, i, j, b, p, piv, cmp);
+                    int k = this.stableCycleDest(array, i, j, b, p, piv, cmp);
 
                     if (k == i)
                         break;
@@ -401,25 +405,22 @@ final public class InPlaceStableCycleSort extends Sort {
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         if (length <= 32) {
-            BinaryInsertionSort smallSort = new BinaryInsertionSort(arrayVisualizer);
+            BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
             smallSort.customBinaryInsert(array, 0, length, 0.25);
             return;
         }
 
-        int piv = selectMedian(array, 0, length);
-        if (partition(array, 0, length, piv))
+        int piv = this.selectMedian(array, 0, length);
+        if (this.partition(array, 0, length, piv))
             return;
 
         // find equal elements zone to be excluded from sorting
 
         int n = length / 2, p = (length + 1) / 2;
-        while (n > 0 && Reads.compareIndices(array, n - 1, p, 1, true) == 0) {
+        while (Reads.compareIndices(array, n - 1, p, 1, true) == 0) {
             n--;
             p++;
         }
-        if (n == 0)
-            return;
-
         Highlights.clearMark(2);
 
         // depending on these comparisons we have to manage block E of equal elements on
@@ -431,24 +432,24 @@ final public class InPlaceStableCycleSort extends Sort {
             while (++p1 < length && Reads.compareIndexValue(array, p1, piv, 1, true) == 0)
                 bSize++;
 
-            stableCycle(array, 0, n, p, piv, 1);
+            this.stableCycle(array, 0, n, p, piv, 1);
             Highlights.clearAllMarks();
-            multiSwap(array, 0, p, bSize);
-            stableCycle(array, bSize, n, p, piv, -1);
+            this.multiSwap(array, 0, p, bSize);
+            this.stableCycle(array, bSize, n, p, piv, -1);
         } else if (Reads.compareValues(array[n - 1], piv) == 0) {
             // [ A ][ E ][ = ][ B ]
             int n1 = n, bSize = 1;
             while (--n1 > 0 && Reads.compareIndexValue(array, n1 - 1, piv, 1, true) == 0)
                 bSize++;
 
-            stableCycle(array, 0, n1, p, piv, 1);
+            this.stableCycle(array, 0, n1, p, piv, 1);
             Highlights.clearAllMarks();
-            multiSwap(array, n1, length - bSize, bSize);
-            stableCycle(array, 0, n, p, piv, -1);
+            this.multiSwap(array, n1, length - bSize, bSize);
+            this.stableCycle(array, 0, n, p, piv, -1);
         } else {
             // [ A ][ = ][ B ] (E does not exist)
-            stableCycle(array, 0, n, p, piv, 1);
-            stableCycle(array, 0, n, p, piv, -1);
+            this.stableCycle(array, 0, n, p, piv, 1);
+            this.stableCycle(array, 0, n, p, piv, -1);
         }
     }
 }

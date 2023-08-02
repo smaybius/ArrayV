@@ -18,6 +18,7 @@ final public class MiepurgeSort extends Sort {
         this.setRunAllSortsName("Miepurge Sort (K-Way Heap Merge Sort)");
         this.setRunSortName("Miepurge Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

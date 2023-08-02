@@ -19,6 +19,7 @@ final public class ClericSortRecursive extends ClericSorting {
         this.setRunAllSortsName("Recursive Cleric Sort");
         this.setRunSortName("Clericsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -12,6 +12,7 @@ public final class Rotations {
     }
 
     // utility functions
+    // utility functions
     private static void swapBlocksBackwards(int[] array, int a, int b, int len, double pause, boolean mark,
             boolean auxwrite) {
         for (int i = 0; i < len; i++) {
@@ -129,10 +130,10 @@ public final class Rotations {
         if (lenA < 1 || lenB < 1)
             return;
 
-        int a = pos;
-        int b = pos + lenA - 1;
-        int c = pos + lenA;
-        int d = pos + lenA + lenB - 1;
+        int a = pos,
+                b = pos + lenA - 1,
+                c = pos + lenA,
+                d = pos + lenA + lenB - 1;
         int swap;
 
         while (a < b && c < d) {
@@ -155,7 +156,10 @@ public final class Rotations {
             Writes.write(array, a++, swap, pause / 2d, mark, auxwrite);
         }
         if (a < d) { // dont count reversals that dont do anything
-            Writes.reversal(array, a, d, pause, mark, auxwrite);
+            if (d - a > 2)
+                Writes.reversal(array, a, d, pause, mark, auxwrite);
+            else
+                Writes.swap(array, a, d, pause, mark, auxwrite);
             Highlights.clearMark(2);
         }
     }
@@ -190,11 +194,7 @@ public final class Rotations {
         if (left < 1 || right < 1)
             return;
 
-        int pta = pos;
-        int ptb = pos + left;
-        int ptc = pos + right;
-        int ptd = ptb + right;
-        int alloc;
+        int pta = pos, ptb = pos + left, ptc = pos + right, ptd = ptb + right, alloc;
 
         if (left < right) {
             int bridge = right - left;
@@ -257,5 +257,127 @@ public final class Rotations {
             Highlights.clearMark(2);
         }
         Writes.changeAllocAmount(-alloc);
+    }
+
+    public static void neon(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean auxwrite) {
+        int end = pos + lenA + lenB;
+        while (lenA > 0 && lenB > 0) {
+            if (lenA < lenB) {
+                for (int i = 0; i < lenA; i++) {
+                    int t = array[pos + i], j = pos + i + lenA;
+                    for (; j < end; j += lenA) {
+                        Writes.write(array, j - lenA, array[j], pause, mark, auxwrite);
+                    }
+                    Writes.write(array, j - lenA, t, pause, mark, auxwrite);
+                }
+                pos += lenB;
+                lenB %= lenA;
+                lenA -= lenB;
+            } else {
+                for (int i = 0; i < lenB; i++) {
+                    int t = array[pos + i + lenA], j = pos + i + lenA - lenB;
+                    for (; j >= pos; j -= lenB) {
+                        Writes.write(array, j + lenB, array[j], pause, mark, auxwrite);
+                    }
+                    Writes.write(array, j + lenB, t, pause, mark, auxwrite);
+                }
+                end = pos + lenB;
+                lenA %= lenB;
+                lenB -= lenA;
+            }
+        }
+    }
+
+    public static void foolish(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean aux) {
+        if (lenA < lenB) {
+            for (int i = 0; i < lenA; i++) {
+                Writes.insert(array, pos, pos + lenA + lenB - 1, pause / lenA, mark, aux);
+            }
+        } else {
+            for (int i = 0; i < lenB; i++) {
+                Writes.insert(array, pos + lenA + lenB - 1, pos, pause / lenB, mark, aux);
+            }
+        }
+    }
+
+    public static void morefoolish(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean aux) {
+        if (lenA > lenB) {
+            for (int i = 0; i < lenA; i++) {
+                Writes.insert(array, pos, pos + lenA + lenB - 1, pause / lenA, mark, aux);
+            }
+        } else {
+            for (int i = 0; i < lenB; i++) {
+                Writes.insert(array, pos + lenA + lenB - 1, pos, pause / lenB, mark, aux);
+            }
+        }
+    }
+
+    public static void radon(int[] array, int pos, int lenA, int lenB, double pause, boolean mark, boolean auxwrite) {
+        int min = Math.min(lenA, lenB), max = Math.max(lenA, lenB), bridge = max - min;
+        if (min < 1)
+            return;
+        if (bridge <= min)
+            Writes.reversal(array, pos + min, pos + max - 1, pause, mark, auxwrite);
+        for (int i = 0; i < min; i++)
+            Writes.swap(array, pos + i, pos + max + i, pause, mark, auxwrite);
+        if (bridge == 0)
+            return;
+        Highlights.clearAllMarks();
+        if (lenA > lenB) {
+            if (bridge > min) {
+                cycleReverse(array, pos + min, bridge, min, pause, mark, auxwrite);
+            } else {
+                int swap, a = pos + min, b = pos + max, c = b + min - 1;
+                while (b < c) {
+                    swap = array[c];
+                    Writes.write(array, c--, array[a], pause, mark, auxwrite);
+                    Writes.write(array, a++, array[b], pause, mark, auxwrite);
+                    Writes.write(array, b++, swap, pause, mark, auxwrite);
+                }
+                Writes.reversal(array, a, c, pause, mark, auxwrite);
+            }
+        } else {
+            if (bridge > min) {
+                cycleReverse(array, pos, min, bridge, pause, mark, auxwrite);
+            } else {
+                int swap, a = pos, b = a + min - 1, c = a + max - 1;
+                while (a < b) {
+                    swap = array[a];
+                    Writes.write(array, a++, array[c], pause, mark, auxwrite);
+                    Writes.write(array, c--, array[b], pause, mark, auxwrite);
+                    Writes.write(array, b--, swap, pause, mark, auxwrite);
+                }
+                Writes.reversal(array, a, c, pause, mark, auxwrite);
+            }
+        }
+    }
+
+    public static void centered(int[] array, int pos, int lenA, int lenB, double pause, boolean mark,
+            boolean auxwrite) {
+        if (lenA < 1 || lenB < 1)
+            return;
+        if (lenA < lenB) {
+            int h = (lenB - lenA) / 2;
+            blockSwap(array, pos, pos + lenA + h, lenA, pause, mark, auxwrite);
+            centered(array, pos + lenA + h, lenA, lenB - lenA - h, pause, mark, auxwrite);
+            centered(array, pos, lenA, h, pause, mark, auxwrite);
+        } else if (lenA == lenB) {
+            blockSwap(array, pos, pos + lenA, lenA, pause, mark, auxwrite);
+        } else {
+            int h = (lenA - lenB) / 2;
+            blockSwap(array, pos + h, pos + lenA, lenB, pause, mark, auxwrite);
+            centered(array, pos, h, lenB, pause, mark, auxwrite);
+            centered(array, pos + h + lenB, lenA - lenB - h, lenB, pause, mark, auxwrite);
+        }
+    }
+
+    public static void adaptable(int[] array, int pos, int lenA, int lenB, double pause, boolean mark,
+            boolean auxwrite) {
+        if (lenA == 0 || lenB == 0)
+            return;
+        if (lenA % lenB == 0 || lenB % lenA == 0)
+            Rotations.holyGriesMills(array, pos, lenA, lenB, pause, mark, auxwrite);
+        else
+            Rotations.cycleReverse(array, pos, lenA, lenB, pause, mark, auxwrite);
     }
 }

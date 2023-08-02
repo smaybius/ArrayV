@@ -11,12 +11,26 @@ runGroup(shuffles.size() + distributions.size()) { // The number of inputs will 
         if (shuffle != Shuffles.ALREADY) { // Exclude the "no shuffle" shuffle, for being redundant with "sorted".
             category = shuffle.name
             // Reverse the input first if the shuffle doesn't affect sorted inputs.
-            if (shuffle == Shuffles.MIN_HEAPIFIED || shuffle == Shuffles.BINOMIAL_HEAPIFIED || shuffle == Shuffles.SMOOTH || shuffle == Shuffles.BINOMIAL_SMOOTH || shuffle == Shuffles.POPLAR || shuffle == Shuffles.OPTI_LAZY_HEAPIFIED || shuffle == Shuffles.PSEUDO_HEAPIFIED) {
+            if (shuffle == Shuffles.MIN_HEAPIFIED || shuffle == Shuffles.BINOMIAL_HEAPIFIED || shuffle == Shuffles.SMOOTH || shuffle == Shuffles.BINOMIAL_SMOOTH || shuffle == Shuffles.POPLAR || shuffle == Shuffles.OPTI_LAZY_HEAPIFIED || shuffle == Shuffles.PSEUDO_HEAPIFIED || shuffle == Shuffles.VELV_HEAP || shuffle == Shuffles.SCROLL_HEAPIFIED) {
                 arrayv.arrayManager.setShuffleSingle(Shuffles.REVERSE).addSingle(shuffle)
             } else {
                 arrayv.arrayManager.setShuffleSingle(shuffle)
             }
-            run OptimizedPigeonholeSort go 2048.numbers, 2048.speed
+            run MiniGrailSort go 2048.numbers
+        } else {
+            arrayv.setUniqueItems(64)
+            category = "Few Uniques (64)"
+            arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
+            run MiniGrailSort go 2048.numbers
+            category = "Few Uniques (32)"
+            arrayv.setUniqueItems(32)
+            arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
+            run MiniGrailSort go 2048.numbers
+            category = "Few Uniques (16)"
+            arrayv.setUniqueItems(16)
+            arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
+            run MiniGrailSort go 2048.numbers
+            arrayv.setUniqueItems(2048)
         }
         
     }
@@ -29,7 +43,7 @@ runGroup(shuffles.size() + distributions.size()) { // The number of inputs will 
             } else {
                 arrayv.arrayManager.setShuffleSingle(distrib)
             }
-            run OptimizedPigeonholeSort go 2048.numbers, 2048.speed
+            run MiniGrailSort go 2048.numbers
         }
         
     }

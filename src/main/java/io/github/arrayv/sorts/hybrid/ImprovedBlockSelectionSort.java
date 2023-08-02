@@ -2,7 +2,6 @@ package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
-import io.github.arrayv.utils.IndexedRotations;
 
 /*
  *
@@ -30,155 +29,164 @@ SOFTWARE.
  *
  */
 
-public final class ImprovedBlockSelectionSort extends Sort {
-	public ImprovedBlockSelectionSort(ArrayVisualizer arrayVisualizer) {
-		super(arrayVisualizer);
+final public class ImprovedBlockSelectionSort extends Sort {
+    public ImprovedBlockSelectionSort(ArrayVisualizer arrayVisualizer) {
+        super(arrayVisualizer);
 
-		this.setSortListName("Improved Block Selection Merge");
-		this.setRunAllSortsName("Improved Block Selection Merge Sort");
-		this.setRunSortName("Improved Block Selection Merge Sort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
-	}
+        this.setSortListName("Improved Block Selection Merge");
+        this.setRunAllSortsName("Improved Block Selection Merge Sort");
+        this.setRunSortName("Improved Block Selection Merge Sort");
+        this.setCategory("Hybrid Sorts");
 
-	public static int sqrt(int n) {
-		int i = 1;
-		for (; i * i < n; i *= 2)
-			;
-		return i;
-	}
+        this.setBucketSort(false);
+        this.setRadixSort(false);
+        this.setUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.setBogoSort(false);
+    }
 
-	private void multiSwap(int[] array, int a, int b, int len) {
-		for (int i = 0; i < len; i++)
-			Writes.swap(array, a + i, b + i, 1, true, false);
-	}
+    public static int sqrt(int n) {
+        int i = 1;
+        for (; i * i < n; i *= 2)
+            ;
+        return i;
+    }
 
-	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
-	}
+    private void multiSwap(int[] array, int a, int b, int len) {
+        for (int i = 0; i < len; i++)
+            Writes.swap(array, a + i, b + i, 1, true, false);
+    }
 
-	private int inPlaceMerge(int[] array, int a, int m, int b) {
-		int i = a;
-		int j = m;
-		int k;
+    private void rotate(int[] array, int a, int m, int b) {
+        int l = m - a, r = b - m;
 
-		while (i < j && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
-				k = j;
-				do
-					k++;
-				while (k < b && Reads.compareIndices(array, i, k, 0.2, true) > 0);
+        while (l > 0 && r > 0) {
+            if (r < l) {
+                this.multiSwap(array, m - r, m, r);
+                b -= r;
+                m -= r;
+                l -= r;
+            } else {
+                this.multiSwap(array, a, m, l);
+                a += l;
+                m += l;
+                r -= l;
+            }
+        }
+    }
 
-				this.rotate(array, i, j, k);
+    private int inPlaceMerge(int[] array, int a, int m, int b) {
+        int i = a, j = m, k;
 
-				i += k - j;
-				j = k;
-			} else
-				i++;
-		}
+        while (i < j && j < b) {
+            if (Reads.compareIndices(array, i, j, 0.5, true) > 0) {
+                k = j;
+                do
+                    k++;
+                while (k < b && Reads.compareIndices(array, i, k, 0, false) > 0);
 
-		return i;
-	}
+                this.rotate(array, i, j, k);
 
-	private void inPlaceMergeBW(int[] array, int a, int m, int b) {
-		int i = m - 1;
-		int j = b - 1;
-		int k;
+                i += k - j;
+                j = k;
+            } else
+                i++;
+        }
 
-		while (j > i && i >= a) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
-				k = i;
-				do
-					k--;
-				while (k >= a && Reads.compareIndices(array, k, j, 0.2, true) > 0);
+        return i;
+    }
 
-				this.rotate(array, k + 1, i + 1, j + 1);
+    private void inPlaceMergeBW(int[] array, int a, int m, int b) {
+        int i = m - 1, j = b - 1, k;
 
-				j -= i - k;
-				i = k;
-			} else
-				j--;
-		}
-	}
+        while (j > i && i >= a) {
+            if (Reads.compareIndices(array, i, j, 0.5, true) > 0) {
+                k = i;
+                do
+                    k--;
+                while (k >= a && Reads.compareIndices(array, k, j, 0, false) > 0);
 
-	private int selectRange(int[] array, int a, int b, int bLen) {
-		int min = a;
-		a += bLen;
+                this.rotate(array, k + 1, i + 1, j + 1);
 
-		while (a < b) {
-			int comp = Reads.compareIndices(array, a, min, 0.1, true);
+                j -= i - k;
+                i = k;
+            } else
+                j--;
+        }
+    }
 
-			if (comp == -1 || (comp == 0 && Reads.compareIndices(array, a + bLen - 1, min + bLen - 1, 0.1, true) == -1))
-				min = a;
+    private int selectRange(int[] array, int a, int b, int bLen) {
+        int min = a;
+        a += bLen;
 
-			a += bLen;
-		}
-		return min;
-	}
+        while (a < b) {
+            int comp = Reads.compareIndices(array, a, min, 0, false);
 
-	private void blockSelect(int[] array, int a, int m, int b, int bLen) {
-		int k = a;
-		int j = m;
+            if (comp == -1 || (comp == 0 && Reads.compareIndices(array, a + bLen - 1, min + bLen - 1, 0, false) == -1))
+                min = a;
 
-		while (k < m && Reads.compareIndices(array, k, m, 0.1, true) <= 0)
-			k += bLen;
-		if (k == m)
-			return;
+            a += bLen;
+        }
+        return min;
+    }
 
-		int i = m;
-		this.multiSwap(array, k, j, bLen);
-		k += bLen;
-		j += bLen;
+    private void blockSelect(int[] array, int a, int m, int b, int bLen) {
+        int k = a, j = m;
 
-		while (k < j && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0) {
-				if (k != i)
-					this.multiSwap(array, k, i, bLen);
-				k += bLen;
-				i = this.selectRange(array, Math.max(m, k), j, bLen);
-			} else {
-				if (i == k)
-					i = j;
-				if (k != j)
-					this.multiSwap(array, k, j, bLen);
-				k += bLen;
-				j += bLen;
-			}
-		}
-		// if(k != m)
-		while (k < j) {
-			i = this.selectRange(array, k, b, bLen);
-			if (k != i)
-				this.multiSwap(array, k, i, bLen);
-			k += bLen;
-		}
-	}
+        while (k < m && Reads.compareIndices(array, k, m, 0.5, true) <= 0)
+            k += bLen;
+        if (k == m)
+            return;
 
-	@Override
-	public void runSort(int[] array, int length, int bucketCount) {
-		for (int j = 1; j < length; j *= 2) {
-			int bLen = sqrt(j);
-			int n = j;
-			int b = length - length % bLen;
+        int i = m;
+        this.multiSwap(array, k, j, bLen);
+        k += bLen;
+        j += bLen;
 
-			while (n > 16) {
-				for (int i = 0; i + j < b; i += 2 * j)
-					for (int k = i; k + n < Math.min(i + 2 * j, b); k += n)
-						this.blockSelect(array, k, k + n, Math.min(k + 2 * n, b), bLen);
+        while (k < j && j < b) {
+            if (Reads.compareIndices(array, i, j, 0.5, true) <= 0) {
+                if (k != i)
+                    this.multiSwap(array, k, i, bLen);
+                k += bLen;
+                i = this.selectRange(array, Math.max(m, k), j, bLen);
+            } else {
+                if (i == k)
+                    i = j;
+                if (k != j)
+                    this.multiSwap(array, k, j, bLen);
+                k += bLen;
+                j += bLen;
+            }
+        }
+        // if (k != m)
+        while (k < j) {
+            i = this.selectRange(array, k, b, bLen);
+            if (k != i)
+                this.multiSwap(array, k, i, bLen);
+            k += bLen;
+        }
+    }
 
-				n = bLen;
-				bLen = sqrt(bLen);
-			}
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        for (int i, j = 1; j < length; j *= 2) {
+            int bLen = sqrt(j), n = j,
+                    b = length - length % bLen;
 
-			for (int i = 0; i + j < b; i += 2 * j)
-				for (int k = i, f = i; k + n < Math.min(i + 2 * j, b); k += n)
-					f = this.inPlaceMerge(array, f, k + n, Math.min(k + 2 * n, b));
+            while (n > 16) {
+                for (i = 0; i + j < b; i += 2 * j)
+                    for (int k = i; k + n < Math.min(i + 2 * j, b); k += n)
+                        this.blockSelect(array, k, k + n, Math.min(k + 2 * n, b), bLen);
 
-			this.inPlaceMergeBW(array, length - length % (2 * j), b, length);
-		}
-	}
+                n = bLen;
+                bLen = sqrt(bLen);
+            }
+
+            for (i = 0; i + j < b; i += 2 * j)
+                for (int k = i, f = i; k + n < Math.min(i + 2 * j, b); k += n)
+                    f = this.inPlaceMerge(array, f, k + n, Math.min(k + 2 * n, b));
+
+            this.inPlaceMergeBW(array, length - length % (2 * j), b, length);
+        }
+    }
 }

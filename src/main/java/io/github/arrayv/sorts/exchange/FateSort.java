@@ -19,6 +19,7 @@ final public class FateSort extends Sort {
         this.setRunAllSortsName("Fate Sort");
         this.setRunSortName("Fatesort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
@@ -29,36 +30,25 @@ final public class FateSort extends Sort {
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
         int left = 1;
-        int right = 2;
         int bound = currentLength;
-        int highestlow = 0;
         int firstswap = 0;
         int highestswap = currentLength;
         while (bound > 1) {
-            right = left + 1;
-            highestlow = 0;
-            while (right <= bound) {
-                Highlights.markArray(1, left > 1 ? left - 1 : 0);
-                Highlights.markArray(2, right - 1);
-                Delays.sleep(0.125);
-                if (Reads.compareIndices(array, left - 1, right - 1, 0.5, true) > 0) {
+            int highestlow = 0;
+            for (int right = left + 1; right <= bound; right++) {
+                if (Reads.compareIndices(array, left - 1, right - 1, 0.125, true) > 0) {
                     if (highestlow == 0)
                         highestlow = right;
                     else {
-                        Highlights.markArray(1, highestlow - 1);
-                        Highlights.markArray(2, right - 1);
                         Highlights.markArray(3, left - 1);
-                        Delays.sleep(0.125);
-                        if (Reads.compareIndices(array, highestlow - 1, right - 1, 0.5, true) < 0)
+                        if (Reads.compareIndices(array, highestlow - 1, right - 1, 0.125, true) < 0)
                             highestlow = right;
                         Highlights.clearMark(3);
                     }
                 }
-                right++;
             }
-            if (highestlow > highestswap) {
+            if (highestlow > highestswap)
                 highestswap = highestlow;
-            }
             if (highestlow != 0) {
                 if (firstswap == 0)
                     firstswap = left;

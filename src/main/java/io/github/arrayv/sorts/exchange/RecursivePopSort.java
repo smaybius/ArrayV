@@ -12,6 +12,7 @@ public final class RecursivePopSort extends Sort {
         this.setRunAllSortsName("Recursive Pop Sort");
         this.setRunSortName("Recursive Pop Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

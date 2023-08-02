@@ -17,6 +17,7 @@ public final class MOMIntroSort extends Sort {
         this.setRunAllSortsName("Median-of-Medians Introspective Sort");
         this.setRunSortName("Median-of-Medians Introsort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -34,13 +35,13 @@ public final class MOMIntroSort extends Sort {
     }
 
     private int medianof3(int[] arr, int left, int mid, int right) {
-        if (Reads.compareValues(arr[right], arr[left]) == -1) {
+        if (Reads.compareIndices(arr, right, left, 0.5, true) == -1) {
             Writes.swap(arr, left, right, 1, true, false);
         }
-        if (Reads.compareValues(arr[mid], arr[left]) == -1) {
+        if (Reads.compareIndices(arr, mid, left, 0.5, true) == -1) {
             Writes.swap(arr, mid, left, 1, true, false);
         }
-        if (Reads.compareValues(arr[right], arr[mid]) == -1) {
+        if (Reads.compareIndices(arr, right, mid, 0.5, true) == -1) {
             Writes.swap(arr, right, mid, 1, true, false);
         }
         this.middle = mid;

@@ -1,8 +1,8 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 
 /*
  *
@@ -31,104 +31,105 @@ SOFTWARE.
  */
 
 final public class BufferedBlockSelectionMergeSort extends Sort {
-	public BufferedBlockSelectionMergeSort(ArrayVisualizer arrayVisualizer) {
-		super(arrayVisualizer);
+    public BufferedBlockSelectionMergeSort(ArrayVisualizer arrayVisualizer) {
+        super(arrayVisualizer);
 
-		this.setSortListName("Buffered Block Selection Merge");
-		this.setRunAllSortsName("Buffered Block Selection Merge Sort");
-		this.setRunSortName("Buffered Block Selection Merge Sort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
-	}
+        this.setSortListName("Buffered Block Selection Merge");
+        this.setRunAllSortsName("Buffered Block Selection Merge Sort");
+        this.setRunSortName("Buffered Block Selection Merge Sort");
+        this.setCategory("Hybrid Sorts");
 
-	private int sqrt(int n) {
-		return (int) Math.sqrt(n - 1) + 1;
-	}
+        this.setBucketSort(false);
+        this.setRadixSort(false);
+        this.setUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.setBogoSort(false);
+    }
 
-	private void multiSwap(int[] array, int a, int b, int len) {
-		for (int i = 0; i < len; i++)
-			Writes.swap(array, a + i, b + i, 1, true, false);
-	}
+    private int sqrt(int n) {
+        return (int) Math.sqrt(n - 1) + 1;
+    }
 
-	private boolean blockLesser(int[] array, int a, int b, int bLen) {
-		int cmp = Reads.compareIndices(array, a, b, 0.5, true);
-		return cmp < 0 || (cmp == 0 && Reads.compareIndices(array, a + bLen - 1, b + bLen - 1, 0.5, true) < 0);
-	}
+    private void multiSwap(int[] array, int a, int b, int len) {
+        for (int i = 0; i < len; i++)
+            Writes.swap(array, a + i, b + i, 1, true, false);
+    }
 
-	private void mergeAboveBW(int[] array, int a1, int b1, int a, int b) {
-		int p = (b1--) + (b--) - a;
+    private boolean blockLesser(int[] array, int a, int b, int bLen) {
+        int cmp = Reads.compareIndices(array, a, b, 0.5, true);
+        return cmp < 0 || (cmp == 0 && Reads.compareIndices(array, a + bLen - 1, b + bLen - 1, 0.5, true) < 0);
+    }
 
-		while (b >= a && b1 >= a1) {
-			if (Reads.compareIndices(array, b, b1, 0.5, true) >= 0)
-				Writes.swap(array, --p, b--, 1, true, false);
-			else
-				Writes.swap(array, --p, b1--, 1, true, false);
-		}
-		while (b >= a)
-			Writes.swap(array, --p, b--, 1, true, false);
-	}
+    private void mergeAboveBW(int[] array, int a1, int b1, int a, int b) {
+        int p = (b1--) + (b--) - a;
 
-	private void mergeBW(int[] array, int a, int m, int b, int p) {
-		int pLen = b - m;
-		this.multiSwap(array, m, p, pLen);
+        while (b >= a && b1 >= a1) {
+            if (Reads.compareIndices(array, b, b1, 0.5, true) >= 0)
+                Writes.swap(array, --p, b--, 1, true, false);
+            else
+                Writes.swap(array, --p, b1--, 1, true, false);
+        }
+        while (b >= a)
+            Writes.swap(array, --p, b--, 1, true, false);
+    }
 
-		int i = pLen - 1, j = m - 1, k = b - 1;
+    private void mergeBW(int[] array, int a, int m, int b, int p) {
+        int pLen = b - m;
+        this.multiSwap(array, m, p, pLen);
 
-		while (i >= 0 && j >= a) {
-			if (Reads.compareIndices(array, p + i, j, 0.5, true) >= 0)
-				Writes.swap(array, k--, p + (i--), 1, true, false);
-			else
-				Writes.swap(array, k--, j--, 1, true, false);
-		}
-		while (i >= 0)
-			Writes.swap(array, k--, p + (i--), 1, true, false);
-	}
+        int i = pLen - 1, j = m - 1, k = b - 1;
 
-	private void inPlaceMergeUnstable(int[] array, int a, int m, int b) {
-		int bLen = this.sqrt(b - a), a1 = a + (m - a - 1) % bLen + 1, b1 = b - (b - m) % bLen;
+        while (i >= 0 && j >= a) {
+            if (Reads.compareIndices(array, p + i, j, 0.5, true) >= 0)
+                Writes.swap(array, k--, p + (i--), 1, true, false);
+            else
+                Writes.swap(array, k--, j--, 1, true, false);
+        }
+        while (i >= 0)
+            Writes.swap(array, k--, p + (i--), 1, true, false);
+    }
 
-		this.multiSwap(array, a1, this.blockLesser(array, m - bLen, b1 - bLen, bLen) ? b1 - bLen : m - bLen, bLen);
+    private void inPlaceMergeUnstable(int[] array, int a, int m, int b) {
+        int bLen = this.sqrt(b - a), a1 = a + (m - a - 1) % bLen + 1, b1 = b - (b - m) % bLen;
 
-		for (a1 += bLen; a1 < b1; a1 += bLen) {
-			int min = a1;
+        this.multiSwap(array, a1, this.blockLesser(array, m - bLen, b1 - bLen, bLen) ? b1 - bLen : m - bLen, bLen);
 
-			for (int i = a1 + bLen; i < b1; i += bLen)
-				if (this.blockLesser(array, i, min, bLen))
-					min = i;
+        for (a1 += bLen; a1 < b1; a1 += bLen) {
+            int min = a1;
 
-			if (min > a1)
-				this.multiSwap(array, min, a1, bLen);
-			this.mergeAboveBW(array, a, a1 - bLen, a1, a1 + bLen);
-		}
-		this.mergeAboveBW(array, a, a1 - bLen, a1, b);
+            for (int i = a1 + bLen; i < b1; i += bLen)
+                if (this.blockLesser(array, i, min, bLen))
+                    min = i;
 
-		BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
-		smallSort.customBinaryInsert(array, b - bLen, b, 0.25);
+            if (min > a1)
+                this.multiSwap(array, min, a1, bLen);
+            this.mergeAboveBW(array, a, a1 - bLen, a1, a1 + bLen);
+        }
+        this.mergeAboveBW(array, a, a1 - bLen, a1, b);
 
-		this.mergeBW(array, a + bLen, b - bLen, b, a);
-		smallSort.customBinaryInsert(array, a, a + bLen, 0.25);
-	}
+        BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
+        smallSort.customBinaryInsert(array, b - bLen, b, 0.25);
 
-	private void mergeSort(int[] array, int a, int b) {
-		if (b - a < 32) {
-			BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
-			smallSort.customBinaryInsert(array, a, b, 0.25);
+        this.mergeBW(array, a + bLen, b - bLen, b, a);
+        smallSort.customBinaryInsert(array, a, a + bLen, 0.25);
+    }
 
-			return;
-		}
-		int m = (a + b) / 2;
+    private void mergeSort(int[] array, int a, int b) {
+        if (b - a < 32) {
+            BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
+            smallSort.customBinaryInsert(array, a, b, 0.25);
 
-		this.mergeSort(array, a, m);
-		this.mergeSort(array, m, b);
-		this.inPlaceMergeUnstable(array, a, m, b);
-	}
+            return;
+        }
+        int m = (a + b) / 2;
 
-	@Override
-	public void runSort(int[] array, int length, int bucketCount) {
-		this.mergeSort(array, 0, length);
-	}
+        this.mergeSort(array, a, m);
+        this.mergeSort(array, m, b);
+        this.inPlaceMergeUnstable(array, a, m, b);
+    }
+
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        this.mergeSort(array, 0, length);
+    }
 }

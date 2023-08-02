@@ -27,6 +27,7 @@ public final class AdaptiveLogMedianQuickSort extends Sort {
         this.setRunAllSortsName("Adaptive Log-Median Quick Sort");
         this.setRunSortName("Adaptive Log-Median Quicksort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -163,7 +164,7 @@ public final class AdaptiveLogMedianQuickSort extends Sort {
                     logMedR = true;
                 }
             } else if (alreadyParted && partialInsert(array, a, p)
-                                     && partialInsert(array, p + 1, b))
+                    && partialInsert(array, p + 1, b))
                 return;
             if (l > r) {
                 quickSort(array, p + 1, b, badAllowed, logMedR);

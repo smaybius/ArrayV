@@ -19,6 +19,7 @@ final public class OptimizedWhySort extends Sort {
         this.setRunAllSortsName("Optimized Why Sort");
         this.setRunSortName("Optimized Whysort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);

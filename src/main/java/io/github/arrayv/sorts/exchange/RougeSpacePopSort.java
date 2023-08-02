@@ -19,6 +19,7 @@ final public class RougeSpacePopSort extends Sort {
         this.setRunAllSortsName("Rouge-Space Pop Sort");
         this.setRunSortName("Rouge-Space Pop Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

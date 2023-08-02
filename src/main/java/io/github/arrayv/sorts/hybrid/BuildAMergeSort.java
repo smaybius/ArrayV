@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
 
 // Replace this with the path of the target algorithm.
-import io.github.arrayv.sorts.distribute.FlightSort;
+import io.github.arrayv.sorts.select.MoreOptimizedOpiumSort;
 
 /*
 
@@ -18,7 +18,7 @@ CODED FOR ARRAYV BY PCBOYGAMES
 final public class BuildAMergeSort extends Sort {
 
     // Replace both filenames with the filename of the target algorithm.
-    FlightSort sort = new FlightSort(arrayVisualizer);
+    MoreOptimizedOpiumSort sort = new MoreOptimizedOpiumSort(arrayVisualizer);
 
     // Optional for most sorts, but required for some.
     int NUMBER_Base = 2;
@@ -26,9 +26,10 @@ final public class BuildAMergeSort extends Sort {
     public BuildAMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
         this.setSortListName("Build-A-Merge");
-        this.setRunAllSortsName("ABClamber as Merge Sort");
-        this.setRunSortName("Build-A-Merge Sort");
+        this.setRunAllSortsName(sort.getRunAllSortsName() + " as Merge Sort");
+        this.setRunSortName(sort.getRunSortName() + " as Mergesort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

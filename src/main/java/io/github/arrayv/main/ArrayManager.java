@@ -1,15 +1,9 @@
 package io.github.arrayv.main;
 
-import java.util.Arrays;
-
 import io.github.arrayv.panes.JErrorPane;
-import io.github.arrayv.utils.Delays;
-import io.github.arrayv.utils.Distributions;
-import io.github.arrayv.utils.Highlights;
-import io.github.arrayv.utils.ShuffleGraph;
-import io.github.arrayv.utils.ShuffleInfo;
-import io.github.arrayv.utils.Shuffles;
-import io.github.arrayv.utils.Writes;
+import io.github.arrayv.utils.*;
+
+import java.util.Arrays;
 
 /*
  *
@@ -39,21 +33,21 @@ SOFTWARE.
  */
 
 public final class ArrayManager {
-    private io.github.arrayv.utils.Shuffles[] shuffleTypes;
-    private io.github.arrayv.utils.Distributions[] distributionTypes;
-    private String[] shuffleIDs;
-    private String[] distributionIDs;
+    private final io.github.arrayv.utils.Shuffles[] shuffleTypes;
+    private final io.github.arrayv.utils.Distributions[] distributionTypes;
+    private final String[] shuffleIDs;
+    private final String[] distributionIDs;
 
     private boolean hadDistributionAllocationError;
 
     private volatile boolean mutableLength;
 
-    private ArrayVisualizer arrayVisualizer;
-    private Delays Delays;
-    private Highlights Highlights;
+    private final ArrayVisualizer arrayVisualizer;
+    private final Delays Delays;
+    private final Highlights Highlights;
     private ShuffleGraph shuffle;
     private Distributions distribution;
-    private Writes Writes;
+    private final Writes Writes;
 
     public ArrayManager(ArrayVisualizer arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer;
@@ -88,7 +82,7 @@ public final class ArrayManager {
         this.mutableLength = mutableLength;
     }
 
-    // TODO: Fix minimum to zero
+    //TODO: Fix minimum to zero
     public void initializeArray(int[] array) {
         if (arrayVisualizer.doingStabilityCheck()) {
             arrayVisualizer.resetStabilityTable();
@@ -102,16 +96,15 @@ public final class ArrayManager {
             temp = new int[currentLen];
         } catch (OutOfMemoryError e) {
             if (!hadDistributionAllocationError)
-                JErrorPane.invokeCustomErrorMessage(
-                        "Failed to allocate temporary array for distribution. (will use main array, which may have side-effects.)");
+                JErrorPane.invokeCustomErrorMessage("Failed to allocate temporary array for distribution. (will use main array, which may have side-effects.)");
             hadDistributionAllocationError = true;
             temp = array;
         }
         distribution.initializeArray(temp, this.arrayVisualizer);
 
-        double uniqueFactor = (double) currentLen / arrayVisualizer.getUniqueItems();
+        double uniqueFactor = (double)currentLen/arrayVisualizer.getUniqueItems();
         for (int i = 0; i < currentLen; i++)
-            temp[i] = (int) (uniqueFactor * (int) (temp[i] / uniqueFactor)) + (int) uniqueFactor / 2;
+            temp[i] = (int)(uniqueFactor*(int)(temp[i]/uniqueFactor))+(int)uniqueFactor/2;
 
         System.arraycopy(temp, 0, array, 0, currentLen);
         arrayVisualizer.updateNow();
@@ -120,23 +113,18 @@ public final class ArrayManager {
     public String[] getShuffleIDs() {
         return this.shuffleIDs;
     }
-
     public Shuffles[] getShuffles() {
         return this.shuffleTypes;
     }
-
     public ShuffleGraph getShuffle() {
         return this.shuffle;
     }
 
     /**
-     * @deprecated This method is deprecatated. Please use
-     *             {@link #setShuffleSingle(Shuffles)} or
-     *             {@link #setShuffle(ShuffleGraph)} instead.
+     * @deprecated This method is deprecatated. Please use {@link #setShuffleSingle(Shuffles)} or {@link #setShuffle(ShuffleGraph)} instead.
      * @see #setShuffleSingle(Shuffles)
      * @see #setShuffle(ShuffleGraph)
      */
-    @Deprecated
     public void setShuffle(Shuffles choice) {
         this.setShuffleSingle(choice);
     }
@@ -149,11 +137,9 @@ public final class ArrayManager {
     public ShuffleGraph setShuffleSingle(Shuffles shuffle) {
         return this.setShuffle(ShuffleGraph.single(shuffle));
     }
-
     public ShuffleGraph setShuffleSingle(Distributions distribution) {
         return this.setShuffle(ShuffleGraph.single(distribution));
     }
-
     public ShuffleGraph setShuffleSingle(Distributions distribution, boolean warped) {
         return this.setShuffle(ShuffleGraph.single(distribution, warped));
     }
@@ -161,15 +147,12 @@ public final class ArrayManager {
     public String[] getDistributionIDs() {
         return this.distributionIDs;
     }
-
     public Distributions[] getDistributions() {
         return this.distributionTypes;
     }
-
     public Distributions getDistribution() {
         return this.distribution;
     }
-
     public void setDistribution(Distributions choice) {
         this.distribution = choice;
         this.distribution.selectDistribution(arrayVisualizer.getArray(), arrayVisualizer);
@@ -181,7 +164,7 @@ public final class ArrayManager {
         return this.shuffle.contains(new ShuffleInfo(shuffle));
     }
 
-    public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer) {
+    public void shuffleArray(int[] array, int currentLen, ArrayVisualizer arrayVisualizer) {
         this.initializeArray(array);
 
         String tmp = arrayVisualizer.getHeading();
@@ -190,14 +173,13 @@ public final class ArrayManager {
         double speed = Delays.getSleepRatio();
 
         if (arrayVisualizer.isActive()) {
-            double sleepRatio = arrayVisualizer.getCurrentLength() / 1024d;
+            double sleepRatio = arrayVisualizer.getCurrentLength()/1024d;
             sleepRatio *= shuffle.getSleepRatio();
             Delays.setSleepRatio(sleepRatio);
         }
 
         shuffle.shuffleArray(array, this.arrayVisualizer);
-        arrayVisualizer.getArrays().subList(1, arrayVisualizer.getArrays().size()).clear();
-        arrayVisualizer.getWrites().clearAllocAmount();
+
         Delays.setSleepRatio(speed);
 
         Highlights.clearAllMarks();
@@ -208,20 +190,20 @@ public final class ArrayManager {
         double speed = Delays.getSleepRatio();
 
         if (arrayVisualizer.isActive()) {
-            double sleepRatio = arrayVisualizer.getCurrentLength() / 1024d;
+            double sleepRatio = arrayVisualizer.getCurrentLength()/1024d;
             Delays.setSleepRatio(sleepRatio);
         }
 
-        int[] counts = new int[length];
+        int[] counts    = new int[length];
         int[] prefixSum = new int[length];
-        int[] table = arrayVisualizer.getStabilityTable();
+        int[] table     = arrayVisualizer.getStabilityTable();
 
         for (int i = 0; i < length; i++)
             counts[array[i]]++;
 
         prefixSum[0] = counts[0];
         for (int i = 1; i < length; i++)
-            prefixSum[i] = counts[i] + prefixSum[i - 1];
+            prefixSum[i] = counts[i] + prefixSum[i-1];
 
         for (int i = 0, j = 0; j < length; i++) {
             while (counts[i] > 0) {
@@ -230,7 +212,7 @@ public final class ArrayManager {
             }
         }
 
-        for (int i = length - 1; i >= 0; i--)
+        for (int i = length-1; i >= 0; i--)
             Writes.write(array, i, --prefixSum[array[i]], 0.5, true, false);
 
         arrayVisualizer.setIndexTable();
@@ -250,9 +232,8 @@ public final class ArrayManager {
 
         arrayVisualizer.setHeading("");
         if (!arrayVisualizer.useAntiQSort()) {
-            this.shuffleArray(array, arrayVisualizer);
-            arrayVisualizer.getArrays().subList(1, arrayVisualizer.getArrays().size()).clear();
-            arrayVisualizer.getWrites().clearAllocAmount();
+            this.shuffleArray(array, currentLen, arrayVisualizer);
+
             if (arrayVisualizer.doingStabilityCheck())
                 this.stableShuffle(array, currentLen);
 

@@ -11,6 +11,7 @@ final public class SqueegeeSort extends Sort {
         this.setRunAllSortsName("Squeegee Sort");
         this.setRunSortName("Squeegeesort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
@@ -37,11 +38,14 @@ final public class SqueegeeSort extends Sort {
 
             Writes.recursion();
             this.stoogeSort(A, i, j - t, d);
+            Writes.recursion();
             this.stoogeSort(A, i + 2 * t, j, d);
+            Writes.recursion();
             this.stoogeSort(A, i, j - t, d);
             if (j - i + 1 > 3) {
                 Writes.recursion();
                 this.stoogeSort(A, j - 2 * t, j, d);
+                Writes.recursion();
                 this.stoogeSort(A, i, j - t, d);
             }
         }

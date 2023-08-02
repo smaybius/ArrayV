@@ -11,6 +11,7 @@ final public class VacuumSort extends Sort {
         this.setRunAllSortsName("Vacuum Sort");
         this.setRunSortName("Vacuum Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

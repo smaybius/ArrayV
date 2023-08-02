@@ -26,6 +26,7 @@ public final class LazierQuickSort extends Sort {
         this.setRunAllSortsName("Lazier Stable Quick Sort");
         this.setRunSortName("Lazier Quicksort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

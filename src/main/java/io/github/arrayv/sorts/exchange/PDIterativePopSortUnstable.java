@@ -19,6 +19,7 @@ final public class PDIterativePopSortUnstable extends Sort {
         this.setRunAllSortsName("Unstable Pattern-Defeating Iterative Pop Sort");
         this.setRunSortName("Unstable Pattern-Defeating Iterative Pop Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

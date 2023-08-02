@@ -19,6 +19,7 @@ final public class ThirtySort extends BogoSorting {
         this.setRunAllSortsName("Thirty Sort");
         this.setRunSortName("Thirty Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);

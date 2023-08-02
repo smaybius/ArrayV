@@ -27,6 +27,7 @@ public final class MOMTernaryQuickSort extends Sort {
         this.setRunAllSortsName("Median-of-Medians Ternary Quick Sort");
         this.setRunSortName("Median-of-Medians Ternary Quicksort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

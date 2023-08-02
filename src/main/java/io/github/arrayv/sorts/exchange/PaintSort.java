@@ -11,6 +11,7 @@ final public class PaintSort extends Sort {
         this.setRunAllSortsName("Paint Sort");
         this.setRunSortName("Paintsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -20,6 +20,7 @@ public class CookieSort extends GrailSorting {
         this.setRunAllSortsName("Cookie Sort [WIP]");
         this.setRunSortName("Cookie Sort [WIP]");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -159,7 +160,7 @@ public class CookieSort extends GrailSorting {
         return a;
     }
 
-    public void grailRotate(int[] array, int pos, int lenA, int lenB) {
+    protected void grailRotate(int[] array, int pos, int lenA, int lenB) {
         int end = pos + lenA + lenB;
         while (lenA > 0 && lenB > 0) {
             if (lenA < lenB) {
@@ -261,7 +262,7 @@ public class CookieSort extends GrailSorting {
         while (i < b) {
             j = blockFindRun(array, i, b);
             len = j - i;
-            grailLazyMerge(array, a, i - a, len);
+            grailMergeWithoutBuffer(array, a, i - a, len);
             i = j;
         }
     }
@@ -321,7 +322,7 @@ public class CookieSort extends GrailSorting {
             if (Reads.compareIndices(array, b - 1, b, 1, true) > 0) {
                 Highlights.clearAllMarks();
                 if (end - b <= len / 8)
-                    grailLazyMerge(array, start, b - start, end - b);
+                    grailMergeWithoutBuffer(array, start, b - start, end - b);
                 else
                     shellSort(array, start, end);
             }

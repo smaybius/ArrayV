@@ -19,6 +19,7 @@ final public class SearchSort extends Sort {
         this.setRunAllSortsName("Search Sort");
         this.setRunSortName("Search Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

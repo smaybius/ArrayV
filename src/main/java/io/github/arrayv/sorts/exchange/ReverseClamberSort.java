@@ -5,7 +5,7 @@ import io.github.arrayv.sorts.templates.Sort;
 
 /*
 
-PORTED TO ARRAYV BY PCBOYGAMES
+CODED FOR ARRAYV BY PCBOYGAMES
 
 ------------------------------
 - SORTING ALGORITHM MADHOUSE -
@@ -19,6 +19,7 @@ final public class ReverseClamberSort extends Sort {
         this.setRunAllSortsName("Reverse Clamber Sort");
         this.setRunSortName("Reverse Clambersort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

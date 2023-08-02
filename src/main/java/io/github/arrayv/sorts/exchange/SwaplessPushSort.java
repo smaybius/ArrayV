@@ -19,6 +19,7 @@ final public class SwaplessPushSort extends Sort {
         this.setRunAllSortsName("Swapless Push Sort");
         this.setRunSortName("Swapless Pushsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -19,6 +19,7 @@ final public class StrangeSort extends Sort {
         this.setRunAllSortsName("Strange Sort");
         this.setRunSortName("Strangesort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -25,6 +25,7 @@ final public class ShockSortAlt extends Sort {
         this.setRunAllSortsName("Shock Sort (Quad)");
         this.setRunSortName("Shocksort (Quad)");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -59,9 +60,8 @@ final public class ShockSortAlt extends Sort {
                 j -= h;
                 w = true;
             }
-            if (w) {
+            if (w)
                 Writes.write(array, j, v, 0.25, true, false);
-            }
         }
     }
 

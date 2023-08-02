@@ -2,6 +2,7 @@ package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.GrailSorting;
+import io.github.arrayv.utils.Rotations;
 
 final public class LazixioSort extends GrailSorting {
     public LazixioSort(ArrayVisualizer arrayVisualizer) {
@@ -10,6 +11,7 @@ final public class LazixioSort extends GrailSorting {
         this.setRunAllSortsName("Lazixio Stable Sort");
         this.setRunSortName("Lazixio Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -50,6 +52,11 @@ final public class LazixioSort extends GrailSorting {
                 l = m + 1;
         }
         return l;
+    }
+
+    @Override
+    protected void grailRotate(int[] array, int pos, int len1, int len2) {
+        Rotations.neon(array, pos, len1, len2, 0.5, true, false);
     }
 
     // taken from PDIPop
@@ -112,24 +119,24 @@ final public class LazixioSort extends GrailSorting {
         while (r < end) {
             int y = findRun(array, r, end);
             if (y >= r + x) {
-                grailLazyMerge(array, start, s - start, r - s);
-                grailLazyMerge(array, start, r - start, y - r);
+                grailMergeWithoutBuffer(array, start, s - start, r - s);
+                grailMergeWithoutBuffer(array, start, r - start, y - r);
                 s = r = y;
                 d = 0;
                 continue;
             }
             if (d > 0) {
-                grailLazyMerge(array, s, r - s, y - r);
+                grailMergeWithoutBuffer(array, s, r - s, y - r);
             }
             if (d + 1 == z) {
-                grailLazyMerge(array, start, s - start, y - s);
+                grailMergeWithoutBuffer(array, start, s - start, y - s);
                 s = y;
             }
             r = y;
             d = (d + 1) % z;
         }
         if (d > 0)
-            grailLazyMerge(array, start, s - start, r - s);
+            grailMergeWithoutBuffer(array, start, s - start, r - s);
     }
 
     @Override

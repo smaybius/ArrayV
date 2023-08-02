@@ -22,6 +22,7 @@ final public class ClarkSort extends Sort {
         this.setRunAllSortsName("Clark Sort");
         this.setRunSortName("Clarksort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

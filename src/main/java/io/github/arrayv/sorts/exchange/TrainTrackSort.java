@@ -11,6 +11,7 @@ final public class TrainTrackSort extends Sort {
         this.setRunAllSortsName("Train Track Sort");
         this.setRunSortName("Train Track Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

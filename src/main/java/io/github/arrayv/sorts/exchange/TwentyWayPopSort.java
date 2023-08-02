@@ -10,6 +10,7 @@ final public class TwentyWayPopSort extends Sort {
         this.setRunAllSortsName("20 Way Pop Sort");
         this.setRunSortName("20 Way Popsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -62,47 +63,85 @@ final public class TwentyWayPopSort extends Sort {
         } else if (order == 1) {
             Writes.recursion();
             this.bubbleSort(array, start, start + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, start + twenty, start + ten, !invert);
+            Writes.recursion();
             this.bubbleSort(array, start + ten, start + ten + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, start + ten + twenty, start + fifth, !invert);
+            Writes.recursion();
             this.bubbleSort(array, start + fifth, start + fifth + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, start + fifth + twenty, start + fifth + ten, !invert);
+            Writes.recursion();
             this.bubbleSort(array, start + fifth + ten, start + fifth + ten + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, start + fifth + ten + twenty, start + 2 * fifth, !invert);
+            Writes.recursion();
             this.bubbleSort(array, start + 2 * fifth, start + 2 * fifth + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, start + 2 * fifth + twenty, start + 2 * fifth + ten, !invert);
+            Writes.recursion();
             this.bubbleSort(array, start + 2 * fifth + ten, start + 2 * fifth + ten + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, start + 2 * fifth + ten + twenty, end - 2 * fifth, !invert);
+            Writes.recursion();
             this.bubbleSort(array, end - 2 * fifth, end - 2 * fifth + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, end - 2 * fifth + twenty, end - 2 * fifth + ten, !invert);
+            Writes.recursion();
             this.bubbleSort(array, end - 2 * fifth + ten, end - 2 * fifth + ten + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, end - 2 * fifth + ten + twenty, end - fifth, !invert);
+            Writes.recursion();
             this.bubbleSort(array, end - fifth, end - fifth + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, end - fifth + twenty, end - fifth + ten, !invert);
+            Writes.recursion();
             this.bubbleSort(array, end - fifth + ten, end - fifth + ten + twenty, invert);
+            Writes.recursion();
             this.bubbleSort(array, end - fifth + ten + twenty, end, !invert);
 
+            Writes.recursion();
             this.bubblePop(array, start, start + ten, invert);
+            Writes.recursion();
             this.bubblePop(array, start + ten, start + fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, start + fifth, start + fifth + ten, invert);
+            Writes.recursion();
             this.bubblePop(array, start + fifth + ten, start + 2 * fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, start + 2 * fifth, start + 2 * fifth + ten, invert);
+            Writes.recursion();
             this.bubblePop(array, start + 2 * fifth + ten, end - 2 * fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, end - 2 * fifth, end - 2 * fifth + ten, invert);
+            Writes.recursion();
             this.bubblePop(array, end - 2 * fifth + ten, end - fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, end - fifth, end - fifth + ten, invert);
+            Writes.recursion();
             this.bubblePop(array, end - fifth + ten, end, !invert);
 
+            Writes.recursion();
             this.bubblePop(array, start, start + fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, start + fifth, start + 2 * fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, start + 2 * fifth, end - 2 * fifth, invert);
+            Writes.recursion();
             this.bubblePop(array, end - 2 * fifth, end - fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, end - fifth, end, invert);
 
+            Writes.recursion();
             this.bubblePop(array, end - 2 * fifth, end, invert);
+            Writes.recursion();
             this.bubblePop(array, start + fifth, end - 2 * fifth, !invert);
+            Writes.recursion();
             this.bubblePop(array, start + fifth, end, invert);
 
+            Writes.recursion();
             this.bubblePop(array, start, end, !invert);
             // it keeps getting worse
         } else {

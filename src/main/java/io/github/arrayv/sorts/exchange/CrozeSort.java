@@ -19,6 +19,7 @@ final public class CrozeSort extends BogoSorting {
         this.setRunAllSortsName("Croze Sort");
         this.setRunSortName("Croze Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

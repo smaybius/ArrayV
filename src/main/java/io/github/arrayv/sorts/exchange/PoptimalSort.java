@@ -11,6 +11,7 @@ final public class PoptimalSort extends Sort {
         this.setRunAllSortsName("Optimal Pop Sort");
         this.setRunSortName("Poptimal Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

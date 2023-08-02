@@ -28,7 +28,7 @@ final public class QuickSPSort extends GrailSorting {
 
     private void ipMerge(int[] array, int a, int m, int b) {
         int len1 = m - a, len2 = b - m;
-        this.grailLazyMerge(array, a, len1, len2);
+        this.grailMergeWithoutBuffer(array, a, len1, len2);
     }
 
     private void quickSPSort2(int[] array, int l, int r) {

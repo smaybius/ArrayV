@@ -22,6 +22,7 @@ final public class BestForNStoogeSort extends BestForNSorting {
         this.setRunAllSortsName("Best For N Stooge Sort");
         this.setRunSortName("Best For N Stooge Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -59,6 +60,7 @@ final public class BestForNStoogeSort extends BestForNSorting {
         delay = del;
         Writes.recordDepth(depth);
         if (length <= maxtouse) {
+
             initNetwork(array, start, length);
         } else {
             int effectivelen = base;

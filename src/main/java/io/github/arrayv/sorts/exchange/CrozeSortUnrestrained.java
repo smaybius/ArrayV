@@ -9,7 +9,7 @@ import io.github.arrayv.sorts.templates.BogoSorting;
  |       and Sort Grid       |
  |(AKA: C', rebranded due to |
  |     to false alarm from   |
- |   profanity filter going  | 
+ |   profanity filter going  |
  |          offline)         |
   \_________________________/ */
 final public class CrozeSortUnrestrained extends BogoSorting {
@@ -19,6 +19,7 @@ final public class CrozeSortUnrestrained extends BogoSorting {
         this.setRunAllSortsName("Unrestrained Croze Sort");
         this.setRunSortName("Unrestrained Croze Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

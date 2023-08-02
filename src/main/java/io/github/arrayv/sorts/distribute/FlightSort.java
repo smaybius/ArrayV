@@ -19,6 +19,7 @@ public final class FlightSort extends Sort {
         this.setRunAllSortsName("Flight Sort");
         this.setRunSortName("Flight Sort");
         this.setCategory("Distribution Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -43,17 +44,14 @@ public final class FlightSort extends Sort {
             Writes.write(holes, array[x] - min, holes[array[x] - min] + 1, 1, true, true);
         }
         Highlights.clearMark(2);
-        int j = 0;
-        for (int count = 0; count < size; count++) {
-            for (int i = 0; i < holes[count]; i++) {
+        for (int count = 0, j = 0; count < size; count++) {
+            for (int i = 0; i < holes[count]; i++, j++) {
                 Highlights.markArray(1, j);
                 Delays.sleep(1);
                 int diff = (count + min) - array[j];
-                if (diff != 0) {
+                if (diff != 0)
                     for (int k = 0; k < Math.abs(diff); k++)
                         Writes.write(array, j, diff < 0 ? array[j] - 1 : array[j] + 1, 0.25, true, false);
-                }
-                j++;
             }
         }
         Writes.deleteExternalArray(holes);

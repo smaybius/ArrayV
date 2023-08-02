@@ -11,6 +11,7 @@ final public class LassoSort extends LassoSorting {
         this.setRunAllSortsName("Lasso Sort");
         this.setRunSortName("Lassosort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -12,6 +12,7 @@ public final class LaziceSort extends Sort {
         this.setRunAllSortsName("Lazice Stable Sort");
         this.setRunSortName("Lazice Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -19,12 +20,13 @@ public final class LaziceSort extends Sort {
         this.setBogoSort(false);
     }
 
-    protected int leftBinSearch(int[] array, int a, int b, int val) {
+    protected int binSearch(int[] array, int a, int b, int val, boolean left) {
         while (a < b) {
             int m = a + (b - a) / 2;
             Highlights.markArray(2, m);
             Delays.sleep(0.25);
-            if (Reads.compareValues(val, array[m]) <= 0)
+            int c = Reads.compareValues(val, array[m]);
+            if (c < 0 || (left && c == 0))
                 b = m;
             else
                 a = m + 1;
@@ -32,17 +34,28 @@ public final class LaziceSort extends Sort {
         return a;
     }
 
-    protected int rightBinSearch(int[] array, int a, int b, int val) {
-        while (a < b) {
-            int m = a + (b - a) / 2;
-            Highlights.markArray(2, m);
-            Delays.sleep(0.25);
-            if (Reads.compareValues(val, array[m]) < 0)
-                b = m;
-            else
-                a = m + 1;
-        }
-        return a;
+    protected int leftExpSearch(int[] array, int a, int b, int val, boolean left) {
+        int i = 1;
+        if (left)
+            while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) > 0)
+                i *= 2;
+        else
+            while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) >= 0)
+                i *= 2;
+        int a1 = a + i / 2, b1 = Math.min(b, a - 1 + i);
+        return binSearch(array, a1, b1, val, left);
+    }
+
+    protected int rightExpSearch(int[] array, int a, int b, int val, boolean left) {
+        int i = 1;
+        if (left)
+            while (b - i >= a && Reads.compareValues(val, array[b - i]) <= 0)
+                i *= 2;
+        else
+            while (b - i >= a && Reads.compareValues(val, array[b - i]) < 0)
+                i *= 2;
+        int a1 = Math.max(a, b - i + 1), b1 = b - i / 2;
+        return binSearch(array, a1, b1, val, left);
     }
 
     protected void rotate(int[] array, int a, int m, int b) {
@@ -50,31 +63,41 @@ public final class LaziceSort extends Sort {
     }
 
     protected void inPlaceMergeFW(int[] array, int a, int m, int b) {
-        int i = a, j = m, k;
-        while (i < j && j < b)
-            if (Reads.compareIndices(array, i, j, 0.5, true) > 0) {
-                k = leftBinSearch(array, j + 1, b, array[i]);
-                rotate(array, i, j, k);
-                i += k - j;
-                j = k;
-            } else
-                i++;
+        while (a < m && m < b) {
+            int i = leftExpSearch(array, m, b, array[a], true);
+            rotate(array, a, m, i);
+            int t = i - m;
+            m = i;
+            a += t + 1;
+            if (m >= b)
+                break;
+            a = leftExpSearch(array, a, m, array[m], false);
+        }
     }
 
     protected void inPlaceMergeBW(int[] array, int a, int m, int b) {
-        int i = m - 1, j = b - 1, k;
-        while (j > i && i >= a)
-            if (Reads.compareIndices(array, i, j, 0.5, true) > 0) {
-                k = rightBinSearch(array, a, i, array[j]);
-                rotate(array, k, i + 1, j + 1);
-                j -= (i + 1) - k;
-                i = k - 1;
-            } else
-                j--;
+        while (b > m && m > a) {
+            int i = rightExpSearch(array, a, m, array[b - 1], false);
+            rotate(array, i, m, b);
+            int t = m - i;
+            m = i;
+            b -= t + 1;
+            if (m <= a)
+                break;
+            b = rightExpSearch(array, m, b, array[m - 1], true);
+        }
     }
 
     public void merge(int[] array, int a, int m, int b) {
-        if (m - a > b - m)
+        if (a >= m || m >= b || Reads.compareIndices(array, m - 1, m, 0.5, true) <= 0)
+            return;
+        a = leftExpSearch(array, a, m, array[m], false);
+        b = rightExpSearch(array, m, b, array[m - 1], true);
+        if (Reads.compareIndices(array, a, b - 1, 0.5, true) > 0) {
+            rotate(array, a, m, b);
+            return;
+        }
+        if (b - m < m - a)
             inPlaceMergeBW(array, a, m, b);
         else
             inPlaceMergeFW(array, a, m, b);
@@ -87,12 +110,12 @@ public final class LaziceSort extends Sort {
             dir = Reads.compareIndices(array, i - 1, i++, 0.5, true) <= 0;
         else
             dir = true;
-        if (dir)
-            while (i < b && Reads.compareIndices(array, i - 1, i, 0.5, true) <= 0)
-                i++;
-        else {
-            while (i < b && Reads.compareIndices(array, i - 1, i, 0.5, true) > 0)
-                i++;
+        while (i < b) {
+            if (dir ^ Reads.compareIndices(array, i - 1, i, 0.5, true) <= 0)
+                break;
+            i++;
+        }
+        if (!dir) {
             if (i - a < 4)
                 Writes.swap(array, a, i - 1, 1.0, true, false);
             else
@@ -107,12 +130,12 @@ public final class LaziceSort extends Sort {
         while (true) {
             i = findRun(array, a, b);
             if (i >= b)
-                return;
+                break;
             j = findRun(array, i, b);
             merge(array, a, i, j);
             Highlights.clearMark(2);
             if (j >= b)
-                return;
+                break;
             k = j;
             while (true) {
                 i = findRun(array, k, b);

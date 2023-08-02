@@ -19,6 +19,7 @@ final public class PDPopSort extends Sort {
         this.setRunAllSortsName("Pattern-Defeating Pop Sort");
         this.setRunSortName("Pattern-Defeating Pop Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

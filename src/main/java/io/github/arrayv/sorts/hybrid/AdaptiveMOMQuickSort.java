@@ -27,6 +27,7 @@ public final class AdaptiveMOMQuickSort extends Sort {
         this.setRunAllSortsName("Adaptive Median-of-Medians Quick Sort");
         this.setRunSortName("Adaptive Median-of-Medians Quicksort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -95,7 +96,7 @@ public final class AdaptiveMOMQuickSort extends Sort {
         }
     }
 
-    //Refactored from PDQSorting.java
+    // Refactored from PDQSorting.java
     protected PivotPair partition(int[] array, int a, int b) {
         int pivot = array[a];
         int first = a;
@@ -133,7 +134,7 @@ public final class AdaptiveMOMQuickSort extends Sort {
         return new PivotPair(pivotPos, alreadyParted);
     }
 
-    //Refactored from PDQSorting.java
+    // Refactored from PDQSorting.java
     protected boolean partialInsert(int[] array, int a, int b) {
         if (a == b)
             return true;
@@ -180,7 +181,7 @@ public final class AdaptiveMOMQuickSort extends Sort {
                     momRight = true;
                 }
             } else if (alreadyParted && partialInsert(array, a, p)
-                                     && partialInsert(array, p + 1, b))
+                    && partialInsert(array, p + 1, b))
                 return;
             if (l > r) {
                 quickSort(array, p + 1, b, badAllowed, momRight);

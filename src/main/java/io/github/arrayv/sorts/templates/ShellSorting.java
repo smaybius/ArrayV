@@ -42,8 +42,11 @@ public abstract class ShellSorting extends Sort {
                         Highlights.markArray(1, j);
                         Highlights.markArray(2, j - h);
 
+                        boolean change = false;
+
                         while (j >= h && Reads.compareValues(array[j - h], v) == 1) {
                             Writes.write(array, j, array[j - h], 1, false, false);
+                            change = true;
                             j -= h;
 
                             Highlights.markArray(1, j);
@@ -54,7 +57,8 @@ public abstract class ShellSorting extends Sort {
                                 Highlights.clearMark(2);
                             }
                         }
-                        Writes.write(array, j, v, 1, true, false);
+                        if (change)
+                            Writes.write(array, j, v, 1, true, false);
                     }
                 }
             } else {
@@ -68,8 +72,11 @@ public abstract class ShellSorting extends Sort {
                         Highlights.markArray(1, j);
                         Highlights.markArray(2, j - h);
 
+                        boolean change = false;
+
                         while (j >= h && Reads.compareValues(array[j - h], v) == 1) {
                             Writes.write(array, j, array[j - h], 1, false, false);
+                            change = true;
                             j -= h;
 
                             Highlights.markArray(1, j);
@@ -80,7 +87,8 @@ public abstract class ShellSorting extends Sort {
                                 Highlights.clearMark(2);
                             }
                         }
-                        Writes.write(array, j, v, 1, true, false);
+                        if (change)
+                            Writes.write(array, j, v, 1, true, false);
                     }
                 }
             }
@@ -95,13 +103,17 @@ public abstract class ShellSorting extends Sort {
                 int v = array[i];
                 int j = i;
 
+                boolean change = false;
+
                 while (j >= h && Reads.compareValues(array[j - h], v) == 1) {
                     Highlights.markArray(1, j);
 
                     Writes.write(array, j, array[j - h], 1, true, false);
+                    change = true;
                     j -= h;
                 }
-                Writes.write(array, j, v, 0.5, true, false);
+                if (change)
+                    Writes.write(array, j, v, 0.5, true, false);
             }
         }
     }

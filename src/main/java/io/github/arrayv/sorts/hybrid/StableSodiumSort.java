@@ -14,6 +14,7 @@ final public class StableSodiumSort extends GrailSorting {
         this.setRunAllSortsName("Sodium Ion Sort");
         this.setRunSortName("Na+ Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -121,7 +122,7 @@ final public class StableSodiumSort extends GrailSorting {
         if (wantedKeys < 2) {
             this.stoogeOpt(array, start, end);
         } else {
-            int foundKeys = this.grailCollectKeys(array, start, end - start, wantedKeys);
+            int foundKeys = this.grailFindKeys(array, start, end - start, wantedKeys);
             if (foundKeys == 1)
                 return;
             if (foundKeys < 4) {
@@ -135,7 +136,7 @@ final public class StableSodiumSort extends GrailSorting {
             this.stoogeblock(array, start + foundKeys, start + len, start, foundKeys);
             this.merge(array, start, start + foundKeys, start + len, end);
             this.bruh.customBinaryInsert(array, start, start + foundKeys, 0.25);
-            this.grailLazyMerge(array, start, foundKeys, end - start - foundKeys);
+            this.grailMergeWithoutBuffer(array, start, foundKeys, end - start - foundKeys);
         }
     }
 

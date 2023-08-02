@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
-public final class OptimizedBottomUpMergeSort extends Sort {
+final public class OptimizedBottomUpMergeSort extends Sort {
     public OptimizedBottomUpMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
@@ -13,6 +13,7 @@ public final class OptimizedBottomUpMergeSort extends Sort {
         this.setRunAllSortsName("Optimized Bottom-Up Merge Sort [std::stable_sort]");
         this.setRunSortName("Bottom-Up Mergesort w/ Binary Insert");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

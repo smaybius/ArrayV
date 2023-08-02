@@ -19,6 +19,7 @@ final public class ReboundSort extends Sort {
         this.setRunAllSortsName("Rebound Sort");
         this.setRunSortName("Rebound Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

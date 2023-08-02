@@ -15,6 +15,7 @@ final public class BranchlessBubbleSort extends Sort {
         this.setRunAllSortsName("Branchless Bubble Sort");
         this.setRunSortName("Branchless Bubblesort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

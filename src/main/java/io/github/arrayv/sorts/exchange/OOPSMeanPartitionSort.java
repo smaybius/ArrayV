@@ -23,6 +23,7 @@ public final class OOPSMeanPartitionSort extends Sort {
         this.setRunAllSortsName("Out of Place Stable Mean Partition Sort");
         this.setRunSortName("OOP Stable Mean Partitionsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

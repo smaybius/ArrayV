@@ -19,6 +19,7 @@ final public class ShircleSortRecursive extends ShircleSorting {
         this.setRunAllSortsName("Recursive Shircle Sort");
         this.setRunSortName("Shirclesort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -11,6 +11,7 @@ final public class OutOfPlacePopSort extends Sort {
         this.setRunAllSortsName("Out-Of-Place Pop Sort");
         this.setRunSortName("OOP Popsort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -23,6 +23,7 @@ final public class BestForNSort extends BestForNSorting {
         this.setRunAllSortsName("Best For N Sort");
         this.setRunSortName("Best For N Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -34,9 +35,11 @@ final public class BestForNSort extends BestForNSorting {
     public void bestN(int[] array, int s, int l, int b) {
         int j;
         for (j = s; j + b <= s + l; j += b) {
+
             initNetwork(array, j, b);
         }
         int ends = l - j;
+
         initNetwork(array, j, ends);
         if (l > b)
             quad.runSort(array, l, 0);

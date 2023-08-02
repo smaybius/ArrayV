@@ -19,6 +19,7 @@ final public class QuasimiddleSort extends Sort {
         this.setRunAllSortsName("Quasimiddle Sort");
         this.setRunSortName("Quasimiddle Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

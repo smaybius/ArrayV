@@ -11,6 +11,7 @@ final public class TinyPullSort extends Sort {
         this.setRunAllSortsName("Tinypull Sort");
         this.setRunSortName("Tinypullsort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -11,6 +11,7 @@ final public class ZubblePopSort extends Sort {
         this.setRunAllSortsName("Zubble Pop Sort");
         this.setRunSortName("Zubble Popsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

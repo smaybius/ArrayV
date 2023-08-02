@@ -1,8 +1,8 @@
 package io.github.arrayv.sorts.hybrid;
 
-import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.main.ArrayVisualizer;
 
 /*
  *
@@ -30,128 +30,129 @@ SOFTWARE.
  *
  */
 
-public final class StacklessDualPivotQuickSort extends Sort {
-	public StacklessDualPivotQuickSort(ArrayVisualizer arrayVisualizer) {
-		super(arrayVisualizer);
+final public class StacklessDualPivotQuickSort extends Sort {
+    public StacklessDualPivotQuickSort(ArrayVisualizer arrayVisualizer) {
+        super(arrayVisualizer);
 
-		this.setSortListName("Stackless Dual-Pivot Quick");
-		this.setRunAllSortsName("Stackless Dual-Pivot Quicksort");
-		this.setRunSortName("Stackless Dual-Pivot Quicksort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
-	}
+        this.setSortListName("Stackless Dual-Pivot Quick");
+        this.setRunAllSortsName("Stackless Dual-Pivot Quicksort");
+        this.setRunSortName("Stackless Dual-Pivot Quicksort");
+        this.setCategory("Hybrid Sorts");
 
-	private int partition(int[] array, int a, int b, int p) {
-		int m1 = (a + a + b) / 3, m2 = (a + b + b) / 3;
+        this.setBucketSort(false);
+        this.setRadixSort(false);
+        this.setUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.setBogoSort(false);
+    }
 
-		if (Reads.compareIndices(array, m1, m2, 0.1, true) > 0) {
-			Writes.swap(array, m1, a, 1, true, false);
-			Writes.swap(array, m2, --b, 1, true, false);
-		} else {
-			Writes.swap(array, m2, a, 1, true, false);
-			Writes.swap(array, m1, --b, 1, true, false);
-		}
+    private int partition(int[] array, int a, int b, int p) {
+        int m1 = (a + a + b) / 3, m2 = (a + b + b) / 3;
 
-		int i = a, j = b;
+        if (Reads.compareIndices(array, m1, m2, 1, true) > 0) {
+            Writes.swap(array, m1, a, 1, true, false);
+            Writes.swap(array, m2, --b, 1, true, false);
+        } else {
+            Writes.swap(array, m2, a, 1, true, false);
+            Writes.swap(array, m1, --b, 1, true, false);
+        }
 
-		for (int k = i + 1; k < j; k++) {
-			if (Reads.compareIndices(array, k, b, 0.1, true) < 0)
-				Writes.swap(array, k, ++i, 1, true, false);
+        int i = a, j = b;
 
-			else if (Reads.compareIndices(array, k, a, 0.1, true) >= 0) {
-				do {
-					j--;
-					Highlights.markArray(3, j);
-					Delays.sleep(1);
-				} while (j > k && Reads.compareIndices(array, j, a, 0.1, true) >= 0);
+        for (int k = i + 1; k < j; k++) {
+            if (Reads.compareIndices(array, k, b, 0.5, true) < 0)
+                Writes.swap(array, k, ++i, 1, true, false);
 
-				Writes.swap(array, k, j, 1, true, false);
-				Highlights.clearMark(3);
+            else if (Reads.compareIndices(array, k, a, 0.5, true) >= 0) {
+                do {
+                    j--;
+                    Highlights.markArray(3, j);
+                    Delays.sleep(1);
+                } while (j > k && Reads.compareIndices(array, j, a, 0.5, true) >= 0);
 
-				if (Reads.compareIndices(array, k, b, 0.1, true) < 0)
-					Writes.swap(array, k, ++i, 1, true, false);
-			}
-		}
+                Writes.swap(array, k, j, 1, true, false);
+                Highlights.clearMark(3);
 
-		Writes.swap(array, a, i, 1, true, false);
-		int t = array[b];
-		Writes.write(array, b, array[j], 1, true, false);
-		Writes.write(array, j, array[p], 1, true, false);
-		Writes.write(array, p, t, 1, true, false);
+                if (Reads.compareIndices(array, k, b, 0.5, true) < 0)
+                    Writes.swap(array, k, ++i, 1, true, false);
+            }
+        }
 
-		return i;
-	}
+        Writes.swap(array, a, i, 1, true, false);
+        int t = array[b];
+        Writes.write(array, b, array[j], 1, true, false);
+        Writes.write(array, j, array[p], 1, true, false);
+        Writes.write(array, p, t, 1, true, false);
 
-	private int leftBinSearch(int[] array, int a, int b, int p) {
-		while (a < b) {
-			int m = a + (b - a) / 2;
+        return i;
+    }
 
-			if (Reads.compareIndices(array, p, m, 0.1, true) <= 0)
-				b = m;
-			else
-				a = m + 1;
-		}
+    private int leftBinSearch(int[] array, int a, int b, int p) {
+        while (a < b) {
+            int m = a + (b - a) / 2;
 
-		return a;
-	}
+            if (Reads.compareIndices(array, p, m, 1, true) <= 0)
+                b = m;
+            else
+                a = m + 1;
+        }
 
-	private void quickSort(int[] array, int a, int b) {
-		int max = array[a];
+        return a;
+    }
 
-		for (int i = a + 1; i < b; i++) {
-			Highlights.markArray(1, i);
-			Delays.sleep(0.5);
+    private void quickSort(int[] array, int a, int b) {
+        int max = array[a];
 
-			if (Reads.compareValues(array[i], max) > 0)
-				max = array[i];
-		}
-		for (int i = b - 1; i >= 0; i--) {
-			Highlights.markArray(1, i);
-			Delays.sleep(0.5);
+        for (int i = a + 1; i < b; i++) {
+            Highlights.markArray(1, i);
+            Delays.sleep(0.5);
 
-			if (Reads.compareValues(array[i], max) == 0)
-				Writes.swap(array, i, --b, 1, true, false);
-		}
+            if (Reads.compareValues(array[i], max) > 0)
+                max = array[i];
+        }
+        for (int i = b - 1; i >= 0; i--) {
+            Highlights.markArray(1, i);
+            Delays.sleep(0.5);
 
-		int b1 = b;
-		boolean med = true; // flag to improve pivot selection in the case of many similar elements
-		BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
+            if (Reads.compareValues(array[i], max) == 0)
+                Writes.swap(array, i, --b, 1, true, false);
+        }
 
-		do {
-			while (b1 - a > 24) {
-				if (!med)
-					Writes.swap(array, a, (a + a + b1) / 3, 1, true, false);
+        int b1 = b;
+        boolean med = true; // flag to improve pivot selection in the case of many similar elements
+        BinaryInsertionSort smallSort = new BinaryInsertionSort(this.arrayVisualizer);
 
-				b1 = this.partition(array, a, b1, b);
-			}
-			smallSort.customBinaryInsert(array, a, b1, 0.25);
+        do {
+            while (b1 - a > 24) {
+                if (!med)
+                    Writes.swap(array, a, (a + a + b1) / 3, 1, true, false);
 
-			a = b1 + 1;
-			if (a >= b) {
-				if (a - 1 < b)
-					Writes.swap(array, a - 1, b, 1, true, false);
-				return;
-			}
+                b1 = this.partition(array, a, b1, b);
+            }
+            smallSort.customBinaryInsert(array, a, b1, 0.25);
 
-			b1 = this.leftBinSearch(array, a, b, a - 1);
-			Writes.swap(array, a - 1, b, 1, true, false);
+            a = b1 + 1;
+            if (a >= b) {
+                if (a - 1 < b)
+                    Writes.swap(array, a - 1, b, 1, true, false);
+                return;
+            }
 
-			med = true;
-			while (a < b1 && Reads.compareIndices(array, a - 1, a, 0.1, true) == 0) {
-				med = false;
-				a++;
-			}
-			if (a == b1)
-				med = true;
-		} while (true);
-	}
+            b1 = this.leftBinSearch(array, a, b, a - 1);
+            Writes.swap(array, a - 1, b, 1, true, false);
 
-	@Override
-	public void runSort(int[] array, int length, int bucketCount) {
-		this.quickSort(array, 0, length);
-	}
+            med = true;
+            while (a < b1 && Reads.compareIndices(array, a - 1, a, 0.5, true) == 0) {
+                med = false;
+                a++;
+            }
+            if (a == b1)
+                med = true;
+        } while (true);
+    }
+
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        this.quickSort(array, 0, length);
+    }
 }

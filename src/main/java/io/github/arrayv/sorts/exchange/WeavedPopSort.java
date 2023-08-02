@@ -19,6 +19,7 @@ final public class WeavedPopSort extends Sort {
         this.setRunAllSortsName("Weaved Pop Sort");
         this.setRunSortName("Weaved Pop Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

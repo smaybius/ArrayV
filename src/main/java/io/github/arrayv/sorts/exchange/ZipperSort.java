@@ -19,6 +19,7 @@ final public class ZipperSort extends Sort {
         this.setRunAllSortsName("Zipper Sort");
         this.setRunSortName("Zippersort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -37,9 +38,11 @@ final public class ZipperSort extends Sort {
             while (i + gap < currentLength) {
                 if (Reads.compareIndices(array, i, i + gap, 0.05, true) > 0) {
                     Writes.swap(array, i, i + gap, 0.1, true, false);
-                    if (gap == 1) first = i;
+                    if (gap == 1)
+                        first = i;
                     gap++;
-                } else i++;
+                } else
+                    i++;
             }
         }
     }

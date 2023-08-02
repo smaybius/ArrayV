@@ -3,19 +3,31 @@ package io.github.arrayv.sorts.hybrid;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
 
+/*
+
+Coded for ArrayV by Ayako-chan
+in collaboration with Gaming32
+
++---------------------------+
+| Sorting Algorithm Scarlet |
++---------------------------+
+
+ */
+
 /**
+ * @author Ayako-chan
  * @author Gaming32
- * @author Kiriko-chan
  *
  */
 public final class AdaptiveSwapMergeSort extends Sort {
 
     public AdaptiveSwapMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-        this.setSortListName("Adaptive SwapMerge");
-        this.setRunAllSortsName("Adaptive SwapMerge Sort");
-        this.setRunSortName("Adaptive SwapMergeSort");
+        this.setSortListName("Adaptive Swap-Merge");
+        this.setRunAllSortsName("Adaptive Swap-Merge Sort");
+        this.setRunSortName("Adaptive Swap-Mergesort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -23,69 +35,69 @@ public final class AdaptiveSwapMergeSort extends Sort {
         this.setBogoSort(false);
     }
 
-    private int rightBinSearch(int[] array, int a, int b, int val) {
+    protected int binSearch(int[] array, int a, int b, int val, boolean left) {
         while (a < b) {
             int m = a + (b - a) / 2;
             Highlights.markArray(2, m);
             Delays.sleep(0.25);
-            if (Reads.compareValues(val, array[m]) < 0)
+            int c = Reads.compareValues(val, array[m]);
+            if (c < 0 || (left && c == 0))
                 b = m;
             else
                 a = m + 1;
         }
-
         return a;
     }
 
-    private int rightExpSearch(int[] array, int a, int b, int val) {
+    protected int leftExpSearch(int[] array, int a, int b, int val, boolean left) {
         int i = 1;
-        while (b - i >= a && Reads.compareValues(val, array[b - i]) < 0)
-            i *= 2;
-
-        return this.rightBinSearch(array, Math.max(a, b - i + 1), b - i / 2, val);
+        if (left)
+            while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) > 0)
+                i *= 2;
+        else
+            while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) >= 0)
+                i *= 2;
+        int a1 = a + i / 2, b1 = Math.min(b, a - 1 + i);
+        return binSearch(array, a1, b1, val, left);
     }
 
-    private int leftBoundSearch(int[] array, int a, int b, int val) {
+    protected int rightExpSearch(int[] array, int a, int b, int val, boolean left) {
         int i = 1;
-        while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) >= 0)
-            i *= 2;
-
-        return this.rightBinSearch(array, a + i / 2, Math.min(b, a - 1 + i), val);
+        if (left)
+            while (b - i >= a && Reads.compareValues(val, array[b - i]) <= 0)
+                i *= 2;
+        else
+            while (b - i >= a && Reads.compareValues(val, array[b - i]) < 0)
+                i *= 2;
+        int a1 = Math.max(a, b - i + 1), b1 = b - i / 2;
+        return binSearch(array, a1, b1, val, left);
     }
 
-    private void insertTo(int[] array, int a, int b) {
+    protected void insertTo(int[] array, int a, int b) {
         Highlights.clearMark(2);
-
-        if (a > b) {
-            int temp = array[a];
-
-            do
-                Writes.write(array, a, array[--a], 0.25, true, false);
-            while (a > b);
-
+        int temp = array[a];
+        int d = (a > b) ? -1 : 1;
+        for (int i = a; i != b; i += d)
+            Writes.write(array, i, array[i + d], 0.25, true, false);
+        if (a != b)
             Writes.write(array, b, temp, 0.25, true, false);
-        }
     }
 
     protected void insertSort(int[] array, int a, int b) {
         for (int i = a + 1; i < b; i++)
-            insertTo(array, i, rightExpSearch(array, a, i, array[i]));
+            insertTo(array, i, rightExpSearch(array, a, i, array[i], false));
     }
 
-    protected void merge(int[] array, int a, int m, int b) {
+    public void smartMerge(int[] array, int a, int m, int b) {
+        if (Reads.compareIndices(array, m - 1, m, 0.125, true) <= 0)
+            return;
+        a = leftExpSearch(array, a, m, array[m], false);
         int i = a, j = m;
         while (i < j && j < b) {
             if (Reads.compareIndices(array, i, j, 0.5, true) > 0)
                 Writes.multiSwap(array, j++, i, 0.025, true, false);
             i++;
         }
-    }
-
-    public void smartMerge(int[] array, int a, int m, int b) {
-        if (Reads.compareIndices(array, m - 1, m, 0.125, true) <= 0)
-            return;
-        a = leftBoundSearch(array, a, m, array[m]);
-        merge(array, a, m, b);
     }
 
     public void mergeSort(int[] array, int a, int b) {
@@ -100,7 +112,7 @@ public final class AdaptiveSwapMergeSort extends Sort {
     }
 
     @Override
-    public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
+    public void runSort(int[] array, int sortLength, int bucketCount) {
         mergeSort(array, 0, sortLength);
 
     }

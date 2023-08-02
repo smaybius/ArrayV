@@ -19,6 +19,7 @@ final public class NoisySort extends Sort {
         this.setRunAllSortsName("Noisy Sort");
         this.setRunSortName("Noisesort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
@@ -27,6 +28,7 @@ final public class NoisySort extends Sort {
         this.setQuestion("Enter the noise intensity for this sort:", 16);
     }
 
+    @Override
     public int validateAnswer(int answer) {
         if (answer < 1)
             return 1;

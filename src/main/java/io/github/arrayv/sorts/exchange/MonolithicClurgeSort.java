@@ -10,6 +10,7 @@ public final class MonolithicClurgeSort extends Sort {
         this.setRunAllSortsName("Monolithic Clurge Sort");
         this.setRunSortName("Monolithic Clurge Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -26,7 +27,9 @@ public final class MonolithicClurgeSort extends Sort {
         if (box == 0) {
             Writes.recursion();
             this.monolithicClurge(array, start, start + (mid - start) / 2, mid, rec, 0);
+            Writes.recursion();
             this.monolithicClurge(array, mid, mid + (end - mid) / 2, end, rec, 0);
+            Writes.recursion();
             this.monolithicClurge(array, start, mid, end, rec, 1);
         } else {
             int comp = 0;

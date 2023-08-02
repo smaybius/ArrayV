@@ -1,11 +1,11 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.templates.GrailSorting;
+import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.IndexedRotations;
 import io.github.arrayv.utils.Searches;
 
-public final class BlockInsertionSort extends GrailSorting {
+public final class BlockInsertionSort extends Sort {
     public BlockInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
 
@@ -22,7 +22,7 @@ public final class BlockInsertionSort extends GrailSorting {
 
     private void rotate(int[] array, int a, int m, int b) {
         Highlights.clearMark(2);
-        IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
+        IndexedRotations.adaptable(array, a, m, b, 0.5, true, false);
     }
 
     private void inPlaceMerge(int[] array, int a, int m, int b) {
@@ -120,6 +120,10 @@ public final class BlockInsertionSort extends GrailSorting {
             }
             i = j;
         }
+    }
+
+    public void insertionSort(int[] array, int start, int end) {
+        insertionSort(array, start, end, 1, false);
     }
 
     public void customInsertSort(int[] array, int start, int end, double delay, boolean auxwrite) {

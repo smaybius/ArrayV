@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sorts.merge.QuadSort;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -19,6 +20,7 @@ final public class CircleSortInverseIterative extends Sort {
         this.setRunAllSortsName("Inverse Iterative Circle Sort");
         this.setRunSortName("Inverse Iterative Circlesort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -27,20 +29,10 @@ final public class CircleSortInverseIterative extends Sort {
     }
 
     protected boolean circle(int[] array, int a, int b, boolean anyswaps) {
-        int left = a;
-        int right = b;
         boolean swaphere = false;
-        while (left < right) {
-            Highlights.markArray(1, left);
-            Highlights.markArray(2, right);
-            Delays.sleep(0.5);
-            if (Reads.compareIndices(array, left, right, 0.5, true) > 0) {
-                Writes.swap(array, left, right, 0.5, true, false);
-                swaphere = true;
-            }
-            left++;
-            right--;
-        }
+        for (; a < b; a++, b--)
+            if (Reads.compareIndices(array, a, b, 0.5, true) > 0)
+                Writes.swap(array, a, b, 0.5, swaphere = true, false);
         if (anyswaps)
             return anyswaps;
         else
@@ -49,22 +41,19 @@ final public class CircleSortInverseIterative extends Sort {
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        int offset = 0;
         int gap = 2;
         boolean anyswaps = true;
         while (anyswaps) {
             anyswaps = false;
             gap = 2;
             while (gap <= currentLength) {
-                offset = 0;
-                while (offset + (gap - 1) < currentLength) {
+                for (int offset = 0; offset + (gap - 1) < currentLength; offset += gap)
                     anyswaps = circle(array, offset, offset + (gap - 1), anyswaps);
-                    offset += gap;
-                }
                 gap *= 2;
             }
             if (gap / 2 != currentLength && !anyswaps) {
-                // TODO: Figure something out to put here.
+                QuadSort quad = new QuadSort(arrayVisualizer);
+                quad.runSort(array, currentLength, 0);
             }
         }
     }

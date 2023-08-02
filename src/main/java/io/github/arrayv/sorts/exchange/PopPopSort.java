@@ -19,6 +19,7 @@ final public class PopPopSort extends Sort {
         this.setRunAllSortsName("Pop Pop Sort");
         this.setRunSortName("Pop Pop Sort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

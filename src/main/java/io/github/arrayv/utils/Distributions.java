@@ -229,6 +229,7 @@ public enum Distributions {
                 array[i] = (int) (n * (Math.cos(c * i) + 1) / 2);
         }
     },
+    // The four distirbutions below may need some fixes.
     TANGENT {
         public String getName() {
             return "Tangent Wave";
@@ -241,15 +242,14 @@ public enum Distributions {
             double c = Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                array[i] = (int) (n * (Math.tan(c * i) + 1) / 32) + (n / 2);
-            }
-            for (int i = 0; i < currentLen; i++) {
-                if (array[i] > currentLen)
-                    array[i] = currentLen - 1;
-                else if (array[i] < 0)
+                int val = (int) (n * (Math.tan(c * i) + 1) / 32) + (n / 2);
+                if (val > currentLen)
+                    array[i] = currentLen;
+                else if (val < 0)
                     array[i] = 0;
+                else
+                    array[i] = val;
             }
-
         }
     },
     COTANGENT {
@@ -264,13 +264,13 @@ public enum Distributions {
             double c = Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                array[i] = (int) (n * (1 / Math.tan(c * i) + 1) / 32) + (n / 2);
-            }
-            for (int i = 0; i < currentLen; i++) {
-                if (array[i] > currentLen)
-                    array[i] = currentLen - 1;
-                else if (array[i] < 0)
+                int val = (int) (n * (1 / Math.tan(c * i) + 1) / 32) + (n / 2);
+                if (val > currentLen)
+                    array[i] = currentLen;
+                else if (val < 0)
                     array[i] = 0;
+                else
+                    array[i] = val;
             }
         }
     },
@@ -286,13 +286,13 @@ public enum Distributions {
             double c = 2 * Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                array[i] = (int) (n * (1 / Math.sin(c * i) + 1) / 32) + (n / 2);
-            }
-            for (int i = 0; i < currentLen; i++) {
-                if (array[i] > currentLen)
-                    array[i] = currentLen - 1;
-                else if (array[i] < 0)
+                int val = (int) (n * (1 / Math.sin(c * i) + 1) / 32) + (n / 2);
+                if (val > currentLen)
+                    array[i] = currentLen;
+                else if (val < 0)
                     array[i] = 0;
+                else
+                    array[i] = val;
             }
         }
     },
@@ -308,13 +308,13 @@ public enum Distributions {
             double c = 2 * Math.PI / n;
 
             for (int i = 0; i < currentLen; i++) {
-                array[i] = (int) (n * (1 / Math.cos(c * i) + 1) / 32) + (n / 2);
-            }
-            for (int i = 0; i < currentLen; i++) {
-                if (array[i] > currentLen)
-                    array[i] = currentLen - 1;
-                else if (array[i] < 0)
+                int val = (int) (n * (1 / Math.cos(c * i) + 1) / 32) + (n / 2);
+                if (val > currentLen)
+                    array[i] = currentLen;
+                else if (val < 0)
                     array[i] = 0;
+                else
+                    array[i] = val;
             }
         }
     },
@@ -657,6 +657,32 @@ public enum Distributions {
                 array[i] = 2 * (n % (i + 1));
         }
     },
+    DIGITS_SUM { // O(n log_10(n))
+        public String getName() {
+            return "Sum of Digits";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int n = arrayVisualizer.getCurrentLength();
+            int max = 0;
+
+            for (int j = 0; j < n; j++) {
+                array[j] = 1;
+
+                for (int i = j; i > 0; i /= 10)
+                    if (i % 10 > 0)
+                        array[j] += i % 10;
+
+                if (array[j] > max)
+                    max = array[j];
+            }
+            double scale = (double) (n - 1) / max;
+
+            for (int i = 0; i < n; i++)
+                array[i] = (int) (array[i] * scale);
+        }
+    },
     DIGITS_PROD {
         public String getName() {
             return "Product of Digits";
@@ -680,6 +706,33 @@ public enum Distributions {
             double scale = (double) (n - 1) / (max != 0 ? max : 1);
 
             for (int i = 0; i < n; i++)
+                array[i] = (int) (array[i] * scale);
+        }
+    },
+    RAMP { // (OEIS A002262)
+        @Override
+        public String getName() {
+            return "Ramps";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLength = arrayVisualizer.getCurrentLength();
+            int ramp = 0;
+            int h = 0;
+            int m = 0;
+            for (int i = 0; i < currentLength; i++) {
+                array[i] = h;
+                if (h > m)
+                    m = h;
+                if (h == ramp) {
+                    ramp++;
+                    h = 0;
+                } else
+                    h++;
+            }
+            double scale = ((currentLength - 1) / m);
+            for (int i = 0; i < currentLength; i++)
                 array[i] = (int) (array[i] * scale);
         }
     },
@@ -721,6 +774,78 @@ public enum Distributions {
             }
         }
     },
+    TWPK_FOUR {
+        @Override
+        public String getName() {
+            return "TWPK's FOUR";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLength = arrayVisualizer.getCurrentLength();
+            int m = 0;
+            for (int i = 0; i < currentLength; i++) {
+                array[i] = runFOUR(i);
+                if (array[i] > m)
+                    m = array[i];
+            }
+            double scale = ((currentLength - 1) / (m * 1.5));
+            for (int i = 0; i < currentLength; i++)
+                array[i] = (int) (array[i] * scale);
+        }
+
+        protected int runFOUR(int a) {
+            if (a == 0)
+                return 2;
+            int[] letters = { 4, 3, 3, 5, 4, 4, 3, 5, 5, 4 };
+            int steps = 1;
+            int cur = 0;
+            int last = a;
+            while (last != 4) {
+                for (int i = last; i > 0; i /= 10)
+                    cur += letters[i % 10];
+                steps++;
+                last = cur;
+                cur = 0;
+            }
+            return steps;
+        }
+    },
+    COLLATZ {
+        @Override
+        public String getName() {
+            return "Collatz Conjecture";
+        }
+
+        @Override
+        public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
+            int currentLength = arrayVisualizer.getCurrentLength();
+            int m = 0;
+            array[0] = 0; // though actually inf
+            for (int i = 1; i < currentLength; i++) {
+                array[i] = runCollatz(i);
+                if (array[i] > m)
+                    m = array[i];
+            }
+            if (currentLength > 3 && currentLength < 22 || currentLength > 27 && currentLength < 120)
+                return; // I have no choice.
+            double scale = ((currentLength - 1) / m);
+            for (int i = 0; i < currentLength; i++)
+                array[i] = (int) (array[i] * scale);
+        }
+
+        protected int runCollatz(long a) {
+            int steps = 1;
+            while (a != 1) {
+                if (a % 2 == 1)
+                    a = 3 * a + 1;
+                else
+                    a /= 2;
+                steps++;
+            }
+            return steps;
+        }
+    },
     WEIERSTRASS {
         @Override
         public String getName() {
@@ -729,23 +854,17 @@ public enum Distributions {
 
         @Override
         public void initializeArray(int[] array, ArrayVisualizer arrayVisualizer) {
-            int n = arrayVisualizer.getCurrentLength();
+            double n = arrayVisualizer.getCurrentLength();
+            double a = 0.5, b = 3;
 
-            double c = 4 * Math.PI / n; // <-- removed factor of 2
-            double b = 3;
-            double a = 0.5;
             for (int i = 0; i < n; i++) {
-                for (int j = 0; j < 10; j++) {
-                    array[i] += (int) (n * (Math.pow(b, -j * a) * Math.cos((Math.pow(b, j) * i * c))) / 5);
-                }
-            }
-            int min = array[0];
-            for (int i = 0; i < n; i++) {
-                if (array[i] < min)
-                    min = array[i];
-            }
-            for (int i = 0; i < n; i++) {
-                array[i] -= min;
+                double y = 0;
+                double x = i / n;
+
+                for (int j = 0; j < 10; j++)
+                    y += Math.pow(a, j) * Math.cos(2 * Math.pow(b, j) * Math.PI * x);
+
+                array[i] = (int) ((0.5 + 0.25 * y) * n);
             }
         }
     },

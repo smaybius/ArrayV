@@ -10,6 +10,7 @@ final public class GnomePopSort extends Sort {
         this.setRunAllSortsName("Gnome Pop Sort");
         this.setRunSortName("Gnome Popsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -40,30 +41,34 @@ final public class GnomePopSort extends Sort {
             Writes.recursion();
 
             this.gnome(array, start, start + quart, invert);
+            Writes.recursion();
             this.gnome(array, start + quart, end - 2 * quart, !invert);
-
+            Writes.recursion();
             this.gnome(array, start, end - 2 * quart, !invert);
-
+            Writes.recursion();
             this.gnome(array, end - 2 * quart, end - quart, !invert);
+            Writes.recursion();
             this.gnome(array, end - quart, end, invert);
-
+            Writes.recursion();
             this.gnome(array, end - 2 * quart, end, invert);
-
+            Writes.recursion();
             this.gnome(array, start, end, invert);
         } else {
             Writes.recordDepth(order - 1);
             Writes.recursion();
 
             this.pop(array, start, start + quart, order - 1, invert);
+            Writes.recursion();
             this.pop(array, start + quart, end - 2 * quart, order - 1, !invert);
-
+            Writes.recursion();
             this.pop(array, start, end - 2 * quart, order - 1, !invert);
-
+            Writes.recursion();
             this.pop(array, end - 2 * quart, end - quart, order - 1, !invert);
+            Writes.recursion();
             this.pop(array, end - quart, end, order - 1, invert);
-
+            Writes.recursion();
             this.pop(array, end - 2 * quart, end, order - 1, invert);
-
+            Writes.recursion();
             this.pop(array, start, end, order - 1, invert);
         }
     }

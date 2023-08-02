@@ -19,6 +19,7 @@ final public class RecursivePushSort extends Sort {
         this.setRunAllSortsName("Recursive Push Sort");
         this.setRunSortName("Recursive Pushsort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

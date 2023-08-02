@@ -22,6 +22,7 @@ final public class BracketSort extends Sort {
         this.setRunAllSortsName("Bracket Sort");
         this.setRunSortName("Bracketsort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

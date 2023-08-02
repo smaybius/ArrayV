@@ -11,6 +11,7 @@ final public class SemiStoogeSort extends Sort {
         this.setRunAllSortsName("Semi-Stooge Sort");
         this.setRunSortName("Semi-Stoogesort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(true);
@@ -37,6 +38,7 @@ final public class SemiStoogeSort extends Sort {
 
             Writes.recursion();
             this.semiStoogeSort(A, i, j - t, d);
+            Writes.recursion();
             this.semiStoogeSort(A, i + t, j, d);
         }
     }
@@ -58,6 +60,7 @@ final public class SemiStoogeSort extends Sort {
 
             Writes.recursion();
             this.demiStoogeSort(A, i + h, j, d);
+            Writes.recursion();
             this.demiStoogeSort(A, i, i + h - 1, d);
         }
         if (j - i + 1 >= 3) {
@@ -67,6 +70,7 @@ final public class SemiStoogeSort extends Sort {
 
             Writes.recursion();
             this.demiStoogeSort(A, i, j - t, d);
+            Writes.recursion();
             this.demiStoogeSort(A, i + t, j, d);
         }
         this.semiStoogeSort(A, i, j, d);

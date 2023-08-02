@@ -67,7 +67,7 @@ final public class MiniGrailSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 1, true, false);
+		IndexedRotations.adaptable(array, a, m, b, 1, true, false);
 	}
 
 	private int binSearch(int[] array, int a, int b, int val, boolean left) {
@@ -90,8 +90,6 @@ final public class MiniGrailSort extends Sort {
 		int f = 1, p = b - f;
 
 		for (int i = p; i > a && f < nKeys; i--) {
-			Highlights.markArray(1, i);
-			Delays.sleep(0.5);
 
 			int loc = this.binSearch(array, p, p + f, array[i - 1], true) - p;
 

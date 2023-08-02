@@ -29,6 +29,7 @@ final public class SumSeededPDQSort extends Sort {
         this.setRunAllSortsName("Sum-Seeded Pattern-Defeating Quick Sort");
         this.setRunSortName("Sum-Seeded Pattern-Defeating Quicksort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

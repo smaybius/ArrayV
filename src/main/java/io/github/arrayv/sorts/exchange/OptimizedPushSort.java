@@ -19,6 +19,7 @@ final public class OptimizedPushSort extends Sort {
         this.setRunAllSortsName("Optimized Push Sort");
         this.setRunSortName("Optimized Pushsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

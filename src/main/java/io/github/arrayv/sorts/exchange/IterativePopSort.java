@@ -19,6 +19,7 @@ final public class IterativePopSort extends Sort {
         this.setRunAllSortsName("Optimized Iterative Pop Sort");
         this.setRunSortName("Optimized Iterative Pop Sort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

@@ -19,6 +19,7 @@ final public class ShircleSortIterative extends IterativeShircleSorting {
         this.setRunAllSortsName("Iterative Shircle Sort");
         this.setRunSortName("Iterative Shirclesort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

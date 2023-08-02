@@ -24,6 +24,7 @@ final public class ShockSort extends Sort {
         this.setRunAllSortsName("Shock Sort (Tim)");
         this.setRunSortName("Shocksort (Tim)");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -58,9 +59,8 @@ final public class ShockSort extends Sort {
                 j -= h;
                 w = true;
             }
-            if (w) {
+            if (w)
                 Writes.write(array, j, v, 0.25, true, false);
-            }
         }
     }
 

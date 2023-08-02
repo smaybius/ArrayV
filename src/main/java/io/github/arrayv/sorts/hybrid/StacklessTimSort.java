@@ -1,7 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
-import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.main.ArrayVisualizer;
 
 /*
  *
@@ -30,297 +30,298 @@ SOFTWARE.
  */
 
 final public class StacklessTimSort extends Sort {
-	public StacklessTimSort(ArrayVisualizer arrayVisualizer) {
-		super(arrayVisualizer);
+    public StacklessTimSort(ArrayVisualizer arrayVisualizer) {
+        super(arrayVisualizer);
 
-		this.setSortListName("Stackless Tim");
-		this.setRunAllSortsName("Stackless Tim Sort");
-		this.setRunSortName("Stackless Timsort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
-	}
+        this.setSortListName("Stackless Tim");
+        this.setRunAllSortsName("Stackless Tim Sort");
+        this.setRunSortName("Stackless Timsort");
+        this.setCategory("Hybrid Sorts");
 
-	private final int M = 7;
+        this.setBucketSort(false);
+        this.setRadixSort(false);
+        this.setUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.setBogoSort(false);
+    }
 
-	private int highlight = 0;
+    private final int M = 7;
 
-	private int leftBinSearch(int[] array, int a, int b, int val) {
-		while (a < b) {
-			int m = a + (b - a) / 2;
-			Highlights.markArray(2, this.highlight + m);
-			Delays.sleep(0.5);
+    private int highlight = 0;
 
-			if (Reads.compareValues(val, array[m]) <= 0)
-				b = m;
-			else
-				a = m + 1;
-		}
+    private int leftBinSearch(int[] array, int a, int b, int val) {
+        while (a < b) {
+            int m = a + (b - a) / 2;
+            Highlights.markArray(2, this.highlight + m);
+            Delays.sleep(0.5);
 
-		return a;
-	}
+            if (Reads.compareValues(val, array[m]) <= 0)
+                b = m;
+            else
+                a = m + 1;
+        }
 
-	private int rightBinSearch(int[] array, int a, int b, int val) {
-		while (a < b) {
-			int m = a + (b - a) / 2;
-			Highlights.markArray(2, this.highlight + m);
-			Delays.sleep(0.5);
+        return a;
+    }
 
-			if (Reads.compareValues(val, array[m]) < 0)
-				b = m;
-			else
-				a = m + 1;
-		}
+    private int rightBinSearch(int[] array, int a, int b, int val) {
+        while (a < b) {
+            int m = a + (b - a) / 2;
+            Highlights.markArray(2, this.highlight + m);
+            Delays.sleep(0.5);
 
-		return a;
-	}
+            if (Reads.compareValues(val, array[m]) < 0)
+                b = m;
+            else
+                a = m + 1;
+        }
 
-	private int leftExpSearch(int[] array, int a, int b, int val) {
-		int i = 1;
-		while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) > 0)
-			i *= 2;
+        return a;
+    }
 
-		return this.leftBinSearch(array, a + i / 2, Math.min(b, a - 1 + i), val);
-	}
+    private int leftExpSearch(int[] array, int a, int b, int val) {
+        int i = 1;
+        while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) > 0)
+            i *= 2;
 
-	private int rightExpSearch(int[] array, int a, int b, int val) {
-		int i = 1;
-		while (b - i >= a && Reads.compareValues(val, array[b - i]) < 0)
-			i *= 2;
+        return this.leftBinSearch(array, a + i / 2, Math.min(b, a - 1 + i), val);
+    }
 
-		return this.rightBinSearch(array, Math.max(a, b - i + 1), b - i / 2, val);
-	}
+    private int rightExpSearch(int[] array, int a, int b, int val) {
+        int i = 1;
+        while (b - i >= a && Reads.compareValues(val, array[b - i]) < 0)
+            i *= 2;
 
-	private int leftBoundSearch(int[] array, int a, int b, int val) {
-		int i = 1;
-		while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) >= 0)
-			i *= 2;
+        return this.rightBinSearch(array, Math.max(a, b - i + 1), b - i / 2, val);
+    }
 
-		return this.rightBinSearch(array, a + i / 2, Math.min(b, a - 1 + i), val);
-	}
+    private int leftBoundSearch(int[] array, int a, int b, int val) {
+        int i = 1;
+        while (a - 1 + i < b && Reads.compareValues(val, array[a - 1 + i]) >= 0)
+            i *= 2;
 
-	private int rightBoundSearch(int[] array, int a, int b, int val) {
-		int i = 1;
-		while (b - i >= a && Reads.compareValues(val, array[b - i]) <= 0)
-			i *= 2;
+        return this.rightBinSearch(array, a + i / 2, Math.min(b, a - 1 + i), val);
+    }
 
-		return this.leftBinSearch(array, Math.max(a, b - i + 1), b - i / 2, val);
-	}
+    private int rightBoundSearch(int[] array, int a, int b, int val) {
+        int i = 1;
+        while (b - i >= a && Reads.compareValues(val, array[b - i]) <= 0)
+            i *= 2;
 
-	private void insertTo(int[] array, int a, int b) {
-		Highlights.clearMark(2);
+        return this.leftBinSearch(array, Math.max(a, b - i + 1), b - i / 2, val);
+    }
 
-		if (a > b) {
-			int temp = array[a];
+    private void insertTo(int[] array, int a, int b) {
+        Highlights.clearMark(2);
 
-			do
-				Writes.write(array, a, array[--a], 0.25, true, false);
-			while (a > b);
+        if (a > b) {
+            int temp = array[a];
 
-			Writes.write(array, b, temp, 0.25, true, false);
-		}
-	}
+            do
+                Writes.write(array, a, array[--a], 0.25, true, false);
+            while (a > b);
 
-	private void buildRuns(int[] array, int a, int b, int mRun) {
-		int i = a + 1, j = a;
+            Writes.write(array, b, temp, 0.25, true, false);
+        }
+    }
 
-		while (i < b) {
-			if (Reads.compareIndices(array, i - 1, i++, 1, true) == 1) {
-				while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) == 1)
-					i++;
-				Writes.reversal(array, j, i - 1, 1, true, false);
-			} else
-				while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) <= 0)
-					i++;
+    private void buildRuns(int[] array, int a, int b, int mRun) {
+        int i = a + 1, j = a;
 
-			if (i < b)
-				j = i - (i - j - 1) % mRun - 1;
+        while (i < b) {
+            if (Reads.compareIndices(array, i - 1, i++, 1, true) == 1) {
+                while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) == 1)
+                    i++;
+                Writes.reversal(array, j, i - 1, 1, true, false);
+            } else
+                while (i < b && Reads.compareIndices(array, i - 1, i, 1, true) <= 0)
+                    i++;
 
-			while (i - j < mRun && i < b) {
-				this.insertTo(array, i, this.rightBinSearch(array, j, i, array[i]));
-				i++;
-			}
-			j = i++;
-		}
-	}
+            if (i < b)
+                j = i - (i - j - 1) % mRun - 1;
 
-	// galloping mode code refactored from TimSorting.java
-	private void mergeFW(int[] array, int[] tmp, int a, int m, int b) {
-		int len1 = m - a, t = a;
-		Highlights.clearMark(2);
-		Writes.arraycopy(array, a, tmp, 0, len1, 1, true, true);
+            while (i - j < mRun && i < b) {
+                this.insertTo(array, i, this.rightBinSearch(array, j, i, array[i]));
+                i++;
+            }
+            j = i++;
+        }
+    }
 
-		int i = 0, mGallop = M, l = 0, r = 0;
+    // galloping mode code refactored from TimSorting.java
+    private void mergeFW(int[] array, int[] tmp, int a, int m, int b) {
+        int len1 = m - a, t = a;
+        Highlights.clearMark(2);
+        Writes.arraycopy(array, a, tmp, 0, len1, 1, true, true);
 
-		while (true) {
-			do {
-				if (Reads.compareValues(tmp[i], array[m]) <= 0) {
-					Writes.write(array, a++, tmp[i++], 1, true, false);
-					l++;
-					r = 0;
+        int i = 0, mGallop = M, l = 0, r = 0;
 
-					if (i == len1)
-						return;
-				} else {
-					Highlights.markArray(2, m);
-					Writes.write(array, a++, array[m++], 1, true, false);
-					r++;
-					l = 0;
+        while (true) {
+            do {
+                if (Reads.compareValues(tmp[i], array[m]) <= 0) {
+                    Writes.write(array, a++, tmp[i++], 1, true, false);
+                    l++;
+                    r = 0;
 
-					if (m == b) {
-						while (i < len1)
-							Writes.write(array, a++, tmp[i++], 1, true, false);
-						return;
-					}
-				}
-			} while ((l | r) < mGallop);
+                    if (i == len1)
+                        return;
+                } else {
+                    Highlights.markArray(2, m);
+                    Writes.write(array, a++, array[m++], 1, true, false);
+                    r++;
+                    l = 0;
 
-			do {
-				l = this.leftExpSearch(array, m, b, tmp[i]) - m;
+                    if (m == b) {
+                        while (i < len1)
+                            Writes.write(array, a++, tmp[i++], 1, true, false);
+                        return;
+                    }
+                }
+            } while ((l | r) < mGallop);
 
-				for (int j = 0; j < l; j++)
-					Writes.write(array, a++, array[m++], 1, true, false);
-				Writes.write(array, a++, tmp[i++], 1, true, false);
+            do {
+                l = this.leftExpSearch(array, m, b, tmp[i]) - m;
 
-				if (i == len1)
-					return;
+                for (int j = 0; j < l; j++)
+                    Writes.write(array, a++, array[m++], 1, true, false);
+                Writes.write(array, a++, tmp[i++], 1, true, false);
 
-				else if (m == b) {
-					while (i < len1)
-						Writes.write(array, a++, tmp[i++], 1, true, false);
-					return;
-				}
+                if (i == len1)
+                    return;
 
-				this.highlight = t;
-				r = this.leftBoundSearch(tmp, i, len1, array[m]) - i;
-				this.highlight = 0;
+                else if (m == b) {
+                    while (i < len1)
+                        Writes.write(array, a++, tmp[i++], 1, true, false);
+                    return;
+                }
 
-				for (int j = 0; j < r; j++)
-					Writes.write(array, a++, tmp[i++], 1, true, false);
-				Writes.write(array, a++, array[m++], 1, true, false);
+                this.highlight = t;
+                r = this.leftBoundSearch(tmp, i, len1, array[m]) - i;
+                this.highlight = 0;
 
-				if (i == len1)
-					return;
+                for (int j = 0; j < r; j++)
+                    Writes.write(array, a++, tmp[i++], 1, true, false);
+                Writes.write(array, a++, array[m++], 1, true, false);
 
-				else if (m == b) {
-					while (i < len1)
-						Writes.write(array, a++, tmp[i++], 1, true, false);
-					return;
-				}
+                if (i == len1)
+                    return;
 
-				mGallop--;
-			} while ((l | r) >= M);
+                else if (m == b) {
+                    while (i < len1)
+                        Writes.write(array, a++, tmp[i++], 1, true, false);
+                    return;
+                }
 
-			if (mGallop < 0)
-				mGallop = 0;
-			mGallop += 2;
-		}
-	}
+                mGallop--;
+            } while ((l | r) >= M);
 
-	private void mergeBW(int[] array, int[] tmp, int a, int m, int b) {
-		int len2 = b - m, t = a;
-		Highlights.clearMark(2);
-		Writes.arraycopy(array, m, tmp, 0, len2, 1, true, true);
+            if (mGallop < 0)
+                mGallop = 0;
+            mGallop += 2;
+        }
+    }
 
-		int i = len2 - 1, mGallop = M, l = 0, r = 0;
-		m--;
+    private void mergeBW(int[] array, int[] tmp, int a, int m, int b) {
+        int len2 = b - m, t = a;
+        Highlights.clearMark(2);
+        Writes.arraycopy(array, m, tmp, 0, len2, 1, true, true);
 
-		while (true) {
-			do {
-				if (Reads.compareValues(tmp[i], array[m]) >= 0) {
-					Writes.write(array, --b, tmp[i--], 1, true, false);
-					l++;
-					r = 0;
+        int i = len2 - 1, mGallop = M, l = 0, r = 0;
+        m--;
 
-					if (i < 0)
-						return;
-				} else {
-					Highlights.markArray(2, m);
-					Writes.write(array, --b, array[m--], 1, true, false);
-					r++;
-					l = 0;
+        while (true) {
+            do {
+                if (Reads.compareValues(tmp[i], array[m]) >= 0) {
+                    Writes.write(array, --b, tmp[i--], 1, true, false);
+                    l++;
+                    r = 0;
 
-					if (m < a) {
-						while (i >= 0)
-							Writes.write(array, --b, tmp[i--], 1, true, false);
-						return;
-					}
-				}
-			} while ((l | r) < mGallop);
+                    if (i < 0)
+                        return;
+                } else {
+                    Highlights.markArray(2, m);
+                    Writes.write(array, --b, array[m--], 1, true, false);
+                    r++;
+                    l = 0;
 
-			do {
-				l = (m + 1) - this.rightExpSearch(array, a, m + 1, tmp[i]);
+                    if (m < a) {
+                        while (i >= 0)
+                            Writes.write(array, --b, tmp[i--], 1, true, false);
+                        return;
+                    }
+                }
+            } while ((l | r) < mGallop);
 
-				for (int j = 0; j < l; j++)
-					Writes.write(array, --b, array[m--], 1, true, false);
-				Writes.write(array, --b, tmp[i--], 1, true, false);
+            do {
+                l = (m + 1) - this.rightExpSearch(array, a, m + 1, tmp[i]);
 
-				if (i < 0)
-					return;
+                for (int j = 0; j < l; j++)
+                    Writes.write(array, --b, array[m--], 1, true, false);
+                Writes.write(array, --b, tmp[i--], 1, true, false);
 
-				else if (m < a) {
-					while (i >= 0)
-						Writes.write(array, --b, tmp[i--], 1, true, false);
-					return;
-				}
+                if (i < 0)
+                    return;
 
-				this.highlight = t;
-				r = (i + 1) - this.rightBoundSearch(tmp, 0, i + 1, array[m]);
-				this.highlight = 0;
+                else if (m < a) {
+                    while (i >= 0)
+                        Writes.write(array, --b, tmp[i--], 1, true, false);
+                    return;
+                }
 
-				for (int j = 0; j < r; j++)
-					Writes.write(array, --b, tmp[i--], 1, true, false);
-				Writes.write(array, --b, array[m--], 1, true, false);
+                this.highlight = t;
+                r = (i + 1) - this.rightBoundSearch(tmp, 0, i + 1, array[m]);
+                this.highlight = 0;
 
-				if (i < 0)
-					return;
+                for (int j = 0; j < r; j++)
+                    Writes.write(array, --b, tmp[i--], 1, true, false);
+                Writes.write(array, --b, array[m--], 1, true, false);
 
-				else if (m < a) {
-					while (i >= 0)
-						Writes.write(array, --b, tmp[i--], 1, true, false);
-					return;
-				}
-			} while ((l | r) >= M);
+                if (i < 0)
+                    return;
 
-			if (mGallop < 0)
-				mGallop = 0;
-			mGallop += 2;
-		}
-	}
+                else if (m < a) {
+                    while (i >= 0)
+                        Writes.write(array, --b, tmp[i--], 1, true, false);
+                    return;
+                }
+            } while ((l | r) >= M);
 
-	private void smartMerge(int[] array, int[] tmp, int a, int m, int b) {
-		if (Reads.compareIndices(array, m - 1, m, 0.5, true) <= 0)
-			return;
+            if (mGallop < 0)
+                mGallop = 0;
+            mGallop += 2;
+        }
+    }
 
-		a = this.leftBoundSearch(array, a, m, array[m]);
-		b = this.rightBoundSearch(array, m, b, array[m - 1]);
+    private void smartMerge(int[] array, int[] tmp, int a, int m, int b) {
+        if (Reads.compareIndices(array, m - 1, m, 0.5, true) <= 0)
+            return;
 
-		if (b - m < m - a)
-			this.mergeBW(array, tmp, a, m, b);
-		else
-			this.mergeFW(array, tmp, a, m, b);
-	}
+        a = this.leftBoundSearch(array, a, m, array[m]);
+        b = this.rightBoundSearch(array, m, b, array[m - 1]);
 
-	@Override
-	public void runSort(int[] array, int length, int bucketCount) {
-		int[] tmp = Writes.createExternalArray(length / 2);
+        if (b - m < m - a)
+            this.mergeBW(array, tmp, a, m, b);
+        else
+            this.mergeFW(array, tmp, a, m, b);
+    }
 
-		int mRun = length;
-		for (; mRun >= 32; mRun = (mRun + 1) / 2)
-			;
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        int[] tmp = Writes.createExternalArray(length / 2);
 
-		this.buildRuns(array, 0, length, mRun);
+        int mRun = length;
+        for (; mRun >= 32; mRun = (mRun + 1) / 2)
+            ;
 
-		for (int i, j = mRun; j < length; j *= 2) {
-			for (i = 0; i + 2 * j <= length; i += 2 * j)
-				this.smartMerge(array, tmp, i, i + j, i + 2 * j);
+        this.buildRuns(array, 0, length, mRun);
 
-			if (i + j < length)
-				this.smartMerge(array, tmp, i, i + j, length);
-		}
-		Writes.deleteExternalArray(tmp);
-	}
+        for (int i, j = mRun; j < length; j *= 2) {
+            for (i = 0; i + 2 * j <= length; i += 2 * j)
+                this.smartMerge(array, tmp, i, i + j, i + 2 * j);
+
+            if (i + j < length)
+                this.smartMerge(array, tmp, i, i + j, length);
+        }
+        Writes.deleteExternalArray(tmp);
+    }
 }

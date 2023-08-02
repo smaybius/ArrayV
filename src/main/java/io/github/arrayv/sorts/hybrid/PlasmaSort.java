@@ -43,6 +43,7 @@ final public class PlasmaSort extends Sort {
         this.setRunAllSortsName("Plasma Sort");
         this.setRunSortName("Plasmasort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

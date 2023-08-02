@@ -29,6 +29,7 @@ public final class WeirdBubblePopSort extends Sort {
         this.setRunAllSortsName("Weird Bubble Pop Sort");
         this.setRunSortName("Weird Bubble Popsort");
         this.setCategory("Impractical Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);

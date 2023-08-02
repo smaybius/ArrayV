@@ -4,6 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.insert.BlockInsertionSort;
 import io.github.arrayv.sorts.insert.PDBinaryInsertionSort;
 import io.github.arrayv.sorts.templates.GrailSorting;
+import io.github.arrayv.utils.Rotations;
 
 /*
 
@@ -25,6 +26,7 @@ final public class LazionSort extends GrailSorting {
         this.setRunAllSortsName("Lazion Stable Sort");
         this.setRunSortName("Lazion Sort");
         this.setCategory("Hybrid Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
@@ -40,15 +42,20 @@ final public class LazionSort extends GrailSorting {
         return val / base;
     }
 
+    protected void grailRotate(int[] array, int pos, int lenA, int lenB) {
+        Highlights.clearAllMarks();
+        Rotations.neon(array, pos, lenA, lenB, 0.5, true, false);
+    }
+
     protected void merge(int[] array, int start, int end, int base) {
         int blockLen = (end - start) / base;
         for (int i = start; i + blockLen < end; i += blockLen) {
-            grailLazyMerge(array, start, i - start + blockLen, blockLen);
+            grailMergeWithoutBuffer(array, start, i - start + blockLen, blockLen);
         }
     }
 
     protected void nonBn(int[] array, int start, int end) {
-        blocksert.insertionSort(array, start, end, 0.5, false);
+        blocksert.insertionSort(array, start, end);
     }
 
     protected void mergesLen(int[] array, int start, int end, int lengthstart, int base) {

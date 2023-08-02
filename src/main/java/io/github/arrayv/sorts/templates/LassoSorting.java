@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.templates;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.insert.PDBinaryInsertionSort;
 import io.github.arrayv.utils.Rotations;
+import io.github.arrayv.utils.Range;
 
 /*******************************
  * *
@@ -54,7 +55,7 @@ public abstract class LassoSorting extends Sort {
     }
 
     protected void rotate(int[] array, int pos, int lenA, int lenB) {
-        Rotations.cycleReverse(array, pos, lenA, lenB, 1, true, false);
+        Rotations.neon(array, pos, lenA, lenB, 1, true, false);
     }
 
     // Copied from Disquad Sort

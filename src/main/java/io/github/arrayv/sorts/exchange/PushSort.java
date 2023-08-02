@@ -19,6 +19,7 @@ final public class PushSort extends Sort {
         this.setRunAllSortsName("Push Sort");
         this.setRunSortName("Pushsort");
         this.setCategory("Exchange Sorts");
+
         this.setBucketSort(false);
         this.setRadixSort(false);
         this.setUnreasonablySlow(false);
