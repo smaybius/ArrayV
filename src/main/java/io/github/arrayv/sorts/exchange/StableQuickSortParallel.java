@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.exchange;
 import java.util.Random;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -29,168 +30,157 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
+@SortMeta(listName = "Quicksort (Stable, Parallel)", showcaseName = "Quicksort (Stable, Parallel)", runName = "Quicksort (Stable, Parallel)")
+public final class StableQuickSortParallel extends Sort {
+	public StableQuickSortParallel(ArrayVisualizer arrayVisualizer) {
+		super(arrayVisualizer);
+	}
 
-final public class StableQuickSortParallel extends Sort {
-    public StableQuickSortParallel(ArrayVisualizer arrayVisualizer) {
-        super(arrayVisualizer);
+	private int[] array;
+	private int[] tmp;
 
-        this.setSortListName("Stable Quick (Parallel)");
-        this.setRunAllSortsName("Parallel Stable Quick Sort");
-        this.setRunSortName("Parallel Stable Quicksort");
-        this.setCategory("Exchange Sorts");
+	private class QuickSortInt extends Thread {
+		private int a, b;
 
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
-    }
+		QuickSortInt(int a, int b) {
+			this.a = a;
+			this.b = b;
+		}
 
-    private int[] array;
-    private int[] tmp;
+		public void run() {
+			StableQuickSortParallel.this.quickSortInt(a, b);
+		}
+	}
 
-    private class QuickSortInt extends Thread {
-        private int a, b;
+	private class QuickSortExt extends Thread {
+		private int a, b;
 
-        QuickSortInt(int a, int b) {
-            this.a = a;
-            this.b = b;
-        }
+		QuickSortExt(int a, int b) {
+			this.a = a;
+			this.b = b;
+		}
 
-        public void run() {
-            StableQuickSortParallel.this.quickSortInt(a, b);
-        }
-    }
+		public void run() {
+			StableQuickSortParallel.this.quickSortExt(a, b);
+		}
+	}
 
-    private class QuickSortExt extends Thread {
-        private int a, b;
+	private int partitionInt(int a, int b) {
+		Random r = new Random();
+		int p = a + r.nextInt(b - a);
 
-        QuickSortExt(int a, int b) {
-            this.a = a;
-            this.b = b;
-        }
+		int piv = array[p];
+		int j = a, k = b - 1;
 
-        public void run() {
-            StableQuickSortParallel.this.quickSortExt(a, b);
-        }
-    }
+		while (j < p && Reads.compareValues(array[j], piv) <= 0)
+			j++;
+		if (j < p)
+			Writes.write(tmp, k--, array[j], 1, false, true);
 
-    private int partitionInt(int a, int b) {
-        Random r = new Random();
-        int p = a + r.nextInt(b - a);
+		for (int i = j + 1; i < p; i++) {
+			if (Reads.compareValues(array[i], piv) <= 0)
+				Writes.write(array, j++, array[i], 1, true, false);
 
-        int piv = array[p];
-        int j = a, k = b - 1;
+			else {
+				Highlights.markArray(2, k);
+				Writes.write(tmp, k--, array[i], 1, false, true);
+			}
+		}
+		for (int i = p + 1; i < b; i++) {
+			if (Reads.compareValues(array[i], piv) < 0)
+				Writes.write(array, j++, array[i], 1, true, false);
 
-        while (j < p && Reads.compareValues(array[j], piv) <= 0)
-            j++;
-        if (j < p)
-            Writes.write(tmp, k--, array[j], 1, false, true);
+			else {
+				Highlights.markArray(2, k);
+				Writes.write(tmp, k--, array[i], 1, false, true);
+			}
+		}
+		Writes.write(array, j, piv, 1, true, false);
 
-        for (int i = j + 1; i < p; i++) {
-            if (Reads.compareValues(array[i], piv) <= 0)
-                Writes.write(array, j++, array[i], 1, true, false);
+		return j;
+	}
 
-            else {
-                Highlights.markArray(2, k);
-                Writes.write(tmp, k--, array[i], 1, false, true);
-            }
-        }
-        for (int i = p + 1; i < b; i++) {
-            if (Reads.compareValues(array[i], piv) < 0)
-                Writes.write(array, j++, array[i], 1, true, false);
+	private int partitionExt(int a, int b) {
+		Random r = new Random();
+		int p = a + r.nextInt(b - a);
 
-            else {
-                Highlights.markArray(2, k);
-                Writes.write(tmp, k--, array[i], 1, false, true);
-            }
-        }
-        Writes.write(array, j, piv, 1, true, false);
+		int piv = tmp[p];
+		int j = b - 1, k = a;
 
-        return j;
-    }
+		while (j > p && Reads.compareValues(tmp[j], piv) > 0)
+			j--;
+		if (j > p)
+			Writes.write(array, k++, tmp[j], 1, true, false);
 
-    private int partitionExt(int a, int b) {
-        Random r = new Random();
-        int p = a + r.nextInt(b - a);
+		for (int i = j - 1; i > p; i--) {
+			if (Reads.compareValues(tmp[i], piv) > 0) {
+				Highlights.markArray(2, j);
+				Writes.write(tmp, j--, tmp[i], 1, false, true);
+			} else
+				Writes.write(array, k++, tmp[i], 1, true, false);
+		}
+		for (int i = p - 1; i >= a; i--) {
+			if (Reads.compareValues(tmp[i], piv) >= 0) {
+				Highlights.markArray(2, j);
+				Writes.write(tmp, j--, tmp[i], 1, false, true);
+			} else
+				Writes.write(array, k++, tmp[i], 1, true, false);
+		}
+		Writes.write(array, k, piv, 1, true, false);
 
-        int piv = tmp[p];
-        int j = b - 1, k = a;
+		return k;
+	}
 
-        while (j > p && Reads.compareValues(tmp[j], piv) > 0)
-            j--;
-        if (j > p)
-            Writes.write(array, k++, tmp[j], 1, true, false);
+	private void quickSortInt(int a, int b) {
+		int len = b - a;
 
-        for (int i = j - 1; i > p; i--) {
-            if (Reads.compareValues(tmp[i], piv) > 0) {
-                Highlights.markArray(2, j);
-                Writes.write(tmp, j--, tmp[i], 1, false, true);
-            } else
-                Writes.write(array, k++, tmp[i], 1, true, false);
-        }
-        for (int i = p - 1; i >= a; i--) {
-            if (Reads.compareValues(tmp[i], piv) >= 0) {
-                Highlights.markArray(2, j);
-                Writes.write(tmp, j--, tmp[i], 1, false, true);
-            } else
-                Writes.write(array, k++, tmp[i], 1, true, false);
-        }
-        Writes.write(array, k, piv, 1, true, false);
+		if (len < 2)
+			return;
 
-        return k;
-    }
+		int p = this.partitionInt(a, b);
 
-    private void quickSortInt(int a, int b) {
-        int len = b - a;
+		QuickSortInt left = new QuickSortInt(a, p);
+		QuickSortExt right = new QuickSortExt(p + 1, b);
+		left.start();
+		right.start();
 
-        if (len < 2)
-            return;
+		try {
+			left.join();
+			right.join();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
 
-        int p = this.partitionInt(a, b);
+	private void quickSortExt(int a, int b) {
+		int len = b - a;
 
-        QuickSortInt left = new QuickSortInt(a, p);
-        QuickSortExt right = new QuickSortExt(p + 1, b);
-        left.start();
-        right.start();
+		if (len < 2) {
+			if (len == 1)
+				Writes.write(array, a, tmp[a], 1, true, false);
+			return;
+		}
 
-        try {
-            left.join();
-            right.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
+		int p = this.partitionExt(a, b);
 
-    private void quickSortExt(int a, int b) {
-        int len = b - a;
+		QuickSortInt left = new QuickSortInt(a, p);
+		QuickSortExt right = new QuickSortExt(p + 1, b);
+		left.start();
+		right.start();
 
-        if (len < 2) {
-            if (len == 1)
-                Writes.write(array, a, tmp[a], 1, true, false);
-            return;
-        }
+		try {
+			left.join();
+			right.join();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
 
-        int p = this.partitionExt(a, b);
-
-        QuickSortInt left = new QuickSortInt(a, p);
-        QuickSortExt right = new QuickSortExt(p + 1, b);
-        left.start();
-        right.start();
-
-        try {
-            left.join();
-            right.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    @Override
-    public void runSort(int[] array, int length, int bucketCount) {
-        this.array = array;
-        this.tmp = Writes.createExternalArray(length);
-        this.quickSortInt(0, length);
-        Writes.deleteExternalArray(tmp);
-    }
+	@Override
+	public void runSort(int[] array, int length, int bucketCount) {
+		this.array = array;
+		this.tmp = Writes.createExternalArray(length);
+		this.quickSortInt(0, length);
+		Writes.deleteExternalArray(tmp);
+	}
 }

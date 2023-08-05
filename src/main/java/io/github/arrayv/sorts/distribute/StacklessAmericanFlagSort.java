@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "American Flag (Stackless)", showcaseName = "American Flag Sort (Stackless)", runName = "American Flag Sort (Stackless)", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
 public final class StacklessAmericanFlagSort extends Sort {
 	public StacklessAmericanFlagSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Stackless American Flag");
-		this.setRunAllSortsName("Stackless American Flag Sort");
-		this.setRunSortName("Stackless American Flag Sort");
-		this.setCategory("Distribution Sorts");
-		this.setBucketSort(true);
-		this.setRadixSort(true);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int stabVal(int idx) {
@@ -67,7 +58,7 @@ public final class StacklessAmericanFlagSort extends Sort {
 		for (int i = 0; i < r - 1; i++) {
 			int pos = a + offs[i];
 
-			if (Reads.compareValues(cnts[i], offs[i]) > 0) {
+			if (cnts[i] > offs[i]) {
 				Highlights.markArray(2, pos);
 				int t = array[pos];
 
@@ -78,7 +69,7 @@ public final class StacklessAmericanFlagSort extends Sort {
 					int t1 = array[a + cnts[digit]];
 					Writes.write(array, a + cnts[digit], t, 0.5, true, false);
 					t = t1;
-				} while (Reads.compareValues(cnts[i], offs[i]) > 0);
+				} while (cnts[i] > offs[i]);
 
 				Highlights.clearMark(2);
 			}
@@ -136,8 +127,6 @@ public final class StacklessAmericanFlagSort extends Sort {
 				}
 			}
 		}
-		Writes.changeAllocAmount(-2 * r);
-		Writes.deleteExternalArray(cnts);
-		Writes.deleteExternalArray(offs);
+		Writes.deleteExternalArrays(cnts, offs);
 	}
 }

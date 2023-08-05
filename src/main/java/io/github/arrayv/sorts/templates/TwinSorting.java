@@ -49,7 +49,7 @@ public abstract class TwinSorting extends Sort {
 		end = nmemb - 2;
 
 		while (index <= end) {
-			if (Reads.compareIndices(array, index + left, index + 1 + left, 0.1, true) <= 0) {
+			if (Reads.compareIndices(array, index + left, index + 1 + left, 1, true) <= 0) {
 				index += 2;
 				continue;
 			}
@@ -61,7 +61,7 @@ public abstract class TwinSorting extends Sort {
 				if (index > end) {
 					if (start == 0) {
 						if (nmemb % 2 == 0
-								|| Reads.compareIndices(array, index - 1 + left, index + left, 0.1, true) > 0) {
+								|| Reads.compareIndices(array, index - 1 + left, index + left, 1, true) > 0) {
 							// the entire array was reversed
 							Writes.changeReversals(1);
 							end = nmemb - 1;
@@ -75,8 +75,8 @@ public abstract class TwinSorting extends Sort {
 					break;
 				}
 
-				if (Reads.compareIndices(array, index + left, index + 1 + left, 0.1, true) > 0) {
-					if (Reads.compareIndices(array, index - 1 + left, index + left, 0.1, true) > 0) {
+				if (Reads.compareIndices(array, index + left, index + 1 + left, 1, true) > 0) {
+					if (Reads.compareIndices(array, index - 1 + left, index + left, 1, true) > 0) {
 						index += 2;
 						continue;
 					}
@@ -114,7 +114,7 @@ public abstract class TwinSorting extends Sort {
 				a = offset;
 				e = a + block - 1;
 
-				if (Reads.compareIndices(array, e + left, e + 1 + left, 0.1, true) <= 0)
+				if (Reads.compareIndices(array, e + left, e + 1 + left, 1, true) <= 0)
 					continue;
 
 				if (offset + block * 2 <= nmemb) {
@@ -129,7 +129,7 @@ public abstract class TwinSorting extends Sort {
 
 				d = d_max - 1;
 
-				while (Reads.compareIndices(array, e + left, d + left, 0.1, true) <= 0) {
+				while (Reads.compareIndices(array, e + left, d + left, 1, true) <= 0) {
 					d_max--;
 					d--;
 					c_max--;
@@ -149,7 +149,7 @@ public abstract class TwinSorting extends Sort {
 				d = a + block - 1;
 				e = d_max - 1;
 
-				if (Reads.compareIndices(array, a + left, a + block + left, 0.1, true) <= 0) {
+				if (Reads.compareIndices(array, a + left, a + block + left, 1, true) <= 0) {
 					Highlights.clearMark(2);
 					Writes.write(array, (e--) + left, array[(d--) + left], 1, true, false);
 

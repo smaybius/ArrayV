@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -47,20 +48,10 @@ SOFTWARE.
  * For n elements, use 1 less than a power of 2 close to n/ln(n)
  *
  */
-
+@SortMeta(name = "Sample")
 public final class SampleSort extends Sort {
     public SampleSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Sample");
-        this.setRunAllSortsName("Sample Sort");
-        this.setRunSortName("Sample Sort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private static int MINSIZE = 100;

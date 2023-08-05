@@ -1,22 +1,15 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+// Author: McDude_73
+@SortMeta(listName = "Simplistic Gravity", showcaseName = "Simplistic Gravity Sort", runName = "Simplistic Gravity Sort")
 public final class SimplisticGravitySort extends Sort {
 
 	public SimplisticGravitySort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Simplistic Gravity");
-		this.setRunAllSortsName("Simplistic Gravity Sort (By McDude_73)");
-		this.setRunSortName("Simplistic Gravity Sort");
-		this.setCategory("Distribution Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	int[] aux;

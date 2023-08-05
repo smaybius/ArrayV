@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Optimized Lazy Heap")
 final public class OptimizedLazyHeapSort extends Sort {
     public OptimizedLazyHeapSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Optimized Lazy Heap");
-        this.setRunAllSortsName("Optimized Lazy Heap Sort");
-        this.setRunSortName("Optimized Lazy Heapsort");
-        this.setCategory("Selection Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private int findMin(int[] array, int p, int a, int b, int s) {
@@ -54,22 +45,22 @@ final public class OptimizedLazyHeapSort extends Sort {
         return min;
     }
 
-    public void lazyHeap(int[] array, int a, int b) {
-        int n = b - a;
-        int s = (int) Math.sqrt(n - 1) + 1;
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        int s = (int) Math.sqrt(length - 1) + 1;
 
-        int f = a + ((n - 1) % s + 1);
-        int fMin = this.findMin(array, a, a + 1, f, 1);
+        int f = (length - 1) % s + 1;
+        int fMin = this.findMin(array, 0, 1, f, 1);
 
-        for (int j = f; j < b; j += s) {
+        for (int j = f; j < length; j += s) {
             int min = this.findMin(array, j, j + 1, j + s, 1);
 
             if (j != min)
                 Writes.swap(array, j, min, 1, true, false);
         }
 
-        for (int j = a; j < b;) {
-            int min = this.findMin(array, fMin, f, b, s);
+        for (int j = 0; j < length;) {
+            int min = this.findMin(array, fMin, f, length, s);
 
             if (min == fMin) {
                 if (j != min)
@@ -100,10 +91,5 @@ final public class OptimizedLazyHeapSort extends Sort {
                     f += s;
             }
         }
-    }
-
-    @Override
-    public void runSort(int[] array, int length, int bucketCount) {
-        lazyHeap(array, 0, length);
     }
 }

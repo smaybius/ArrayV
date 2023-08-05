@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.IndexedRotations;
 
@@ -28,32 +29,20 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-
+@SortMeta(name = "Rotate Merge")
 public final class RotateMergeSort extends Sort {
 	public RotateMergeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Rotate Merge");
-		this.setRunAllSortsName("Rotate Merge Sort");
-		// this.setRunAllID("In-Place Merge Sort with Rotations");
-		this.setRunSortName(/* "In-Place */"Rotate Mergesort");
-		this.setCategory("Merge Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
+		IndexedRotations.adaptable(array, a, m, b, 0.5, true, false);
 	}
 
 	private int binarySearch(int[] array, int a, int b, int value, boolean left) {
 		while (a < b) {
 			int m = a + (b - a) / 2;
-			Highlights.markArray(1, m);
-			Delays.sleep(1);
+
 			boolean comp = left ? Reads.compareValues(value, array[m]) <= 0
 					: Reads.compareValues(value, array[m]) < 0;
 
@@ -66,7 +55,7 @@ public final class RotateMergeSort extends Sort {
 		return a;
 	}
 
-	public void rotateMerge(int[] array, int a, int m, int b, int depth) {
+	private void rotateMerge(int[] array, int a, int m, int b) {
 		int m1, m2, m3;
 
 		if (m - a >= b - m) {
@@ -80,16 +69,10 @@ public final class RotateMergeSort extends Sort {
 		}
 		this.rotate(array, m1, m, m2);
 
-		if (m2 - (m3 + 1) > 0 && b - m2 > 0) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.rotateMerge(array, m3 + 1, m2, b, depth + 1);
-		}
-		if (m1 - a > 0 && m3 - m1 > 0) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.rotateMerge(array, a, m1, m3, depth + 1);
-		}
+		if (m2 - (m3 + 1) > 0 && b - m2 > 0)
+			this.rotateMerge(array, m3 + 1, m2, b);
+		if (m1 - a > 0 && m3 - m1 > 0)
+			this.rotateMerge(array, a, m1, m3);
 	}
 
 	protected void rotateMergeSort(int[] array, int a, int b) {
@@ -97,10 +80,10 @@ public final class RotateMergeSort extends Sort {
 
 		for (int j = 1; j < len; j *= 2) {
 			for (i = a; i + 2 * j <= b; i += 2 * j)
-				this.rotateMerge(array, i, i + j, i + 2 * j, 0);
+				this.rotateMerge(array, i, i + j, i + 2 * j);
 
 			if (i + j < b)
-				this.rotateMerge(array, i, i + j, b, 0);
+				this.rotateMerge(array, i, i + j, b);
 		}
 	}
 

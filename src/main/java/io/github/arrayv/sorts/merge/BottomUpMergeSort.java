@@ -1,24 +1,16 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+@SortMeta(name = "Bottom-Up Merge")
 public final class BottomUpMergeSort extends Sort {
     private int[] scratchArray;
     private int copyLength;
 
     public BottomUpMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Bottom-up Merge");
-        this.setRunAllSortsName("Bottom-up Merge Sort");
-        this.setRunSortName("Bottom-up Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void merge(int[] array, int currentLength, int index, int mergeSize) {
@@ -35,7 +27,7 @@ public final class BottomUpMergeSort extends Sort {
                 this.Highlights.markArray(2, right);
                 this.Delays.sleep(1);
 
-                if (this.Reads.compareIndices(array, left, right, 0.5, true) <= 0) {
+                if (this.Reads.compareValues(array[left], array[right]) <= 0) {
                     this.Writes.write(this.scratchArray, scratchIndex++, array[left++], 0, false, true);
                 } else {
                     this.Writes.write(this.scratchArray, scratchIndex++, array[right++], 0, false, true);

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.CircleSorting;
 
@@ -15,20 +16,10 @@ Texts.  A copy of the license is included in the section entitled "GNU
 Free Documentation License".
  *
  */
-
+@SortMeta(listName = "Intro Circle (Recursive)", showcaseName = "Recursive Introspective Circle Sort", runName = "Recursive Introspective Circle Sort")
 public final class IntroCircleSortRecursive extends CircleSorting {
     public IntroCircleSortRecursive(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Intro Circle (Recursive)");
-        this.setRunAllSortsName("Recursive Introspective Circle Sort");
-        this.setRunSortName("Introspective Circlesort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     @Override
@@ -45,10 +36,11 @@ public final class IntroCircleSortRecursive extends CircleSorting {
             iterations++;
 
             if (iterations >= threshold) {
+                Highlights.clearAllMarks();
                 InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
                 binaryInserter.customInsertSort(array, 0, length, 0.5, false);
                 break;
             }
-        } while (this.circleSortRoutine(array, 0, n - 1, 0, 1, 0) != 0);
+        } while (this.circleSortRoutine(array, 0, n - 1, 0, 1) != 0);
     }
 }

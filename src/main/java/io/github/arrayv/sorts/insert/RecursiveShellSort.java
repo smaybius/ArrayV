@@ -1,21 +1,13 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+@SortMeta(listName = "Recursive Shell", showcaseName = "Recursive Shell Sort", runName = "Recursive Shell Sort")
 public final class RecursiveShellSort extends Sort {
     public RecursiveShellSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Recursive Shell");
-        this.setRunAllSortsName("yuji's Recursive Shell Sort");
-        this.setRunSortName("yuji's Recursive Shell Sort");
-        this.setCategory("Insertion Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     public void gappedInsertionSort(int[] arr, int a, int b, int gap) {
@@ -32,21 +24,17 @@ public final class RecursiveShellSort extends Sort {
         Highlights.clearAllMarks();
     }
 
-    public void recursiveShellSort(int[] array, int start, int end, int g, int depth) {
+    public void recursiveShellSort(int[] array, int start, int end, int g) {
         if (start + g <= end) {
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.recursiveShellSort(array, start, end, 3 * g, depth + 1);
-            Writes.recursion();
-            this.recursiveShellSort(array, start + g, end, 3 * g, depth + 1);
-            Writes.recursion();
-            this.recursiveShellSort(array, start + (2 * g), end, 3 * g, depth + 1);
+            this.recursiveShellSort(array, start, end, 3 * g);
+            this.recursiveShellSort(array, start + g, end, 3 * g);
+            this.recursiveShellSort(array, start + (2 * g), end, 3 * g);
             this.gappedInsertionSort(array, start, end, g);
         }
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.recursiveShellSort(array, 0, length, 1, 0);
+        this.recursiveShellSort(array, 0, length, 1);
     }
 }

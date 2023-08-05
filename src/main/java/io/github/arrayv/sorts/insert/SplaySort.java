@@ -1,8 +1,11 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+//
+@SortMeta(listName = "Tree (Splay)", showcaseName = "Tree Sort (Splay Balanced)", runName = "Tree Sort (Splay Balanced)")
 public final class SplaySort extends Sort {
 
     // Splay sort is an adaptive algorithm based on splay tree data structure
@@ -11,16 +14,6 @@ public final class SplaySort extends Sort {
 
     public SplaySort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Splay");
-        this.setRunAllSortsName("Splay Sort");
-        this.setRunSortName("Splaysort");
-        this.setCategory("Insertion Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     // Splay tree code retrieved from
@@ -86,14 +79,14 @@ public final class SplaySort extends Sort {
 
             if (Reads.compareValues(root.left.key, key) == 1) {
                 root.left.left = treeWrite(splay(root.left.left, key, depth * 4), depth * 4);
-                root = treeWrite(rightRotate(root, depth + 1), depth + 1);
+                root = treeWrite(rightRotate(root, depth), depth);
             } else {
                 root.left.right = treeWrite(splay(root.left.right, key, depth * 4 + 1), depth * 4 + 1);
                 if (root.left.right != null) {
                     root.left = treeWrite(leftRotate(root.left, depth * 2), depth * 2);
                 }
             }
-            return (root.left == null) ? root : rightRotate(root, depth + 1);
+            return (root.left == null) ? root : rightRotate(root, depth);
         } else {
             if (root.right == null) {
                 return root;
@@ -106,9 +99,9 @@ public final class SplaySort extends Sort {
                 }
             } else {
                 root.right.right = treeWrite(splay(root.right.right, key, depth * 4 + 3), depth * 4 + 3);
-                root = treeWrite(leftRotate(root, depth + 1), depth + 1);
+                root = treeWrite(leftRotate(root, depth), depth);
             }
-            return (root.right == null) ? root : leftRotate(root, depth + 1);
+            return (root.right == null) ? root : leftRotate(root, depth);
         }
     }
 
@@ -118,7 +111,7 @@ public final class SplaySort extends Sort {
             return root;
         }
 
-        root = splay(root, key, depth + 1);
+        root = splay(root, key, depth);
         Node n = new Node(key);
 
         if (Reads.compareValues(root.key, key) == 1) {

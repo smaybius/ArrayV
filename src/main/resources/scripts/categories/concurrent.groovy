@@ -1,15 +1,14 @@
 import io.github.arrayv.prompts.SortPrompt
 
-SortPrompt.setSortThreadForCategory('Concurrent Sorts', 24) {
+SortPrompt.setSortThreadForCategory('Concurrent Sorts', 22) {
     // Other
     run FoldSort go 1024.numbers
     run CreaseSort go 1024.numbers
-    run MatrixSort go 1024.numbers, 2.speed
+    run MatrixSort go 256.numbers, 0.667.speed
 
     // Recursive
     run BitonicSortRecursive go 1024.numbers
     run OddEvenMergeSortRecursive go 1024.numbers
-    run OptimizedOddEvenMergeSort go 1024.numbers
     run PairwiseSortRecursive go 1024.numbers
     run BoseNelsonSortRecursive go 1024.numbers
     run WeaveSortRecursive go 1024.numbers
@@ -21,7 +20,6 @@ SortPrompt.setSortThreadForCategory('Concurrent Sorts', 24) {
     run OddEvenMergeSortParallel go 1024.numbers
     run BoseNelsonSortParallel go 1024.numbers
     run WeaveSortParallel go 1024.numbers
-    run MatrixSortParallel go 1024.numbers, 0.5.speed
 
     // Iterative
     run BitonicSortIterative go 1024.numbers

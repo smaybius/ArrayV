@@ -1,30 +1,26 @@
 package io.github.arrayv.sorts.quick;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
  * @author Timo Bingmann
- *         Implemented in ArrayV by Gaming32
- *         https://github.com/bingmann/sound-of-sorting/blob/master/src/SortAlgo.cpp#L449-L534
+ * Implemented in ArrayV by Gaming32
+ * https://github.com/bingmann/sound-of-sorting/blob/master/src/SortAlgo.cpp#L449-L534
  */
+@SortMeta(
+    listName = "Ternary LR Quick",
+    showcaseName = "Quick Sort (ternary, LR ptrs)",
+    runName = "Quicksort (ternary, LR ptrs)"
+)
 public final class TernaryLRQuickSort extends Sort {
     public TernaryLRQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Ternary LR Quick");
-        this.setRunAllSortsName("Quick Sort (ternary, LR ptrs)");
-        this.setRunSortName("Quicksort (ternary, LR ptrs)");
-        this.setCategory("Quick Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private int compare(int[] A, int lo, int hi) {
-        return Reads.compareIndices(A, lo, hi, 0.1, true);
+        return Reads.compareIndices(A, lo, hi, 0.5, true);
     }
 
     // I'll just be using median-of-3 here
@@ -37,13 +33,12 @@ public final class TernaryLRQuickSort extends Sort {
             return hi - 1;
 
         return compare(A, lo, mid) < 0
-                ? (compare(A, mid, hi - 1) < 0 ? mid : (compare(A, lo, hi - 1) < 0 ? hi - 1 : lo))
-                : (compare(A, mid, hi - 1) > 0 ? mid : (compare(A, lo, hi - 1) < 0 ? lo : hi - 1));
+            ? (compare(A, mid, hi - 1) < 0 ? mid : (compare(A, lo, hi - 1) < 0 ? hi - 1 : lo))
+            : (compare(A, mid, hi - 1) > 0 ? mid : (compare(A, lo, hi - 1) < 0 ? lo : hi - 1));
     }
 
-    private void quickSortTernaryLR(int[] A, int lo, int hi, int depth) {
-        if (hi <= lo)
-            return;
+    private void quickSortTernaryLR(int[] A, int lo, int hi) {
+        if (hi <= lo) return;
 
         int cmp;
 
@@ -76,8 +71,7 @@ public final class TernaryLRQuickSort extends Sort {
                 Highlights.markArray(3, j);
             }
 
-            if (i > j)
-                break;
+            if (i > j) break;
 
             Writes.swap(A, i++, j--, 1, true, false);
             Highlights.markArray(3, j);
@@ -88,8 +82,7 @@ public final class TernaryLRQuickSort extends Sort {
         int num_less = i - p;
         int num_greater = q - j;
 
-        j = i - 1;
-        i = i + 1;
+        j = i - 1; i = i + 1;
         Highlights.markArray(3, i);
 
         int pe = lo + Math.min(p - lo, num_less);
@@ -105,15 +98,13 @@ public final class TernaryLRQuickSort extends Sort {
         }
 
         Highlights.clearAllMarks();
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        quickSortTernaryLR(A, lo, lo + num_less - 1, depth + 1);
-        Writes.recursion();
-        quickSortTernaryLR(A, hi - num_greater + 1, hi, depth + 1);
+
+        quickSortTernaryLR(A, lo, lo + num_less - 1);
+        quickSortTernaryLR(A, hi - num_greater + 1, hi);
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        quickSortTernaryLR(array, 0, currentLength - 1, 0);
+        quickSortTernaryLR(array, 0, currentLength - 1);
     }
 }

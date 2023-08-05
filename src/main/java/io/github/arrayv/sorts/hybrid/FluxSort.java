@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.QuadSorting;
 
 /*
@@ -33,34 +34,23 @@ import io.github.arrayv.sorts.templates.QuadSorting;
 /*
 	fluxsort 1.1.3.3
 */
-
+@SortMeta(listName = "Flux", showcaseName = "Flux Sort", runName = "Flux Sort")
 public final class FluxSort extends QuadSorting {
 	public FluxSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Flux");
-		this.setRunAllSortsName("Flux Sort");
-		this.setRunSortName("Fluxsort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
-	private static final int FLUX_OUT = 24;
+	private final int FLUX_OUT = 24;
 
 	private boolean fluxAnalyze(int[] array, int nmemb) {
-		int cnt;
-		int balance = 0;
+		int cnt, balance = 0;
 		int pta;
 
 		pta = 0;
 		cnt = nmemb;
 
 		while (--cnt > 0)
-			if (Reads.compareIndices(array, pta, ++pta, 0.1, true) > 0)
+			if (Reads.compareIndices(array, pta, ++pta, 0.5, true) > 0)
 				balance++;
 
 		if (balance == 0)
@@ -83,56 +73,45 @@ public final class FluxSort extends QuadSorting {
 		int[] t = new int[4];
 		int val;
 
-		val = (Reads.compareIndices(array, v0, v1, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v0, v1, 1, true) + 1) / 2;
 		t[0] = val;
-		Writes.changeAuxWrites(1);
 		t[1] = val ^ 1;
-		Writes.changeAuxWrites(1);
-		val = (Reads.compareIndices(array, v0, v2, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v0, v2, 1, true) + 1) / 2;
 		t[0] += val;
-		Writes.changeAuxWrites(val);
 		t[2] = val ^ 1;
-		val = (Reads.compareIndices(array, v0, v3, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v0, v3, 1, true) + 1) / 2;
 		t[0] += val;
-		Writes.changeAuxWrites(val);
 		t[3] = val ^ 1;
-		Writes.changeAuxWrites(1);
-		val = (Reads.compareIndices(array, v0, v4, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v0, v4, 1, true) + 1) / 2;
 		t[0] += val;
-		Writes.changeAuxWrites(val);
+
 		if (t[0] == 2)
 			return v0;
 
-		val = (Reads.compareIndices(array, v1, v2, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v1, v2, 1, true) + 1) / 2;
 		t[1] += val;
-		Writes.changeAuxWrites(val);
 		t[2] += val ^ 1;
-		Writes.changeAuxWrites(val ^ 1);
-		val = (Reads.compareIndices(array, v1, v3, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v1, v3, 1, true) + 1) / 2;
 		t[1] += val;
-		Writes.changeAuxWrites(val);
 		t[3] += val ^ 1;
-		Writes.changeAuxWrites(val ^ 1);
-		val = (Reads.compareIndices(array, v1, v4, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v1, v4, 1, true) + 1) / 2;
 		t[1] += val;
-		Writes.changeAuxWrites(val);
+
 		if (t[1] == 2)
 			return v1;
 
-		val = (Reads.compareIndices(array, v2, v3, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v2, v3, 1, true) + 1) / 2;
 		t[2] += val;
-		Writes.changeAuxWrites(val);
 		t[3] += val ^ 1;
-		Writes.changeAuxWrites(val ^ 1);
-		val = (Reads.compareIndices(array, v2, v4, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v2, v4, 1, true) + 1) / 2;
 		t[2] += val;
-		Writes.changeAuxWrites(val);
+
 		if (t[2] == 2)
 			return v2;
 
-		val = (Reads.compareIndices(array, v3, v4, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v3, v4, 1, true) + 1) / 2;
 		t[3] += val;
-		Writes.changeAuxWrites(val);
+
 		return t[3] == 2 ? v3 : v4;
 	}
 
@@ -140,31 +119,23 @@ public final class FluxSort extends QuadSorting {
 		int[] t = new int[2];
 		int val;
 
-		val = (Reads.compareIndices(array, v0, v1, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v0, v1, 1, true) + 1) / 2;
 		t[0] = val;
 		t[1] = val ^ 1;
-		Writes.changeAuxWrites(2);
-		val = (Reads.compareIndices(array, v0, v2, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v0, v2, 1, true) + 1) / 2;
 		t[0] += val;
-		Writes.changeAuxWrites(val);
 
 		if (t[0] == 1)
 			return v0;
 
-		val = (Reads.compareIndices(array, v1, v2, 0.1, true) + 1) / 2;
+		val = (Reads.compareIndices(array, v1, v2, 1, true) + 1) / 2;
 		t[1] += val;
-		Writes.changeAuxWrites(val);
 
 		return t[1] == 1 ? v1 : v2;
 	}
 
 	private int medianOfFifteen(int[] array, int ptx, int nmemb) {
-		int v0;
-		int v1;
-		int v2;
-		int v3;
-		int v4;
-		int div = nmemb / 16;
+		int v0, v1, v2, v3, v4, div = nmemb / 16;
 
 		v0 = this.medianOfThree(array, ptx + div * 2, ptx + div * 1, ptx + div * 3);
 		v1 = this.medianOfThree(array, ptx + div * 5, ptx + div * 4, ptx + div * 6);
@@ -176,10 +147,7 @@ public final class FluxSort extends QuadSorting {
 	}
 
 	private int medianOfNine(int[] array, int ptx, int nmemb) {
-		int v0;
-		int v1;
-		int v2;
-		int div = nmemb / 16;
+		int v0, v1, v2, div = nmemb / 16;
 
 		v0 = this.medianOfThree(array, ptx + div * 2, ptx + div * 1, ptx + div * 4);
 		v1 = this.medianOfThree(array, ptx + div * 8, ptx + div * 6, ptx + div * 10);
@@ -188,15 +156,10 @@ public final class FluxSort extends QuadSorting {
 		return this.medianOfThree(array, v0, v1, v2);
 	}
 
-	private void fluxPartition(int[] array, int[] swap, int[] main, int start, int nmemb, int depth) {
+	private void fluxPartition(int[] array, int[] swap, int[] main, int start, int nmemb) {
 		int val;
-		int aSize;
-		int sSize;
-		int pta;
-		int pts;
-		int ptx;
-		int pte;
-		int piv;
+		int aSize, sSize;
+		int pta, pts, ptx, pte, piv;
 
 		ptx = main == array ? start : 0;
 
@@ -228,19 +191,13 @@ public final class FluxSort extends QuadSorting {
 		if (aSize <= sSize / 16 || sSize <= FLUX_OUT) {
 			Writes.arraycopy(swap, 0, array, pta, sSize, 0.5, true, false);
 			this.quadSortSwap(array, swap, pta, sSize);
-		} else {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.fluxPartition(array, swap, swap, pta, sSize, depth + 1);
-		}
+		} else
+			this.fluxPartition(array, swap, swap, pta, sSize);
 
 		if (sSize <= aSize / 16 || aSize <= FLUX_OUT)
 			this.quadSortSwap(array, swap, start, aSize);
-		else {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.fluxPartition(array, swap, array, start, aSize, depth + 1);
-		}
+		else
+			this.fluxPartition(array, swap, array, start, aSize);
 	}
 
 	public void fluxsort(int[] array, int nmemb) {
@@ -250,7 +207,7 @@ public final class FluxSort extends QuadSorting {
 		else if (this.fluxAnalyze(array, nmemb)) {
 			int[] swap = Writes.createExternalArray(nmemb);
 
-			this.fluxPartition(array, swap, array, 0, nmemb, 0);
+			this.fluxPartition(array, swap, array, 0, nmemb);
 
 			Writes.deleteExternalArray(swap);
 		}

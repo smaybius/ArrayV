@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.IndexedRotations;
 
@@ -29,20 +30,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Rotate MSD Radix", showcaseName = "Rotate MSD Radix Sort", runName = "Rotate MSD Radix Sort", question = "Enter base width (default: 4):", defaultAnswer = 4)
 public final class RotateMSDRadixSort extends Sort {
 	public RotateMSDRadixSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Rotate MSD Radix");
-		this.setRunAllSortsName("Rotate MSD Radix Sort, Base 4");
-		this.setRunSortName("Rotate MSD Radixsort");
-		this.setCategory("Distribution Sorts");
-		this.setBucketSort(true);
-		this.setRadixSort(true);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int stabVal(int idx) {
@@ -63,7 +54,7 @@ public final class RotateMSDRadixSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
+		IndexedRotations.adaptable(array, a, m, b, 0.5, true, false);
 	}
 
 	private int binSearch(int[] array, int a, int b, int d, int p) {
@@ -79,7 +70,7 @@ public final class RotateMSDRadixSort extends Sort {
 		return a;
 	}
 
-	private void merge(int[] array, int a, int m, int b, int da, int db, int p, int depth) {
+	private void merge(int[] array, int a, int m, int b, int da, int db, int p) {
 		if (b - a < 2 || db - da < 2)
 			return;
 
@@ -89,29 +80,25 @@ public final class RotateMSDRadixSort extends Sort {
 
 		this.rotate(array, m1, m, m2);
 		m = m1 + (m2 - m);
-		Writes.recordDepth(depth);
-		Writes.recursion();
-		this.merge(array, m, m2, b, dm, db, p, depth + 1);
-		Writes.recursion();
-		this.merge(array, a, m1, m, da, dm, p, depth + 1);
+
+		this.merge(array, m, m2, b, dm, db, p);
+		this.merge(array, a, m1, m, da, dm, p);
 	}
 
-	private void mergeSort(int[] array, int a, int b, int p, int depth) {
+	private void mergeSort(int[] array, int a, int b, int p) {
 		if (b - a < 2)
 			return;
 
 		int m = (a + b) / 2;
-		Writes.recordDepth(depth);
-		Writes.recursion();
-		this.mergeSort(array, a, m, p, depth + 1);
-		Writes.recursion();
-		this.mergeSort(array, m, b, p, depth + 1);
 
-		this.merge(array, a, m, b, 0, this.base, p, depth + 1);
+		this.mergeSort(array, a, m, p);
+		this.mergeSort(array, m, b, p);
+
+		this.merge(array, a, m, b, 0, this.base, p);
 	}
 
 	private int dist(int[] array, int a, int b, int p) {
-		this.mergeSort(array, a, b, p, 0);
+		this.mergeSort(array, a, b, p);
 
 		return this.binSearch(array, a, b, 1, p);
 	}

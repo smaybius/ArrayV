@@ -142,7 +142,7 @@ public abstract class KotaSorting extends Sort {
 			Highlights.markArray(2, i);
 			Delays.sleep(1);
 			int loc = this.binarySearch(array, pos, posEnd, array[i], true);
-			if (i == loc || Reads.compareIndices(array, i, loc, 0.1, true) != 0) {
+			if (i == loc || Reads.compareValues(array[i], array[loc]) != 0) {
 				this.rotate(array, pos, posEnd, i);
 				int inc = i - posEnd;
 				loc += inc;
@@ -219,7 +219,7 @@ public abstract class KotaSorting extends Sort {
 
 			for (int i = j + 1; i < count; i++) {
 				int sel = pos + i * this.blockLen;
-				if (Reads.compareIndices(array, sel, min, 0.2, true) == -1)
+				if (Reads.compareValues(array[sel], array[min]) == -1)
 					min = sel;
 			}
 			if (start != min)
@@ -235,7 +235,7 @@ public abstract class KotaSorting extends Sort {
 
 			for (int i = j + 1; i < count; i++) {
 				int sel = pos - i * this.blockLen;
-				if (Reads.compareIndices(array, sel, min, 0.2, true) == -1)
+				if (Reads.compareValues(array[sel], array[min]) == -1)
 					min = sel;
 			}
 			if (start != min)
@@ -344,7 +344,7 @@ public abstract class KotaSorting extends Sort {
 			k = 0;
 
 			while (i < m && k < this.blockLen) {
-				if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
+				if (Reads.compareValues(array[i], array[j]) <= 0) {
 					this.kotaSwap(array, left++, i++, this.ext);
 				} else {
 					this.kotaSwap(array, left++, j++, this.ext);
@@ -364,7 +364,7 @@ public abstract class KotaSorting extends Sort {
 				k = 0;
 
 				while (i < m && j < b && k < this.blockLen) {
-					if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
+					if (Reads.compareValues(array[i], array[j]) <= 0) {
 						this.kotaSwap(array, right++, i++, this.ext);
 						rightAD--;
 						leftAD++;
@@ -401,7 +401,7 @@ public abstract class KotaSorting extends Sort {
 				k = 0;
 
 				while (i < m && j < b && k < this.blockLen) {
-					if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
+					if (Reads.compareValues(array[i], array[j]) <= 0) {
 						this.kotaSwap(array, left++, i++, this.ext);
 					} else {
 						this.kotaSwap(array, left++, j++, this.ext);
@@ -461,7 +461,7 @@ public abstract class KotaSorting extends Sort {
 			k = 0;
 
 			while (j >= m && k < this.blockLen) {
-				if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
+				if (Reads.compareValues(array[i], array[j]) == 1) {
 					this.kotaSwap(array, right--, i--, this.ext);
 					leftAD++;
 					rightAD--;
@@ -480,7 +480,7 @@ public abstract class KotaSorting extends Sort {
 				k = 0;
 
 				while (j >= m && i >= a && k < this.blockLen) {
-					if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
+					if (Reads.compareValues(array[i], array[j]) == 1) {
 						this.kotaSwap(array, left--, i--, this.ext);
 					} else {
 						this.kotaSwap(array, left--, j--, this.ext);
@@ -514,7 +514,7 @@ public abstract class KotaSorting extends Sort {
 				k = 0;
 
 				while (j >= m && i >= a && k < this.blockLen) {
-					if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
+					if (Reads.compareValues(array[i], array[j]) == 1) {
 						this.kotaSwap(array, right--, i--, this.ext);
 						leftAD++;
 						rightAD--;
@@ -573,7 +573,7 @@ public abstract class KotaSorting extends Sort {
 		int i = a, j = m, k;
 
 		while (i < j && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
+			if (Reads.compareValues(array[i], array[j]) == 1) {
 				k = this.binarySearch(array, j, b, array[i], true);
 				this.rotate(array, i, j, k);
 
@@ -588,7 +588,7 @@ public abstract class KotaSorting extends Sort {
 		int i = m - 1, j = b - 1, k;
 
 		while (j > i && i >= a) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) >= 0) {
+			if (Reads.compareValues(array[i], array[j]) >= 0) {
 				k = this.binarySearch(array, a, i + 1, array[j], true);
 				this.rotate(array, k, i + 1, j + 1);
 
@@ -610,16 +610,16 @@ public abstract class KotaSorting extends Sort {
 		int i = start, m = mid, k = mid, q;
 
 		while (m < end) {
-			if (Reads.compareIndices(array, m - 1, m, 0.1, true) <= 0)
+			if (Reads.compareValues(array[m - 1], array[m]) <= 0)
 				return;
 
-			while (i < m - 1 && Reads.compareIndices(array, i, m, 0.1, true) <= 0)
+			while (i < m - 1 && Reads.compareValues(array[i], array[m]) <= 0)
 				i++;
 			Writes.swap(array, i++, k++, 1, true, false);
 
 			while (i < m) {
 				Highlights.markArray(3, m);
-				while (i < m && k < end && Reads.compareIndices(array, m, k, 0.2, true) == 1)
+				while (i < m && k < end && Reads.compareValues(array[m], array[k]) == 1)
 					Writes.swap(array, i++, k++, 1, true, false);
 				Highlights.clearMark(3);
 
@@ -637,7 +637,7 @@ public abstract class KotaSorting extends Sort {
 				}
 
 				q = m;
-				while (i < m && q < k && Reads.compareIndices(array, q, k, 0.2, true) <= 0)
+				while (i < m && q < k && Reads.compareValues(array[q], array[k]) <= 0)
 					Writes.swap(array, i++, q++, 1, true, false);
 				this.rotate(array, m, q, k);
 			}
@@ -673,7 +673,7 @@ public abstract class KotaSorting extends Sort {
 		int i = a, j = m, k = a - l;
 
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) <= 0)
+			if (Reads.compareValues(array[i], array[j]) <= 0)
 				this.kotaSwap(array, k++, i++, this.ext);
 			else
 				this.kotaSwap(array, k++, j++, this.ext);
@@ -691,7 +691,7 @@ public abstract class KotaSorting extends Sort {
 			int i = a, j = m, k = a - l;
 
 			while (k < i && i < m) {
-				if (Reads.compareIndices(array, i, j, 0.2, true) <= 0)
+				if (Reads.compareValues(array[i], array[j]) <= 0)
 					this.kotaSwap(array, k++, i++, this.ext);
 				else
 					this.kotaSwap(array, k++, j++, this.ext);
@@ -704,7 +704,7 @@ public abstract class KotaSorting extends Sort {
 				k = (m - 1) + (b - j);
 
 				while (i2 >= i && j2 >= j) {
-					if (Reads.compareIndices(array, i2, j2, 0.2, true) == 1)
+					if (Reads.compareValues(array[i2], array[j2]) == 1)
 						this.kotaSwap(array, k--, i2--, this.ext);
 					else
 						this.kotaSwap(array, k--, j2--, this.ext);
@@ -719,7 +719,7 @@ public abstract class KotaSorting extends Sort {
 		int i = m - 1, j = b - 1, k = b - 1 + l;
 
 		while (k > j && j >= m) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) == 1)
+			if (Reads.compareValues(array[i], array[j]) == 1)
 				this.kotaSwap(array, k--, i--, this.ext);
 			else
 				this.kotaSwap(array, k--, j--, this.ext);
@@ -734,7 +734,7 @@ public abstract class KotaSorting extends Sort {
 			k = m - (i - a);
 
 			while (i2 < i && j2 < j) {
-				if (Reads.compareIndices(array, i2, j2, 0.2, true) <= 0)
+				if (Reads.compareValues(array[i2], array[j2]) <= 0)
 					this.kotaSwap(array, k++, i2++, this.ext);
 				else
 					this.kotaSwap(array, k++, j2++, this.ext);
@@ -754,7 +754,7 @@ public abstract class KotaSorting extends Sort {
 			j = m - 1;
 			k = b - 1;
 			while (i >= 0 && j >= a) {
-				if (Reads.compareIndices(array, j, p + i, 0.1, true) >= 0) {
+				if (Reads.compareValues(array[j], array[p + i]) >= 0) {
 					q = this.binarySearch(array, a, j + 1, array[p + i], true);
 					while (j >= q)
 						Writes.swap(array, k--, j--, 1, true, false);
@@ -769,7 +769,7 @@ public abstract class KotaSorting extends Sort {
 			j = m;
 			k = a;
 			while (i < m - a && j < b) {
-				if (Reads.compareIndices(array, j, p + i, 0.1, true) == -1) {
+				if (Reads.compareValues(array[j], array[p + i]) == -1) {
 					q = this.binarySearch(array, j, b, array[p + i], true);
 					while (j < q)
 						Writes.swap(array, k++, j++, 1, true, false);

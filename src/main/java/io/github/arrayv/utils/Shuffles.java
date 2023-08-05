@@ -1779,7 +1779,7 @@ public enum Shuffles {
 
             BinomialSmoothSort heapSort = new BinomialSmoothSort(arrayVisualizer);
             for (int node = 1; node < currentLen; node++)
-                heapSort.thrift(array, node, node % 2 == 1, (node + (1 << heapSort.height(node)) >= currentLen), 0);
+                heapSort.thrift(array, node, node % 2 == 1, (node + (1 << heapSort.height(node)) >= currentLen));
         }
     },
     POPLAR {

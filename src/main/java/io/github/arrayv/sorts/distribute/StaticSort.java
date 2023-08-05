@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.select.MaxHeapSort;
 import io.github.arrayv.sorts.templates.Sort;
@@ -30,23 +31,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Static")
 public final class StaticSort extends Sort {
     MaxHeapSort heapSorter;
     InsertionSort insertSorter;
 
     public StaticSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Static");
-        this.setRunAllSortsName("Static Sort");
-        this.setRunSortName("Static Sort");
-        this.setCategory("Distribution Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     public int[] findMinMax(int[] array, int a, int b) {

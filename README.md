@@ -9,26 +9,31 @@ Over 200 sorting algorithms animated with 15 unique graphic designs
 [Join the Discord server!](https://discord.gg/thestudio)
 
 To compile use:
+
 ```shell
 ./mvnw clean verify
 ```
-Or for faster results, install mvnd (https://github.com/apache/maven-mvnd#usage) and use mvnd instead of running the mvnw script, such as:
+
+Or for faster results, install mvnd (<https://github.com/apache/maven-mvnd#usage>) and use mvnd instead of running the mvnw script, such as:
+
 ```shell
 mvnd compile
 ```
+
 This is much faster because it'll only compile data that was changed from the previous build on the same daemon. On the first time though or on a new daemon, it's no different from the standard `clean verify` method.
 
 To run use:
+
 ```shell
 ./run
 ```
+
 Alternatively, you can double click on "run" or "run.bat" on Windows.
 
 You can always download the most up-to-date pre-built JAR from [GitHub Actions](https://nightly.link/Gaming32/ArrayV/workflows/maven/main/standalone-jar.zip) (link via [nightly.link](https://nightly.link)).
 
-
-
 **KNOWN BUGS:**
+
 - Certain sorts (comb sort, radix sorts) cause the program to forget the current speed
 - Certain sorts do not work with the "Skip Sort" button
 - Missing soundfont
@@ -36,6 +41,7 @@ You can always download the most up-to-date pre-built JAR from [GitHub Actions](
 - No circular pointer -- will be fixed soon
 
 **PLANS FOR FUTURE RELEASES:**
+
 - SkaSort
 - "Holy Grail Sort"
 - Options to:
@@ -57,3 +63,8 @@ You can always download the most up-to-date pre-built JAR from [GitHub Actions](
   - getters/setters
   - method parameters
 - Small organizational changes
+
+**LICENSES:**
+
+- ArrayV is licensed under the MIT License.
+- TarsosDSP is licensed under an unspecified GPL license.

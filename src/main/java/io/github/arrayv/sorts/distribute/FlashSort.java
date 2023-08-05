@@ -1,22 +1,14 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
+@SortMeta(name = "Flash")
 public final class FlashSort extends Sort {
     public FlashSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Flash");
-        this.setRunAllSortsName("Flash Sort");
-        this.setRunSortName("Flashsort");
-        this.setCategory("Distribution Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     // The flashsort algorithm is attributed to Karl-Dietrich Neubert

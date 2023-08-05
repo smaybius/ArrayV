@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -27,20 +28,10 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Mergesort (Parallel)", showcaseName = "Mergesort (Parallel)", runName = "Mergesort (Parallel)")
 public final class MergeSortParallel extends Sort {
 	public MergeSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Merge (Parallel)");
-		this.setRunAllSortsName("Parallel Merge Sort");
-		this.setRunSortName("Parallel Mergesort");
-		this.setCategory("Merge Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int[] array;
@@ -63,7 +54,7 @@ public final class MergeSortParallel extends Sort {
 		int i = a, j = m, k = a;
 
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) <= 0) {
+			if (Reads.compareValues(array[i], array[j]) <= 0) {
 				Highlights.markArray(1, i);
 				Writes.write(tmp, k++, array[i++], 1, false, true);
 			} else {

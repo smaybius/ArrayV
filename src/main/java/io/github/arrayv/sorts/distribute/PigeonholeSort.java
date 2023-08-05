@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -14,20 +15,10 @@ import io.github.arrayv.sorts.templates.Sort;
  */
 
 // Code refactored from the Python implementation found here: https://en.wikipedia.org/wiki/Pigeonhole_sort
-
+@SortMeta(listName = "Pigeonhole", showcaseName = "Pigeonhole Sort", runName = "Pigeonhole Sort")
 public final class PigeonholeSort extends Sort {
     public PigeonholeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Pigeonhole");
-        this.setRunAllSortsName("Pigeonhole Sort");
-        this.setRunSortName("Pigeonhole Sort");
-        this.setCategory("Distribution Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     @Override

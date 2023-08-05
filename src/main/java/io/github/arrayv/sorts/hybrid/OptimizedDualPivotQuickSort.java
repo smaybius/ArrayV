@@ -1,31 +1,21 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
 // code retrieved from https://codeblab.com/wp-content/uploads/2009/09/DualPivotQuicksort.pdf
 // written by Vladimir Yaroslavskiy
-
+@SortMeta(name = "Optimized Dual-Pivot Quick")
 public final class OptimizedDualPivotQuickSort extends Sort {
     private InsertionSort insertSorter;
 
     public OptimizedDualPivotQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Optimized Dual-Pivot Quick");
-        // this.setRunAllID("Optimized Dual-Pivot Quick Sort");
-        this.setRunAllSortsName("Optimized Dual-Pivot Quick Sort [Arrays.sort]");
-        this.setRunSortName("Optimized Dual-Pivot Quicksort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
-    private void dualPivot(int[] array, int left, int right, int divisor, int depth) {
+    private void dualPivot(int[] array, int left, int right, int divisor) {
         int length = right - left;
 
         // insertion sort for tiny array
@@ -47,7 +37,7 @@ public final class OptimizedDualPivotQuickSort extends Sort {
         if (med2 >= right) {
             med2 = right - 1;
         }
-        if (Reads.compareIndices(array, med1, med2, 0.1, true) == -1) {
+        if (Reads.compareIndices(array, med1, med2, 1, true) == -1) {
             Writes.swap(array, med1, left, 1, true, false);
             Writes.swap(array, med2, right, 1, true, false);
         } else {
@@ -98,11 +88,8 @@ public final class OptimizedDualPivotQuickSort extends Sort {
         Writes.swap(array, great + 1, right, 1, true, false);
 
         // subarrays
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        this.dualPivot(array, left, less - 2, divisor, depth + 1);
-        Writes.recursion();
-        this.dualPivot(array, great + 2, right, divisor, depth + 1);
+        this.dualPivot(array, left, less - 2, divisor);
+        this.dualPivot(array, great + 2, right, divisor);
 
         Highlights.markArray(2, less);
         Highlights.markArray(3, great);
@@ -128,15 +115,13 @@ public final class OptimizedDualPivotQuickSort extends Sort {
 
         // subarray
         if (pivot1 < pivot2) {
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.dualPivot(array, less, great, divisor, depth + 1);
+            this.dualPivot(array, less, great, divisor);
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
         this.insertSorter = new InsertionSort(this.arrayVisualizer);
-        this.dualPivot(array, 0, currentLength - 1, 3, 0);
+        this.dualPivot(array, 0, currentLength - 1, 3);
     }
 }

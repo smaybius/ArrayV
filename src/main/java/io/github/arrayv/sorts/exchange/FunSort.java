@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -24,21 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Fun")
 public final class FunSort extends Sort {
 
     public FunSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Fun");
-        this.setRunAllSortsName("Fun Sort");
-        this.setRunSortName("Fun Sort");
-        this.setCategory("Exchange Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     /*
@@ -59,7 +50,7 @@ public final class FunSort extends Sort {
             } else {
                 end = mid;
             }
-            Delays.sleep(0.25);
+            Delays.sleep(1);
         }
         Highlights.clearMark(1);
         Highlights.clearMark(2);
@@ -74,11 +65,11 @@ public final class FunSort extends Sort {
             do {
                 done = true;
                 int pos = binarySearch(array, 0, length - 1, array[i]);
-                if (Reads.compareIndices(array, pos, i, 0.1, true) != 0) {
+                if (Reads.compareIndices(array, pos, i, 0, false) != 0) {
                     if (i < pos - 1) {
-                        Writes.swap(array, i, pos - 1, 1, true, false);
+                        Writes.swap(array, i, pos - 1, 2, true, false);
                     } else if (i > pos) {
-                        Writes.swap(array, i, pos, 1, true, false);
+                        Writes.swap(array, i, pos, 2, true, false);
                     }
                     done = false;
                 }

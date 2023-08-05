@@ -1,8 +1,8 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
-import io.github.arrayv.sorts.insert.InsertionSort;
 
 /*
  *
@@ -29,23 +29,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Weave Merge", showcaseName = "Weave Merge Sort", runName = "Weave Merge Sort")
 public final class WeaveMergeSort extends Sort {
     public WeaveMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Weave Merge");
-        this.setRunAllSortsName("Weave Merge Sort");
-        this.setRunSortName("Weave Mergesort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
-    InsertionSort insert = new InsertionSort(arrayVisualizer);
+    private void weaveInsert(int[] arr, int start, int end) {
+        int pos;
+
+        for (int j = start; j < end; j++) {
+            pos = j;
+
+            Highlights.markArray(1, j);
+            Highlights.clearMark(2);
+
+            while (pos > start && Reads.compareValues(arr[pos], arr[pos - 1]) < 1) {
+                Writes.swap(arr, pos, pos - 1, 0.2, true, false);
+                pos--;
+            }
+        }
+    }
 
     private void weaveMerge(int[] arr, int min, int max, int mid) {
         int i = 1;
@@ -56,29 +60,27 @@ public final class WeaveMergeSort extends Sort {
             i++;
         }
 
-        insert.customInsertSort(arr, min, max + 1, 0.05, false);
+        this.weaveInsert(arr, min, max + 1);
     }
 
-    private void weaveMergeSort(int[] array, int min, int max, int depth) {
+    private void weaveMergeSort(int[] array, int min, int max) {
         if (max - min == 0) { // only one element.
             Delays.sleep(1); // no swap
         } else if (max - min == 1) { // only two elements and swaps them
-            if (Reads.compareIndices(array, min, max, 0.1, true) == 1) {
+            if (Reads.compareValues(array[min], array[max]) == 1) {
                 Writes.swap(array, min, max, 0.01, true, false);
             }
         } else {
             int mid = (int) Math.floor((min + max) / 2); // The midpoint
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.weaveMergeSort(array, min, mid, depth + 1); // sort the left side
-            Writes.recursion();
-            this.weaveMergeSort(array, mid + 1, max, depth + 1); // sort the right side
+
+            this.weaveMergeSort(array, min, mid); // sort the left side
+            this.weaveMergeSort(array, mid + 1, max); // sort the right side
             this.weaveMerge(array, min, max, mid); // combines them
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.weaveMergeSort(array, 0, currentLength - 1, 0);
+        this.weaveMergeSort(array, 0, currentLength - 1);
     }
 }

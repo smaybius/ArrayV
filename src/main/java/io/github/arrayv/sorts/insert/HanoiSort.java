@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.insert;
 import java.util.Stack;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
@@ -39,6 +40,7 @@ import io.github.arrayv.sorts.templates.Sort;
  * @see <a href="https://stackoverflow.com/a/12348866">
  *      Iterative algorithm for Tower of Hanoi problem</a>
  */
+@SortMeta(listName = "Hanoi", showcaseName = "Hanoi Sort", runName = "Hanoi Sort", slowSort = true, unreasonableLimit = 32, category = "Impractical Sorts")
 public final class HanoiSort extends Sort {
 	// main array
 	private int[] array;
@@ -56,16 +58,6 @@ public final class HanoiSort extends Sort {
 
 	public HanoiSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Hanoi");
-		this.setRunAllSortsName("Hanoi Sort");
-		this.setRunSortName("Hanoi sort");
-		this.setCategory("Impractical Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(true);
-		this.setUnreasonableLimit(32);
-		this.setBogoSort(false);
 	}
 
 	/**
@@ -77,7 +69,7 @@ public final class HanoiSort extends Sort {
 		target = array[sp];
 
 		int moves = hanoi(2, true, 1);
-		int height = getHeight(moves + 1, 0);
+		int height = getHeight(moves + 1);
 		targetMoves = moves;
 		boolean evenHeight = height % 2 == 0;
 
@@ -97,7 +89,7 @@ public final class HanoiSort extends Sort {
 	 */
 	private void returnToMainStack() {
 		int moves = hanoi(2, true, 3);
-		int height = getHeight(moves + 1, 0);
+		int height = getHeight(moves + 1);
 		if (height % 2 == 1) { // Odd height case: moved to stack3
 			targetMoves = moves;
 			hanoi(3, true, 2);
@@ -212,7 +204,7 @@ public final class HanoiSort extends Sort {
 	 * @return Whether or not the end condition has been met
 	 */
 	private boolean endConMet(int endCon, int moves) {
-		if (!validNumberMoves(moves, 0))
+		if (!validNumberMoves(moves))
 			return false;
 		switch (endCon) {
 			case 1:
@@ -230,14 +222,12 @@ public final class HanoiSort extends Sort {
 	 * @param moves The number of moves completed so far
 	 * @return If the moves is of the form (2^n)-1
 	 */
-	private boolean validNumberMoves(int moves, int depth) {
+	private boolean validNumberMoves(int moves) {
 		if (moves == 0)
 			return true;
 		if (moves % 2 == 0)
 			return false;
-		Writes.recordDepth(depth);
-		Writes.recursion();
-		return validNumberMoves(moves / 2, depth + 1);
+		return validNumberMoves(moves / 2);
 	}
 
 	/**
@@ -246,12 +236,10 @@ public final class HanoiSort extends Sort {
 	 * @param movesPlus1 The number of moves performed, plus one
 	 * @return The height of the pyramid moved (equal to log_2(moves + 1))
 	 */
-	private int getHeight(int movesPlus1, int depth) {
+	private int getHeight(int movesPlus1) {
 		if (movesPlus1 == 1)
 			return 0;
-		Writes.recordDepth(depth);
-		Writes.recursion();
-		return getHeight(movesPlus1 / 2, depth + 1) + 1;
+		return getHeight(movesPlus1 / 2) + 1;
 	}
 
 	/**
@@ -270,7 +258,6 @@ public final class HanoiSort extends Sort {
 		Writes.changeAuxWrites(1);
 		Writes.startLap();
 		stack.push(array[sp]);
-		Writes.changeAllocAmount(1);
 		Writes.stopLap();
 		sp++;
 		Highlights.markArray(1, sp);
@@ -283,7 +270,6 @@ public final class HanoiSort extends Sort {
 			Writes.changeAuxWrites(1);
 			Writes.startLap();
 			stack.push(array[sp]);
-			Writes.changeAllocAmount(1);
 			Writes.stopLap();
 			sp++;
 			Highlights.markArray(1, sp);
@@ -303,14 +289,12 @@ public final class HanoiSort extends Sort {
 		// Move element
 		sp--;
 		Highlights.markArray(1, sp);
-		Writes.write(array, sp, stack.pop(), 0.25, true, false);
+		Writes.write(array, sp, stack.pop(), 0.25, false, false);
 		// Move any duplicates
 		while (!stack.isEmpty() && Reads.compareValues(stack.peek(), array[sp]) == 0) {
 			sp--;
 			Highlights.markArray(1, sp);
-			Writes.write(array, sp, stack.pop(), 0.25, true, false);
-			Writes.changeAuxWrites(1);
-			Writes.changeAllocAmount(-1);
+			Writes.write(array, sp, stack.pop(), 0.25, false, false);
 		}
 	}
 
@@ -323,14 +307,14 @@ public final class HanoiSort extends Sort {
 	 */
 	private void moveBetweenStacks(Stack<Integer> from, Stack<Integer> to) {
 		// Move element
-		Writes.changeAuxWrites(2);
+		Writes.changeAuxWrites(1);
 		Writes.startLap();
 		to.push(from.pop());
 		Writes.stopLap();
 		Delays.sleep(0.25);
 		// Move any duplicates
 		while (!from.isEmpty() && Reads.compareValues(from.peek(), to.peek()) == 0) {
-			Writes.changeAuxWrites(2);
+			Writes.changeAuxWrites(1);
 			Writes.startLap();
 			to.push(from.pop());
 			Writes.stopLap();

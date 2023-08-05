@@ -96,7 +96,7 @@ public abstract class PDQSorting extends Sort {
 
             // Compare first so we can avoid 2 moves for an element already positioned
             // correctly.
-            if (Reads.compareIndices(array, sift, siftMinusOne, 0.2, true) < 0) {
+            if (Reads.compareValues(array[sift], array[siftMinusOne]) < 0) {
                 int tmp = array[sift];
                 do {
                     Writes.write(array, sift--, array[siftMinusOne], sleep, true, false);
@@ -123,7 +123,7 @@ public abstract class PDQSorting extends Sort {
 
             // Compare first so we can avoid 2 moves for an element already positioned
             // correctly.
-            if (Reads.compareIndices(array, sift, siftMinusOne, 0.2, true) < 0) {
+            if (Reads.compareValues(array[sift], array[siftMinusOne]) < 0) {
                 int tmp = array[sift];
 
                 do {
@@ -156,7 +156,7 @@ public abstract class PDQSorting extends Sort {
 
             // Compare first so we can avoid 2 moves for an element already positioned
             // correctly.
-            if (Reads.compareIndices(array, sift, siftMinusOne, 0.2, true) < 0) {
+            if (Reads.compareValues(array[sift], array[siftMinusOne]) < 0) {
                 int tmp = array[sift];
 
                 do {
@@ -171,7 +171,7 @@ public abstract class PDQSorting extends Sort {
     }
 
     private void pdqSortTwo(int[] array, int a, int b) {
-        if (Reads.compareIndices(array, b, a, 0.1, true) < 0) {
+        if (Reads.compareValues(array[b], array[a]) < 0) {
             Writes.swap(array, a, b, 1, true, false);
         }
         Highlights.clearMark(2);
@@ -581,7 +581,7 @@ public abstract class PDQSorting extends Sort {
         return pivotPos;
     }
 
-    protected void pdqLoop(int[] array, int begin, int end, boolean Branchless, int badAllowed, int depth) {
+    protected void pdqLoop(int[] array, int begin, int end, boolean Branchless, int badAllowed) {
         boolean leftmost = true;
 
         // Use a while loop for tail recursion elimination.
@@ -618,7 +618,7 @@ public abstract class PDQSorting extends Sort {
             // the left partition, greater elements in the right partition. We do not have
             // to
             // recurse on the left partition, since it's sorted (all equal).
-            if (!leftmost && !(Reads.compareIndices(array, begin - 1, begin, 0.1, true) < 0)) {
+            if (!leftmost && !(Reads.compareValues(array[begin - 1], array[begin]) < 0)) {
                 begin = this.pdqPartLeft(array, begin, end) + 1;
                 continue;
             }
@@ -680,9 +680,7 @@ public abstract class PDQSorting extends Sort {
             // Sort the left partition first using recursion and do tail recursion
             // elimination for
             // the right-hand partition.
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.pdqLoop(array, begin, pivotPos, Branchless, badAllowed, depth + 1);
+            this.pdqLoop(array, begin, pivotPos, Branchless, badAllowed);
             begin = pivotPos + 1;
             leftmost = false;
         }

@@ -2,21 +2,13 @@ package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+@SortMeta(name = "Fibonacci Heap")
 final public class FibonacciHeapSort extends Sort {
     public FibonacciHeapSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Fibonacci Heap");
-        this.setRunAllSortsName("Fibonacci Heap Sort");
-        this.setRunSortName("Fibonacci Heapsort");
-        this.setCategory("Selection Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private int[] FIB = new int[44]; // fib(47) > Integer.MAX_VALUE

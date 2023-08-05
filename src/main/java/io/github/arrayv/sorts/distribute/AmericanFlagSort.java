@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -42,22 +43,12 @@ limitations under the License.
  * <br>
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-
+@SortMeta(listName = "American Flag", showcaseName = "American Flag Sort", runName = "American Flag Sort", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
 public final class AmericanFlagSort extends Sort {
     private int NUMBER_OF_BUCKETS = 128; // ex. 10 for base 10 numbers
 
     public AmericanFlagSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("American Flag");
-        this.setRunAllSortsName("American Flag Sort, " + this.NUMBER_OF_BUCKETS + " Buckets");
-        this.setRunSortName("American Flag Sort");
-        this.setCategory("Distribution Sorts");
-        this.setBucketSort(true);
-        this.setRadixSort(true);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     // Slightly different than Reads.analyzeMaxLog.
@@ -78,7 +69,7 @@ public final class AmericanFlagSort extends Sort {
         return (integer / divisor) % this.NUMBER_OF_BUCKETS;
     }
 
-    private void sort(int[] array, int start, int length, int divisor, int depth) {
+    private void sort(int[] array, int start, int length, int divisor) {
         // First pass - find counts
         int[] count = Writes.createExternalArray(this.NUMBER_OF_BUCKETS);
         int[] offset = Writes.createExternalArray(this.NUMBER_OF_BUCKETS);
@@ -130,20 +121,19 @@ public final class AmericanFlagSort extends Sort {
                 int begin = (i > 0) ? offset[i - 1] : start;
                 int end = offset[i];
 
-                if (end - begin > 1) {
-                    Writes.recordDepth(depth);
-                    Writes.recursion();
-                    this.sort(array, begin, end, divisor / this.NUMBER_OF_BUCKETS, depth + 1);
-                }
+                if (end - begin > 1)
+                    this.sort(array, begin, end, divisor / this.NUMBER_OF_BUCKETS);
             }
         }
 
-        Writes.changeAllocAmount(-2 * this.NUMBER_OF_BUCKETS);
+        Writes.deleteExternalArrays(count, offset);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         this.NUMBER_OF_BUCKETS = bucketCount;
+
         this.setRunAllSortsName("American Flag Sort, " + this.NUMBER_OF_BUCKETS + " Buckets");
 
         int numberOfDigits = this.getMaxNumberOfDigits(array, sortLength); // Max number of digits
@@ -152,6 +142,6 @@ public final class AmericanFlagSort extends Sort {
         for (int i = 0; i < numberOfDigits - 1; i++)
             max *= this.NUMBER_OF_BUCKETS;
 
-        this.sort(array, 0, sortLength, max, 0);
+        this.sort(array, 0, sortLength, max);
     }
 }

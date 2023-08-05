@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,25 +29,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "In-Place Merge")
 public final class InPlaceMergeSort extends Sort {
     public InPlaceMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("In-Place Merge");
-        this.setRunAllSortsName("In-Place Merge Sort");
-        this.setRunSortName("In-Place Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void push(int[] array, int low, int high) {
         for (int i = low; i < high; i++) {
-            if (Reads.compareIndices(array, i, i + 1, 0.1, true) == 1) {
+            if (Reads.compareValues(array[i], array[i + 1]) == 1) {
                 Writes.swap(array, i, i + 1, 0.035, true, false);
             }
         }
@@ -55,7 +46,7 @@ public final class InPlaceMergeSort extends Sort {
     private void merge(int[] array, int min, int max, int mid) {
         int i = min;
         while (i <= mid) {
-            if (Reads.compareIndices(array, i, mid + 1, 0.2, true) == 1) {
+            if (Reads.compareValues(array[i], array[mid + 1]) == 1) {
                 Writes.swap(array, i, mid + 1, 0.035, true, false);
                 push(array, mid + 1, max);
             }
@@ -64,26 +55,24 @@ public final class InPlaceMergeSort extends Sort {
         }
     }
 
-    private void mergeSort(int[] array, int min, int max, int depth) {
+    private void mergeSort(int[] array, int min, int max) {
         if (max - min == 0) { // only one element.
             Delays.sleep(1); // no swap
         } else if (max - min == 1) { // only two elements and swaps them
-            if (Reads.compareIndices(array, min, max, 0.1, true) == 1) {
+            if (Reads.compareValues(array[min], array[max]) == 1) {
                 Writes.swap(array, min, max, 0.035, true, false);
             }
         } else {
             int mid = ((int) Math.floor((min + max) / 2)); // The midpoint
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            mergeSort(array, min, mid, depth + 1); // sort the left side
-            Writes.recursion();
-            mergeSort(array, mid + 1, max, depth + 1); // sort the right side
+
+            mergeSort(array, min, mid); // sort the left side
+            mergeSort(array, mid + 1, max); // sort the right side
             merge(array, min, max, mid); // combines them
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.mergeSort(array, 0, currentLength - 1, 0);
+        this.mergeSort(array, 0, currentLength - 1);
     }
 }

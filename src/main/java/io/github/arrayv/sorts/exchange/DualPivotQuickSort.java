@@ -1,25 +1,16 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
-final public class DualPivotQuickSort extends Sort {
+@SortMeta(name = "Dual-Pivot Quick")
+public final class DualPivotQuickSort extends Sort {
     private InsertionSort insertSorter;
 
     public DualPivotQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Dual-Pivot Quick");
-        this.setRunAllSortsName("Dual-Pivot Quick Sort");
-        this.setRunSortName("Dual-Pivot Quicksort");
-        this.setCategory("Exchange Sorts");
-
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     /*
@@ -57,7 +48,7 @@ final public class DualPivotQuickSort extends Sort {
         if (med2 >= right) {
             med2 = right - 1;
         }
-        if (Reads.compareIndices(array, med1, med2, 0.5, true) == -1) {
+        if (Reads.compareValues(array[med1], array[med2]) == -1) {
             Writes.swap(array, med1, left, 1, true, false);
             Writes.swap(array, med2, right, 1, true, false);
         } else {

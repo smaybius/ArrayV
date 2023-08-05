@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Stable Cycle")
 public final class StableCycleSort extends Sort {
 	public StableCycleSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Stable Cycle");
-		this.setRunAllSortsName("Stable Cycle Sort");
-		this.setRunSortName("Stable Cyclesort");
-		this.setCategory("Selection Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private final int WLEN = 3;
@@ -61,7 +52,7 @@ public final class StableCycleSort extends Sort {
 
 		for (int i = a + 1; i < b; i++) {
 			Highlights.markArray(2, i);
-			int cmp = Reads.compareIndices(array, i, a, 0.1, true);
+			int cmp = Reads.compareValues(array[i], array[a]);
 
 			if (cmp < 0)
 				d++;

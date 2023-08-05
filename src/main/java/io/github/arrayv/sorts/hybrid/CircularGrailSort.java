@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Circular Grail", showcaseName = "Circular Grail Sort", runName = "Circular Grail Sort")
 public final class CircularGrailSort extends Sort {
 	public CircularGrailSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Circular Grail");
-		this.setRunAllSortsName("Circular Grail Sort");
-		this.setRunSortName("Circular Grailsort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int n;
@@ -51,7 +42,7 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private int circCompareIndices(int[] array, int a, int b) {
-		return Reads.compareIndices(array, a % n, b % n, 0.1, true);
+		return Reads.compareValues(array[a % n], array[b % n]);
 	}
 
 	private void shiftFW(int[] array, int a, int m, int b) {
@@ -76,8 +67,7 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		int l = m - a;
-		int r = b - m;
+		int l = m - a, r = b - m;
 
 		while (l > 0 && r > 0) {
 			if (r < l) {
@@ -95,9 +85,7 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private void inPlaceMerge(int[] array, int a, int m, int b) {
-		int i = a;
-		int j = m;
-		int k;
+		int i = a, j = m, k;
 
 		while (i < j && j < b) {
 			if (this.circCompareIndices(array, i, j) > 0) {
@@ -115,8 +103,7 @@ public final class CircularGrailSort extends Sort {
 	}
 
 	private int merge(int[] array, int p, int a, int m, int b, boolean full) {
-		int i = a;
-		int j = m;
+		int i = a, j = m;
 
 		while (i < m && j < b) {
 			if (this.circCompareIndices(array, i, j) <= 0)
@@ -187,10 +174,7 @@ public final class CircularGrailSort extends Sort {
 		for (; bLen * bLen < length; bLen *= 2)
 			;
 
-		int i = bLen;
-		int j = 1;
-		int len = length - i;
-		int b = length;
+		int i = bLen, j = 1, len = length - i, b = length;
 
 		while (j <= bLen) {
 			for (; i + 2 * j < b; i += 2 * j)

@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.hybrid;
 import java.util.List;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -26,20 +27,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Drop Merge Sort")
 public final class DropMergeSort extends Sort {
     public DropMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Drop Merge");
-        this.setRunAllSortsName("Drop Merge Sort");
-        this.setRunSortName("Drop Mergesort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private final int RECENCY = 8;
@@ -83,13 +74,13 @@ public final class DropMergeSort extends Sort {
                 return;
             }
 
-            if (write == 0 || Reads.compareIndices(array, read, write - 1, 0.1, true) >= 0) {
+            if (write == 0 || Reads.compareIndices(array, read, write - 1, 0, false) >= 0) {
                 // The element is order - keep it:
                 Writes.write(array, write++, array[read++], 1, true, false);
                 num_dropped_in_a_row = 0;
             } else {
                 if (num_dropped_in_a_row == 0 && write >= 2
-                        && Reads.compareIndices(array, read, write - 2, 0.1, true) >= 0) {
+                        && Reads.compareIndices(array, read, write - 2, 0, false) >= 0) {
                     // Quick undo: drop previously accepted element, and overwrite with new one
                     Writes.arrayListAdd(dropped, array[write - 1], false, 0);
                     Writes.write(array, write - 1, array[read++], 1, true, false);

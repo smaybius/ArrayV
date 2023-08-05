@@ -1,74 +1,58 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
-import io.github.arrayv.sorts.insert.InsertionSort;
 
 // From C#'s standard library (Array.Sort) https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Array.cs
-
+@SortMeta(listName = "Intro", showcaseName = "Introspective Sort (std::sort on C++, Array.Sort on C#)", runName = "Introspective Sort (std::sort on C++, Array.Sort on C#)")
 public final class IntroSort extends Sort {
-    private int sizeThreshold = 16;
+    private static int IntrosortSizeThreshold = 16;
 
     public IntroSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Intro");
-        // this.setRunAllID("Introspective Sort (std::sort)");
-        this.setRunAllSortsName("Introspective Sort (std::sort on C++, Array.Sort on C#)");
-        this.setRunSortName("Introsort (std::sort on C++, Array.Sort on C#)");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void SwapIfGreater(int[] keys, int a, int b) {
         if (a != b) {
-            if (Reads.compareIndices(keys, a, b, 0.1, true) > 0) {
-                Writes.swap(keys, a, b, 0, false, false);
+            if (Reads.compareIndices(keys, a, b, 1, true) > 0) {
+                Writes.swap(keys, a, b, 0.5, true, false);
             }
         }
     }
 
-    private void IntrospectiveSort(int[] array, int left, int length) {
-        if (length < 2)
-            return;
-        IntroSorter(array, left, length + left - 1, (int) (2 * (Math.log((int) length) + 1) / Math.log(2)));
-
+    private void IntrospectiveSort(int[] keys, int left, int length) {
+        introSort(keys, left, length + left - 1, (int) (2 * (Math.log(length + 1) / Math.log(2))));
     }
 
-    private void IntroSorter(int[] array, int lo, int hi, int depthLimit) {
-
+    private void introSort(int[] keys, int lo, int hi, int depthLimit) {
         while (hi > lo) {
             int partitionSize = hi - lo + 1;
-            if (partitionSize <= sizeThreshold) {
-
+            if (partitionSize <= IntrosortSizeThreshold) {
                 if (partitionSize == 2) {
-                    SwapIfGreater(array, lo, hi);
+                    SwapIfGreater(keys, lo, hi);
                     return;
                 }
 
                 if (partitionSize == 3) {
-                    SwapIfGreater(array, lo, hi - 1);
-                    SwapIfGreater(array, lo, hi);
-                    SwapIfGreater(array, hi - 1, hi);
+                    SwapIfGreater(keys, lo, hi - 1);
+                    SwapIfGreater(keys, lo, hi);
+                    SwapIfGreater(keys, hi - 1, hi);
                     return;
                 }
 
-                InsertionSort(array, lo, hi);
+                insertionSort(keys, lo, hi);
                 return;
             }
 
             if (depthLimit == 0) {
-                Heapsort(array, lo, hi);
+                Heapsort(keys, lo, hi);
                 return;
             }
             depthLimit--;
 
-            int p = PickPivotAndPartition(array, lo, hi);
-            IntroSorter(array, p + 1, hi, depthLimit);
+            int p = PickPivotAndPartition(keys, lo, hi);
+            introSort(keys, p + 1, hi, depthLimit);
             hi = p - 1;
         }
     }
@@ -90,14 +74,10 @@ public final class IntroSort extends Sort {
                                        // pre-increment & decrement below.
 
         while (left < right) {
-            Highlights.markArray(1, left);
-            Delays.sleep(1);
             while (Reads.compareValues(keys[++left], pivot) < 0) {
                 Highlights.markArray(1, left);
                 Delays.sleep(1);
             }
-            Highlights.markArray(1, right);
-            Delays.sleep(1);
             while (Reads.compareValues(pivot, keys[--right]) < 0) {
                 Highlights.markArray(1, right);
                 Delays.sleep(1);
@@ -116,15 +96,15 @@ public final class IntroSort extends Sort {
         return left;
     }
 
-    private void Heapsort(int[] array, int lo, int hi) {
+    private void Heapsort(int[] keys, int lo, int hi) {
         int n = hi - lo + 1;
         for (int i = n / 2; i >= 1; i--) {
-            DownHeap(array, i, n, lo);
+            DownHeap(keys, i, n, lo);
         }
         for (int i = n; i > 1; i--) {
-            Writes.swap(array, lo, lo + i - 1, 1, true, false);
+            Writes.swap(keys, lo, lo + i - 1, 1, true, false);
 
-            DownHeap(array, 1, i - 1, lo);
+            DownHeap(keys, 1, i - 1, lo);
         }
     }
 
@@ -133,22 +113,34 @@ public final class IntroSort extends Sort {
         int child;
         while (i <= n / 2) {
             child = 2 * i;
-            if (child < n && Reads.compareIndices(keys, lo + child - 1, lo + child, 0.1, true) < 0) {
+            if (child < n && Reads.compareIndices(keys, lo + child - 1, lo + child, 1, true) < 0) {
                 child++;
             }
-            Highlights.markArray(1, lo + child - 1);
-            Delays.sleep(1);
-            if (!(Reads.compareValues(d, keys[lo + child - 1]) < 0))
+            if (!(Reads.compareValues(d, keys[lo + child - 1]) < 0)) {
+                Highlights.markArray(1, lo + child - 1);
+                Delays.sleep(1);
                 break;
-            Writes.write(keys, lo + i - 1, keys[lo + child - 1], 1, true, false);
+            }
+            Writes.write(keys, lo + i - 1, keys[lo + child - 1], 0.5, true, false);
             i = child;
         }
         Writes.write(keys, lo + i - 1, d, 1, true, false);
     }
 
-    private void InsertionSort(int[] keys, int lo, int hi) {
-        InsertionSort insert = new InsertionSort(arrayVisualizer);
-        insert.customInsertSort(keys, lo, hi, 1, false);
+    private void insertionSort(int[] keys, int lo, int hi) {
+        int i, j;
+        int t;
+        for (i = lo; i < hi; i++) {
+            j = i;
+            t = keys[i + 1];
+            while (j >= lo && Reads.compareValues(t, keys[j]) < 0) {
+                Highlights.markArray(1, j);
+                Delays.sleep(1);
+                Writes.write(keys, j + 1, keys[j], 0.5, true, false);
+                j--;
+            }
+            Writes.write(keys, j + 1, t, 1, true, false);
+        }
     }
 
     @Override

@@ -29,10 +29,13 @@ public abstract class HeapSorting extends Sort {
 
         while (root <= dist / 2) {
             int leaf = 2 * root;
-            if (leaf < dist && Reads.compareIndices(array, start + leaf - 1, start + leaf, sleep, true) == compareVal) {
+            if (leaf < dist && Reads.compareValues(array[start + leaf - 1], array[start + leaf]) == compareVal) {
                 leaf++;
             }
-            if (Reads.compareIndices(array, start + root - 1, start + leaf - 1, sleep, true) == compareVal) {
+            Highlights.markArray(1, start + root - 1);
+            Highlights.markArray(2, start + leaf - 1);
+            Delays.sleep(sleep);
+            if (Reads.compareValues(array[start + root - 1], array[start + leaf - 1]) == compareVal) {
                 Writes.swap(array, start + root - 1, start + leaf - 1, 0, true, false);
                 root = leaf;
             } else

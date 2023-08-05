@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.concurrent;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -25,19 +26,14 @@ SOFTWARE.
  *
  */
 
+@SortMeta(
+    listName = "Pairwise (Iterative)",
+    showcaseName = "Iterative Pairwise Sorting Network",
+    runName = "Iterative Pairwise Sort"
+)
 public final class PairwiseSortIterative extends Sort {
     public PairwiseSortIterative(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Pairwise (Iterative)");
-        this.setRunAllSortsName("Iterative Pairwise Sorting Network");
-        this.setRunSortName("Iterative Pairwise Sort");
-        this.setCategory("Concurrent Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void iterativepairwise(int[] array, int length, double sleep) {
@@ -46,16 +42,16 @@ public final class PairwiseSortIterative extends Sort {
         int c = 0;
         int d = 0;
         int e = 0;
-        while (a < length) {
+        while (a < length){
             b = a;
             c = 0;
-            while (b < length) {
-                if (Reads.compareIndices(array, b - a, b, sleep, true) == 1) {
+            while (b < length){
+                if(Reads.compareIndices(array, b - a, b, sleep, true) == 1) {
                     Writes.swap(array, b - a, b, sleep, true, false);
                 }
                 c = (c + 1) % a;
                 b++;
-                if (c == 0) {
+                if (c == 0){
                     b += a;
                 }
             }
@@ -63,18 +59,18 @@ public final class PairwiseSortIterative extends Sort {
         }
         a /= 4;
         e = 1;
-        while (a > 0) {
+        while (a > 0){
             d = e;
-            while (d > 0) {
+            while (d > 0){
                 b = ((d + 1) * a);
                 c = 0;
-                while (b < length) {
-                    if (Reads.compareIndices(array, b - (d * a), b, sleep, true) == 1) {
+                while (b < length){
+                    if(Reads.compareIndices(array, b - (d * a), b, sleep, true) == 1) {
                         Writes.swap(array, b - (d * a), b, sleep, true, false);
                     }
                     c = (c + 1) % a;
                     b++;
-                    if (c == 0) {
+                    if (c == 0){
                         b += a;
                     }
                 }

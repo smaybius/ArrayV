@@ -17,12 +17,18 @@ import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.swing.JOptionPane;
 
+import be.tarsos.dsp.AudioGenerator;
+import be.tarsos.dsp.filters.LowPassSP;
+import be.tarsos.dsp.io.jvm.AudioPlayer;
 import io.github.arrayv.dialogs.LoadingDialog;
 import io.github.arrayv.dialogs.SoundbankDialog;
 import io.github.arrayv.frames.SoundFrame;
+import io.github.arrayv.frames.WaveFrame;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.panes.JErrorPane;
 
@@ -111,6 +117,13 @@ public final class Sounds {
     private volatile int instrumentChoice;
     private volatile int testInstrumentChoice;
 
+    private WaveFrame waveFrame;
+
+    private ArrayWaveSound arrayWaveSound;
+    private AudioGenerator generator;
+
+    private LowPassSP lowPassFilter;
+
     public Sounds(int[] array, ArrayVisualizer arrayVisualizer) {
         this.array = array;
         this.arrayVisualizer = arrayVisualizer;
@@ -122,10 +135,14 @@ public final class Sounds {
         this.pitchMin = 25d;
         this.pitchMax = 105d;
         this.soundMultiplier = 1d;
-
+        this.lowPassFilter = new LowPassSP(96000, 96000);
         this.noteDelay = 1;
 
         this.soundEnabled = true;
+
+        this.arrayWaveSound = new ArrayWaveSound(0.0f, 220f);
+        this.waveFrame = new WaveFrame(this.arrayWaveSound);
+        this.waveFrame.setVisible(true);
 
         try {
             MidiSystem.getSequencer(false);
@@ -225,6 +242,7 @@ public final class Sounds {
                 }
             }
         };
+
     }
 
     public boolean isEnabled() {
@@ -582,18 +600,13 @@ public final class Sounds {
     public void setSofterSounds(boolean softerSounds) {
         this.softerSounds = softerSounds;
 
-        if (this.softerSounds)
+        if (this.softerSounds) {
+            this.lowPassFilter.setFrequency(500);
             this.soundMultiplier = 0.01;
-        else
+        } else {
+            this.lowPassFilter.setFrequency(96000);
             this.soundMultiplier = 1;
-    }
-
-    /**
-     * @deprecated Use {@link #setSofterSounds} instead.
-     */
-    @Deprecated
-    public void toggleSofterSounds(boolean val) {
-        setSofterSounds(val);
+        }
     }
 
     // Double check logic
@@ -607,6 +620,10 @@ public final class Sounds {
 
     public void changeVolume(double val) {
         this.soundMultiplier = val;
+    }
+
+    public ArrayWaveSound getArrayWaveSound() {
+        return this.arrayWaveSound;
     }
 
     public void changeNoteDelayAndFilter(int noteFactor) {
@@ -631,6 +648,23 @@ public final class Sounds {
             JOptionPane.showMessageDialog(null, "Sound is disabled.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         audioThread.start();
+        Runnable runnable = () -> {
+            try {
+                System.out.println("Executing code from: " + Thread.currentThread());
+                this.generator = new AudioGenerator(1024, 0);
+                this.generator.addAudioProcessor(this.arrayWaveSound);
+                generator.addAudioProcessor(lowPassFilter);
+                this.generator
+                        .addAudioProcessor(new AudioPlayer(new AudioFormat(96000, 16, 1, true, false)));
+                generator.addAudioProcessor(new ArrayWaveEqualizer());
+
+                this.generator.run();
+            } catch (LineUnavailableException e1) {
+                e1.printStackTrace();
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     public void closeSynth() {

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -26,20 +27,10 @@ import io.github.arrayv.sorts.templates.Sort;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+@SortMeta(name = "Poplar Heap")
 public class PoplarHeapSort extends Sort {
     public PoplarHeapSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Poplar Heap");
-        this.setRunAllSortsName("Poplar Heap Sort");
-        this.setRunSortName("Poplar Heapsort");
-        this.setCategory("Selection Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     ////////////////////////////////////////////////////////////
@@ -59,10 +50,10 @@ public class PoplarHeapSort extends Sort {
 
             // Compare first so we can avoid 2 moves for
             // an element already positioned correctly
-            if (Reads.compareIndices(array, sift, sift_1, 0.2, true) == -1) {
+            if (Reads.compareValues(array[sift], array[sift_1]) == -1) {
                 int tmp = array[sift];
                 do {
-                    Writes.write(array, sift, array[sift_1], 0, true, false);
+                    Writes.write(array, sift, array[sift_1], 0.25, true, false);
                 } while (--sift != first && Reads.compareValues(tmp, array[--sift_1]) == -1);
                 Writes.write(array, sift, tmp, 0.25, true, false);
             }
@@ -89,16 +80,16 @@ public class PoplarHeapSort extends Sort {
 
         while (true) {
             int max_root = root;
-            if (Reads.compareIndices(array, max_root, child_root1, 0.1, true) == -1) {
+            if (Reads.compareValues(array[max_root], array[child_root1]) == -1) {
                 max_root = child_root1;
             }
-            if (Reads.compareIndices(array, max_root, child_root2, 0.1, true) == -1) {
+            if (Reads.compareValues(array[max_root], array[child_root2]) == -1) {
                 max_root = child_root2;
             }
             if (max_root == root)
                 return;
 
-            Writes.swap(array, root, max_root, 0.02, true, false);
+            Writes.swap(array, root, max_root, 0.75, true, false);
             Highlights.clearMark(2);
 
             size /= 2;
@@ -123,7 +114,7 @@ public class PoplarHeapSort extends Sort {
             int root = it + poplar_size - 1;
             if (root == last_root)
                 break;
-            if (Reads.compareIndices(array, bigger, root, 0.1, true) == -1) {
+            if (Reads.compareValues(array[bigger], array[root]) == -1) {
                 bigger = root;
                 bigger_size = poplar_size;
             }
@@ -136,7 +127,7 @@ public class PoplarHeapSort extends Sort {
         // If a poplar root was bigger than the last one, exchange
         // them and sift
         if (bigger != last_root) {
-            Writes.swap(array, bigger, last_root, 0.02, true, false);
+            Writes.swap(array, bigger, last_root, 0.75, true, false);
             Highlights.clearMark(2);
             this.sift(array, bigger - (bigger_size - 1), bigger_size);
         }

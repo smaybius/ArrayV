@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.concurrent;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -29,48 +30,44 @@ SOFTWARE.
  *
  */
 
+@SortMeta(
+    name = "Fold",
+    showcaseName = "Fold Sorting Network",
+    runName = "Fold Sort"
+)
 public final class FoldSort extends Sort {
     public FoldSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Fold");
-        this.setRunAllSortsName("Fold Sorting Network");
-        this.setRunSortName("Fold Sort");
-        this.setCategory("Concurrent Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     int end;
 
-    void compSwap(int[] array, int a, int b) {
-        if (b < end && Reads.compareIndices(array, a, b, 0.5, true) == 1)
-            Writes.swap(array, a, b, 0, true, false);
-    }
+	void compSwap(int[] array, int a, int b) {
+		if(b < end && Reads.compareIndices(array, a, b, 0.5, true) == 1)
+			Writes.swap(array, a, b, 0.5, true, false);
+	}
 
-    void halver(int[] array, int low, int high) {
-        while (low < high) {
+	void halver(int[] array, int low, int high)
+    {
+        while (low < high)
+        {
             this.compSwap(array, low++, high--);
         }
     }
 
     @Override
     public void runSort(int[] array, int size, int bucketCount) {
-        int ceilLog = 1;
-        for (; (1 << ceilLog) < size; ceilLog++)
-            ;
+    	int ceilLog = 1;
+    	for (; (1 << ceilLog) < size; ceilLog++);
 
-        end = size;
-        size = 1 << ceilLog;
+    	end  = size;
+    	size = 1 << ceilLog;
 
-        for (int k = size >> 1; k > 0; k >>= 1) // log(N)
+        for (int k = size >> 1; k > 0; k >>= 1)        //log(N)
         {
-            for (int i = size; i >= k; i >>= 1) // log(N)
+            for (int i = size; i >= k; i >>= 1)        //log(N)
             {
-                for (int j = 0; j < end; j += i) // N
+                for (int j = 0; j < end; j += i)    //N
                 {
                     halver(array, j, j + i - 1);
                 }

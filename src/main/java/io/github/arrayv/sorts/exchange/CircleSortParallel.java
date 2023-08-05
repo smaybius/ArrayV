@@ -1,7 +1,8 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.sortdata.SortMeta;
+import io.github.arrayv.sorts.templates.ParallelCircleSorting;
 
 /*
  * 
@@ -28,67 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
-final public class CircleSortParallel extends Sort {
+@SortMeta(listName = "Circle (Parallel)", showcaseName = "Circlesort (Parallel)", runName = "Circlesort (Parallel)", unreasonableLimit = 4096)
+final public class CircleSortParallel extends ParallelCircleSorting {
 	public CircleSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Circle (Parallel)");
-		this.setRunAllSortsName("Parallel Circle Sort");
-		this.setRunSortName("Parallel Circlesort");
-		this.setCategory("Exchange Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
-	}
-
-	private int[] array;
-	private int end;
-
-	private volatile boolean swapped;
-
-	private class CircleSort extends Thread {
-		private int a, b;
-
-		public CircleSort(int a, int b) {
-			this.a = a;
-			this.b = b;
-		}
-
-		public void run() {
-			CircleSortParallel.this.circleSort(a, b);
-		}
-	}
-
-	private void circleSort(int a, int b) {
-		if (a >= this.end)
-			return;
-
-		for (int i = a, j = b - 1; i < j; i++, j--)
-			if (j < this.end && Reads.compareIndices(array, i, j, 1, true) > 0) {
-				Writes.swap(array, i, j, 0, true, false);
-				this.swapped = true;
-			}
-
-		if (b - a < 4)
-			return;
-
-		int m = (a + b) / 2;
-
-		CircleSort l = new CircleSort(a, m);
-		CircleSort r = new CircleSort(m, b);
-
-		l.start();
-		r.start();
-
-		try {
-			l.join();
-			r.join();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
 	}
 
 	@Override
@@ -101,8 +45,9 @@ final public class CircleSortParallel extends Sort {
 			;
 
 		while (swapped) {
+			this.swapCount = 0;
 			swapped = false;
-			this.circleSort(0, n);
+			this.circleSortRoutine(0, n, 1);
 		}
 	}
 }

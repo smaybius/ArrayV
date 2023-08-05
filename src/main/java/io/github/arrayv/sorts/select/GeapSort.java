@@ -1,21 +1,14 @@
 package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.HeapSorting;
 
+//
+@SortMeta(name = "Geap")
 final public class GeapSort extends HeapSorting {
     public GeapSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Geap");
-        this.setRunAllSortsName("Geap Sort");
-        this.setRunSortName("Geapsort");
-        this.setCategory("Selection Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     public void makeGeap(int[] array, int start, int end, double sleep) {

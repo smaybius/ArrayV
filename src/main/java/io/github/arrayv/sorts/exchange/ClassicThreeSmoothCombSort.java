@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -25,20 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Three-Smooth Comb (Classic)", showcaseName = "Three-Smooth Comb Sort (Classic)", runName = "Three-Smooth Comb Sort (Classic)")
 public final class ClassicThreeSmoothCombSort extends Sort {
     public ClassicThreeSmoothCombSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Classic 3-Smooth Comb");
-        this.setRunAllSortsName("Classic 3-Smooth Comb Sort");
-        this.setRunSortName("Classic 3-Smooth Combsort");
-        this.setCategory("Exchange Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private boolean is3Smooth(int n) {
@@ -58,6 +49,6 @@ public final class ClassicThreeSmoothCombSort extends Sort {
             if (is3Smooth(g))
                 for (int i = g; i < length; i++)
                     if (Reads.compareIndices(array, i - g, i, 0.5, true) == 1)
-                        Writes.swap(array, i - g, i, 0, true, false);
+                        Writes.swap(array, i - g, i, 0.5, true, false);
     }
 }

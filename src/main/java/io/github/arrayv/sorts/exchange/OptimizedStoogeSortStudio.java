@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
@@ -13,20 +14,10 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author aphitorite - Sorting network optimizations
  * @author EilrahcF - Key ideas / concepts
  */
-
+@SortMeta(listName = "Optimized Stooge (Studio)", showcaseName = "Optimized Stooge (Studio) Sort", runName = "Optimized Stooge (Studio) Sort")
 public final class OptimizedStoogeSortStudio extends Sort {
 	public OptimizedStoogeSortStudio(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Optimized Stooge (The Studio version)");
-		this.setRunAllSortsName("Optimized Stooge Sort");
-		this.setRunSortName("Optistooge Sort");
-		this.setCategory("Exchange Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private boolean compSwap(int[] array, int a, int b) {
@@ -37,7 +28,7 @@ public final class OptimizedStoogeSortStudio extends Sort {
 		return false;
 	}
 
-	public boolean stoogeSort(int[] array, int a, int m, int b, boolean merge, int depth) {
+	private boolean stoogeSort(int[] array, int a, int m, int b, boolean merge) {
 		if (a >= m)
 			return false;
 		if (b - a == 2)
@@ -50,44 +41,27 @@ public final class OptimizedStoogeSortStudio extends Sort {
 		int b2 = (a + b + b + 2) / 3;
 
 		if (m < b2) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			lChange = this.stoogeSort(array, a, m, b2, merge, depth + 1);
+			lChange = this.stoogeSort(array, a, m, b2, merge);
 
 			if (merge) {
-				Writes.recordDepth(depth);
-				Writes.recursion();
-				rChange = this.stoogeSort(array, Math.max(a + b2 - m, a2), b2, b, true, depth + 1);
-				if (rChange) {
-					Writes.recordDepth(depth);
-					Writes.recursion();
-					this.stoogeSort(array, a + b2 - m, a2, 2 * a2 - a, true, depth + 1);
-				}
+				rChange = this.stoogeSort(array, Math.max(a + b2 - m, a2), b2, b, true);
+				if (rChange)
+					this.stoogeSort(array, a + b2 - m, a2, 2 * a2 - a, true);
 			} else {
-				Writes.recordDepth(depth);
-				Writes.recursion();
-				rChange = this.stoogeSort(array, a2, b2, b, false, depth + 1);
-				if (rChange) {
-					Writes.recordDepth(depth);
-					Writes.recursion();
-					this.stoogeSort(array, a, a2, 2 * a2 - a, true, depth + 1);
-				}
+				rChange = this.stoogeSort(array, a2, b2, b, false);
+				if (rChange)
+					this.stoogeSort(array, a, a2, 2 * a2 - a, true);
 			}
 		} else {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			rChange = this.stoogeSort(array, a2, m, b, merge, depth + 1);
-			if (rChange) {
-				Writes.recordDepth(depth);
-				Writes.recursion();
-				this.stoogeSort(array, a, a2, a2 + b - m, true, depth + 1);
-			}
+			rChange = this.stoogeSort(array, a2, m, b, merge);
+			if (rChange)
+				this.stoogeSort(array, a, a2, a2 + b - m, true);
 		}
 		return lChange || rChange;
 	}
 
 	@Override
 	public void runSort(int[] array, int currentLength, int bucketCount) {
-		this.stoogeSort(array, 0, 1, currentLength, false, 0);
+		this.stoogeSort(array, 0, 1, currentLength, false);
 	}
 }

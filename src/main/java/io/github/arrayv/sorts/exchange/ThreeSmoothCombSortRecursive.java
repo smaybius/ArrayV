@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -25,52 +26,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Three-Smooth Comb (Recursive)", showcaseName = "Three-Smooth Combsort (Recursive)", runName = "Three-Smooth Combsort (Recursive)")
 public final class ThreeSmoothCombSortRecursive extends Sort {
     public ThreeSmoothCombSortRecursive(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("3-Smooth Comb (Recursive)");
-        this.setRunAllSortsName("Recursive 3-Smooth Comb Sort");
-        this.setRunSortName("Recursive 3-Smooth Combsort");
-        this.setCategory("Exchange Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
-    private void recursiveComb(int[] array, int pos, int gap, int end, int depth) {
+    private void recursiveComb(int[] array, int pos, int gap, int end) {
         if (pos + gap > end)
             return;
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        this.recursiveComb(array, pos, gap * 2, end, depth + 1);
-        Writes.recursion();
-        this.recursiveComb(array, pos + gap, gap * 2, end, depth + 1);
 
-        this.powerOfThree(array, pos, gap, end, depth);
+        this.recursiveComb(array, pos, gap * 2, end);
+        this.recursiveComb(array, pos + gap, gap * 2, end);
+
+        this.powerOfThree(array, pos, gap, end);
     }
 
-    private void powerOfThree(int[] array, int pos, int gap, int end, int depth) {
+    private void powerOfThree(int[] array, int pos, int gap, int end) {
         if (pos + gap > end)
             return;
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        this.powerOfThree(array, pos, gap * 3, end, depth + 1);
-        Writes.recursion();
-        this.powerOfThree(array, pos + gap, gap * 3, end, depth + 1);
-        Writes.recursion();
-        this.powerOfThree(array, pos + 2 * gap, gap * 3, end, depth + 1);
+
+        this.powerOfThree(array, pos, gap * 3, end);
+        this.powerOfThree(array, pos + gap, gap * 3, end);
+        this.powerOfThree(array, pos + 2 * gap, gap * 3, end);
 
         for (int i = pos; i + gap < end; i += gap)
             if (Reads.compareIndices(array, i, i + gap, 0.5, true) == 1)
-                Writes.swap(array, i, i + gap, 0, false, false);
+                Writes.swap(array, i, i + gap, 0.5, false, false);
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.recursiveComb(array, 0, 1, length, 0);
+        this.recursiveComb(array, 0, 1, length);
     }
 }

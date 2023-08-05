@@ -2,7 +2,6 @@ package io.github.arrayv.sorts.templates;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sorts.exchange.OptimizedGnomeSort;
-import io.github.arrayv.utils.Rotations;
 
 /*
  *
@@ -67,7 +66,16 @@ public abstract class UnstableGrailSorting extends Sort {
     }
 
     protected void grailRotate(int[] array, int pos, int lenA, int lenB) {
-        Rotations.cycleReverse(array, pos, lenA, lenB, 0.5, true, false);
+        while (lenA != 0 && lenB != 0) {
+            if (lenA <= lenB) {
+                this.grailMultiSwap(array, pos, pos + lenA, lenA);
+                pos += lenA;
+                lenB -= lenA;
+            } else {
+                this.grailMultiSwap(array, pos + (lenA - lenB), pos + lenA, lenB);
+                lenA -= lenB;
+            }
+        }
     }
 
     private void grailInsertSort(int[] arr, int pos, int len) {
@@ -80,13 +88,13 @@ public abstract class UnstableGrailSorting extends Sort {
         while (left < right - 1) {
             int mid = left + ((right - left) >> 1);
             if (isLeft) {
-                if (Reads.compareIndices(arr, pos + mid, keyPos, 0.2, true) >= 0) {
+                if (Reads.compareValues(arr[pos + mid], arr[keyPos]) >= 0) {
                     right = mid;
                 } else {
                     left = mid;
                 }
             } else {
-                if (Reads.compareIndices(arr, pos + mid, keyPos, 0.2, true) > 0) {
+                if (Reads.compareValues(arr[pos + mid], arr[keyPos]) > 0) {
                     right = mid;
                 } else
                     left = mid;
@@ -112,7 +120,7 @@ public abstract class UnstableGrailSorting extends Sort {
                 do {
                     pos++;
                     len1--;
-                } while (len1 != 0 && Reads.compareIndices(arr, pos, pos + len1, 0.2, true) <= 0);
+                } while (len1 != 0 && Reads.compareValues(arr[pos], arr[pos + len1]) <= 0);
             }
         } else {
             while (len2 != 0) {
@@ -126,7 +134,7 @@ public abstract class UnstableGrailSorting extends Sort {
                     break;
                 do {
                     len2--;
-                } while (len2 != 0 && Reads.compareIndices(arr, pos + len1 - 1, pos + len1 + len2 - 1, 0.2, true) <= 0);
+                } while (len2 != 0 && Reads.compareValues(arr[pos + len1 - 1], arr[pos + len1 + len2 - 1]) <= 0);
             }
         }
     }
@@ -177,7 +185,7 @@ public abstract class UnstableGrailSorting extends Sort {
         rightLen += leftLen;
 
         while (right < rightLen) {
-            if (left == leftLen || Reads.compareIndices(arr, pos + left, pos + right, 0.2, true) > 0) {
+            if (left == leftLen || Reads.compareValues(arr[pos + left], arr[pos + right]) > 0) {
                 this.grailSwap(arr, pos + (dist++), pos + (right++));
             } else
                 this.grailSwap(arr, pos + (dist++), pos + (left++));
@@ -197,7 +205,7 @@ public abstract class UnstableGrailSorting extends Sort {
         int left = leftLen - 1;
 
         while (left >= 0) {
-            if (right < leftLen || Reads.compareIndices(arr, pos + left, pos + right, 0.2, true) > 0) {
+            if (right < leftLen || Reads.compareValues(arr[pos + left], arr[pos + right]) > 0) {
                 this.grailSwap(arr, pos + (mergedPos--), pos + (left--));
             } else
                 this.grailSwap(arr, pos + (mergedPos--), pos + (right--));
@@ -219,7 +227,7 @@ public abstract class UnstableGrailSorting extends Sort {
         int dist = 0 - blockLen, left = 0, right = leftOverLen, leftEnd = right, rightEnd = right + blockLen;
 
         while (left < leftEnd && right < rightEnd) {
-            if (Reads.compareIndices(arr, pos + left, pos + right, 0.2, true) <= 0) {
+            if (Reads.compareValues(arr[pos + left], arr[pos + right]) <= 0) {
                 this.grailSwap(arr, pos + (dist++), pos + (left++));
             } else
                 this.grailSwap(arr, pos + (dist++), pos + (right++));
@@ -248,7 +256,7 @@ public abstract class UnstableGrailSorting extends Sort {
         int extraDist, part;
         for (int dist = 1; dist < len; dist += 2) {
             extraDist = 0;
-            if (Reads.compareIndices(arr, pos + (dist - 1), pos + dist, 0.2, true) > 0)
+            if (Reads.compareValues(arr[pos + (dist - 1)], arr[pos + dist]) > 0)
                 extraDist = 1;
             this.grailSwap(arr, pos + (dist - 3), pos + (dist - 1 + extraDist));
             this.grailSwap(arr, pos + (dist - 2), pos + (dist - extraDist));
@@ -310,11 +318,11 @@ public abstract class UnstableGrailSorting extends Sort {
                 int leftIndex = index - 1;
 
                 for (int rightIndex = index; rightIndex < blockCount; rightIndex++) {
-                    int rightComp = Reads.compareIndices(arr, blockPos + leftIndex * regBlockLen,
-                            blockPos + rightIndex * regBlockLen, 0.2, true);
-                    if (rightComp > 0 || (rightComp == 0
-                            && Reads.compareIndices(arr, blockPos + (leftIndex + 1) * regBlockLen - 1,
-                                    blockPos + (rightIndex + 1) * regBlockLen - 1, 0.2, true) > 0)) {
+                    int rightComp = Reads.compareValues(arr[blockPos + leftIndex * regBlockLen],
+                            arr[blockPos + rightIndex * regBlockLen]);
+                    if (rightComp > 0
+                            || (rightComp == 0 && Reads.compareValues(arr[blockPos + (leftIndex + 1) * regBlockLen - 1],
+                                    arr[blockPos + (rightIndex + 1) * regBlockLen - 1]) > 0)) {
                         leftIndex = rightIndex;
                     }
                 }
@@ -330,8 +338,8 @@ public abstract class UnstableGrailSorting extends Sort {
                 lastLen = leftOver % regBlockLen;
 
             if (lastLen != 0) {
-                while (aBlockCount < blockCount && Reads.compareIndices(arr, blockPos + blockCount * regBlockLen,
-                        blockPos + (blockCount - aBlockCount - 1) * regBlockLen, 0.2, true) < 0) {
+                while (aBlockCount < blockCount && Reads.compareValues(arr[blockPos + blockCount * regBlockLen],
+                        arr[blockPos + (blockCount - aBlockCount - 1) * regBlockLen]) < 0) {
                     aBlockCount++;
                 }
             }

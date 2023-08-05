@@ -1,24 +1,14 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
-final public class OptimizedBottomUpMergeSort extends Sort {
+@SortMeta(listName = "Optimized Bottom-Up Merge", showcaseName = "Optimized Bottom-Up Merge Sort (std::stable_sort)", runName = "Optimized Bottom-Up Merge Sort (std::stable_sort)")
+public final class OptimizedBottomUpMergeSort extends Sort {
     public OptimizedBottomUpMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Optimized Bottom-Up Merge");
-        // this.setRunAllID("Bottom-Up Merge Sort w/ Binary Insert (std::stable_sort)");
-        this.setRunAllSortsName("Optimized Bottom-Up Merge Sort [std::stable_sort]");
-        this.setRunSortName("Bottom-Up Mergesort w/ Binary Insert");
-        this.setCategory("Hybrid Sorts");
-
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     /**

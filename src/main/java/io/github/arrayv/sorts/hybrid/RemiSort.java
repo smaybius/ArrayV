@@ -1,7 +1,8 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.sortdata.SortMeta;
+import io.github.arrayv.sorts.templates.MultiWayMergeSorting;
 
 /*
  *
@@ -28,274 +29,239 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
+@SortMeta(name = "Remi")
+public final class RemiSort extends MultiWayMergeSorting {
+	public RemiSort(ArrayVisualizer arrayVisualizer) {
+		super(arrayVisualizer);
+	}
 
-public final class RemiSort extends Sort {
-    public RemiSort(ArrayVisualizer arrayVisualizer) {
-        super(arrayVisualizer);
+	// stable sorting algorithm that guarantees worst case performance of
+	// O(n log n) comparisons and O(n) moves in O(n^2/3) memory
 
-        this.setSortListName("Remi");
-        this.setRunAllSortsName("Remi Sort");
-        this.setRunSortName("Remisort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
-    }
+	private int ceilCbrt(int n) {
+		int a = 0, b = Math.min(1291, n);
 
-    // stable sorting algorithm that guarantees worst case performance of
-    // O(n log n) comparisons and O(n) moves in O(n^2/3) memory
+		while (a < b) {
+			int m = (a + b) / 2;
 
-    private int ceilCbrt(int n) {
-        int a = 0, b = Math.min(1291, n);
+			if (m * m * m >= n)
+				b = m;
+			else
+				a = m + 1;
+		}
 
-        while (a < b) {
-            int m = (a + b) / 2;
+		return a;
+	}
 
-            if (m * m * m >= n)
-                b = m;
-            else
-                a = m + 1;
-        }
+	private void siftDown(int[] array, int[] keys, int r, int len, int a, int t) {
+		int j = r;
 
-        return a;
-    }
+		while (2 * j + 1 < len) {
+			j = 2 * j + 1;
 
-    private boolean keyLessThan(int[] src, int[] pa, int a, int b) {
-        int cmp = Reads.compareValues(src[pa[a]], src[pa[b]]);
-        return cmp < 0 || (cmp == 0 && Reads.compareOriginalValues(a, b) < 0);
-    }
+			if (j + 1 < len) {
+				int cmp = Reads.compareIndices(array, a + keys[j + 1], a + keys[j], 0.2, true);
 
-    private void siftDown(int[] src, int[] heap, int[] pa, int t, int r, int size) {
-        while (2 * r + 2 < size) {
-            int nxt = 2 * r + 1;
-            int min = nxt + (this.keyLessThan(src, pa, heap[nxt], heap[nxt + 1]) ? 0 : 1);
+				if (cmp > 0 || (cmp == 0 && Reads.compareOriginalValues(keys[j + 1], keys[j]) > 0))
+					j++;
+			}
+		}
+		for (int cmp = Reads.compareIndices(array, a + t, a + keys[j], 0.2, true);
 
-            if (this.keyLessThan(src, pa, heap[min], t)) {
-                Writes.write(heap, r, heap[min], 0.25, true, true);
-                r = min;
-            } else
-                break;
-        }
-        int min = 2 * r + 1;
+				cmp > 0 || (cmp == 0 && Reads.compareOriginalValues(t, keys[j]) > 0);
 
-        if (min < size && this.keyLessThan(src, pa, heap[min], t)) {
-            Writes.write(heap, r, heap[min], 0.25, true, true);
-            r = min;
-        }
-        Writes.write(heap, r, t, 0.25, true, true);
-    }
+				j = (j - 1) / 2, cmp = Reads.compareIndices(array, a + t, a + keys[j], 0.2, true))
+			;
 
-    private void siftDown(int[] array, int[] keys, int r, int len, int a, int t) {
-        int j = r;
+		for (int t2; j > r; j = (j - 1) / 2) {
+			t2 = keys[j];
+			Highlights.markArray(3, j);
+			Writes.write(keys, j, t, 0.2, false, true);
+			t = t2;
+		}
+		Highlights.markArray(3, r);
+		Writes.write(keys, r, t, 0.2, false, true);
+	}
 
-        while (2 * j + 1 < len) {
-            j = 2 * j + 1;
+	private void tableSort(int[] array, int[] keys, int a, int b) {
+		int len = b - a;
 
-            if (j + 1 < len) {
-                int cmp = Reads.compareIndices(array, a + keys[j + 1], a + keys[j], 0.2, true);
+		for (int i = (len - 1) / 2; i >= 0; i--)
+			this.siftDown(array, keys, i, len, a, keys[i]);
 
-                if (cmp > 0 || (cmp == 0 && Reads.compareOriginalValues(keys[j + 1], keys[j]) > 0))
-                    j++;
-            }
-        }
-        for (int cmp = Reads.compareIndices(array, a + t, a + keys[j], 0.2, true);
+		for (int i = len - 1; i > 0; i--) {
+			int t = keys[i];
+			Highlights.markArray(3, i);
+			Writes.write(keys, i, keys[0], 1, false, true);
+			this.siftDown(array, keys, 0, i, a, t);
+		}
+		Highlights.clearMark(3);
 
-                cmp > 0 || (cmp == 0 && Reads.compareOriginalValues(t, keys[j]) > 0);
+		for (int i = 0; i < len; i++) {
+			Highlights.markArray(2, i);
+			if (Reads.compareOriginalValues(i, keys[i]) != 0) {
+				int t = array[a + i];
+				int j = i, next = keys[i];
 
-                j = (j - 1) / 2, cmp = Reads.compareIndices(array, a + t, a + keys[j], 0.2, true))
-            ;
+				do {
+					Writes.write(array, a + j, array[a + next], 1, true, false);
+					Writes.write(keys, j, j, 1, true, true);
 
-        for (int t2; j > r; j = (j - 1) / 2) {
-            t2 = keys[j];
-            Highlights.markArray(3, j);
-            Writes.write(keys, j, t, 0.2, false, true);
-            t = t2;
-        }
-        Highlights.markArray(3, r);
-        Writes.write(keys, r, t, 0.2, false, true);
-    }
+					j = next;
+					next = keys[next];
+				} while (Reads.compareOriginalValues(next, i) != 0);
 
-    private void tableSort(int[] array, int[] keys, int a, int b) {
-        int len = b - a;
+				Writes.write(array, a + j, t, 1, true, false);
+				Writes.write(keys, j, j, 1, true, true);
+			}
+		}
+		Highlights.clearMark(2);
+	}
 
-        for (int i = (len - 1) / 2; i >= 0; i--)
-            this.siftDown(array, keys, i, len, a, keys[i]);
+	private void blockCycle(int[] array, int[] buf, int[] keys, int a, int bLen, int bCnt) {
+		for (int i = 0; i < bCnt; i++) {
+			if (Reads.compareOriginalValues(i, keys[i]) != 0) {
+				Writes.arraycopy(array, a + i * bLen, buf, 0, bLen, 1, true, true);
+				int j = i, next = keys[i];
 
-        for (int i = len - 1; i > 0; i--) {
-            int t = keys[i];
-            Highlights.markArray(3, i);
-            Writes.write(keys, i, keys[0], 1, false, true);
-            this.siftDown(array, keys, 0, i, a, t);
-        }
-        Highlights.clearMark(3);
+				do {
+					Writes.arraycopy(array, a + next * bLen, array, a + j * bLen, bLen, 1, true, false);
+					Writes.write(keys, j, j, 1, true, true);
 
-        for (int i = 0; i < len; i++) {
-            Highlights.markArray(2, i);
-            if (Reads.compareOriginalValues(i, keys[i]) != 0) {
-                int t = array[a + i];
-                int j = i, next = keys[i];
+					j = next;
+					next = keys[next];
+				} while (Reads.compareOriginalValues(next, i) != 0);
 
-                do {
-                    Writes.write(array, a + j, array[a + next], 1, true, false);
-                    Writes.write(keys, j, j, 1, true, true);
+				Writes.arraycopy(buf, 0, array, a + j * bLen, bLen, 1, true, false);
+				Writes.write(keys, j, j, 1, true, true);
+			}
+		}
+	}
 
-                    j = next;
-                    next = keys[next];
-                } while (Reads.compareOriginalValues(next, i) != 0);
+	private void kWayMerge(int[] array, int[] buf, int[] keys, int[] heap, int b, int[] pa, int[] p, int bLen,
+			int rLen) {
+		int k = p.length, size = k, a = pa[0], a1 = pa[1];
 
-                Writes.write(array, a + j, t, 1, true, false);
-                Writes.write(keys, j, j, 1, true, true);
-            }
-        }
-        Highlights.clearMark(2);
-    }
+		for (int i = 0; i < k; i++)
+			Writes.write(heap, i, i, 0, false, true);
 
-    private void blockCycle(int[] array, int[] buf, int[] keys, int a, int bLen, int bCnt) {
-        for (int i = 0; i < bCnt; i++) {
-            if (Reads.compareOriginalValues(i, keys[i]) != 0) {
-                Writes.arraycopy(array, a + i * bLen, buf, 0, bLen, 1, true, true);
-                int j = i, next = keys[i];
+		for (int i = (k - 1) / 2; i >= 0; i--)
+			this.siftDown(array, heap, pa, heap[i], i, k);
 
-                do {
-                    Writes.arraycopy(array, a + next * bLen, array, a + j * bLen, bLen, 1, true, false);
-                    Writes.write(keys, j, j, 1, true, true);
+		for (int i = 0; i < rLen; i++) {
+			int min = heap[0];
 
-                    j = next;
-                    next = keys[next];
-                } while (Reads.compareOriginalValues(next, i) != 0);
+			Highlights.markArray(2, pa[min]);
 
-                Writes.arraycopy(buf, 0, array, a + j * bLen, bLen, 1, true, false);
-                Writes.write(keys, j, j, 1, true, true);
-            }
-        }
-    }
+			Writes.write(buf, i, array[pa[min]], 0, false, true);
+			Writes.write(pa, min, pa[min] + 1, 1, false, true);
 
-    private void kWayMerge(int[] array, int[] buf, int[] keys, int[] heap, int b, int[] pa, int[] p, int bLen,
-            int rLen) {
-        int k = p.length, size = k, a = pa[0], a1 = pa[1];
+			if (pa[min] == Math.min(a + (min + 1) * rLen, b))
+				this.siftDown(array, heap, pa, heap[--size], 0, size);
+			else
+				this.siftDown(array, heap, pa, heap[0], 0, size);
+		}
+		int t = 0, cnt = 0, c = 0;
+		while (pa[c] - p[c] < bLen)
+			c++;
 
-        for (int i = 0; i < k; i++)
-            Writes.write(heap, i, i, 0, false, true);
+		do {
+			int min = heap[0];
 
-        for (int i = (k - 1) / 2; i >= 0; i--)
-            this.siftDown(array, heap, pa, heap[i], i, k);
+			Highlights.markArray(2, pa[min]);
+			Highlights.markArray(3, p[c]);
 
-        for (int i = 0; i < rLen; i++) {
-            int min = heap[0];
+			Writes.write(array, p[c], array[pa[min]], 0, false, false);
+			Writes.write(pa, min, pa[min] + 1, 0, false, true);
+			Writes.write(p, c, p[c] + 1, 1, false, true);
 
-            Highlights.markArray(2, pa[min]);
+			if (pa[min] == Math.min(a + (min + 1) * rLen, b))
+				this.siftDown(array, heap, pa, heap[--size], 0, size);
+			else
+				this.siftDown(array, heap, pa, heap[0], 0, size);
 
-            Writes.write(buf, i, array[pa[min]], 0, false, true);
-            Writes.write(pa, min, pa[min] + 1, 1, false, true);
+			if (++cnt == bLen) {
+				Writes.write(keys, t++, (c > 0) ? p[c] / bLen - bLen - 1 : -1, 0, false, true);
 
-            if (pa[min] == Math.min(a + (min + 1) * rLen, b))
-                this.siftDown(array, heap, pa, heap[--size], 0, size);
-            else
-                this.siftDown(array, heap, pa, heap[0], 0, size);
-        }
-        int t = 0, cnt = 0, c = 0;
-        while (pa[c] - p[c] < bLen)
-            c++;
+				c = cnt = 0;
+				while (pa[c] - p[c] < bLen)
+					c++;
+			}
+		} while (size > 0);
 
-        do {
-            int min = heap[0];
+		Highlights.clearAllMarks();
 
-            Highlights.markArray(2, pa[min]);
-            Highlights.markArray(3, p[c]);
+		while (cnt-- > 0) {
+			Writes.write(p, c, p[c] - 1, 0, false, true);
+			Writes.write(array, --b, array[p[c]], 1, true, false);
+		}
+		Writes.write(pa, k - 1, b, 0, false, true);
+		Writes.write(keys, keys.length - 1, -1, 0, false, true);
 
-            Writes.write(array, p[c], array[pa[min]], 0, false, false);
-            Writes.write(pa, min, pa[min] + 1, 0, false, true);
-            Writes.write(p, c, p[c] + 1, 1, false, true);
+		t = 0;
+		while (keys[t] != -1)
+			t++;
 
-            if (pa[min] == Math.min(a + (min + 1) * rLen, b))
-                this.siftDown(array, heap, pa, heap[--size], 0, size);
-            else
-                this.siftDown(array, heap, pa, heap[0], 0, size);
+		for (int i = 1, j = a; j < p[0]; i++) {
+			while (p[i] < pa[i]) {
+				Writes.write(keys, t++, p[i] / bLen - bLen, 0, false, true);
+				while (keys[t] != -1)
+					t++;
 
-            if (++cnt == bLen) {
-                Writes.write(keys, t++, (c > 0) ? p[c] / bLen - bLen - 1 : -1, 0, false, true);
+				Writes.arraycopy(array, j, array, p[i], bLen, 1, true, false);
+				Writes.write(p, i, p[i] + bLen, 0, false, true);
 
-                c = cnt = 0;
-                while (pa[c] - p[c] < bLen)
-                    c++;
-            }
-        } while (size > 0);
+				j += bLen;
+			}
+		}
+		Writes.arraycopy(buf, 0, array, a, rLen, 1, true, false);
 
-        Highlights.clearAllMarks();
+		this.blockCycle(array, buf, keys, a1, bLen, (b - a1) / bLen);
+	}
 
-        while (cnt-- > 0) {
-            Writes.write(p, c, p[c] - 1, 0, false, true);
-            Writes.write(array, --b, array[p[c]], 1, true, false);
-        }
-        Writes.write(pa, k - 1, b, 0, false, true);
-        Writes.write(keys, keys.length - 1, -1, 0, false, true);
+	@Override
+	public void runSort(int[] array, int length, int bucketCount) {
+		int a = 0, b = length;
 
-        t = 0;
-        while (keys[t] != -1)
-            t++;
+		int bLen = this.ceilCbrt(length);
+		int rLen = bLen * bLen;
+		int rCnt = (length - 1) / rLen + 1;
 
-        for (int i = 1, j = a; j < p[0]; i++) {
-            while (p[i] < pa[i]) {
-                Writes.write(keys, t++, p[i] / bLen - bLen, 0, false, true);
-                while (keys[t] != -1)
-                    t++;
+		if (rCnt < 2) {
+			int[] keys = Writes.createExternalArray(length);
 
-                Writes.arraycopy(array, j, array, p[i], bLen, 1, true, false);
-                Writes.write(p, i, p[i] + bLen, 0, false, true);
+			for (int i = 0; i < keys.length; i++)
+				Writes.write(keys, i, i, 1, true, true);
 
-                j += bLen;
-            }
-        }
-        Writes.arraycopy(buf, 0, array, a, rLen, 1, true, false);
+			this.tableSort(array, keys, a, b);
 
-        this.blockCycle(array, buf, keys, a1, bLen, (b - a1) / bLen);
-    }
+			Writes.deleteExternalArray(keys);
+			return;
+		}
 
-    @Override
-    public void runSort(int[] array, int length, int bucketCount) {
-        int a = 0, b = length;
+		int[] keys = Writes.createExternalArray(rLen);
+		int[] buf = Writes.createExternalArray(rLen);
 
-        int bLen = this.ceilCbrt(length);
-        int rLen = bLen * bLen;
-        int rCnt = (length - 1) / rLen + 1;
+		int[] heap = new int[rCnt];
+		int[] p = new int[rCnt];
+		int[] pa = new int[rCnt];
 
-        if (rCnt < 2) {
-            int[] keys = Writes.createExternalArray(length);
+		int alloc = 3 * rCnt;
+		Writes.changeAllocAmount(alloc);
 
-            for (int i = 0; i < keys.length; i++)
-                Writes.write(keys, i, i, 1, true, true);
+		for (int i = 0; i < keys.length; i++)
+			Writes.write(keys, i, i, 1, true, true);
 
-            this.tableSort(array, keys, a, b);
+		for (int i = a, j = 0; i < b; i += rLen, j++) {
+			this.tableSort(array, keys, i, Math.min(i + rLen, b));
+			Writes.write(pa, j, i, 0, false, true);
+		}
+		Writes.arraycopy(pa, 0, p, 0, rCnt, 0, false, true);
 
-            Writes.deleteExternalArray(keys);
-            return;
-        }
+		this.kWayMerge(array, buf, keys, heap, b, pa, p, bLen, rLen);
 
-        int[] keys = Writes.createExternalArray(rLen);
-        int[] buf = Writes.createExternalArray(rLen);
-
-        int[] heap = new int[rCnt];
-        int[] p = new int[rCnt];
-        int[] pa = new int[rCnt];
-
-        int alloc = 3 * rCnt;
-        Writes.changeAllocAmount(alloc);
-
-        for (int i = 0; i < keys.length; i++)
-            Writes.write(keys, i, i, 1, true, true);
-
-        for (int i = a, j = 0; i < b; i += rLen, j++) {
-            this.tableSort(array, keys, i, Math.min(i + rLen, b));
-            Writes.write(pa, j, i, 0, false, true);
-        }
-        Writes.arraycopy(pa, 0, p, 0, rCnt, 0, false, true);
-
-        this.kWayMerge(array, buf, keys, heap, b, pa, p, bLen, rLen);
-
-        Writes.deleteExternalArray(keys);
-        Writes.deleteExternalArray(buf);
-        Writes.changeAllocAmount(-alloc);
-    }
+		Writes.deleteExternalArray(keys);
+		Writes.deleteExternalArray(buf);
+		Writes.changeAllocAmount(-alloc);
+	}
 }

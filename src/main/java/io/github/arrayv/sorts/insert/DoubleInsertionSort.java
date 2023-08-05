@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Double Insertion", showcaseName = "Double Insertion Sort", runName = "Double Insertion Sort")
 public final class DoubleInsertionSort extends Sort {
     public DoubleInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Double Insertion");
-        this.setRunAllSortsName("Double Insertion Sort");
-        this.setRunSortName("Double Insertsort");
-        this.setCategory("Insertion Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     protected void insertionSort(int[] array, int start, int end, double sleep, boolean auxwrite) {

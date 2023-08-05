@@ -1,117 +1,51 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
-import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.sorts.templates.ParallelCircleSorting;
 
 /*
- * 
-MIT License
-
-Copyright (c) 2021 aphitorite
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ *
+Copyright (c) rosettacode.org.
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+Texts.  A copy of the license is included in the section entitled "GNU
+Free Documentation License".
  *
  */
+@SortMeta(listName = "Intro Circle (Parallel)", showcaseName = "Parallel Introspective Circle Sort", runName = "Parallel Introspective Circle Sort")
+public final class IntroCircleSortParallel extends ParallelCircleSorting {
+    public IntroCircleSortParallel(ArrayVisualizer arrayVisualizer) {
+        super(arrayVisualizer);
+    }
 
-final public class IntroCircleSortParallel extends Sort {
-	public IntroCircleSortParallel(ArrayVisualizer arrayVisualizer) {
-		super(arrayVisualizer);
+    @Override
+    public void runSort(int[] array, int sortLength, int bucketCount) {
+        this.array = array;
+        this.end = sortLength;
+        this.swapped = true;
+        int iterations = 0;
+        int threshold = 0, n = 1;
+        for (; n < sortLength; n *= 2, threshold++)
+            ;
 
-		this.setSortListName("Intro Circle (Parallel)");
-		this.setRunAllSortsName("Parallel Intro Circle Sort");
-		this.setRunSortName("Parallel Intro Circlesort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
-	}
+        threshold /= 2;
 
-	private int[] array;
-	private int end;
+        while (swapped) {
+            this.swapCount = 0;
+            swapped = false;
+            iterations++;
 
-	private volatile boolean swapped;
-
-	private class CircleSort extends Thread {
-		private int a, b;
-
-		public CircleSort(int a, int b) {
-			this.a = a;
-			this.b = b;
-		}
-
-		public void run() {
-			IntroCircleSortParallel.this.circleSort(a, b);
-		}
-	}
-
-	private void circleSort(int a, int b) {
-		if (a >= this.end)
-			return;
-
-		for (int i = a, j = b - 1; i < j; i++, j--)
-			if (j < this.end && Reads.compareIndices(array, i, j, 0.5, true) > 0) {
-				Writes.swap(array, i, j, 0, true, false);
-				this.swapped = true;
-			}
-
-		if (b - a < 4)
-			return;
-
-		int m = (a + b) / 2;
-
-		CircleSort l = new CircleSort(a, m);
-		CircleSort r = new CircleSort(m, b);
-
-		l.start();
-		r.start();
-
-		try {
-			l.join();
-			r.join();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
-	}
-
-	@Override
-	public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-		this.array = array;
-		this.end = sortLength;
-		int threshold = 0, n = 1;
-		for (; n < sortLength; n *= 2, threshold++)
-			;
-
-		threshold /= 2;
-		int iterations = 0;
-
-		do {
-			swapped = false;
-			iterations++;
-			this.circleSort(0, n);
-			if (iterations >= threshold) {
-				InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
-				binaryInserter.customInsertSort(array, 0, sortLength, 0.5, false);
-				break;
-			}
-		} while (swapped);
-	}
+            if (iterations >= threshold) {
+                Highlights.clearAllMarks();
+                InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
+                binaryInserter.customInsertSort(array, 0, sortLength, 0.5, false);
+                break;
+            }
+            this.circleSortRoutine(0, n, 1);
+        }
+    }
 }

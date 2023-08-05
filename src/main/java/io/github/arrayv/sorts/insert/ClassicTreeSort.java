@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,43 +29,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Tree (Unbalanced, Classic)", showcaseName = "Tree Sort (Unbalanced, Classic)", runName = "Tree Sort (Unbalanced, Classic)")
 public final class ClassicTreeSort extends Sort {
 	public ClassicTreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Classic Tree");
-		this.setRunAllSortsName("Classic Unbalanced Tree Sort");
-		this.setRunSortName("Classic Unbalanced Treesort");
-		this.setCategory("Insertion Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int idx;
 
-	private void traverse(int[] array, int[] temp, int[] lower, int[] upper, int r, int depth) {
+	private void traverse(int[] array, int[] temp, int[] lower, int[] upper, int r) {
 		Highlights.markArray(1, r);
 		Delays.sleep(1);
 
-		if (lower[r] != 0) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.traverse(array, temp, lower, upper, lower[r], depth + 1);
-		}
+		if (lower[r] != 0)
+			this.traverse(array, temp, lower, upper, lower[r]);
 
 		Writes.write(temp, this.idx++, array[r], 0, false, true);
 		Highlights.markArray(1, r);
 		Delays.sleep(1);
 
-		if (upper[r] != 0) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.traverse(array, temp, lower, upper, upper[r], depth + 1);
-		}
+		if (upper[r] != 0)
+			this.traverse(array, temp, lower, upper, upper[r]);
 	}
 
 	@Override
@@ -81,7 +66,7 @@ public final class ClassicTreeSort extends Sort {
 				Highlights.markArray(1, c);
 				Delays.sleep(0.5);
 
-				next = Reads.compareIndices(array, i, c, 0.5, true) < 0 ? lower : upper;
+				next = Reads.compareValues(array[i], array[c]) < 0 ? lower : upper;
 
 				if (next[c] == 0) {
 					Writes.write(next, c, i, 0, false, true);
@@ -94,7 +79,7 @@ public final class ClassicTreeSort extends Sort {
 
 		int[] temp = Writes.createExternalArray(currentLength);
 		this.idx = 0;
-		this.traverse(array, temp, lower, upper, 0, 0);
+		this.traverse(array, temp, lower, upper, 0);
 		Writes.arraycopy(temp, 0, array, 0, currentLength, 1, true, false);
 
 		Writes.deleteExternalArray(lower);

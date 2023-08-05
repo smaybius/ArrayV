@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -25,20 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Three-Smooth Comb (Parallel)", showcaseName = "Three-Smooth Combsort (Parallel)", runName = "Three-Smooth Combsort (Parallel)")
 public final class ThreeSmoothCombSortParallel extends Sort {
 	public ThreeSmoothCombSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("3-Smooth Comb (Parallel)");
-		this.setRunAllSortsName("Parallel 3-Smooth Comb Sort");
-		this.setRunSortName("Parallel 3-Smooth Combsort");
-		this.setCategory("Exchange Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int[] array;
@@ -109,7 +100,7 @@ public final class ThreeSmoothCombSortParallel extends Sort {
 		}
 		for (int i = pos; i + gap < end; i += gap)
 			if (Reads.compareIndices(this.array, i, i + gap, 0.5, true) == 1)
-				Writes.swap(this.array, i, i + gap, 0, false, false);
+				Writes.swap(this.array, i, i + gap, 0.5, false, false);
 	}
 
 	@Override

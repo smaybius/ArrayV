@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
@@ -30,20 +31,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Median Merge")
 public final class MedianMergeSort extends Sort {
 	public MedianMergeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Median Merge");
-		this.setRunAllSortsName("Median Mergesort");
-		this.setRunSortName("Median Mergesort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private InsertionSort insSort;
@@ -52,13 +43,13 @@ public final class MedianMergeSort extends Sort {
 	private void medianOfThree(int[] array, int a, int b) {
 		int m = a + (b - 1 - a) / 2;
 
-		if (Reads.compareIndices(array, a, m, 0.1, true) == 1)
+		if (Reads.compareIndices(array, a, m, 1, true) == 1)
 			Writes.swap(array, a, m, 1, true, false);
 
-		if (Reads.compareIndices(array, m, b - 1, 0.1, true) == 1) {
+		if (Reads.compareIndices(array, m, b - 1, 1, true) == 1) {
 			Writes.swap(array, m, b - 1, 1, true, false);
 
-			if (Reads.compareIndices(array, a, m, 0.1, true) == 1)
+			if (Reads.compareIndices(array, a, m, 1, true) == 1)
 				return;
 		}
 
@@ -99,13 +90,13 @@ public final class MedianMergeSort extends Sort {
 				i++;
 				Highlights.markArray(1, i);
 				Delays.sleep(0.5);
-			} while (i < j && Reads.compareIndices(array, i, p, 0.1, true) == -1);
+			} while (i < j && Reads.compareIndices(array, i, p, 0, false) == -1);
 
 			do {
 				j--;
 				Highlights.markArray(2, j);
 				Delays.sleep(0.5);
-			} while (j >= i && Reads.compareIndices(array, j, p, 0.1, true) == 1);
+			} while (j >= i && Reads.compareIndices(array, j, p, 0, false) == 1);
 
 			if (i < j)
 				Writes.swap(array, i, j, 1, true, false);
@@ -118,7 +109,7 @@ public final class MedianMergeSort extends Sort {
 		int i = a, j = m;
 
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0)
+			if (Reads.compareIndices(array, i, j, 0, false) <= 0)
 				Writes.swap(array, p++, i++, 1, true, false);
 			else
 				Writes.swap(array, p++, j++, 1, true, false);

@@ -1,7 +1,7 @@
 package io.github.arrayv.sorts.templates;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.insert.BlockInsertionSort;
+import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.utils.Delays;
 import io.github.arrayv.utils.Highlights;
 import io.github.arrayv.utils.IndexedRotations;
@@ -150,7 +150,7 @@ public final class WikiSorting {
     // just keep in mind that making it too small ruins the point (nothing will fit
     // into it),
     // and making it too large also ruins the point (so much for "low memory"!)
-    private BlockInsertionSort InsertSort;
+    private InsertionSort InsertSort;
 
     private Delays Delays;
     private Highlights Highlights;
@@ -179,7 +179,7 @@ public final class WikiSorting {
     // 0 – if the system simply cannot allocate any extra memory whatsoever, no
     // memory works just fine
 
-    public WikiSorting(BlockInsertionSort insertionSort, ArrayVisualizer arrayVisualizer, int cacheChoice) {
+    public WikiSorting(InsertionSort insertionSort, ArrayVisualizer arrayVisualizer, int cacheChoice) {
         this.InsertSort = insertionSort;
 
         this.Delays = arrayVisualizer.getDelays();
@@ -209,18 +209,13 @@ public final class WikiSorting {
         int start = range.start, end = range.end - 1;
         while (start < end) {
             int mid = start + (end - start) / 2;
-            Highlights.markArray(1, mid);
-            Delays.sleep(1);
             if (Reads.compareValues(array[mid], value) < 0)
                 start = mid + 1;
             else
                 end = mid;
         }
-        Highlights.markArray(1, start);
-        Delays.sleep(1);
         if (start == range.end - 1 && Reads.compareValues(array[start], value) < 0)
             start++;
-        Highlights.clearMark(1);
         return start;
     }
 
@@ -230,18 +225,13 @@ public final class WikiSorting {
         int start = range.start, end = range.end - 1;
         while (start < end) {
             int mid = start + (end - start) / 2;
-            Highlights.markArray(1, mid);
-            Delays.sleep(1);
             if (Reads.compareValues(value, array[mid]) >= 0)
                 start = mid + 1;
             else
                 end = mid;
         }
-        Highlights.markArray(1, start);
-        Delays.sleep(1);
         if (start == range.end - 1 && Reads.compareValues(value, array[start]) >= 0)
             start++;
-        Highlights.clearMark(1);
         return start;
     }
 
@@ -254,13 +244,10 @@ public final class WikiSorting {
             return range.start;
         int index, skip = Math.max(range.length() / unique, 1);
 
-        for (index = range.start + skip; Reads.compareValues(array[index - 1], value) < 0; index += skip) {
-            Highlights.markArray(1, index - 1);
-            Delays.sleep(1);
+        for (index = range.start + skip; Reads.compareValues(array[index - 1], value) < 0; index += skip)
             if (index >= range.end - skip)
                 return BinaryFirst(array, value, new Range(index, range.end));
-        }
-        Highlights.clearMark(1);
+
         return BinaryFirst(array, value, new Range(index - skip, index));
     }
 
@@ -269,13 +256,10 @@ public final class WikiSorting {
             return range.start;
         int index, skip = Math.max(range.length() / unique, 1);
 
-        for (index = range.start + skip; Reads.compareValues(value, array[index - 1]) >= 0; index += skip) {
-            Highlights.markArray(1, index - 1);
-            Delays.sleep(1);
+        for (index = range.start + skip; Reads.compareValues(value, array[index - 1]) >= 0; index += skip)
             if (index >= range.end - skip)
                 return BinaryLast(array, value, new Range(index, range.end));
-        }
-        Highlights.clearMark(1);
+
         return BinaryLast(array, value, new Range(index - skip, index));
     }
 
@@ -285,15 +269,10 @@ public final class WikiSorting {
         int index, skip = Math.max(range.length() / unique, 1);
 
         for (index = range.end - skip; index > range.start
-                && Reads.compareValues(array[index - 1], value) >= 0; index -= skip) {
-            Highlights.markArray(1, index - 1);
-            Delays.sleep(1);
-            if (index < range.start + skip) {
-                Highlights.clearMark(1);
+                && Reads.compareValues(array[index - 1], value) >= 0; index -= skip)
+            if (index < range.start + skip)
                 return BinaryFirst(array, value, new Range(range.start, index));
-            }
-        }
-        Highlights.clearMark(1);
+
         return BinaryFirst(array, value, new Range(index, index + skip));
     }
 
@@ -303,15 +282,10 @@ public final class WikiSorting {
         int index, skip = Math.max(range.length() / unique, 1);
 
         for (index = range.end - skip; index > range.start
-                && Reads.compareValues(value, array[index - 1]) < 0; index -= skip) {
-            Highlights.markArray(1, index - 1);
-            Delays.sleep(1);
-            if (index < range.start + skip) {
-                Highlights.clearMark(1);
+                && Reads.compareValues(value, array[index - 1]) < 0; index -= skip)
+            if (index < range.start + skip)
                 return BinaryLast(array, value, new Range(range.start, index));
-            }
-        }
-        Highlights.clearMark(1);
+
         return BinaryLast(array, value, new Range(index, index + skip));
     }
 
@@ -353,7 +327,7 @@ public final class WikiSorting {
             if (range1.length() <= range2.length()) {
                 if (range1.length() <= cache_size) {
                     if (cache != null) {
-                        Writes.arraycopy(array, range1.start, cache, 0, range1.length(), 1, false, true);
+                        Writes.arraycopy(array, range1.start, cache, 0, range1.length(), 1, true, true);
                         Writes.arraycopy(array, range2.start, array, range1.start, range2.length(), 1, true, false);
                         Writes.arraycopy(cache, 0, array, range1.start + range2.length(), range1.length(), 1, true,
                                 false);
@@ -363,7 +337,7 @@ public final class WikiSorting {
             } else {
                 if (range2.length() <= cache_size) {
                     if (cache != null) {
-                        Writes.arraycopy(array, range2.start, cache, 0, range2.length(), 1, false, true);
+                        Writes.arraycopy(array, range2.start, cache, 0, range2.length(), 1, true, true);
                         Writes.arraycopy(array, range1.start, array, range2.end - range1.length(), range1.length(), 1,
                                 true, false);
                         Writes.arraycopy(cache, 0, array, range1.start, range2.length(), 1, true, false);
@@ -391,7 +365,7 @@ public final class WikiSorting {
          * }
          */
 
-        IndexedRotations.cycleReverse(array, range.start, split, range.end, 1, true, false);
+        IndexedRotations.adaptable(array, range.start, split, range.end, 1, true, false);
     }
 
     // merge two ranges from one array and save the results into a different array
@@ -403,8 +377,8 @@ public final class WikiSorting {
         int B_last = B.end;
 
         while (true) {
-            if (Reads.compareIndices(from, B_index, A_index, 0.25, true) >= 0) {
-                Writes.write(into, insert_index, from[A_index], 1, true, tempwrite);
+            if (Reads.compareValues(from[B_index], from[A_index]) >= 0) {
+                Writes.write(into, insert_index, from[A_index], 1, false, tempwrite);
 
                 if (tempwrite)
                     Highlights.markArray(1, A_index);
@@ -419,7 +393,7 @@ public final class WikiSorting {
                     break;
                 }
             } else {
-                Writes.write(into, insert_index, from[B_index], 1, true, tempwrite);
+                Writes.write(into, insert_index, from[B_index], 1, false, tempwrite);
 
                 if (tempwrite)
                     Highlights.markArray(1, B_index);
@@ -484,14 +458,18 @@ public final class WikiSorting {
 
         if (B.length() > 0 && A.length() > 0) {
             while (true) {
-                if (Reads.compareIndices(array, B.start + B_count, buffer.start + A_count, 0.25, true) >= 0) {
-                    Writes.swap(array, A.start + insert, buffer.start + A_count, 0.5, true, false);
+                if (Reads.compareValues(array[B.start + B_count], array[buffer.start + A_count]) >= 0) {
+                    Highlights.markArray(3, buffer.start + A_count);
+                    Delays.sleep(1);
+                    Writes.swap(array, A.start + insert, buffer.start + A_count, 0, true, false);
                     A_count++;
                     insert++;
                     if (A_count >= A.length())
                         break;
                 } else {
-                    Writes.swap(array, A.start + insert, B.start + B_count, 0.5, true, false);
+                    Highlights.markArray(3, B.start + B_count);
+                    Delays.sleep(1);
+                    Writes.swap(array, A.start + insert, B.start + B_count, 0, true, false);
                     B_count++;
                     insert++;
                     if (B_count >= B.length())
@@ -499,6 +477,7 @@ public final class WikiSorting {
                 }
             }
         }
+        Highlights.clearMark(3);
 
         // swap the remainder of A into the final array
         BlockSwap(array, buffer.start + A_count, A.start + insert, A.length() - A_count);
@@ -556,10 +535,10 @@ public final class WikiSorting {
     }
 
     void NetSwap(int[] array, int[] order, Range range, int x, int y) {
-        int compare = Reads.compareIndices(array, range.start + x, range.start + y, 0.25, true);
+        int compare = Reads.compareValues(array[range.start + x], array[range.start + y]);
         if (compare > 0 || (Reads.compareOriginalValues(order[x], order[y]) == 1 && compare == 0)) {
             Writes.swap(array, range.start + x, range.start + y, 1, true, false);
-            Writes.swap(order, x, y, 1, true, false);
+            Writes.swap(order, x, y, 0, false, false);
         }
     }
 
@@ -572,18 +551,18 @@ public final class WikiSorting {
         if (size < 4) {
             if (size == 3) {
                 // hard-coded insertion sort
-                if (Reads.compareIndices(array, 1, 0, 0.25, true) < 0) {
+                if (Reads.compareValues(array[1], array[0]) < 0) {
                     Writes.swap(array, 0, 1, 1, true, false);
                 }
-                if (Reads.compareIndices(array, 2, 1, 0.25, true) < 0) {
+                if (Reads.compareValues(array[2], array[1]) < 0) {
                     Writes.swap(array, 1, 2, 1, true, false);
-                    if (Reads.compareIndices(array, 1, 0, 0.25, true) < 0) {
+                    if (Reads.compareValues(array[1], array[0]) < 0) {
                         Writes.swap(array, 0, 1, 1, true, false);
                     }
                 }
             } else if (size == 2) {
                 // swap the items if they're out of order
-                if (Reads.compareIndices(array, 1, 0, 0.25, true) < 0) {
+                if (Reads.compareValues(array[1], array[0]) < 0) {
                     Writes.swap(array, 0, 1, 1, true, false);
                 }
             }
@@ -709,39 +688,39 @@ public final class WikiSorting {
                         Range A2 = iterator.nextRange();
                         Range B2 = iterator.nextRange();
 
-                        if (Reads.compareIndices(array, B1.end - 1, A1.start, 0.25, true) < 0) {
+                        if (Reads.compareValues(array[B1.end - 1], array[A1.start]) < 0) {
                             // the two ranges are in reverse order, so copy them in reverse order into the
                             // cache
-                            Writes.arraycopy(array, A1.start, cache, B1.length(), A1.length(), 1, false, true);
-                            Writes.arraycopy(array, B1.start, cache, 0, B1.length(), 1, false, true);
-                        } else if (Reads.compareIndices(array, B1.start, A1.end - 1, 0.25, true) < 0) {
+                            Writes.arraycopy(array, A1.start, cache, B1.length(), A1.length(), 1, true, true);
+                            Writes.arraycopy(array, B1.start, cache, 0, B1.length(), 1, true, true);
+                        } else if (Reads.compareValues(array[B1.start], array[A1.end - 1]) < 0) {
                             // these two ranges weren't already in order, so merge them into the cache
                             MergeInto(array, A1, B1, cache, 0, true);
                         } else {
                             // if A1, B1, A2, and B2 are all in order, skip doing anything else
-                            if (Reads.compareIndices(array, B2.start, A2.end - 1, 0.25, true) >= 0
-                                    && Reads.compareIndices(array, A2.start, B1.end - 1, 0.25, true) >= 0)
+                            if (Reads.compareValues(array[B2.start], array[A2.end - 1]) >= 0
+                                    && Reads.compareValues(array[A2.start], array[B1.end - 1]) >= 0)
                                 continue;
 
                             // copy A1 and B1 into the cache in the same order
-                            Writes.arraycopy(array, A1.start, cache, 0, A1.length(), 1, false, true);
-                            Writes.arraycopy(array, B1.start, cache, A1.length(), B1.length(), 1, false, true);
+                            Writes.arraycopy(array, A1.start, cache, 0, A1.length(), 1, true, true);
+                            Writes.arraycopy(array, B1.start, cache, A1.length(), B1.length(), 1, true, true);
                         }
                         A1.set(A1.start, B1.end);
 
                         // merge A2 and B2 into the cache
-                        if (Reads.compareIndices(array, B2.end - 1, A2.start, 0.25, true) < 0) {
+                        if (Reads.compareValues(array[B2.end - 1], array[A2.start]) < 0) {
                             // the two ranges are in reverse order, so copy them in reverse order into the
                             // cache
                             Writes.arraycopy(array, A2.start, cache, A1.length() + B2.length(), A2.length(), 1, true,
                                     true);
-                            Writes.arraycopy(array, B2.start, cache, A1.length(), B2.length(), 1, false, true);
-                        } else if (Reads.compareIndices(array, B2.start, A2.end - 1, 0.25, true) < 0) {
+                            Writes.arraycopy(array, B2.start, cache, A1.length(), B2.length(), 1, true, true);
+                        } else if (Reads.compareValues(array[B2.start], array[A2.end - 1]) < 0) {
                             // these two ranges weren't already in order, so merge them into the cache
                             MergeInto(array, A2, B2, cache, A1.length(), true);
                         } else {
                             // copy A2 and B2 into the cache in the same order
-                            Writes.arraycopy(array, A2.start, cache, A1.length(), A2.length(), 1, false, true);
+                            Writes.arraycopy(array, A2.start, cache, A1.length(), A2.length(), 1, true, true);
                             Writes.arraycopy(array, B2.start, cache, A1.length() + A2.length(), B2.length(), 1, true,
                                     true);
                         }
@@ -751,13 +730,13 @@ public final class WikiSorting {
                         Range A3 = new Range(0, A1.length());
                         Range B3 = new Range(A1.length(), A1.length() + A2.length());
 
-                        if (Reads.compareIndices(cache, B3.end - 1, A3.start, 0.25, true) < 0) {
+                        if (Reads.compareValues(cache[B3.end - 1], cache[A3.start]) < 0) {
                             // the two ranges are in reverse order, so copy them in reverse order into the
                             // cache
                             Writes.arraycopy(cache, A3.start, array, A1.start + A2.length(), A3.length(), 1, true,
                                     false);
                             Writes.arraycopy(cache, B3.start, array, A1.start, B3.length(), 1, true, false);
-                        } else if (Reads.compareIndices(cache, B3.start, A3.end - 1, 0.25, true) < 0) {
+                        } else if (Reads.compareValues(cache[B3.start], cache[A3.end - 1]) < 0) {
                             // these two ranges weren't already in order, so merge them back into the array
                             MergeInto(cache, A3, B3, array, A1.start, false);
                         } else {
@@ -778,12 +757,12 @@ public final class WikiSorting {
                         A = iterator.nextRange();
                         B = iterator.nextRange();
 
-                        if (Reads.compareIndices(array, B.end - 1, A.start, 0.25, true) < 0) {
+                        if (Reads.compareValues(array[B.end - 1], array[A.start]) < 0) {
                             // the two ranges are in reverse order, so a simple rotation should fix it
                             Rotate(array, A.length(), new Range(A.start, B.end), true);
-                        } else if (Reads.compareIndices(array, B.start, A.end - 1, 0.25, true) < 0) {
+                        } else if (Reads.compareValues(array[B.start], array[A.end - 1]) < 0) {
                             // these two ranges weren't already in order, so we'll need to merge them!
-                            Writes.arraycopy(array, A.start, cache, 0, A.length(), 1, false, true);
+                            Writes.arraycopy(array, A.start, cache, 0, A.length(), 1, true, true);
                             MergeExternal(array, A, B);
                         }
                     }
@@ -1051,10 +1030,10 @@ public final class WikiSorting {
                         }
                     }
 
-                    if (Reads.compareIndices(array, B.end - 1, A.start, 0.25, true) < 0) {
+                    if (Reads.compareValues(array[B.end - 1], array[A.start]) < 0) {
                         // the two ranges are in reverse order, so a simple rotation should fix it
                         Rotate(array, A.length(), new Range(A.start, B.end), true);
-                    } else if (Reads.compareIndices(array, A.end, A.end - 1, 0.25, true) < 0) {
+                    } else if (Reads.compareValues(array[A.end], array[A.end - 1]) < 0) {
                         // these two ranges weren't already in order, so we'll need to merge them!
 
                         // break the remainder of A into blocks. firstA is the uneven-sized first A
@@ -1083,7 +1062,7 @@ public final class WikiSorting {
                         // otherwise, if the second buffer is available, block swap the contents into
                         // that
                         if (lastA.length() <= cache_size && cache != null) {
-                            Writes.arraycopy(array, lastA.start, cache, 0, lastA.length(), 1, false, true);
+                            Writes.arraycopy(array, lastA.start, cache, 0, lastA.length(), 1, true, true);
                         } else if (buffer2.length() > 0)
                             BlockSwap(array, lastA.start, buffer2.start, lastA.length());
 
@@ -1094,7 +1073,7 @@ public final class WikiSorting {
                                 // then drop that minimum A block behind. or if there are no B blocks left then
                                 // keep dropping the remaining A blocks.
                                 if ((lastB.length() > 0
-                                        && Reads.compareIndices(array, lastB.end - 1, indexA, 0.25, true) >= 0)
+                                        && Reads.compareValues(array[lastB.end - 1], array[indexA]) >= 0)
                                         || blockB.length() == 0) {
                                     // figure out where to split the previous B block, and rotate it at the split
                                     int B_split = BinaryFirst(array, array[indexA], lastB);
@@ -1103,7 +1082,7 @@ public final class WikiSorting {
                                     // swap the minimum A block to the beginning of the rolling A blocks
                                     int minA = blockA.start;
                                     for (int findA = minA + block_size; findA < blockA.end; findA += block_size)
-                                        if (Reads.compareIndices(array, findA, minA, 0.25, true) < 0)
+                                        if (Reads.compareValues(array[findA], array[minA]) < 0)
                                             minA = findA;
                                     BlockSwap(array, blockA.start, minA, block_size);
 
@@ -1127,7 +1106,7 @@ public final class WikiSorting {
                                         // copy the previous A block into the cache or buffer2, since that's where we
                                         // need it to be when we go to merge it anyway
                                         if (block_size <= cache_size) {
-                                            Writes.arraycopy(array, blockA.start, cache, 0, block_size, 1, false, true);
+                                            Writes.arraycopy(array, blockA.start, cache, 0, block_size, 1, true, true);
                                         } else
                                             BlockSwap(array, blockA.start, buffer2.start, block_size);
 

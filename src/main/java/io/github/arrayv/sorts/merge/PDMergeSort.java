@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,23 +29,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Pattern-Defeating Merge")
 public class PDMergeSort extends Sort {
     protected int[] copied;
     protected int runCount;
 
     public PDMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Pattern Defeating Merge");
-        this.setRunAllSortsName("Pattern-Defeating Merge Sort");
-        this.setRunSortName("Pattern-Defeating Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     protected void mergeUp(int[] array, int start, int mid, int end) {

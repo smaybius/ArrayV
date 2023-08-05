@@ -39,15 +39,12 @@ public abstract class BinaryQuickSorting extends Sort {
         }
     }
 
-    public void binaryQuickSortRecursive(int[] array, int p, int r, int bit, int depth) {
+    public void binaryQuickSortRecursive(int[] array, int p, int r, int bit) {
         if (p < r && bit >= 0) {
             int q = partition(array, p, r, bit);
             Delays.sleep(1);
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            binaryQuickSortRecursive(array, p, q, bit - 1, depth + 1);
-            Writes.recursion();
-            binaryQuickSortRecursive(array, q + 1, r, bit - 1, depth + 1);
+            binaryQuickSortRecursive(array, p, q, bit - 1);
+            binaryQuickSortRecursive(array, q + 1, r, bit - 1);
         }
     }
 
@@ -65,11 +62,9 @@ public abstract class BinaryQuickSorting extends Sort {
                 int q = partition(array, task.p, task.r, task.bit);
                 Delays.sleep(1);
                 tasks.add(new Task(task.p, q, task.bit - 1));
-                Writes.changeAuxWrites(1);
-                Writes.changeAllocAmount(1);
                 tasks.add(new Task(q + 1, task.r, task.bit - 1));
-                Writes.changeAuxWrites(1);
-                Writes.changeAllocAmount(1);
+                Writes.changeAuxWrites(2);
+                Writes.changeAllocAmount(2);
             }
         }
     }

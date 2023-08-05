@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Gravity", showcaseName = "Gravity Sort", runName = "Gravity Sort")
 public final class GravitySort extends Sort {
 	public GravitySort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Gravity");
-		this.setRunAllSortsName("Gravity (Bead) Sort");
-		this.setRunSortName("Beadsort");
-		this.setCategory("Distribution Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	@Override
@@ -82,7 +73,6 @@ public final class GravitySort extends Sort {
 				Delays.sleep(delay);
 
 				int inc = (i >= length - y[j] ? 1 : 0) - (x[i] >= j ? 1 : 0);
-				Reads.addComparison();
 
 				// update the main array
 				Writes.write(array, i, array[i] + inc, delay, true, false);

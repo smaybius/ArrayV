@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Binary Quick (Stackless)", showcaseName = "Binary Quick Sort (Stackless)", runName = "Binary Quick Sort (Stackless)")
 public final class StacklessBinaryQuickSort extends Sort {
 	public StacklessBinaryQuickSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Stackless Binary Quick");
-		this.setRunAllSortsName("Stackless Binary Quick Sort");
-		this.setRunSortName("Stackless Binary Quicksort");
-		this.setCategory("Distribution Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int stabVal(int idx) {

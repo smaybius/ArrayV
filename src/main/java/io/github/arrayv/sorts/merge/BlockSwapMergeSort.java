@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -30,19 +31,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 //refactored version of original implementation by @Piotr Grochowski (in place merge 2)
+@SortMeta(name = "Block-Swap Merge")
 public final class BlockSwapMergeSort extends Sort {
     public BlockSwapMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Block-Swap Merge");
-        this.setRunAllSortsName("Block-Swap Merge Sort");
-        this.setRunSortName("Block-Swap Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void multiSwap(int[] array, int a, int b, int len) {
@@ -54,7 +46,7 @@ public final class BlockSwapMergeSort extends Sort {
         int a = 0, b = Math.min(mid - start, end - mid), m = a + (b - a) / 2;
 
         while (b > a) {
-            if (Reads.compareIndices(array, mid - m - 1, mid + m, 0.1, true) == 1)
+            if (Reads.compareValues(array[mid - m - 1], array[mid + m]) == 1)
                 a = m + 1;
             else
                 b = m;
@@ -65,19 +57,12 @@ public final class BlockSwapMergeSort extends Sort {
         return m;
     }
 
-    public void multiSwapMerge(int[] array, int start, int mid, int end) { // backwards compatibility with extra sorts
-                                                                           // pack
-        multiSwapMerge(array, start, mid, end, 0);
-    }
-
-    public void multiSwapMerge(int[] array, int start, int mid, int end, int depth) {
+    public void multiSwapMerge(int[] array, int start, int mid, int end) {
         int m = this.binarySearchMid(array, start, mid, end);
 
         while (m > 0) {
             this.multiSwap(array, mid - m, mid, m);
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.multiSwapMerge(array, mid, mid + m, end, depth + 1);
+            this.multiSwapMerge(array, mid, mid + m, end);
 
             end = mid;
             mid -= m;
@@ -91,10 +76,10 @@ public final class BlockSwapMergeSort extends Sort {
 
         for (int j = 1; j < len; j *= 2) {
             for (i = a; i + 2 * j <= b; i += 2 * j)
-                this.multiSwapMerge(array, i, i + j, i + 2 * j, 0);
+                this.multiSwapMerge(array, i, i + j, i + 2 * j);
 
             if (i + j < b)
-                this.multiSwapMerge(array, i, i + j, b, 0);
+                this.multiSwapMerge(array, i, i + j, b);
         }
     }
 

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.concurrent;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -29,65 +30,51 @@ SOFTWARE.
  *
  */
 
+@SortMeta(
+	name = "Recursive Pairwise Merge",
+	listName = "Pairwise Merge (Recursive)"
+)
 public final class PairwiseMergeSortRecursive extends Sort {
-	public PairwiseMergeSortRecursive(ArrayVisualizer arrayVisualizer) {
-		super(arrayVisualizer);
-
-		this.setSortListName("Pairwise Merge (Recursive)");
-		this.setRunAllSortsName("Recursive Pairwise Merge Sort");
-		this.setRunSortName("Recursive Pairwise Mergesort");
-		this.setCategory("Concurrent Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
-	}
+    public PairwiseMergeSortRecursive(ArrayVisualizer arrayVisualizer) {
+        super(arrayVisualizer);
+    }
 
 	private int end;
 
 	private void compSwap(int[] array, int a, int b) {
-		if (b < this.end && Reads.compareIndices(array, a, b, 0.5, true) == 1)
+		if(b < this.end && Reads.compareIndices(array, a, b, 0.5, true) == 1)
 			Writes.swap(array, a, b, 0.5, true, false);
 	}
 
-	private void pairwiseMerge(int[] array, int a, int b, int depth) {
-		int m = (a + b) / 2, m1 = (a + m) / 2, g = m - m1;
+	private void pairwiseMerge(int[] array, int a, int b) {
+		int m = (a+b)/2, m1 = (a+m)/2, g = m-m1;
 
-		for (int i = 0; m1 + i < m; i++)
-			for (int j = m1, k = g; k > 0; k >>= 1, j -= k - (i & k))
-				this.compSwap(array, j + i, j + i + k);
+		for(int i = 0; m1+i < m; i++)
+			for(int j = m1, k = g; k > 0; k >>= 1, j -= k-(i&k))
+				this.compSwap(array, j+i, j+i+k);
 
-		if (b - a > 4) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.pairwiseMerge(array, m, b, depth + 1);
-		}
+		if(b-a > 4) this.pairwiseMerge(array, m, b);
 	}
 
-	private void pairwiseMergeSort(int[] array, int a, int b, int depth) {
-		int m = (a + b) / 2;
+	private void pairwiseMergeSort(int[] array, int a, int b) {
+		int m = (a+b)/2;
 
-		for (int i = a, j = m; i < m; i++, j++)
+		for(int i = a, j = m; i < m; i++, j++)
 			this.compSwap(array, i, j);
 
-		if (b - a > 2) {
-			Writes.recordDepth(depth);
-			Writes.recursion();
-			this.pairwiseMergeSort(array, a, m, depth + 1);
-			Writes.recursion();
-			this.pairwiseMergeSort(array, m, b, depth + 1);
-			this.pairwiseMerge(array, a, b, depth);
+		if(b-a > 2) {
+			this.pairwiseMergeSort(array, a, m);
+			this.pairwiseMergeSort(array, m, b);
+			this.pairwiseMerge(array, a, b);
 		}
 	}
 
-	@Override
-	public void runSort(int[] array, int length, int bucketCount) throws Exception {
-		this.end = length;
-		int n = 1;
-		for (; n < length; n <<= 1)
-			;
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) throws Exception {
+    	this.end = length;
+    	int n = 1;
+    	for(; n < length; n <<= 1);
 
-		this.pairwiseMergeSort(array, 0, n, 0);
-	}
+		this.pairwiseMergeSort(array, 0, n);
+    }
 }

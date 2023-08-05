@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Improved In-Place Merge")
 public final class ImprovedInPlaceMergeSort extends Sort {
     public ImprovedInPlaceMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Improved In-Place Merge");
-        this.setRunAllSortsName("Improved In-Place Merge Sort");
-        this.setRunSortName("Improved In-Place Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void push(int[] array, int p, int a, int b, double sleep) {
@@ -62,8 +53,11 @@ public final class ImprovedInPlaceMergeSort extends Sort {
 
         Highlights.clearMark(1);
         while (i < m && j < b) {
+            Highlights.markArray(2, i);
+            Highlights.markArray(3, j);
+            Delays.sleep(1);
 
-            if (Reads.compareIndices(array, i, j, 0.1, true) == 1)
+            if (Reads.compareValues(array[i], array[j]) == 1)
                 j++;
             else
                 this.push(array, i++, m, j, sleep);
@@ -74,18 +68,13 @@ public final class ImprovedInPlaceMergeSort extends Sort {
             this.push(array, i++, m, b, sleep);
     }
 
-    private void mergeSort(int[] array, int a, int b, double sleep, int depth) {
+    private void mergeSort(int[] array, int a, int b, double sleep) {
         int m = a + (b - a) / 2;
 
         if (b - a > 2) {
-            if (b - a > 3) {
-                Writes.recordDepth(depth);
-                Writes.recursion();
-                this.mergeSort(array, a, m, 2 * sleep, depth + 1);
-            }
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.mergeSort(array, m, b, 2 * sleep, depth + 1);
+            if (b - a > 3)
+                this.mergeSort(array, a, m, 2 * sleep);
+            this.mergeSort(array, m, b, 2 * sleep);
         }
 
         this.merge(array, a, m, b, sleep);
@@ -93,6 +82,6 @@ public final class ImprovedInPlaceMergeSort extends Sort {
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.mergeSort(array, 0, currentLength, Math.max(1.0 / currentLength, 0.001), 0);
+        this.mergeSort(array, 0, currentLength, Math.max(1.0 / currentLength, 0.001));
     }
 }

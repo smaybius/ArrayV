@@ -1,21 +1,13 @@
 package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+@SortMeta(name = "Smooth")
 public final class SmoothSort extends Sort {
     public SmoothSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Smooth");
-        this.setRunAllSortsName("Smooth Sort");
-        this.setRunSortName("Smoothsort");
-        this.setCategory("Selection Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     // SMOOTH SORT - Provided here:
@@ -49,17 +41,17 @@ public final class SmoothSort extends Sort {
             if (Reads.compareValues(val, A[lf]) >= 0 && Reads.compareValues(val, A[rt]) >= 0)
                 break;
 
-            if (Reads.compareIndices(A, lf, rt, 0.2, true) >= 0) {
-                Writes.write(A, head, A[lf], 0.02, true, false);
+            if (Reads.compareValues(A[lf], A[rt]) >= 0) {
+                Writes.write(A, head, A[lf], 0.65, true, false);
                 head = lf;
                 pshift -= 1;
             } else {
-                Writes.write(A, head, A[rt], 0.02, true, false);
+                Writes.write(A, head, A[rt], 0.65, true, false);
                 head = rt;
                 pshift -= 2;
             }
         }
-        Writes.write(A, head, val, 0.02, true, false);
+        Writes.write(A, head, val, 0.65, true, false);
 
         Highlights.clearMark(2);
         Highlights.clearMark(3);
@@ -85,11 +77,11 @@ public final class SmoothSort extends Sort {
 
                 Delays.sleep(0.325);
 
-                if (Reads.compareIndices(A, rt, stepson, 0.2, true) >= 0 ||
-                        Reads.compareIndices(A, lf, stepson, 0.2, true) >= 0)
+                if (Reads.compareValues(A[rt], A[stepson]) >= 0 ||
+                        Reads.compareValues(A[lf], A[stepson]) >= 0)
                     break;
             }
-            Writes.write(A, head, A[stepson], 0.02, true, false);
+            Writes.write(A, head, A[stepson], 0.65, true, false);
 
             Highlights.clearMark(2);
             Highlights.clearMark(3);
@@ -108,7 +100,7 @@ public final class SmoothSort extends Sort {
         }
     }
 
-    public void smoothSort(int[] A, int lo, int hi, boolean fullSort) {
+    private void smoothSort(int[] A, int lo, int hi, boolean fullSort) {
         int head = lo; // the offset of the first element of the prefix into m
 
         // These variables need a little explaining. If our string of heaps
@@ -134,7 +126,7 @@ public final class SmoothSort extends Sort {
                 pshift += 2;
             } else {
                 // adding a new block of length 1
-                if (Reads.compareValues(LP[pshift - 1], hi - head) >= 0) {
+                if (LP[pshift - 1] >= hi - head) {
                     // this block is its final size.
                     this.trinkle(A, p, pshift, head, false);
                 } else {

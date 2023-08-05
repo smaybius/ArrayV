@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Merge-Insertion", showcaseName = "Merge-Insertion Sort (Ford-Johnson)", runName = "Merge-Insertion Sort (Ford-Johnson)")
 public final class MergeInsertionSort extends Sort {
 	public MergeInsertionSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Merge-Insertion");// aka ford-johnson algorithm (in place version)
-		this.setRunAllSortsName("Merge-Insertion Sort");
-		this.setRunSortName("Merge-Insertsort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private void blockSwap(int[] array, int a, int b, int s, double sleep) {
@@ -91,7 +82,7 @@ public final class MergeInsertionSort extends Sort {
 		int k = 1;
 		while (2 * k <= length) {
 			for (int i = 2 * k - 1; i < length; i += 2 * k)
-				if (Reads.compareIndices(array, i - k, i, 0.1, true) > 0)
+				if (Reads.compareValues(array[i - k], array[i]) > 0)
 					this.blockSwap(array, i - k, i, k, 1);
 
 			k *= 2;

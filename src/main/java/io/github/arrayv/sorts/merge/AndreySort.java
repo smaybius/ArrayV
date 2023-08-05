@@ -1,28 +1,20 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+@SortMeta(listName = "Andrey's Merge", showcaseName = "Andrey Astrelin's In-Place Merge Sort", runName = "Andrey Astrelin's In-Place Merge Sort")
 public class AndreySort extends Sort {
     public AndreySort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Andrey's Merge");
-        this.setRunAllSortsName("Andrey Astrelin's In-Place Merge Sort");
-        this.setRunSortName("Andreysort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void sort(int[] arr, int a, int b) {
         while (b > 1) {
             int k = 0;
             for (int i = 1; i < b; i++) {
-                if (Reads.compareIndices(arr, a + k, a + i, 0.2, true) > 0) {
+                if (Reads.compareValues(arr[a + k], arr[a + i]) > 0) {
                     k = i;
                 }
             }
@@ -42,7 +34,7 @@ public class AndreySort extends Sort {
     private int backmerge(int[] arr, int arr1, int l1, int arr2, int l2) {
         int arr0 = arr2 + l1;
         for (;;) {
-            if (Reads.compareIndices(arr, arr1, arr2, 0.2, true) > 0) {
+            if (Reads.compareValues(arr[arr1], arr[arr2]) > 0) {
                 Writes.swap(arr, arr1--, arr0--, 1, true, false);
                 if (--l1 == 0) {
                     return 0;
@@ -67,7 +59,7 @@ public class AndreySort extends Sort {
             // select smallest arr[p0+n*r]
             int q = i;
             for (int j = i + r; j < l; j += r) {
-                if (Reads.compareIndices(arr, a + q, a + j, 0.2, true) > 0) {
+                if (Reads.compareValues(arr[a + q], arr[a + j]) > 0) {
                     q = j;
                 }
             }
@@ -93,7 +85,7 @@ public class AndreySort extends Sort {
         return k;
     }
 
-    private void msort(int[] arr, int a, int len, int depth) {
+    private void msort(int[] arr, int a, int len) {
         if (len < 12) {
             sort(arr, a, len);
             return;
@@ -103,7 +95,7 @@ public class AndreySort extends Sort {
         int lr = (len / r - 1) * r;
 
         for (int p = 2; p <= lr; p += 2) {
-            if (Reads.compareIndices(arr, a + (p - 2), a + (p - 1), 0.2, true) > 0) {
+            if (Reads.compareValues(arr[a + (p - 2)], arr[a + (p - 1)]) > 0) {
                 Writes.swap(arr, a + (p - 2), a + (p - 1), 1, true, false);
             }
             if ((p & 2) != 0) {
@@ -145,18 +137,14 @@ public class AndreySort extends Sort {
         }
 
         int s = len - lr;
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        msort(arr, a + lr, s, depth + 1);
+        msort(arr, a + lr, s);
         aswap(arr, a, a + lr, s);
         s += backmerge(arr, a + (s - 1), s, a + (lr - 1), lr - s);
-        Writes.recordDepth(depth);
-        Writes.recursion();
-        msort(arr, a, s, depth + 1);
+        msort(arr, a, s);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.msort(array, 0, sortLength, 0);
+        this.msort(array, 0, sortLength);
     }
 }

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
@@ -9,19 +10,10 @@ import io.github.arrayv.sorts.templates.Sort;
  *
  * @author Sam Walko (Anonymous0726)
  */
+@SortMeta(listName = "Tree (Unbalanced)", showcaseName = "Tree Sort (Unbalanced)", runName = "Tree Sort (Unbalanced)")
 public final class TreeSort extends Sort {
 	public TreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Tree");
-		this.setRunAllSortsName("Tree Sort (Unbalanced)");
-		this.setRunSortName("Tree sort (Unbalanced)");
-		this.setCategory("Insertion Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private Node NULL_NODE = new Node();
@@ -74,7 +66,7 @@ public final class TreeSort extends Sort {
 			Highlights.markArray(2, pointer);
 
 			// Case 2: The element is smaller and thus belongs in the left subtree
-			if (Reads.compareIndices(array, addPointer, pointer, 0.5, true) == -1) {
+			if (Reads.compareValues(array[addPointer], array[pointer]) == -1) {
 				Delays.sleep(0.25);
 
 				// Recursively get the root of the new left subtree

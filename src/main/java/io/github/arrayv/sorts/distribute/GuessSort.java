@@ -1,21 +1,16 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.templates.BogoSorting;
+import io.github.arrayv.sortdata.SortMeta;
+import io.github.arrayv.sorts.templates.Sort;
 
-public final class GuessSort extends BogoSorting {
+@SortMeta(name = "Guess", slowSort = true, unreasonableLimit = 7, category = "Impractical Sorts")
+public final class GuessSort extends Sort {
     public GuessSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-        this.setSortListName("Guess");
-        this.setRunAllSortsName("Guess Sort");
-        this.setRunSortName("Guess Sort");
-        this.setCategory("Impractical Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(7);
-        this.setBogoSort(false);
     }
+
+    private double delay = 1e-9;
 
     // PROGRAMMER'S NOTE: This sort is intentionally bad, it is purposefully
     // un-optimized.

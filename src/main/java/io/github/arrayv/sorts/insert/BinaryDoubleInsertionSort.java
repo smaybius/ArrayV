@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Binary Double Insertion", showcaseName = "Binary Double Insertion Sort", runName = "Binary Double Insertion Sort")
 public final class BinaryDoubleInsertionSort extends Sort {
 	public BinaryDoubleInsertionSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Binary Double Insertion");
-		this.setRunAllSortsName("Binary Double Insertion Sort");
-		this.setRunSortName("Binary Double Insertsort");
-		this.setCategory("Insertion Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int leftBinarySearch(int[] array, int a, int b, int val, double sleep) {

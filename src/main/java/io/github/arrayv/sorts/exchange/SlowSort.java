@@ -1,24 +1,14 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 // Code refactored from Python: http://wiki.c2.com/?SlowSort
-
-final public class SlowSort extends Sort {
+@SortMeta(name = "Slow", slowSort = true, unreasonableLimit = 150)
+public final class SlowSort extends Sort {
     public SlowSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Slow");
-        this.setRunAllSortsName("Slow Sort");
-        this.setRunSortName("Slowsort");
-        this.setCategory("Exchange Sorts");
-
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(150);
-        this.setBogoSort(false);
     }
 
     private void slowSort(int[] A, int i, int j) {

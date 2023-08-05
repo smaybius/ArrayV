@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.concurrent;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -11,19 +12,14 @@ import io.github.arrayv.sorts.templates.Sort;
  * work for array lengths other than powers of two!
  */
 
+@SortMeta(
+    listName = "Odd-Even Merge (Iterative)",
+    showcaseName = "Iterative Odd-Even Merge Sort",
+    runName = "Iterative Odd-Even Mergesort"
+)
 public final class OddEvenMergeSortIterative extends Sort {
     public OddEvenMergeSortIterative(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Odd-Even Merge (Iterative)");
-        this.setRunAllSortsName("Iterative Odd-Even Merge Sort");
-        this.setRunSortName("Iterative Odd-Even Mergesort");
-        this.setCategory("Concurrent Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     @Override
@@ -32,9 +28,9 @@ public final class OddEvenMergeSortIterative extends Sort {
             for (int k = p; k > 0; k /= 2)
                 for (int j = k % p; j + k < sortLength; j += k + k)
                     for (int i = 0; i < k; i++)
-                        if ((i + j) / (p + p) == (i + j + k) / (p + p))
-                            if (i + j + k < sortLength)
-                                if (Reads.compareIndices(array, i + j, i + j + k, 0.5, true) > 0)
-                                    Writes.swap(array, i + j, i + j + k, 0, true, false);
+                        if ((i + j)/(p + p) == (i + j + k)/(p + p))
+                            if(i + j + k < sortLength)
+                                if(Reads.compareIndices(array, i + j, i + j + k, 0.5, true) > 0)
+                                    Writes.swap(array, i + j, i + j + k, 0.5, true, false);
     }
 }

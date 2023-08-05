@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.hybrid;
 import java.util.Random;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.MultiWayMergeSorting;
 
 /*
@@ -30,41 +31,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Flan")
 public final class FlanSort extends MultiWayMergeSorting {
 	public FlanSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Flan");
-		this.setRunAllSortsName("Flan Sort");
-		this.setRunSortName("Flansort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	// unstable sorting algorithm performing an average of
 	// O(n log n) comparisons and O(n) moves in O(1) memory
 
-	private static final int G = 14;
-	private static final int R = 4;
-	Random rng = new Random();
+	private final int G = 14;
+	private final int R = 4;
 
 	private int medianOfThree(int[] array, int a, int m, int b) {
-		if (Reads.compareIndices(array, m, a, 0.1, true) > 0) {
-			if (Reads.compareIndices(array, m, b, 0.1, true) < 0)
+		if (Reads.compareValues(array[m], array[a]) > 0) {
+			if (Reads.compareValues(array[m], array[b]) < 0)
 				return m;
-			if (Reads.compareIndices(array, a, b, 0.1, true) > 0)
+			if (Reads.compareValues(array[a], array[b]) > 0)
 				return a;
 			else
 				return b;
 		} else {
-			if (Reads.compareIndices(array, m, b, 0.1, true) > 0)
+			if (Reads.compareValues(array[m], array[b]) > 0)
 				return m;
-			if (Reads.compareIndices(array, a, b, 0.1, true) < 0)
+			if (Reads.compareValues(array[a], array[b]) < 0)
 				return a;
 			else
 				return b;
@@ -192,11 +182,11 @@ public final class FlanSort extends MultiWayMergeSorting {
 	}
 
 	private void retrieve(int[] array, int i, int p, int pEnd, int bsv, boolean bw) {
-		int j = i - 1;
-		int m;
+		int j = i - 1, m;
 
-		for (int k = pEnd - (G + 1) - 1; k > p + G; k -= G + 1) {
+		for (int k = pEnd - (G + 1); k > p + G;) {
 			m = this.rightBinSearch(array, k - G, k, bsv, bw) - 1;
+			k -= G + 1;
 
 			while (m >= k)
 				Writes.swap(array, j--, m--, 1, true, false);
@@ -216,13 +206,13 @@ public final class FlanSort extends MultiWayMergeSorting {
 			return;
 		}
 
+		Random rng = new Random();
+
 		int s = len;
 		while (s >= 32)
 			s = (s - 1) / R + 1;
 
-		int i = a + s;
-		int j = a + R * s;
-		int pEnd = p + (s + 1) * (G + 1) + G;
+		int i = a + s, j = a + R * s, pEnd = p + (s + 1) * (G + 1) + G;
 		this.binaryInsertion(array, a, i);
 		for (int k = 0; k < s; k++) // scatter elements to make G sized gaps b/w them
 			Writes.swap(array, a + k, p + k * (G + 1) + G, 1, true, false);
@@ -241,8 +231,7 @@ public final class FlanSort extends MultiWayMergeSorting {
 
 			int bLoc = this.leftBlockSearch(array, p + G, pEnd - (G + 1), array[i]); // search gap location
 
-			if (Reads.compareIndices(array, i, bLoc, 0.1, true) == 0) { // handle equal values to prevent worst case
-																		// O(n^2)
+			if (Reads.compareValues(array[i], array[bLoc]) == 0) { // handle equal values to prevent worst case O(n^2)
 				int eqEnd = this.rightBlockSearch(array, bLoc + (G + 1), pEnd - (G + 1), array[i]); // find the endpoint
 																									// of the gaps with
 																									// equal head
@@ -291,17 +280,13 @@ public final class FlanSort extends MultiWayMergeSorting {
 		int[] pa = Writes.createExternalArray(G + 2);
 		int[] heap = Writes.createExternalArray(G + 2);
 
-		int a = 0;
-		int b = length;
+		int a = 0, b = length;
 
 		while (b - a >= 32) {
 			int piv = array[this.medianOfThreeNinthers(array, a, b)];
 
 			// partition -> [a][E > piv][i][E == piv][j][E < piv][b]
-			int i1 = a;
-			int i = a - 1;
-			int j = b;
-			int j1 = b;
+			int i1 = a, i = a - 1, j = b, j1 = b;
 
 			for (;;) {
 				while (++i < j) {
@@ -340,10 +325,7 @@ public final class FlanSort extends MultiWayMergeSorting {
 				}
 			}
 
-			int left = i - a;
-			int right = b - j;
-			int m;
-			int kCnt = 0;
+			int left = i - a, right = b - j, m, kCnt = 0;
 
 			if (left <= right) { // sort the smaller partition using larger partition as space
 				m = b - left;
@@ -391,7 +373,6 @@ public final class FlanSort extends MultiWayMergeSorting {
 			}
 		}
 		this.binaryInsertion(array, a, b);
-		Writes.deleteExternalArray(pa);
-		Writes.deleteExternalArray(heap);
+		Writes.deleteExternalArrays(pa, heap);
 	}
 }

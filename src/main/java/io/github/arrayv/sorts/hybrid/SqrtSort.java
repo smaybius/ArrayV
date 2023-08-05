@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
@@ -60,23 +61,12 @@ final class SqrtState {
     }
 }
 
+@SortMeta(name = "Sqrt")
 public final class SqrtSort extends Sort {
     private InsertionSort insertSorter;
 
     public SqrtSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Sqrt");
-        // this.setRunAllID("Square Root Sort (Block Merge Sort)");
-        // this.setRunAllSortsName("Square Root Sort [Block Merge Sort]");
-        this.setRunAllSortsName("Sqrtsort");
-        this.setRunSortName("Sqrtsort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void sqrtSwap(int[] arr, int a, int b, boolean auxwrite) {
@@ -104,7 +94,7 @@ public final class SqrtSort extends Sort {
             Highlights.markArray(2, pos + left);
             Highlights.markArray(3, pos + right);
 
-            if (right < leftLen || Reads.compareIndices(arr, pos + left, pos + right, 0.5, true) > 0) {
+            if (right < leftLen || Reads.compareValues(arr[pos + left], arr[pos + right]) > 0) {
                 Writes.write(arr, pos + (mergedPos--), arr[pos + (left--)], 1, true, auxwrite);
             } else
                 Writes.write(arr, pos + (mergedPos--), arr[pos + (right--)], 1, true, auxwrite);
@@ -131,7 +121,7 @@ public final class SqrtSort extends Sort {
         rightEnd += leftEnd;
 
         while (right < rightEnd) {
-            if (left == leftEnd || Reads.compareIndices(arr, pos + left, pos + right, 0.5, true) > 0) {
+            if (left == leftEnd || Reads.compareValues(arr[pos + left], arr[pos + right]) > 0) {
                 Writes.write(arr, pos + dist++, arr[pos + right++], 1, true, auxwrite);
             } else
                 Writes.write(arr, pos + dist++, arr[pos + left++], 1, true, auxwrite);
@@ -187,7 +177,7 @@ public final class SqrtSort extends Sort {
         int typeFrag = 1 - leftOverFrag; // 1 if inverted
 
         while (left < leftEnd && right < rightEnd) {
-            if (Reads.compareIndices(arr, pos + left, pos + right, 0.5, true) - typeFrag < 0) {
+            if (Reads.compareValues(arr[pos + left], arr[pos + right]) - typeFrag < 0) {
                 Writes.write(arr, pos + dist++, arr[pos + left++], 1, true, auxwrite);
             } else
                 Writes.write(arr, pos + dist++, arr[pos + right++], 1, true, auxwrite);
@@ -291,7 +281,7 @@ public final class SqrtSort extends Sort {
 
         for (int dist = 1; dist < len; dist += 2) {
             extraDist = 0;
-            if (Reads.compareIndices(arr, pos + (dist - 1), pos + dist, 0.2, true) > 0)
+            if (Reads.compareValues(arr[pos + (dist - 1)], arr[pos + dist]) > 0)
                 extraDist = 1;
 
             Writes.write(arr, pos + dist - 3, arr[pos + dist - 1 + extraDist], 1, true, auxwrite);
@@ -369,10 +359,9 @@ public final class SqrtSort extends Sort {
                 leftIndex = tagIndex - 1;
 
                 for (int rightIndex = tagIndex; rightIndex < blockCount; rightIndex++) {
-                    int rightComp = Reads.compareIndices(arr, blockPos + leftIndex * regBlockLen,
-                            blockPos + rightIndex * regBlockLen, 0.2, true);
-                    if (rightComp > 0
-                            || (rightComp == 0 && Reads.compareIndices(tags, leftIndex, rightIndex, 0.2, true) > 0))
+                    int rightComp = Reads.compareValues(arr[blockPos + leftIndex * regBlockLen],
+                            arr[blockPos + rightIndex * regBlockLen]);
+                    if (rightComp > 0 || (rightComp == 0 && tags[leftIndex] > tags[rightIndex]))
                         leftIndex = rightIndex;
                 }
 
@@ -389,8 +378,8 @@ public final class SqrtSort extends Sort {
                 lastLen = leftOver % regBlockLen;
 
             if (lastLen != 0) {
-                while (aBlockCount < blockCount && Reads.compareIndices(arr, blockPos + blockCount * regBlockLen,
-                        blockPos + (blockCount - aBlockCount - 1) * regBlockLen, 0.2, true) < 0) {
+                while (aBlockCount < blockCount && Reads.compareValues(arr[blockPos + blockCount * regBlockLen],
+                        arr[blockPos + (blockCount - aBlockCount - 1) * regBlockLen]) < 0) {
                     aBlockCount++;
                 }
             }

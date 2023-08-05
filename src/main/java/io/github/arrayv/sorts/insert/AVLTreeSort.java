@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
@@ -9,19 +10,10 @@ import io.github.arrayv.sorts.templates.Sort;
  *
  * @author Sam Walko (Anonymous0726)
  */
+@SortMeta(listName = "Tree (AVL)", showcaseName = "Tree Sort (AVL Balanced)", runName = "Tree Sort (AVL Balanced)")
 public final class AVLTreeSort extends Sort {
 	public AVLTreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("AVL Tree");
-		this.setRunAllSortsName("Tree Sort (AVL Balanced)");
-		this.setRunSortName("Tree sort (AVL Balanced)");
-		this.setCategory("Insertion Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private Node NULL_NODE = new Node(); // (sub)tree of size 0
@@ -100,7 +92,8 @@ public final class AVLTreeSort extends Sort {
 			Highlights.markArray(2, pointer);
 
 			// Case 2: The element is smaller and thus belongs in the left subtree
-			if (Reads.compareIndices(array, addPointer, pointer, 0.25, true) == -1) {
+			if (Reads.compareValues(array[addPointer], array[pointer]) == -1) {
+				Delays.sleep(0.25);
 
 				// Recursively get the root of the new left subtree
 				AddContainer container = left.add(addPointer);

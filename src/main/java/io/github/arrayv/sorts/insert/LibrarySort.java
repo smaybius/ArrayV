@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -31,20 +32,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Library", showcaseName = "Library Sort", runName = "Library Sort")
 public final class LibrarySort extends Sort {
 	public LibrarySort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Library");
-		this.setRunAllSortsName("Library Sort");
-		this.setRunSortName("Library Sort");
-		this.setCategory("Insertion Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	// possible implementation of the library sort here

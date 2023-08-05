@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.misc;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -12,25 +13,21 @@ import io.github.arrayv.sorts.templates.Sort;
  * https://www.ideserve.co.in/learn/pancake-sorting
  */
 
+@SortMeta(
+    name = "Pancake",
+    runName = "Pancake Sort"
+)
 public final class PancakeSort extends Sort {
     public PancakeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Pancake");
-        this.setRunAllSortsName("Pancake Sorting");
-        this.setRunSortName("Pancake Sort");
-        this.setCategory("Miscellaneous Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private boolean sorted(int[] array, int length) {
-        for (int i = 0; i < length; i++) {
-            if (Reads.compareIndices(array, i, i + 1, 0.025, true) > 0)
-                return false;
+        for(int i = 0; i < length; i++) {
+            Highlights.markArray(1, i);
+            Delays.sleep(0.025);
+
+            if(Reads.compareValues(array[i], array[i + 1]) > 0) return false;
         }
         return true;
     }
@@ -55,17 +52,18 @@ public final class PancakeSort extends Sort {
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         for (int i = length - 1; i >= 0; i--) {
-            if (!this.sorted(array, i)) {
+            if(!this.sorted(array, i)) {
                 int index = this.findMax(array, i);
 
-                if (index == 0) {
+                if(index == 0) {
                     Writes.reversal(array, 0, i, 0.05, true, false);
-                } else if (index != i) {
+                }
+                else if(index != i) {
                     Writes.reversal(array, 0, index, 0.05, true, false);
                     Writes.reversal(array, 0, i, 0.05, true, false);
                 }
-            } else
-                break;
+            }
+            else break;
         }
     }
 }

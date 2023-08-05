@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.IterativeCircleSorting;
 
@@ -15,20 +16,10 @@ Texts.  A copy of the license is included in the section entitled "GNU
 Free Documentation License".
  *
  */
-
+@SortMeta(listName = "Intro Circle (Iterative)", showcaseName = "Iterative Introspective Circle Sort", runName = "Iterative Introspective Circle Sort")
 public final class IntroCircleSortIterative extends IterativeCircleSorting {
     public IntroCircleSortIterative(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Intro Circle (Iterative)");
-        this.setRunAllSortsName("Iterative Introspective Circle Sort");
-        this.setRunSortName("Iterative Introspective Circlesort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     @Override
@@ -45,6 +36,7 @@ public final class IntroCircleSortIterative extends IterativeCircleSorting {
             iterations++;
 
             if (iterations >= threshold) {
+                Highlights.clearAllMarks();
                 InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
                 binaryInserter.customInsertSort(array, 0, length, 0.5, false);
                 break;

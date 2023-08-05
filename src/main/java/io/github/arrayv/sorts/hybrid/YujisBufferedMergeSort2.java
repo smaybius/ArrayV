@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -29,20 +30,11 @@ SOFTWARE.
  *
  */
 
+@SortMeta(listName = "Opti. A/Y", showcaseName = "Optimized Andrey/Yuji Sort", runName = "Optimized Andrey/Yuji Sort")
 public final class YujisBufferedMergeSort2 extends Sort {
 
 	public YujisBufferedMergeSort2(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Optimized A/Y Sort");
-		this.setRunAllSortsName("Optimized Andrey/Yuji Sort");
-		this.setRunSortName("Optimized Andrey/Yuji Sort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	public static int ceilLog(int n) {
@@ -96,7 +88,7 @@ public final class YujisBufferedMergeSort2 extends Sort {
 
 		if (useBinarySearch) {
 			while (i < m - a && j < b) {
-				if (Reads.compareIndices(array, j, p + i, 0.1, true) == -1) {
+				if (Reads.compareValues(array[j], array[p + i]) == -1) {
 					int q = this.binarySearch(array, j, b, array[p + i], true);
 					while (j < q)
 						Writes.swap(array, k++, j++, 1, true, false);
@@ -108,7 +100,7 @@ public final class YujisBufferedMergeSort2 extends Sort {
 			}
 		} else {
 			while (i < m - a && j < b) {
-				if (Reads.compareIndices(array, p + i, j, 0.1, true) <= 0) {
+				if (Reads.compareValues(array[p + i], array[j]) <= 0) {
 					Writes.swap(array, k++, p + (i++), 1, true, false);
 				} else {
 					Writes.swap(array, k++, j++, 1, true, false);
@@ -123,7 +115,7 @@ public final class YujisBufferedMergeSort2 extends Sort {
 	private int merge(int[] array, int a, int m, int b, int p) {
 		int i = a, j = m;
 		while (i < m && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.1, true) <= 0)
+			if (Reads.compareIndices(array, i, j, 0, false) <= 0)
 				Writes.swap(array, p++, i++, 1, true, false);
 			else
 				Writes.swap(array, p++, j++, 1, true, false);
@@ -170,7 +162,7 @@ public final class YujisBufferedMergeSort2 extends Sort {
 		}
 	}
 
-	private void bufferedMerge(int[] array, int a, int b, int depth) {
+	private void bufferedMerge(int[] array, int a, int b) {
 		if (b - a <= 16) {
 			this.binaryInsertion(array, a, b);
 			return;
@@ -191,19 +183,15 @@ public final class YujisBufferedMergeSort2 extends Sort {
 		}
 
 		// the same as Andreysort's buffer redistribution
-		Writes.recordDepth(depth);
-		Writes.recursion();
-		this.bufferedMerge(array, a, m, depth + 1);
+		this.bufferedMerge(array, a, m);
 		this.multiSwap(array, a, b - (m - a), m - a);
 		int s = this.merge(array, m, b - (m - a), b, a);
-		Writes.recordDepth(depth);
-		Writes.recursion();
-		this.bufferedMerge(array, b - (m - a) - s, b, depth + 1);
+		this.bufferedMerge(array, b - (m - a) - s, b);
 
 	}
 
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) {
-		this.bufferedMerge(array, 0, length, 0);
+		this.bufferedMerge(array, 0, length);
 	}
 }

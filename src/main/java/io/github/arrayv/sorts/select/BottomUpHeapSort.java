@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,20 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Bottom-Up Heap")
 public final class BottomUpHeapSort extends Sort {
 	public BottomUpHeapSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Bottom-up Heap");
-		this.setRunAllSortsName("Bottom-up Heap Sort");
-		this.setRunSortName("Bottom-up Heapsort");
-		this.setCategory("Selection Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	// source: https://en.wikipedia.org/wiki/Heapsort#Bottom-up_heapsort
@@ -49,10 +40,10 @@ public final class BottomUpHeapSort extends Sort {
 	public void siftDown(int[] array, int i, int b) {
 		int j = i;
 		for (; 2 * j + 1 < b; j = 2 * j + 2 < b
-				? (Reads.compareIndices(array, 2 * j + 2, 2 * j + 1, 0.05, true) > 0 ? 2 * j + 2 : 2 * j + 1)
+				? (Reads.compareValues(array[2 * j + 2], array[2 * j + 1]) > 0 ? 2 * j + 2 : 2 * j + 1)
 				: 2 * j + 1)
 			;
-		for (; Reads.compareIndices(array, i, j, 0.2, true) > 0; j = (j - 1) / 2)
+		for (; Reads.compareValues(array[i], array[j]) > 0; j = (j - 1) / 2)
 			;
 		for (; j > i; j = (j - 1) / 2)
 			Writes.swap(array, i, j, 1, true, false);

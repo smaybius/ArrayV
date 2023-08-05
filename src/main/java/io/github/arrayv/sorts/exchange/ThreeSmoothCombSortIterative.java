@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -27,25 +28,15 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Three-Smooth Comb (Iterative)", showcaseName = "Three-Smooth Combsort (Iterative)", runName = "Three-Smooth Combsort (Iterative)")
 public final class ThreeSmoothCombSortIterative extends Sort {
   public ThreeSmoothCombSortIterative(ArrayVisualizer arrayVisualizer) {
     super(arrayVisualizer);
-
-    this.setSortListName("3-Smooth Comb (Iterative)");
-    this.setRunAllSortsName("Iterative 3-Smooth Comb Sort");
-    this.setRunSortName("Iterative 3-Smooth Combsort");
-    this.setCategory("Exchange Sorts");
-    this.setBucketSort(false);
-    this.setRadixSort(false);
-    this.setUnreasonablySlow(false);
-    this.setUnreasonableLimit(0);
-    this.setBogoSort(false);
   }
 
   private void compSwap(int[] array, int a, int b) {
     if (Reads.compareIndices(array, a, b, 0.5, true) == 1)
-      Writes.swap(array, a, b, 0, true, false);
+      Writes.swap(array, a, b, 0.5, true, false);
   }
 
   @Override

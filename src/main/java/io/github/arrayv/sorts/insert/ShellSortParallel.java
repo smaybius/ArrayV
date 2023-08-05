@@ -1,21 +1,13 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.ShellSorting;
 
+@SortMeta(listName = "Shell (Parallel)", showcaseName = "Shell Sort (Parallel)", runName = "Shell Sort (Parallel)")
 public final class ShellSortParallel extends ShellSorting {
 	public ShellSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Shell (Parallel)");
-		this.setRunAllSortsName("Parallel Shell Sort");
-		this.setRunSortName("Parallel Shellsort");
-		this.setCategory("Insertion Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int[] array;
@@ -37,7 +29,7 @@ public final class ShellSortParallel extends ShellSorting {
 
 	private void gappedInsertion(int a, int b, int g) {
 		for (int i = a + g; i < b; i += g) {
-			if (Reads.compareIndices(this.array, i - g, i, 0.1, true) > 0) {
+			if (Reads.compareIndices(this.array, i - g, i, 1, true) > 0) {
 				int tmp = this.array[i], j = i;
 				Highlights.clearMark(2);
 

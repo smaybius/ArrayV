@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.IndexedRotations;
 
@@ -29,19 +30,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "Lazierest", showcaseName = "Lazierest Sort", runName = "Lazierest Sort")
 public final class LazierestSort extends Sort {
 	public LazierestSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-		this.setSortListName("Lazierest Stable");
-		this.setRunAllSortsName("Lazierest Stable Sort");
-		this.setRunSortName("Lazierest Sort");
-		this.setCategory("Hybrid Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	private int ceilCbrt(int n) {
@@ -68,7 +60,7 @@ public final class LazierestSort extends Sort {
 	}
 
 	private void rotate(int[] array, int a, int m, int b) {
-		IndexedRotations.cycleReverse(array, a, m, b, 0.5, true, false);
+		IndexedRotations.adaptable(array, a, m, b, 0.5, true, false);
 	}
 
 	private int leftBinSearch(int[] array, int a, int b, int val) {
@@ -122,7 +114,7 @@ public final class LazierestSort extends Sort {
 		int i = a, j = m, k;
 
 		while (i < j && j < b) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) == 1) {
+			if (Reads.compareValues(array[i], array[j]) == 1) {
 				k = this.leftExpSearch(array, j + 1, b, array[i]);
 				IndexedRotations.cycleReverse(array, i, j, k, 0.75, true, false);
 
@@ -137,7 +129,7 @@ public final class LazierestSort extends Sort {
 		int i = m - 1, j = b - 1, k;
 
 		while (j > i && i >= a) {
-			if (Reads.compareIndices(array, i, j, 0.2, true) > 0) {
+			if (Reads.compareValues(array[i], array[j]) > 0) {
 				k = this.rightExpSearch(array, a, i, array[j]);
 				this.rotate(array, k, i + 1, j + 1);
 

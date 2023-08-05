@@ -1,28 +1,18 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-final public class LRQuickSort extends Sort {
+@SortMeta(listName = "Quicksort (Left/Right Pointers)", showcaseName = "Quicksort (Left/Right Pointers)", runName = "Quicksort (Left/Right Pointers)")
+public final class LRQuickSort extends Sort {
     public LRQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Left/Right Quick");
-        this.setRunAllSortsName("Quick Sort, Left/Right Pointers");
-        this.setRunSortName("Left/Right Quicksort");
-        this.setCategory("Exchange Sorts");
-
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     // Thanks to Timo Bingmann for providing a good reference for Quick Sort w/ LR
     // pointers.
-    public void quickSort(int[] a, int p, int r, int d) {
-        Writes.recordDepth(d);
+    private void quickSort(int[] a, int p, int r) {
         int pivot = p + (r - p + 1) / 2;
         int x = a[pivot];
 
@@ -60,17 +50,15 @@ final public class LRQuickSort extends Sort {
         }
 
         if (p < j) {
-            Writes.recursion();
-            this.quickSort(a, p, j, d + 1);
+            this.quickSort(a, p, j);
         }
         if (i < r) {
-            Writes.recursion();
-            this.quickSort(a, i, r, d + 1);
+            this.quickSort(a, i, r);
         }
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.quickSort(array, 0, currentLength - 1, 0);
+        this.quickSort(array, 0, currentLength - 1);
     }
 }

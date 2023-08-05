@@ -1,24 +1,17 @@
 package io.github.arrayv.sorts.select;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
  * @author aphitorite
  */
+@SortMeta(name = "Triangular Heap")
 public final class TriangularHeapSort extends Sort {
 
 	public TriangularHeapSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-		this.setSortListName("Triangular Heap");
-		this.setRunAllSortsName("Triangular Heap Sort");
-		this.setRunSortName("Triangular Heapsort");
-		this.setCategory("Selection Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	public static int triangularRoot(int val) {
@@ -40,7 +33,7 @@ public final class TriangularHeapSort extends Sort {
 
 				break;
 			}
-			int max = (this.Reads.compareIndices(array, left, right, 0.2, true) >= 0) ? left : right;
+			int max = (this.Reads.compareValues(array[left], array[right]) >= 0) ? left : right;
 
 			this.Highlights.markArray(2, max);
 			if (this.Reads.compareValues(array[max], temp) == 1) {
@@ -65,12 +58,13 @@ public final class TriangularHeapSort extends Sort {
 
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) {
+		// TODO Auto-generated method stub
 		triangularHeapify(array, length);
 		for (int i = 1; i < length - 1; i++) {
 			this.Writes.swap(array, 0, length - i, 0.5D, true, false);
 			siftDown(array, length - i, 0);
 		}
-		if (this.Reads.compareIndices(array, 0, 1, 0.5, true) == 1)
+		if (this.Reads.compareValues(array[0], array[1]) == 1)
 			this.Writes.swap(array, 0, 1, 0.5D, true, false);
 
 	}

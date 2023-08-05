@@ -6,6 +6,7 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -19,20 +20,10 @@ import io.github.arrayv.sorts.templates.Sort;
   Free Documentation License".
  *
  */
-
+@SortMeta(listName = "Patience", showcaseName = "Patience Sort", runName = "Patience Sort")
 public final class PatienceSort extends Sort {
 	public PatienceSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-
-		this.setSortListName("Patience");
-		this.setRunAllSortsName("Patience Sort");
-		this.setRunSortName("Patience Sort");
-		this.setCategory("Insertion Sorts");
-		this.setBucketSort(false);
-		this.setRadixSort(false);
-		this.setUnreasonablySlow(false);
-		this.setUnreasonableLimit(0);
-		this.setBogoSort(false);
 	}
 
 	final private class Pile extends Stack<Integer> implements Comparable<Pile> {

@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.distribute;
 import java.util.ArrayList;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -30,24 +31,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(listName = "MSD Radix", showcaseName = "MSD Radix Sort", runName = "MSD Radix Sort", question = "Enter base width (default: 4):", defaultAnswer = 4)
 public final class MSDRadixSort extends Sort {
     public MSDRadixSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("MSD Radix");
-        // this.setRunAllID("Most Significant Digit Radix Sort");
-        this.setRunAllSortsName("Most Significant Digit Radix Sort, Base 4");
-        this.setRunSortName("Most Significant Digit Radixsort");
-        this.setCategory("Distribution Sorts");
-        this.setBucketSort(true);
-        this.setRadixSort(true);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
-    private void radixMSD(int[] array, int length, int min, int max, int radix, int pow, int depth) {
+    private void radixMSD(int[] array, int length, int min, int max, int radix, int pow) {
         if (min >= max || pow < 0)
             return;
 
@@ -76,9 +66,7 @@ public final class MSDRadixSort extends Sort {
 
         int sum = 0;
         for (int i = 0; i < registers.length; i++) {
-            Writes.recordDepth(depth);
-            Writes.recursion();
-            this.radixMSD(array, length, sum + min, sum + min + registers[i].size(), radix, pow - 1, depth + 1);
+            this.radixMSD(array, length, sum + min, sum + min + registers[i].size(), radix, pow - 1);
 
             sum += registers[i].size();
             Writes.arrayListClear(registers[i]);
@@ -92,6 +80,6 @@ public final class MSDRadixSort extends Sort {
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         int highestpower = Reads.analyzeMaxLog(array, sortLength, bucketCount, 0.5, true);
 
-        radixMSD(array, sortLength, 0, sortLength, bucketCount, highestpower, 0);
+        radixMSD(array, sortLength, 0, sortLength, bucketCount, highestpower);
     }
 }

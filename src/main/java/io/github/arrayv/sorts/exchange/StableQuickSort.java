@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.exchange;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.ArrayVList;
 
@@ -29,23 +30,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
-final public class StableQuickSort extends Sort {
+@SortMeta(listName = "Quicksort (Stable)", showcaseName = "Quicksort (Stable)", runName = "Quicksort (Stable)")
+public final class StableQuickSort extends Sort {
     private int length;
 
     public StableQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Stable Quick");
-        this.setRunAllSortsName("Stable Quick Sort");
-        this.setRunSortName("Stable Quicksort");
-        this.setCategory("Exchange Sorts");
-
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     // Author: Rodney Shaghoulian

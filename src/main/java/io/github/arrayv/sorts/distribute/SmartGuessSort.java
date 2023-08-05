@@ -1,22 +1,16 @@
 package io.github.arrayv.sorts.distribute;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.templates.BogoSorting;
+import io.github.arrayv.sortdata.SortMeta;
+import io.github.arrayv.sorts.templates.Sort;
 
-public final class SmartGuessSort extends BogoSorting {
+@SortMeta(name = "Smart Guess", slowSort = true, unreasonableLimit = 19)
+public final class SmartGuessSort extends Sort {
     public SmartGuessSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Smart Guess");
-        this.setRunAllSortsName("Smart Guess Sort");
-        this.setRunSortName("Smart Guess Sort");
-        this.setCategory("Impractical Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(true);
-        this.setUnreasonableLimit(19);
-        this.setBogoSort(false);
     }
+
+    private double delay = 1e-9;
 
     // PROGRAMMER'S NOTE: This sort is intentionally bad, it is purposefully
     // un-optimized.
@@ -35,7 +29,7 @@ public final class SmartGuessSort extends BogoSorting {
                 Highlights.markArray(2, i + 1);
                 Delays.sleep(this.delay);
                 int comp = Reads.compareIndices(array, loops[i], loops[i + 1], this.delay, true);
-                if (comp < 0 || comp == 0 && Reads.compareIndices(loops, i, i + 1, 0.1, true) < 0)
+                if (comp < 0 || comp == 0 && loops[i] < loops[i + 1])
                     continue;
                 sorted = false;
                 break;

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,21 +29,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Iterative Top-Down Merge")
 public class IterativeTopDownMergeSort extends Sort {
 
     public IterativeTopDownMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Iterative Top-down Merge");
-        this.setRunAllSortsName("Iterative Top-down Merge Sort");
-        this.setRunSortName("Iterative Top-down Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private static int ceilPowerOfTwo(int x) {
@@ -60,7 +51,7 @@ public class IterativeTopDownMergeSort extends Sort {
         Highlights.markArray(2, high);
         int nxt = start;
         for (; low < mid && high < end; ++nxt) {
-            if (Reads.compareIndices(array, low, high, 0.5, true) == 1) {
+            if (Reads.compareValues(array[low], array[high]) == 1) {
                 Writes.write(tmp, nxt, array[high++], 1, false, true);
                 Highlights.markArray(2, high);
             } else {

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 
 /*
  *
@@ -36,22 +37,13 @@ SOFTWARE.
  * but rather, it is a variation of the shuffle algorithm.
  *
  * See also a proof of the time complexity at https://arxiv.org/abs/1508.00292.
- * The implementation is based on the pseudocode found in  */
-
+ * The implementation is based on the pseudocode found in this.
+ */
+@SortMeta(name = "New Shuffle Merge")
 public class NewShuffleMergeSort extends IterativeTopDownMergeSort {
 
     public NewShuffleMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("New Shuffle Merge");
-        this.setRunAllSortsName("New Shuffle Merge Sort");
-        this.setRunSortName("New Shuffle Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void rotateEqual(int[] array, int a, int b, int size, double sleep) {
@@ -163,7 +155,7 @@ public class NewShuffleMergeSort extends IterativeTopDownMergeSort {
         int i = start;
         int j = i + 1;
         while (j < end) {
-            int cmp = Reads.compareIndices(array, i, j, 0.1, true);
+            int cmp = Reads.compareIndices(array, i, j, 0, true);
             if (cmp == -1 || !type && cmp == 0) {
                 ++i;
                 if (i == j) {
@@ -176,10 +168,10 @@ public class NewShuffleMergeSort extends IterativeTopDownMergeSort {
             } else {
                 int r = 0;
                 if (type)
-                    while (j + 2 * r < end && Reads.compareIndices(array, j + 2 * r, i, 0.1, true) != 1)
+                    while (j + 2 * r < end && Reads.compareIndices(array, j + 2 * r, i, 0, true) != 1)
                         ++r;
                 else
-                    while (j + 2 * r < end && Reads.compareIndices(array, j + 2 * r, i, 0.1, true) == -1)
+                    while (j + 2 * r < end && Reads.compareIndices(array, j + 2 * r, i, 0, true) == -1)
                         ++r;
                 --j;
                 unshuffle(array, j, j + 2 * r);
