@@ -12,7 +12,7 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author EilrahcF
  *
  */
-@SortMeta(name = "Quad Stooge", slowSort = true, unreasonableLimit = 2048)
+@SortMeta(name = "Quad Stooge", slowSort = true, unreasonableLimit = 2048, category = "Impractical Sorts")
 public final class QuadStoogeSort extends Sort {
 
 	/**

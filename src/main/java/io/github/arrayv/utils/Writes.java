@@ -226,6 +226,14 @@ public final class Writes {
         Delays.sleep(pause);
     }
 
+    /**
+     * Same as {@link #insert()}, but with swaps.
+     *
+     * @param pos      The item to select
+     * @param to       The index to move @param pos to.
+     * @param auxwrite Adds to the "writes to aux arrays" statistic if true, or
+     *                 "writes to main array" if false
+     */
     public void multiSwap(int[] array, int pos, int to, double sleep, boolean mark, boolean auxwrite) {
         if (to - pos > 0) {
             for (int i = pos; i < to; i++) {
@@ -240,6 +248,14 @@ public final class Writes {
         }
     }
 
+    /**
+     * Moves an item to a specific index
+     *
+     * @param pos      The item to select
+     * @param to       The index to move @param pos to.
+     * @param auxwrite Adds to the "writes to aux arrays" statistic if true, or
+     *                 "writes to main array" if false
+     */
     public void insert(int[] array, int pos, int to, double sleep, boolean mark, boolean auxwrite) {
         int temp = array[pos];
         if (to - pos > 0) {
@@ -267,6 +283,14 @@ public final class Writes {
         }
     }
 
+    public void addReversal() {
+        this.reversals++;
+    }
+
+    public void addSwap() {
+        this.swaps++;
+    }
+
     public void recursion() {
         this.recursions++;
     }
@@ -276,6 +300,14 @@ public final class Writes {
             this.depth = k;
     }
 
+    /**
+     * Wrapper function for @param array [@param at ] = @param equals
+     *
+     * @param at       The index to write to
+     * @param equals   The value to write to @param at
+     * @param auxwrite Adds to the "writes to aux arrays" statistic if true, or
+     *                 "writes to main array" if false
+     */
     public void write(int[] array, int at, int equals, double pause, boolean mark, boolean auxwrite) {
         if (arrayVisualizer.sortCanceled())
             throw new StopSort();
@@ -367,8 +399,11 @@ public final class Writes {
         Delays.sleep(pause);
     }
 
-    // Simulates a write in order to better estimate time for values being written
-    // to an ArrayList
+    /**
+     * Simulates a write in order to better estimate time for values being written
+     * to an ArrayList.
+     */
+
     public void mockWrite(int length, int pos, int val, double pause) {
         if (arrayVisualizer.sortCanceled())
             throw new StopSort();
@@ -385,7 +420,11 @@ public final class Writes {
         Delays.sleep(pause);
     }
 
-    public void transcribe(int[] array, ArrayList<Integer>[] registers, int start, boolean mark, boolean auxwrite) {
+    /**
+     * Dumps all ArrayLists from an array of ArrayLists into the selected array,
+     * while also clearing all ArrayLists from the source array.
+     */
+    public void transcribe(int[] array, ArrayVList[] registers, int start, boolean mark, boolean auxwrite) {
         int total = start;
 
         for (int index = 0; index < registers.length; index++) {
@@ -398,12 +437,28 @@ public final class Writes {
         }
     }
 
-    public void transcribeMSD(int[] array, ArrayList<Integer>[] registers, int start, int min, double sleep,
+    /**
+     * Updates the visualization of an array of ArrayLists without adding to the
+     * statistics or affecting the ArrayLists.
+     */
+    public <T extends ArrayVList> void fakeTranscribe(int[] array, T[] registers, int start) {
+        int total = start;
+
+        for (int index = 0; index < registers.length; index++) {
+            for (int i = 0; i < registers[index].size(); i++) {
+                this.write(array, total++, registers[index].get(i), 0, false, false);
+                this.writes--;
+            }
+            array[Math.clamp(total, 0, arrayVisualizer.getCurrentLength())] = 0; // padding between each ArrayList
+        }
+    }
+
+    public void transcribeMSD(int[] array, ArrayVList[] registers, int start, int min, double sleep,
             boolean mark, boolean auxwrite) {
         int total = start;
         int temp = 0;
 
-        for (ArrayList<Integer> list : registers) {
+        for (ArrayVList list : registers) {
             total += list.size();
         }
 
@@ -416,7 +471,7 @@ public final class Writes {
         }
     }
 
-    public void fancyTranscribe(int[] array, int length, ArrayList<Integer>[] registers, double sleep) {
+    public void fancyTranscribe(int[] array, int length, ArrayVList[] registers, double sleep) {
         int[] tempArray = this.createExternalArray(length);
         boolean[] tempWrite = new boolean[length];
         int radix = registers.length;
@@ -521,6 +576,17 @@ public final class Writes {
         return result;
     }
 
+    /**
+     * Same as {@link Writes#createExternalArray()}, but without changing the alloc
+     * amount. Used for views of arrays of ArrayLists.
+     */
+    public int[] createMockExternalArray(int length) {
+        int[] result = new int[length];
+        arrayVisualizer.getArrays().add(result);
+        arrayVisualizer.updateNow();
+        return result;
+    }
+
     public void deleteExternalArray(int[] array) {
         this.allocAmount -= array.length;
         arrayVisualizer.getArrays().remove(array);
@@ -529,6 +595,25 @@ public final class Writes {
 
     public void deleteExternalArrays(int[]... arrays) {
         this.allocAmount -= Arrays.stream(arrays).reduce(0, (a, b) -> (a + b.length), (a, b) -> a + b);
+        List<int[]> visArrays = arrayVisualizer.getArrays();
+        Arrays.stream(arrays).forEach(visArrays::remove);
+        arrayVisualizer.updateNow();
+    }
+
+    /**
+     * Removes an array of ArrayLists from the view without changing the alloc
+     * amount
+     */
+    public void deleteMockExternalArray(int[] array) {
+        arrayVisualizer.getArrays().remove(array);
+        arrayVisualizer.updateNow();
+    }
+
+    /**
+     * Removes multiple arrays of ArrayLists from the view without changing the
+     * alloc amount
+     */
+    public void deleteMockExternalArrays(int[]... arrays) {
         List<int[]> visArrays = arrayVisualizer.getArrays();
         Arrays.stream(arrays).forEach(visArrays::remove);
         arrayVisualizer.updateNow();

@@ -28,7 +28,7 @@ public class ArrayWaveSound implements AudioProcessor {
     private double frequency;
     private double phase;
     private Phasor phs;
-    private final float sampleRate = 192000;
+    private final float sampleRate = 48000;
     private boolean enabled;
 
     public ArrayWaveSound() {

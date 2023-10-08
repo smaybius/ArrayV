@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Stable Permutation", showcaseName = "Stable Permutation Sort", runName = "Stable Permutation Sort", slowSort = true, unreasonableLimit = 11)
+@SortMeta(listName = "Stable Permutation", showcaseName = "Stable Permutation Sort", runName = "Stable Permutation Sort", slowSort = true, unreasonableLimit = 11, category = "Impractical Sorts")
 public final class StablePermutationSort extends BogoSorting {
 	public StablePermutationSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

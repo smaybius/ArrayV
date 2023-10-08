@@ -49,7 +49,7 @@ public class CocktailMergeSort extends Sort {
             Highlights.clearAllMarks();
 
             this.timSortInstance = new TimSorting(array, sortLength, this.arrayVisualizer);
-            TimSorting.sort(this.timSortInstance, array, sortLength);
+            TimSorting.sort(this.timSortInstance, array, sortLength, 0);
         }
     }
 }

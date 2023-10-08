@@ -604,7 +604,7 @@ public final class Sounds {
             this.lowPassFilter.setFrequency(500);
             this.soundMultiplier = 0.01;
         } else {
-            this.lowPassFilter.setFrequency(96000);
+            this.lowPassFilter.setFrequency(48000);
             this.soundMultiplier = 1;
         }
     }
@@ -651,11 +651,11 @@ public final class Sounds {
         Runnable runnable = () -> {
             try {
                 System.out.println("Executing code from: " + Thread.currentThread());
-                this.generator = new AudioGenerator(1024, 0);
+                this.generator = new AudioGenerator(2048, 0);
                 this.generator.addAudioProcessor(this.arrayWaveSound);
                 generator.addAudioProcessor(lowPassFilter);
                 this.generator
-                        .addAudioProcessor(new AudioPlayer(new AudioFormat(96000, 16, 1, true, false)));
+                        .addAudioProcessor(new AudioPlayer(new AudioFormat(48000, 16, 1, true, false)));
                 generator.addAudioProcessor(new ArrayWaveEqualizer());
 
                 this.generator.run();

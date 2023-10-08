@@ -16,7 +16,7 @@ import io.github.arrayv.sorts.templates.Sort;
 
 // Code refactored from: https://en.wikipedia.org/wiki/Stooge_sort
 
-@SortMeta(name = "Stooge", slowSort = true, unreasonableLimit = 1024)
+@SortMeta(name = "Stooge", slowSort = true, unreasonableLimit = 1024, category = "Impractical Sorts")
 public final class StoogeSort extends Sort {
     public StoogeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

@@ -172,7 +172,7 @@ public final class TimSorting {
     }
 
     public void customSort(int[] a, int start, int length) {
-        TimSorting.sort(this, a, start, length);
+        TimSorting.sort(this, a, start, length, 0);
         this.Writes.deleteExternalArray(this.tmp);
         this.Writes.deleteExternalArray(this.runBase);
         this.Writes.deleteExternalArray(this.runLen);
@@ -183,14 +183,14 @@ public final class TimSorting {
      * the entire API of this class. Each of these methods obeys the contract
      * of the public method with the same signature in java.util.Arrays.
      */
-    public static void sort(TimSorting timSort, int[] a, int length) {
-        sort(timSort, a, 0, length);
+    public static void sort(TimSorting timSort, int[] a, int length, int bucketCount) {
+        sort(timSort, a, 0, length, bucketCount);
         timSort.Writes.deleteExternalArray(timSort.tmp);
         timSort.Writes.deleteExternalArray(timSort.runBase);
         timSort.Writes.deleteExternalArray(timSort.runLen);
     }
 
-    static void sort(TimSorting timSort, int[] a, int lo, int hi) {
+    static void sort(TimSorting timSort, int[] a, int lo, int hi, int bucketCount) {
         TimSorting ts = timSort;
 
         int nRemaining = hi - lo;
@@ -205,7 +205,7 @@ public final class TimSorting {
          * extending short natural runs to minRun elements, and merging runs
          * to maintain stack invariant.
          */
-        int minRun = minRunLength(nRemaining);
+        int minRun = bucketCount == 0 ? minRunLength(nRemaining) : bucketCount;
         do {
             // Identify next run
             int runLen = countRunAndMakeAscending(ts, a, lo, hi);

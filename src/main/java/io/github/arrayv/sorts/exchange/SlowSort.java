@@ -5,7 +5,7 @@ import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 // Code refactored from Python: http://wiki.c2.com/?SlowSort
-@SortMeta(name = "Slow", slowSort = true, unreasonableLimit = 150)
+@SortMeta(name = "Slow", slowSort = true, unreasonableLimit = 150, category = "Impractical Sorts")
 public final class SlowSort extends Sort {
     public SlowSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

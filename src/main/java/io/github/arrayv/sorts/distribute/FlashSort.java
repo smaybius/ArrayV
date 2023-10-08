@@ -121,7 +121,7 @@ public final class FlashSort extends Sort {
         // the number of A(i) values that are in the ith
         // class or lower (see counting sort for more details)
         for (K = 2; K <= m; K++) {
-            Writes.write(L, K, L[K] + L[K - 1], 0, false, true);
+            Writes.write(L, K, L[K] + L[K - 1], 1, false, true);
         }
 
         // -------PERMUTATION-------
@@ -189,6 +189,7 @@ public final class FlashSort extends Sort {
 
                 // swap the value currently residing at the new
                 // location with the evicted value
+                Writes.addSwap();
                 int temp = array[location];
                 Writes.write(array, location, evicted, 1, false, false);
                 Highlights.markArray(1, location);
@@ -196,7 +197,7 @@ public final class FlashSort extends Sort {
 
                 // decrease the count for this class
                 // see counting sort for why this is done
-                Writes.write(L, K, L[K] - 1, 0, false, true);
+                Writes.write(L, K, L[K] - 1, 1, false, true);
 
                 // another element was moved
                 numMoves++;
@@ -244,10 +245,8 @@ public final class FlashSort extends Sort {
                 runSort(copiedRange, classSize, 0);
             }
         }
-
+        Writes.deleteExternalArray(L);
         InsertionSort insertSorter = new InsertionSort(this.arrayVisualizer);
         insertSorter.customInsertSort(array, 0, sortLength, 0.75, false);
-
-        Writes.deleteExternalArray(L);
     }
 }

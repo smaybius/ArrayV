@@ -1,10 +1,9 @@
 package io.github.arrayv.sorts.distribute;
 
-import java.util.ArrayList;
-
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.ArrayVList;
 
 /*
  *
@@ -31,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "LSD Radix", showcaseName = "LSD Radix Sort", runName = "LSD Radix Sort", question = "Enter base width (default: 4):", defaultAnswer = 4)
+@SortMeta(name = "LSD Radix", question = "Enter base width (default: 4):", defaultAnswer = 4)
 public final class LSDRadixSort extends Sort {
     public LSDRadixSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
@@ -44,11 +43,10 @@ public final class LSDRadixSort extends Sort {
 
         int highestpower = Reads.analyzeMaxLog(array, sortLength, bucketCount, 0.5, true);
 
-        @SuppressWarnings("unchecked")
-        ArrayList<Integer>[] registers = new ArrayList[bucketCount];
+        ArrayVList[] registers = new ArrayVList[bucketCount];
 
         for (int i = 0; i < bucketCount; i++)
-            registers[i] = new ArrayList<>();
+            registers[i] = new ArrayVList();
 
         for (int p = 0; p <= highestpower; p++) {
             for (int i = 0; i < sortLength; i++) {

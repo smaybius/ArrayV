@@ -4,7 +4,7 @@
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/Gaming32/ArrayV/maven/main)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/Gaming32/ArrayV/checkstyle/main?label=checkstyle)
 
-Over 200 sorting algorithms animated with 15 unique graphic designs
+Over 200 sorting algorithms animated with 15 unique display methods. The audio is done via an option of highlights (plays a MIDI note based on the value being highlighted) or directly using the working array as an arbitrary audio waveform on the fly while being sorted. To protect your ears from harsh frequencies, the "softer sounds" mode applies a low-pass filter to the array waveform and decreases the highlights volume the higher the played note is.
 
 [Join the Discord server!](https://discord.gg/thestudio)
 
@@ -46,9 +46,6 @@ You can always download the most up-to-date pre-built JAR from [GitHub Actions](
 - "Holy Grail Sort"
 - Options to:
   - Enter in your own set of numbers
-  - Select ShellSort gap sequence
-  - Change TimSort "minrun" value
-  - Change IntroSort threshold for insertion/heap sort
   - Change Simple Shatter Sort rate(?)
   - Stop Run All Sorts(?)
   - Stop TimeSort(?)

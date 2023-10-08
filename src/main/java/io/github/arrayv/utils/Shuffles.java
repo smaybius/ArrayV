@@ -2059,6 +2059,40 @@ public enum Shuffles {
             }
         }
     },
+    HALVER {
+        public String getName() {
+            return "Circle Halver Pass";
+        }
+
+        private boolean delay;
+
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays delays, Highlights highlights,
+                Writes writes) {
+            this.reads = arrayVisualizer.getReads();
+            int end = arrayVisualizer.getCurrentLength();
+            delay = arrayVisualizer.shuffleEnabled();
+            int n = end;
+            shuffle(array, 0, end, delay ? 0.5 : 0, writes);
+            for (int j = 1; j < n / 2; j *= 2)
+                for (int i = 0; i < end; i += 2 * j)
+                    this.fwdComp(array, i, i + j, j, reads, writes);
+        }
+
+        private void fwdComp(int[] array, int a, int m, int l, Reads reads, Writes writes) {
+            for (int i = 0; i < l; i++)
+                this.compSwap(array, a + i, m + i, reads, writes);
+        }
+
+        private boolean compSwap(int[] array, int a, int b, Reads reads, Writes writes) {
+            if (reads.compareIndices(array, a, b, delay ? 0.1 : 0, true) > 0) {
+
+                writes.swap(array, a, b, 0, true, false);
+                return true;
+            }
+            return false;
+        }
+    },
     REC_REV {
         public String getName() {
             return "Recursive Reversal";
@@ -2132,8 +2166,10 @@ public enum Shuffles {
             triangleRec(triangle, 0, currentLen, delay ? 1 : 0, writes, 0);
 
             int[] temp = writes.copyOfArray(array, currentLen);
-            for (int i = 0; i < currentLen; i++)
+            for (int i = 0; i < currentLen; i++) {
+                highlights.markArray(2, triangle[i]);
                 writes.write(array, i, temp[triangle[i]], delay ? 0.5 : 0, true, false);
+            }
             writes.deleteExternalArray(temp);
             writes.deleteExternalArray(triangle);
         }
@@ -2142,7 +2178,7 @@ public enum Shuffles {
             if (b - a < 2)
                 return;
             if (b - a == 2) {
-                writes.write(array, a + 1, array[a + 1] + 1, sleep / 2, true, true);
+                writes.write(array, a + 1, array[a + 1] + 1, sleep, true, true);
                 return;
             }
 
@@ -2150,17 +2186,17 @@ public enum Shuffles {
             int t1 = (a + a + b) / 3;
             int t2 = (a + b + b + 2) / 3;
             for (int i = a; i < t1; i++)
-                writes.write(array, i, array[i] + h, sleep / 2, true, true);
+                writes.write(array, i, array[i] + h, sleep, true, true);
 
             for (int i = t1; i < t2; i++)
-                writes.write(array, i, array[i] + 2 * h, sleep / 2, true, true);
+                writes.write(array, i, array[i] + 2 * h, sleep, true, true);
             writes.recordDepth(depth);
             writes.recursion();
-            triangleRec(array, a, t1, sleep / 2, writes, depth + 1);
+            triangleRec(array, a, t1, sleep, writes, depth + 1);
             writes.recursion();
-            triangleRec(array, t1, t2, sleep / 2, writes, depth + 1);
+            triangleRec(array, t1, t2, sleep, writes, depth + 1);
             writes.recursion();
-            triangleRec(array, t2, b, sleep / 2, writes, depth + 1);
+            triangleRec(array, t2, b, sleep, writes, depth + 1);
         }
     },
     TRIANGULAR {
@@ -2188,7 +2224,7 @@ public enum Shuffles {
                 writes.write(triangle, i, triangle[j] + 1, delay ? 1 : 0, true, true);
                 if (reads.compareValues(triangle[i], max) > 0) {
                     highlights.markArray(2, i);
-                    delays.sleep(1);
+                    delays.sleep(delay ? 1 : 0);
                     max = triangle[i];
                 }
             }
@@ -2200,12 +2236,16 @@ public enum Shuffles {
             for (int i = 1; i < cnt.length; i++)
                 writes.write(cnt, i, cnt[i] + cnt[i - 1], delay ? 1 : 0, true, true);
 
-            for (int i = currentLen - 1; i >= 0; i--)
+            for (int i = currentLen - 1; i >= 0; i--) {
+                highlights.markArray(2, triangle[i]);
                 writes.write(triangle, i, --cnt[triangle[i]], delay ? 1 : 0, true, true);
+            }
 
             int[] temp = writes.copyOfArray(array, currentLen);
-            for (int i = 0; i < currentLen; i++)
+            for (int i = 0; i < currentLen; i++) {
+                highlights.markArray(2, triangle[i]);
                 writes.write(array, i, temp[triangle[i]], delay ? 1 : 0, true, false);
+            }
             writes.deleteExternalArray(temp);
             writes.deleteExternalArray(cnt);
             writes.deleteExternalArray(triangle);

@@ -9,7 +9,7 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author PiotrGrochowski
  *
  */
-@SortMeta(name = "Shove", slowSort = true, unreasonableLimit = 512)
+@SortMeta(name = "Shove", slowSort = true, unreasonableLimit = 512, category = "Impractical Sorts")
 public final class ShoveSort extends Sort {
 
     public ShoveSort(ArrayVisualizer arrayVisualizer) {

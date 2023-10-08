@@ -6,7 +6,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(name = "Snuffle", slowSort = true, unreasonableLimit = 100)
+@SortMeta(name = "Snuffle", slowSort = true, unreasonableLimit = 100, category = "Impractical Sorts")
 public class SnuffleSort extends Sort {
     private static double DELAY = 1;
 

@@ -857,7 +857,7 @@ public abstract class QuadSorting extends Sort {
     }
 
     // main sorting method with given swap array
-    protected void quadSortSwap(int[] array, int[] swap, int start, int length) {
+    public void quadSortSwap(int[] array, int[] swap, int start, int length) {
         if (length < 16) {
             this.tailSwap(array, start, length);
         }

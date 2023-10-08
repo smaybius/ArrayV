@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Classsic Gravity", showcaseName = "Classsic Gravity Sort", runName = "Classsic Gravity Sort")
+@SortMeta(name = "Classsic Gravity")
 public final class ClassicGravitySort extends Sort {
 	public ClassicGravitySort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

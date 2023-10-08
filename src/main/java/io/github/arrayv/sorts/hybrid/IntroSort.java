@@ -5,7 +5,7 @@ import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 // From C#'s standard library (Array.Sort) https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Array.cs
-@SortMeta(listName = "Intro", showcaseName = "Introspective Sort (std::sort on C++, Array.Sort on C#)", runName = "Introspective Sort (std::sort on C++, Array.Sort on C#)")
+@SortMeta(listName = "Intro", showcaseName = "Introspective Sort (std::sort on C++, Array.Sort on C#)", runName = "Introspective Sort (std::sort on C++, Array.Sort on C#)", question = "Enter max recursions before fallback (0: log n)", defaultAnswer = 0)
 public final class IntroSort extends Sort {
     private static int IntrosortSizeThreshold = 16;
 
@@ -19,10 +19,6 @@ public final class IntroSort extends Sort {
                 Writes.swap(keys, a, b, 0.5, true, false);
             }
         }
-    }
-
-    private void IntrospectiveSort(int[] keys, int left, int length) {
-        introSort(keys, left, length + left - 1, (int) (2 * (Math.log(length + 1) / Math.log(2))));
     }
 
     private void introSort(int[] keys, int lo, int hi, int depthLimit) {
@@ -102,7 +98,7 @@ public final class IntroSort extends Sort {
             DownHeap(keys, i, n, lo);
         }
         for (int i = n; i > 1; i--) {
-            Writes.swap(keys, lo, lo + i - 1, 1, true, false);
+            Writes.swap(keys, lo, lo + i - 1, 0, true, false);
 
             DownHeap(keys, 1, i - 1, lo);
         }
@@ -113,18 +109,18 @@ public final class IntroSort extends Sort {
         int child;
         while (i <= n / 2) {
             child = 2 * i;
-            if (child < n && Reads.compareIndices(keys, lo + child - 1, lo + child, 1, true) < 0) {
+            if (child < n && Reads.compareIndices(keys, lo + child - 1, lo + child, 0.5, true) < 0) {
                 child++;
             }
             if (!(Reads.compareValues(d, keys[lo + child - 1]) < 0)) {
                 Highlights.markArray(1, lo + child - 1);
-                Delays.sleep(1);
+                Delays.sleep(0.5);
                 break;
             }
             Writes.write(keys, lo + i - 1, keys[lo + child - 1], 0.5, true, false);
             i = child;
         }
-        Writes.write(keys, lo + i - 1, d, 1, true, false);
+        Writes.write(keys, lo + i - 1, d, 0.2, true, false);
     }
 
     private void insertionSort(int[] keys, int lo, int hi) {
@@ -145,6 +141,7 @@ public final class IntroSort extends Sort {
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        IntrospectiveSort(array, 0, length);
+        introSort(array, 0, length - 1,
+                bucketCount == 0 ? (int) (2 * (Math.log(length + 1) / Math.log(2))) : bucketCount);
     }
 }

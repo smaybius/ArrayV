@@ -22,10 +22,9 @@ public final class IntroCircleSortIterative extends IterativeCircleSorting {
         super(arrayVisualizer);
     }
 
-    @Override
-    public void runSort(int[] array, int length, int bucketCount) {
+    public void circleSort(int[] array, int start, int length, double sleep) {
         this.end = length;
-        int threshold = 0, n = 1;
+        int threshold = 0, n = start + 1;
         for (; n < length; n *= 2, threshold++)
             ;
 
@@ -38,9 +37,14 @@ public final class IntroCircleSortIterative extends IterativeCircleSorting {
             if (iterations >= threshold) {
                 Highlights.clearAllMarks();
                 InsertionSort binaryInserter = new InsertionSort(this.arrayVisualizer);
-                binaryInserter.customInsertSort(array, 0, length, 0.5, false);
+                binaryInserter.customInsertSort(array, start, length, 0.5, false);
                 break;
             }
-        } while (this.circleSortRoutine(array, n, 1) != 0);
+        } while (this.circleSortRoutine(array, start, length, 1) != 0);
+    }
+
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        circleSort(array, 0, length, 1);
     }
 }

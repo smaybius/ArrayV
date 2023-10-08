@@ -21,15 +21,16 @@ import io.github.arrayv.sorts.templates.TimSorting;
  * limitations under the License.
  */
 
-@SortMeta(
-    name = "Tim",
-    category = "Hybrid Sorts"
-)
+@SortMeta(name = "Tim", category = "Hybrid Sorts", question = "Enter the minimum run length (0: variable)", defaultAnswer = 0)
 public class TimSort extends Sort {
-    private TimSorting timSortInstance; // TimSort cannot be simply written off as an abstract class, as it creates an instance of itself
-                                        // in order to track its state. Plus, it contains both instance and static methods, requiring even
-                                        // more refactoring, which would be just doing unnecessary busy work. Instead of what we've done for
-                                        // the rest of the algorithms, we'll favor composition over inheritance here and pass "util" objects
+    private TimSorting timSortInstance; // TimSort cannot be simply written off as an abstract class, as it creates an
+                                        // instance of itself
+                                        // in order to track its state. Plus, it contains both instance and static
+                                        // methods, requiring even
+                                        // more refactoring, which would be just doing unnecessary busy work. Instead of
+                                        // what we've done for
+                                        // the rest of the algorithms, we'll favor composition over inheritance here and
+                                        // pass "util" objects
                                         // to it.
 
     public TimSort(ArrayVisualizer arrayVisualizer) {
@@ -40,6 +41,6 @@ public class TimSort extends Sort {
     public void runSort(int[] array, int currentLength, int bucketCount) {
         this.timSortInstance = new TimSorting(array, currentLength, this.arrayVisualizer);
 
-        TimSorting.sort(this.timSortInstance, array, currentLength);
+        TimSorting.sort(this.timSortInstance, array, currentLength, bucketCount);
     }
 }

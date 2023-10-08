@@ -35,6 +35,12 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
         this(DEFAULT_CAPACITY, DEFAULT_GROW_FACTOR);
     }
 
+    public ArrayVList(boolean watch) {
+        this();
+        if (!watch)
+            this.unwatch();
+    }
+
     public ArrayVList(int capacity) {
         this(capacity, DEFAULT_GROW_FACTOR);
     }
@@ -52,12 +58,36 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
         this.growFactor = growFactor;
     }
 
+    public void watch() {
+        arrayVisualizer.getArrays().add(internal);
+        arrayVisualizer.updateNow();
+    }
+
+    public void unwatch() {
+        arrayVisualizer.getArrays().remove(internal);
+        arrayVisualizer.updateNow();
+    }
+
     public void delete() {
         writes.changeAllocAmount(-count);
         arrayVisualizer.getArrays().remove(internal);
         this.internal = null;
         this.count = 0;
         this.capacity = 0;
+    }
+
+    public int peek() {
+        return get(count - 1);
+    }
+
+    public int pop() {
+        int obj = peek();
+        remove(count - 1);
+        return obj;
+    }
+
+    public int compareStacks(ArrayVList y) {
+        return reads.compareValues(peek(), y.peek());
     }
 
     @Override

@@ -22,19 +22,23 @@ public final class CircleSortIterative extends IterativeCircleSorting {
     }
 
     public void singleRoutine(int[] array, int length) {
-        this.circleSortRoutine(array, length, 0.1);
+        this.circleSortRoutine(array, 0, length, 0.1);
     }
 
-    @Override
-    public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.end = sortLength;
+    public void circleSort(int[] array, int start, int end, double sleep) {
+        this.end = end;
         int n = 1;
-        for (; n < sortLength; n *= 2)
+        for (; n < end; n *= 2)
             ;
 
         int numberOfSwaps = 0;
         do {
-            numberOfSwaps = this.circleSortRoutine(array, n, 1);
+            numberOfSwaps = this.circleSortRoutine(array, start, n, sleep);
         } while (numberOfSwaps != 0);
+    }
+
+    @Override
+    public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
+        circleSort(array, 0, sortLength, 1);
     }
 }

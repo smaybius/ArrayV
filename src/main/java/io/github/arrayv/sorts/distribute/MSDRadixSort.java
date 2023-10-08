@@ -1,10 +1,9 @@
 package io.github.arrayv.sorts.distribute;
 
-import java.util.ArrayList;
-
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.ArrayVList;
 
 /*
  *
@@ -44,11 +43,10 @@ public final class MSDRadixSort extends Sort {
         Highlights.markArray(2, max - 1);
         Highlights.markArray(3, min);
 
-        @SuppressWarnings("unchecked")
-        ArrayList<Integer>[] registers = new ArrayList[radix];
+        ArrayVList[] registers = new ArrayVList[radix];
 
         for (int i = 0; i < radix; i++)
-            registers[i] = new ArrayList<>();
+            registers[i] = Writes.createArrayList();
 
         for (int i = min; i < max; i++) {
             Highlights.markArray(1, i);
@@ -66,11 +64,12 @@ public final class MSDRadixSort extends Sort {
 
         int sum = 0;
         for (int i = 0; i < registers.length; i++) {
+            for (ArrayVList regs : registers)
+                regs.unwatch();
             this.radixMSD(array, length, sum + min, sum + min + registers[i].size(), radix, pow - 1);
 
             sum += registers[i].size();
             Writes.arrayListClear(registers[i]);
-            Writes.changeAuxWrites(registers[i].size());
         }
 
         Writes.deleteExternalArray(registers);

@@ -56,7 +56,7 @@ import io.github.arrayv.utils.IndexedRotations;
  *
  * @author aphitorite
  */
-@SortMeta(name = "Adaptive Grail Sort")
+@SortMeta(name = "Adaptive Grail")
 public final class AdaptiveGrailSort extends Sort {
     public AdaptiveGrailSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

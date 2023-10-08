@@ -2,12 +2,13 @@ package io.github.arrayv.sorts.insert;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.ArrayVList;
 
 /*
  *
@@ -26,7 +27,7 @@ public final class PatienceSort extends Sort {
 		super(arrayVisualizer);
 	}
 
-	final private class Pile extends Stack<Integer> implements Comparable<Pile> {
+	final private class Pile extends ArrayVList implements Comparable<Pile> {
 		private static final long serialVersionUID = 1L;
 
 		public int compare(Pile y) {
@@ -42,13 +43,11 @@ public final class PatienceSort extends Sort {
 	private void binarySearch(ArrayList<Pile> list, Pile find) {
 		int at = list.size() / 2;
 		int change = list.size() / 4;
-
 		long compsBefore = Reads.getComparisons();
 		while (list.get(at).compare(find) != 0 && change > 0) {
 			Reads.setComparisons(compsBefore);
 			Highlights.markArray(1, at);
 			Delays.sleep(0.5);
-
 			if (list.get(at).compare(find) < 0)
 				at += change;
 			else
@@ -62,19 +61,19 @@ public final class PatienceSort extends Sort {
 		Delays.sleep(0.5);
 	}
 
+	private int[] flatpiles;
+
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) {
 		ArrayList<Pile> piles = new ArrayList<>();
-
+		flatpiles = Writes.createMockExternalArray(length);
 		// sort into piles
 		for (int x = 0; x < length; x++) {
 			Pile newPile = new Pile();
-
+			newPile.unwatch();
 			Highlights.markArray(2, x);
-			Writes.mockWrite(length, Math.min(newPile.size(), length - 1), array[x], 1);
 
-			newPile.push(array[x]);
-			Writes.changeAllocAmount(1);
+			newPile.add(array[x]);
 
 			int i = Collections.binarySearch(piles, newPile);
 			if (!piles.isEmpty()) {
@@ -83,36 +82,32 @@ public final class PatienceSort extends Sort {
 			if (i < 0)
 				i = ~i;
 			if (i != piles.size()) {
-				Writes.mockWrite(length, Math.min(piles.get(i).size(), length - 1), array[x], 0);
-				piles.get(i).push(array[x]);
-				Writes.changeAllocAmount(1);
+				piles.get(i).add(array[x]);
 			} else {
-				Writes.mockWrite(length, Math.min(piles.size(), length - 1), newPile.get(0), 0);
 				piles.add(newPile);
-				Writes.changeAllocAmount(1);
 			}
+			ArrayVList[] arrayPiles = new ArrayVList[piles.size()];
+			Writes.fakeTranscribe(flatpiles, piles.toArray(arrayPiles), 0);
 		}
-
 		Highlights.clearMark(2);
 
 		// priority queue allows us to retrieve least pile efficiently
 		PriorityQueue<Pile> heap = new PriorityQueue<>(piles);
-
+		int[] flatheap = Writes.createMockExternalArray(length);
 		for (int c = 0; c < length; c++) {
-			Writes.mockWrite(length, Math.min(heap.size(), length - 1), 0, 0);
 			Pile smallPile = heap.poll();
-
-			Writes.mockWrite(length, Math.min(smallPile.size(), length - 1), 0, 0);
 			Writes.write(array, c, smallPile.pop(), 1, true, false);
-			Writes.changeAllocAmount(-1);
 
 			if (!smallPile.isEmpty()) {
 				Writes.mockWrite(length, Math.min(heap.size(), length - 1), smallPile.get(0), 0);
 				heap.offer(smallPile);
-				Writes.changeAllocAmount(-1);
 			}
+			ArrayVList[] arrayHeap = new ArrayVList[heap.size()];
+			Writes.fakeTranscribe(flatheap, heap.toArray(arrayHeap), 0);
+			ArrayVList[] arrayPiles = new ArrayVList[piles.size()];
+			Writes.fakeTranscribe(flatpiles, piles.toArray(arrayPiles), 0);
 		}
-
+		Writes.deleteMockExternalArrays(flatheap, flatpiles);
 		Writes.clearAllocAmount();
 	}
 }

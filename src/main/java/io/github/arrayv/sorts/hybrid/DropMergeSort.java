@@ -5,6 +5,7 @@ import java.util.List;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.ArrayVList;
 
 /*
  *
@@ -37,7 +38,7 @@ public final class DropMergeSort extends Sort {
     private final int EARLY_OUT_TEST_AT = 4;
     private final double EARLY_OUT_DISORDER_FRACTION = 0.6;
 
-    private void truncateArrayList(List<Integer> arrayList, int len) {
+    private void truncateArrayList(ArrayVList arrayList, int len) {
         int size = arrayList.size();
         arrayList.subList(len, size).clear();
     }
@@ -48,7 +49,7 @@ public final class DropMergeSort extends Sort {
             return;
 
         PDQBranchedSort pdqSort = new PDQBranchedSort(arrayVisualizer);
-        List<Integer> dropped = Writes.createArrayList(length);
+        ArrayVList dropped = Writes.createArrayList(length);
 
         int num_dropped_in_a_row = 0;
         int read = 0;

@@ -5,6 +5,7 @@ import java.util.Stack;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.ArrayVList;
 
 /**
  * Hanoi Sort, a sort inspired by the classic Tower of Hanoi puzzle.
@@ -47,7 +48,7 @@ public final class HanoiSort extends Sort {
 	// Length of the array
 	private int length;
 	// Auxiliary stacks from the classic Tower of Hanoi problem
-	private Stack<Integer> stack2, stack3;
+	private ArrayVList stack2, stack3;
 	// sp is a "stack pointer" for the main array (which isn't actually a stack)
 	private int sp;
 	// Where the unsorted portion of the main array begins
@@ -252,12 +253,11 @@ public final class HanoiSort extends Sort {
 	 * @return duplicates The number of consecutive identical elements
 	 *         that were popped off the main array in the current "move"
 	 */
-	private int moveFromMain(Stack<Integer> stack, boolean checkUnsorted) {
+	private int moveFromMain(ArrayVList stack, boolean checkUnsorted) {
 		int duplicates = 1;
 		// Move element
-		Writes.changeAuxWrites(1);
 		Writes.startLap();
-		stack.push(array[sp]);
+		stack.add(array[sp]);
 		Writes.stopLap();
 		sp++;
 		Highlights.markArray(1, sp);
@@ -267,9 +267,8 @@ public final class HanoiSort extends Sort {
 		boolean endOnLength = (sp >= length) || (checkUnsorted && sp >= unsorted);
 		while (!endOnLength && Reads.compareValues(array[sp], stack.peek()) == 0) {
 			duplicates++;
-			Writes.changeAuxWrites(1);
 			Writes.startLap();
-			stack.push(array[sp]);
+			stack.add(array[sp]);
 			Writes.stopLap();
 			sp++;
 			Highlights.markArray(1, sp);
@@ -285,7 +284,7 @@ public final class HanoiSort extends Sort {
 	 *
 	 * @param stack The stack to move the element(s) to the main array from
 	 */
-	private void moveToMain(Stack<Integer> stack) {
+	private void moveToMain(ArrayVList stack) {
 		// Move element
 		sp--;
 		Highlights.markArray(1, sp);
@@ -305,18 +304,16 @@ public final class HanoiSort extends Sort {
 	 * @param from the stack to move the element(s) from
 	 * @param to   the stack to move the element(s) to
 	 */
-	private void moveBetweenStacks(Stack<Integer> from, Stack<Integer> to) {
+	private void moveBetweenStacks(ArrayVList from, ArrayVList to) {
 		// Move element
-		Writes.changeAuxWrites(1);
 		Writes.startLap();
-		to.push(from.pop());
+		to.add(from.pop());
 		Writes.stopLap();
 		Delays.sleep(0.25);
 		// Move any duplicates
 		while (!from.isEmpty() && Reads.compareValues(from.peek(), to.peek()) == 0) {
-			Writes.changeAuxWrites(1);
 			Writes.startLap();
-			to.push(from.pop());
+			to.add(from.pop());
 			Writes.stopLap();
 			Delays.sleep(0.25);
 		}
@@ -327,8 +324,8 @@ public final class HanoiSort extends Sort {
 		// Initialize local variables
 		this.array = array;
 		this.length = length;
-		stack2 = new Stack<Integer>();
-		stack3 = new Stack<Integer>();
+		stack2 = new ArrayVList();
+		stack3 = new ArrayVList();
 		sp = 0;
 		unsorted = 0;
 

@@ -80,7 +80,7 @@ public final class SortInfo {
                     ? requireName(name)
                     : metaAnnotation.listName();
             this.runName = metaAnnotation.runName().isEmpty()
-                    ? requireName(name) + "sort"
+                    ? requireName(name) + " Sort"
                     : metaAnnotation.runName();
             this.runAllName = metaAnnotation.showcaseName().isEmpty()
                     ? requireName(name) + " Sort"
@@ -446,7 +446,7 @@ public final class SortInfo {
                     disabled,
                     unreasonableLimit,
                     Objects.requireNonNull(listName, "listName"),
-                    runName != null ? runName : (listName + "sort"),
+                    runName != null ? runName : (listName + " Sort"),
                     runAllName != null ? runAllName : (listName + " Sort"),
                     Objects.requireNonNull(category, "category"),
                     slowSort,
