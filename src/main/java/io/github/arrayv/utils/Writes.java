@@ -449,7 +449,8 @@ public final class Writes {
                 this.write(array, total++, registers[index].get(i), 0, false, false);
                 this.writes--;
             }
-            array[Math.clamp(total, 0, arrayVisualizer.getCurrentLength())] = 0; // padding between each ArrayList
+            // array[Math.clamp(total, 0, arrayVisualizer.getCurrentLength())] = 0; //
+            // padding between each ArrayList
         }
     }
 
