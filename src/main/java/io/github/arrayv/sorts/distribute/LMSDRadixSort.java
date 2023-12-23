@@ -49,9 +49,8 @@ final public class LMSDRadixSort extends Sort {
         for (int i = start; i < end; i++) {
             Highlights.markArray(1, i);
             int digit = Reads.getDigit(array[i], place, this.base);
-            Writes.arrayListAdd(registers[digit], array[i]);
-
-            Writes.mockWrite(end - start, digit, array[i], 1);
+            registers[digit].add(array[i]);
+            Delays.sleep(1);
         }
 
         Highlights.clearAllMarks();
@@ -62,8 +61,9 @@ final public class LMSDRadixSort extends Sort {
                 Writes.write(array, counter++, registers[i].get(j), 1, true, false);
             }
         }
-        for (ArrayVList regs : registers)
-            regs.unwatch();
+        for (int i = 0; i < this.base; i++) {
+            registers[i].unwatch();
+        }
         return registers;
     }
 
@@ -84,6 +84,7 @@ final public class LMSDRadixSort extends Sort {
 
                 sum += registers[i].size();
                 Writes.arrayListClear(registers[i]);
+                Writes.changeAllocAmount(-registers[i].size());
             }
 
             Writes.deleteExternalArray(registers);

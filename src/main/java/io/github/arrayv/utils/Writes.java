@@ -441,16 +441,12 @@ public final class Writes {
      * Updates the visualization of an array of ArrayLists without adding to the
      * statistics or affecting the ArrayLists.
      */
-    public <T extends ArrayVList> void fakeTranscribe(int[] array, T[] registers, int start) {
-        int total = start;
-
+    public <T extends ArrayVList> void fakeTranscribe(ArrayVList array, T[] registers, int start) {
+        array.mockReset();
         for (int index = 0; index < registers.length; index++) {
             for (int i = 0; i < registers[index].size(); i++) {
-                this.write(array, total++, registers[index].get(i), 0, false, false);
-                this.writes--;
+                array.mockAdd(registers[index].get(i));
             }
-            // array[Math.clamp(total, 0, arrayVisualizer.getCurrentLength())] = 0; //
-            // padding between each ArrayList
         }
     }
 
@@ -581,10 +577,8 @@ public final class Writes {
      * Same as {@link Writes#createExternalArray()}, but without changing the alloc
      * amount. Used for views of arrays of ArrayLists.
      */
-    public int[] createMockExternalArray(int length) {
-        int[] result = new int[length];
-        arrayVisualizer.getArrays().add(result);
-        arrayVisualizer.updateNow();
+    public ArrayVList createMockExternalArray(int length) {
+        ArrayVList result = new ArrayVList();
         return result;
     }
 
@@ -605,18 +599,17 @@ public final class Writes {
      * Removes an array of ArrayLists from the view without changing the alloc
      * amount
      */
-    public void deleteMockExternalArray(int[] array) {
-        arrayVisualizer.getArrays().remove(array);
-        arrayVisualizer.updateNow();
+    public void deleteMockExternalArray(ArrayVList array) {
+        array.mockDelete();
     }
 
     /**
      * Removes multiple arrays of ArrayLists from the view without changing the
      * alloc amount
      */
-    public void deleteMockExternalArrays(int[]... arrays) {
-        List<int[]> visArrays = arrayVisualizer.getArrays();
-        Arrays.stream(arrays).forEach(visArrays::remove);
+    public void deleteMockExternalArrays(ArrayVList... arrays) {
+        for (ArrayVList array : arrays)
+            array.mockDelete();
         arrayVisualizer.updateNow();
     }
 

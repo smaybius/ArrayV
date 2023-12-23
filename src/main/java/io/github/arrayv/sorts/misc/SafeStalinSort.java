@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.ArrayVList;
 
 /*
 
@@ -60,9 +61,17 @@ final public class SafeStalinSort extends Sort {
         Writes.write(array, i, x, 1, true, false);
     }
 
+    private void transcribe(ArrayVList array, LinkedList<Integer> sauce) {
+        array.mockReset();
+        for (Integer i : sauce) {
+            array.mockAdd(i);
+        }
+    }
+
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        Deque<Integer> outside = new LinkedList<>();
+        LinkedList<Integer> outside = new LinkedList<>();
+        ArrayVList flatOside = new ArrayVList();
         boolean pass = false;
         int getlen = currentLength;
         int auxlen = 0;
@@ -74,6 +83,7 @@ final public class SafeStalinSort extends Sort {
                     int compare = Reads.compareIndices(array, i - 1, i, 0.5, true);
                     if (compare > 0) {
                         outsideAdd(outside, array[i]);
+                        transcribe(flatOside, outside);
                         remove(array, i, currentLength--);
                         getlen--;
                         auxlen++;
@@ -103,6 +113,7 @@ final public class SafeStalinSort extends Sort {
                 Highlights.markArray(1, i);
                 while (!(i + 1 > currentLength)) {
                     outsideAdd(outside, array[i]);
+                    transcribe(flatOside, outside);
                     remove(array, i, currentLength--);
                     auxlen++;
                 }
@@ -114,6 +125,7 @@ final public class SafeStalinSort extends Sort {
                 auxlen = 0;
             }
         }
+        Writes.deleteMockExternalArray(flatOside);
         Writes.clearAllocAmount();
     }
 }

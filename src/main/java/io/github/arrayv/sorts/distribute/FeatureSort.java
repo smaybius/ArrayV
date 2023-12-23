@@ -1,7 +1,8 @@
 package io.github.arrayv.sorts.distribute;
 
+import java.util.ArrayList;
+
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.ArrayVList;
 
@@ -26,10 +27,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-@SortMeta(name = "Feature")
+
 final public class FeatureSort extends Sort {
     public FeatureSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
+
+        this.setSortListName("Feature");
+        this.setRunAllSortsName("Feature Sort");
+        this.setRunSortName("Feature Sort");
+        this.setCategory("Distribution Sorts");
+        this.setBucketSort(false);
+        this.setRadixSort(false);
+        this.setUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.setBogoSort(false);
     }
 
     public void arrayListSwap(ArrayVList arr, int a, int b, int start) {
@@ -38,9 +49,9 @@ final public class FeatureSort extends Sort {
         arr.set(b, temp);
         Highlights.markArray(0, start + a);
         Highlights.markArray(1, start + b);
+        Writes.addSwap();
         Delays.sleep(1);
         Highlights.clearAllMarks();
-        Writes.fakeTranscribe(flatstacks, pos, 0);
     }
 
     public void arrayListWrite(ArrayVList arr, int at, int value, int pos) {
@@ -48,7 +59,6 @@ final public class FeatureSort extends Sort {
         Highlights.markArray(1, pos + at);
         Delays.sleep(1);
         Highlights.clearAllMarks();
-        Writes.fakeTranscribe(flatstacks, this.pos, 0);
     }
 
     public void arrayListReversal(ArrayVList array, int start, int length, int pos) {
@@ -174,7 +184,7 @@ final public class FeatureSort extends Sort {
             Writes.mockWrite(runs.size(), runs.size() - 1, lastRun, 0);
             lastRun = identifyRun(array, lastRun, maxIndex, start);
         }
-        runs.unwatch();
+
         return runs;
     }
 
@@ -190,11 +200,12 @@ final public class FeatureSort extends Sort {
                 Writes.arrayListRemoveAt(runs, i);
             }
         }
-        runs.unwatch();
+
         Writes.deleteArrayList(runs);
     }
 
     public void insertionSort(ArrayVList arr, int a, int b, int start) {
+        arr.watch();
         for (int i = a + 1; i < b; i++) {
             int key = arr.get(i);
             int j = i - 1;
@@ -207,6 +218,7 @@ final public class FeatureSort extends Sort {
             this.arrayListWrite(arr, j + 1, key, start);
         }
         Highlights.clearAllMarks();
+        arr.unwatch();
     }
 
     public void sortSubList(ArrayVList subList, int start, int[] mainArray) {
@@ -220,40 +232,36 @@ final public class FeatureSort extends Sort {
         }
     }
 
-    private int[] flatstacks;
-    ArrayVList[] pos;
-
     public void featureSort(int[] array, int currentLength) {
         double max = Reads.analyzeMax(array, currentLength, 0.25, true);
-        pos = new ArrayVList[currentLength];
+        ArrayVList[] pos = new ArrayVList[currentLength];
         double posConstant = max / (currentLength + 4);
+        ArrayVList flatPos = Writes.createMockExternalArray(1);
         for (int i = 0; i < currentLength; i++) {
-            pos[i] = new ArrayVList();
-            pos[i].unwatch(); // We shouldn't overfill the max displayed arrays
+            pos[i] = new ArrayVList(false);
         }
         for (int i = 0; i < currentLength; i++) {
             Highlights.markArray(0, i);
             int idx = (int) (array[i] * posConstant);
             Writes.arrayListAdd(pos[idx], array[i], true, 1);
-            Writes.fakeTranscribe(flatstacks, pos, 0);
+            Writes.fakeTranscribe(flatPos, pos, 0);
         }
         Highlights.clearAllMarks();
         for (int i = 0; i < pos.length; i++) {
             Highlights.markArray(0, i);
             Delays.sleep(1);
             this.sortSubList(pos[i], i, array);
+            Writes.fakeTranscribe(flatPos, pos, 0);
             Highlights.clearAllMarks();
-            Writes.fakeTranscribe(flatstacks, pos, 0);
         }
         Highlights.clearAllMarks();
         Writes.transcribe(array, pos, 0, true, false);
         Writes.deleteExternalArray(pos);
+        Writes.deleteMockExternalArray(flatPos);
     }
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        flatstacks = Writes.createMockExternalArray(currentLength);
         this.featureSort(array, currentLength);
-        Writes.deleteMockExternalArray(flatstacks);
     }
 }

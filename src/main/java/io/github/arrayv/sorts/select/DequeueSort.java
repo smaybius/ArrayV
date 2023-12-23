@@ -5,6 +5,7 @@ import java.util.PriorityQueue;
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
+import io.github.arrayv.utils.ArrayVList;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -38,16 +39,14 @@ final public class DequeueSort extends Sort {
         super(arrayVisualizer);
     }
 
-    public void seeHeap(int[] array, PriorityQueue<LinkedList<Integer>> registers, int start) {
-        int total = start;
-
+    public void seeHeap(ArrayVList array, PriorityQueue<LinkedList<Integer>> registers, int start) {
+        array.mockReset();
         LinkedList<Integer>[] flatRegs = new LinkedList[registers.size()];
         LinkedList<Integer>[] regs = registers.toArray(flatRegs);
         for (int index = 0; index < regs.length; index++) {
             for (int i = 0; i < regs[index].size(); i++) {
-                array[total++] = regs[index].get(i);
+                array.mockAdd(regs[index].get(i));
             }
-            array[total - 1] = 0;
         }
     }
 
@@ -65,7 +64,7 @@ final public class DequeueSort extends Sort {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        int[] flatHeap = Writes.createExternalArray(sortLength);
+        ArrayVList flatHeap = Writes.createMockExternalArray(sortLength);
         PriorityQueue<LinkedList<Integer>> heap = new PriorityQueue<>(sortLength / 2,
                 new Comparator<LinkedList<Integer>>() {
                     @Override
@@ -121,6 +120,6 @@ final public class DequeueSort extends Sort {
             }
             seeHeap(flatHeap, heap, 0);
         }
-        Writes.deleteExternalArray(flatHeap);
+        Writes.deleteMockExternalArray(flatHeap);
     }
 }

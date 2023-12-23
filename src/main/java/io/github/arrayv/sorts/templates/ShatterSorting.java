@@ -37,28 +37,36 @@ public abstract class ShatterSorting extends Sort {
         super(arrayVisualizer);
     }
 
+    private void transcribe(int[] array, ArrayVList[] registers, int start) {
+        int total = start;
+
+        for (int index = 0; index < registers.length; index++) {
+            for (int i = 0; i < registers[index].size(); i++) {
+                array[total++] = registers[index].get(i);
+            }
+        }
+    }
+
     protected void shatterPartition(int[] array, int length, int num) {
         int shatters = (int) Math.ceil(length / (double) num);
-        int[] full = Writes.createMockExternalArray(length);
+
         ArrayVList[] registers = new ArrayVList[shatters];
+        int[] flatRegs = Writes.createExternalArray(length);
 
         for (int i = 0; i < shatters; i++) {
-            registers[i] = Writes.createArrayList();
-            registers[i].unwatch();
+            registers[i] = new ArrayVList(false);
         }
 
         for (int i = 0; i < length; i++) {
-            Writes.arrayListAdd(registers[array[i] / num], array[i]);
-            Highlights.markArray(1, i);
-
-            Writes.mockWrite(length, array[i] / num, array[i], 0.5);
-            Writes.fakeTranscribe(full, registers, 0);
+            Highlights.markArray(2, i);
+            Highlights.markArray(3, array[i] / num);
+            registers[array[i] / num].add(array[i], 1, true);
+            transcribe(flatRegs, registers, 0);
         }
-
+        Highlights.clearAllMarks();
         Writes.transcribe(array, registers, 0, true, false);
-
+        Writes.deleteExternalArray(flatRegs);
         Writes.deleteExternalArray(registers);
-        Writes.deleteExternalArray(full);
     }
 
     protected void shatterSort(int[] array, int length, int num) {

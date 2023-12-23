@@ -57,7 +57,7 @@ final public class DivisorSort extends Sort {
         Writes.arrayListAdd(aList.get(index), value, true, 1);
     }
 
-    private int[] flatbuckets;
+    private ArrayVList flatbuckets;
 
     private void divisorLoop(int[] array, int start, int length, int base, int log) {
         int divisor = (int) Math.pow(base, log);

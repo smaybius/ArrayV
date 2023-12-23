@@ -28,6 +28,10 @@ public final class PatienceSort extends Sort {
 	}
 
 	final private class Pile extends ArrayVList implements Comparable<Pile> {
+		public Pile(boolean watch) {
+			super(watch);
+		}
+
 		private static final long serialVersionUID = 1L;
 
 		public int compare(Pile y) {
@@ -61,7 +65,7 @@ public final class PatienceSort extends Sort {
 		Delays.sleep(0.5);
 	}
 
-	private int[] flatpiles;
+	private ArrayVList flatpiles;
 
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) {
@@ -69,8 +73,7 @@ public final class PatienceSort extends Sort {
 		flatpiles = Writes.createMockExternalArray(length);
 		// sort into piles
 		for (int x = 0; x < length; x++) {
-			Pile newPile = new Pile();
-			newPile.unwatch();
+			Pile newPile = new Pile(false);
 			Highlights.markArray(2, x);
 
 			newPile.add(array[x]);
@@ -93,7 +96,7 @@ public final class PatienceSort extends Sort {
 
 		// priority queue allows us to retrieve least pile efficiently
 		PriorityQueue<Pile> heap = new PriorityQueue<>(piles);
-		int[] flatheap = Writes.createMockExternalArray(length);
+		ArrayVList flatheap = Writes.createMockExternalArray(length);
 		for (int c = 0; c < length; c++) {
 			Pile smallPile = heap.poll();
 			Writes.write(array, c, smallPile.pop(), 1, true, false);

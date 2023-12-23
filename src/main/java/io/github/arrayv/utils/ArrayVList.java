@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 import io.github.arrayv.main.ArrayVisualizer;
 
 public class ArrayVList extends AbstractList<Integer> implements RandomAccess, Cloneable, java.io.Serializable {
-    private static final int DEFAULT_CAPACITY = 128;
+    private static final int DEFAULT_CAPACITY = 16;
     private static final double DEFAULT_GROW_FACTOR = 2;
 
     private static ArrayVisualizer arrayVisualizer;
@@ -38,7 +38,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
     public ArrayVList(boolean watch) {
         this();
         if (!watch)
-            this.unwatch();
+            arrayVisualizer.getArrays().remove(internal);
     }
 
     public ArrayVList(int capacity) {
@@ -58,22 +58,38 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
         this.growFactor = growFactor;
     }
 
-    public void watch() {
-        arrayVisualizer.getArrays().add(internal);
-        arrayVisualizer.updateNow();
-    }
-
-    public void unwatch() {
-        arrayVisualizer.getArrays().remove(internal);
-        arrayVisualizer.updateNow();
-    }
-
     public void delete() {
         writes.changeAllocAmount(-count);
         arrayVisualizer.getArrays().remove(internal);
         this.internal = null;
         this.count = 0;
         this.capacity = 0;
+    }
+
+    public void mockDelete() {
+        arrayVisualizer.getArrays().remove(internal);
+        this.internal = null;
+        this.count = 0;
+        this.capacity = 0;
+    }
+
+    public void watch() {
+        arrayVisualizer.getArrays().add(internal);
+    }
+
+    public void unwatch() {
+        arrayVisualizer.getArrays().remove(internal);
+    }
+
+    public void mockReset() {
+        int[] newInternal = new int[DEFAULT_CAPACITY];
+        ArrayList<int[]> arrays = arrayVisualizer.getArrays();
+        if (arrays.indexOf(internal) != -1)
+            arrays.set(arrays.indexOf(internal), newInternal);
+        this.internal = newInternal;
+        this.count = 0;
+        this.capacity = DEFAULT_CAPACITY;
+
     }
 
     public int peek() {
@@ -127,11 +143,12 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
     }
 
     protected void grow() {
-        int newCapacity = (int) Math.ceil(capacity * growFactor);
+        int newCapacity = (int) Math.ceil(capacity + growFactor);
         int[] newInternal = new int[newCapacity];
         System.arraycopy(internal, 0, newInternal, 0, count);
         ArrayList<int[]> arrays = arrayVisualizer.getArrays();
-        arrays.set(arrays.indexOf(internal), newInternal);
+        if (arrays.indexOf(internal) != -1)
+            arrays.set(arrays.indexOf(internal), newInternal);
         this.capacity = newCapacity;
         this.internal = newInternal;
     }
@@ -148,6 +165,18 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
     @Override
     public boolean add(Integer e) {
         return add(e, 0, false);
+    }
+
+    public boolean mockAdd(int e, double sleep, boolean mark) {
+        if (count >= capacity) {
+            grow();
+        }
+        internal[count++] = e;
+        return true;
+    }
+
+    public boolean mockAdd(Integer e) {
+        return mockAdd(e, 0, false);
     }
 
     private void fastRemove(int index) {
@@ -202,6 +231,11 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
     public void clear() {
         Arrays.fill(internal, 0, count, 0);
         writes.changeAllocAmount(-count);
+        count = 0;
+    }
+
+    public void mockClear() {
+        Arrays.fill(internal, 0, count, 0);
         count = 0;
     }
 

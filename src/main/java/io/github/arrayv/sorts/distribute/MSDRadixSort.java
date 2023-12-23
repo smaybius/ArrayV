@@ -1,5 +1,7 @@
 package io.github.arrayv.sorts.distribute;
 
+import java.util.ArrayList;
+
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
@@ -46,30 +48,34 @@ public final class MSDRadixSort extends Sort {
         ArrayVList[] registers = new ArrayVList[radix];
 
         for (int i = 0; i < radix; i++)
-            registers[i] = Writes.createArrayList();
+            registers[i] = new ArrayVList();
 
         for (int i = min; i < max; i++) {
             Highlights.markArray(1, i);
 
             int digit = Reads.getDigit(array[i], pow, radix);
             Writes.arrayListAdd(registers[digit], array[i]);
-
-            Writes.mockWrite(length, digit, array[i], 1);
+            Delays.sleep(1);
         }
 
         Highlights.clearMark(2);
         Highlights.clearMark(3);
 
         Writes.transcribeMSD(array, registers, 0, min, 0.8, true, false);
-
+        for (int j = 0; j < registers.length; j++) {
+            registers[j].unwatch();
+            Writes.changeAllocAmount(-registers[j].size());
+        }
         int sum = 0;
         for (int i = 0; i < registers.length; i++) {
-            for (ArrayVList regs : registers)
-                regs.unwatch();
-            this.radixMSD(array, length, sum + min, sum + min + registers[i].size(), radix, pow - 1);
+            {
+
+                this.radixMSD(array, length, sum + min, sum + min + registers[i].size(), radix, pow - 1);
+            }
 
             sum += registers[i].size();
             Writes.arrayListClear(registers[i]);
+            Writes.changeAuxWrites(registers[i].size());
         }
 
         Writes.deleteExternalArray(registers);
