@@ -135,7 +135,8 @@ public final class Sounds {
         this.pitchMin = 25d;
         this.pitchMax = 105d;
         this.soundMultiplier = 1d;
-        this.lowPassFilter = new LowPassSP(96000, 96000);
+        this.lowPassFilter = new LowPassSP(48000, 48000);
+        this.lowPassFilter.setFrequency(48000);
         this.noteDelay = 1;
 
         this.soundEnabled = true;
@@ -601,12 +602,14 @@ public final class Sounds {
         this.softerSounds = softerSounds;
 
         if (this.softerSounds) {
-            this.lowPassFilter.setFrequency(500);
             this.soundMultiplier = 0.01;
         } else {
-            this.lowPassFilter.setFrequency(48000);
             this.soundMultiplier = 1;
         }
+    }
+
+    public void setFilter(float cutoff) {
+        this.lowPassFilter.setFrequency(cutoff);
     }
 
     // Double check logic

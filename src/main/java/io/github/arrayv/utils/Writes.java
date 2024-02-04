@@ -227,7 +227,9 @@ public final class Writes {
     }
 
     /**
-     * Same as {@link #insert()}, but with swaps.
+     * Same as
+     * {@link #insert(int[] array, int pos, int to, double sleep, boolean mark, boolean auxwrite)},
+     * but with swaps.
      *
      * @param pos      The item to select
      * @param to       The index to move @param pos to.
@@ -574,7 +576,8 @@ public final class Writes {
     }
 
     /**
-     * Same as {@link Writes#createExternalArray()}, but without changing the alloc
+     * Same as {@link Writes#createExternalArray(int length)}, but without changing
+     * the alloc
      * amount. Used for views of arrays of ArrayLists.
      */
     public ArrayVList createMockExternalArray(int length) {

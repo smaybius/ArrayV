@@ -1,27 +1,20 @@
 package io.github.arrayv.sorts.concurrent;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.CircleSorting;
 
+//
+@SortMeta(name = "Apollyon")
 final public class ApollyonSort extends CircleSorting {
     private boolean direction = true;
 
     public ApollyonSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Apollyon");
-        this.setRunAllSortsName("Apollyon Sort");
-        this.setRunSortName("Apollyon Sort");
-        this.setCategory("Concurrent Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
-    private static int greatestPowerOfTwoLessThan(int n){
+    private static int greatestPowerOfTwoLessThan(int n) {
         int k = 1;
         while (k < n) {
             k = k << 1;
@@ -29,21 +22,19 @@ final public class ApollyonSort extends CircleSorting {
         return k >> 1;
     }
 
-    private void compare(int[] A, int i, int j, boolean dir)
-    {
+    private void compare(int[] A, int i, int j, boolean dir) {
         int cmp = Reads.compareIndices(A, i, j, 0.5, true);
 
-        if (dir == (cmp == 1)) Writes.swap(A, i, j, 0.5, true, false);
+        if (dir == (cmp == 1))
+            Writes.swap(A, i, j, 0.5, true, false);
     }
 
-    private void apollyonMerge(int[] A, int lo, int n, boolean dir)
-    {
-        if (n > 1)
-        {
+    private void apollyonMerge(int[] A, int lo, int n, boolean dir) {
+        if (n > 1) {
             int m = greatestPowerOfTwoLessThan(n);
 
             for (int i = lo; i < lo + n - m; i++) {
-                this.compare(A, i, i+m, dir);
+                this.compare(A, i, i + m, dir);
             }
 
             this.apollyonMerge(A, lo, m, dir);
@@ -51,10 +42,8 @@ final public class ApollyonSort extends CircleSorting {
         }
     }
 
-    private void apollyonSort(int[] A, int lo, int n, boolean dir)
-    {
-        if (n > 1)
-        {
+    private void apollyonSort(int[] A, int lo, int n, boolean dir) {
+        if (n > 1) {
             int m = n / 2;
             this.apollyonSort(A, lo, m, !dir);
             this.apollyonMerge(A, lo, n, dir);
@@ -62,16 +51,20 @@ final public class ApollyonSort extends CircleSorting {
     }
 
     public void changeDirection(String choice) throws Exception {
-        if (choice.equals("forward")) this.direction = true;
-        else if (choice.equals("backward")) this.direction = false;
-        else throw new Exception("Invalid direction for Apollyon Sort!");
+        if (choice.equals("forward"))
+            this.direction = true;
+        else if (choice.equals("backward"))
+            this.direction = false;
+        else
+            throw new Exception("Invalid direction for Apollyon Sort!");
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         this.end = sortLength;
         int threshold = 0, n = 1;
-        for(; n < sortLength; n*=2, threshold++);
+        for (; n < sortLength; n *= 2, threshold++)
+            ;
 
         threshold /= 2;
         int iterations = 0;

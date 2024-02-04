@@ -58,27 +58,27 @@ public final class SortAnalyzer {
     private static final File EXTRA_SORTS_FILE = new File("cache", EXTRA_SORTS_JAR_NAME);
     private static final URLClassLoader EXTRA_SORTS_CLASS_LOADER;
     private static final Map.Entry<String, String>[] IMPORT_REPLACEMENTS = CommonUtils.createPairArray(
-        "import dialogs.", "import io.github.arrayv.dialogs.",
-        "import frames.", "import io.github.arrayv.frames.",
-        "import main.", "import io.github.arrayv.main.",
-        "import panels.", "import io.github.arrayv.panels.",
-        "import panes.", "import io.github.arrayv.panes.",
-        "import prompts.", "import io.github.arrayv.prompts.",
-        "import sorts.", "import io.github.arrayv.sorts.",
-        "import threads.", "import io.github.arrayv.threads.",
-        "import utils.", "import io.github.arrayv.utils.",
-        "import visuals.", "import io.github.arrayv.visuals.",
-        "import sorts.templates.SortComparator;", "import io.github.arrayv.sortdata.SortComparator;"
-    );
+            "import dialogs.", "import io.github.arrayv.dialogs.",
+            "import frames.", "import io.github.arrayv.frames.",
+            "import main.", "import io.github.arrayv.main.",
+            "import panels.", "import io.github.arrayv.panels.",
+            "import panes.", "import io.github.arrayv.panes.",
+            "import prompts.", "import io.github.arrayv.prompts.",
+            "import sorts.", "import io.github.arrayv.sorts.",
+            "import threads.", "import io.github.arrayv.threads.",
+            "import utils.", "import io.github.arrayv.utils.",
+            "import visuals.", "import io.github.arrayv.visuals.",
+            "import sorts.templates.SortComparator;", "import io.github.arrayv.sortdata.SortComparator;");
 
     private final Set<Class<?>> extraSorts = new HashSet<>();
     private final Map<SortNameType, Map<String, SortInfo>> sortsByName = new EnumMap<>(SortNameType.class);
 
     static {
         try {
-            EXTRA_SORTS_DOWNLOAD = new URL("https://nightly.link/Gaming32/ArrayV-Extra-Sorts/workflows/build/main/extra-sorts-jar.zip");
+            EXTRA_SORTS_DOWNLOAD = new URL(
+                    "https://nightly.link/Gaming32/ArrayV-Extra-Sorts/workflows/build/main/extra-sorts-jar.zip");
             EXTRA_SORTS_CLASS_LOADER = new URLClassLoader(new URL[] {
-                EXTRA_SORTS_FILE.toURI().toURL()
+                    EXTRA_SORTS_FILE.toURI().toURL()
             });
         } catch (MalformedURLException e) {
             throw new Error(e);
@@ -119,6 +119,7 @@ public final class SortAnalyzer {
     /**
      * Like {@link #addSort}, but also sorts it.
      * This is equivalent to, but more efficient than:
+     * 
      * <pre>
      * addSort(sort);
      * sortSorts();
@@ -159,7 +160,7 @@ public final class SortAnalyzer {
             e.printStackTrace();
             return true;
         }
-        return compileSingle((Class<? extends Sort>)sortClass);
+        return compileSingle((Class<? extends Sort>) sortClass);
     }
 
     private boolean compileSingle(Class<? extends Sort> sortClass) {
@@ -213,9 +214,9 @@ public final class SortAnalyzer {
 
     private ClassGraph classGraph(boolean includeExtras) {
         ClassGraph classGraph = new ClassGraph()
-            .acceptPackages("sorts", "io.github.arrayv.sorts")
-            .rejectPackages("sorts.templates", "io.github.arrayv.sorts.templates")
-            .initializeLoadedClasses();
+                .acceptPackages("sorts", "io.github.arrayv.sorts")
+                .rejectPackages("sorts.templates", "io.github.arrayv.sorts.templates")
+                .initializeLoadedClasses();
         if (includeExtras && extraSortsInstalled()) {
             classGraph.addClassLoader(EXTRA_SORTS_CLASS_LOADER);
         }
@@ -236,29 +237,34 @@ public final class SortAnalyzer {
     }
 
     public void analyzeSortsExtrasOnly() {
-        if (!extraSortsInstalled()) return;
+        if (!extraSortsInstalled())
+            return;
         // analyzeSorts(
-        //     classGraph(true)
-        //         .whitelistJars(EXTRA_SORTS_FILE.getName())
+        // classGraph(true)
+        // .whitelistJars(EXTRA_SORTS_FILE.getName())
         // );
         // Custom sort analysis so sorts don't get duplicated
         try {
             try (ZipFile zf = new ZipFile(EXTRA_SORTS_FILE)) {
                 for (final Enumeration<? extends ZipEntry> en = zf.entries(); en.hasMoreElements();) {
                     ZipEntry entry = en.nextElement();
-                    if (entry.isDirectory()) continue;
+                    if (entry.isDirectory())
+                        continue;
                     String name = entry.getName();
-                    if (!name.endsWith(".class")) continue;
+                    if (!name.endsWith(".class"))
+                        continue;
                     String nameNoExt = name.substring(0, name.length() - 6);
-                    if (!nameNoExt.startsWith("sorts") && !nameNoExt.startsWith("io/github/arrayv/sorts")) continue;
-                    if (nameNoExt.contains("$")) continue;
+                    if (!nameNoExt.startsWith("sorts") && !nameNoExt.startsWith("io/github/arrayv/sorts"))
+                        continue;
+                    if (nameNoExt.contains("$"))
+                        continue;
                     String className = nameNoExt.replace('/', '.');
                     this.compileSingle(className, EXTRA_SORTS_CLASS_LOADER);
                 }
             }
         } catch (Exception e) {
             if (e instanceof RuntimeException) {
-                throw (RuntimeException)e; // rethrow
+                throw (RuntimeException) e; // rethrow
             }
             throw new RuntimeException(e);
         }
@@ -270,7 +276,8 @@ public final class SortAnalyzer {
             sortFiles = scanResult.getAllClasses();
 
             for (ClassInfo sortFile : sortFiles) {
-                if (sortFile.getName().contains("$")) continue; // Ignore inner classes
+                if (sortFile.getName().contains("$"))
+                    continue; // Ignore inner classes
                 this.compileSingle(sortFile.loadClass(Sort.class));
             }
             sortSorts();
@@ -309,13 +316,13 @@ public final class SortAnalyzer {
         int partLength = 0;
         if (monitor != null) {
             monitor.setMinimum(0);
-            final int contentLength = (int)connection.getContentLengthLong();
+            final int contentLength = (int) connection.getContentLengthLong();
             if (contentLength > 0) { // Negative if size unknown or overflow
                 partLength = contentLength;
                 monitor.setMaximum(contentLength * 2);
             } else if (EXTRA_SORTS_FILE.isFile()) {
                 // We can estimate the download size from the previous file if this is an update
-                final int fileLength = (int)EXTRA_SORTS_FILE.length();
+                final int fileLength = (int) EXTRA_SORTS_FILE.length();
                 if (fileLength > 0) {
                     partLength = fileLength;
                     monitor.setMaximum(fileLength * 2);
@@ -329,9 +336,8 @@ public final class SortAnalyzer {
             monitor.setProgress(0);
         }
         try (
-            InputStream is = connection.getInputStream();
-            OutputStream os = new FileOutputStream(DOWNLOAD_TEMP_FILE);
-        ) {
+                InputStream is = connection.getInputStream();
+                OutputStream os = new FileOutputStream(DOWNLOAD_TEMP_FILE);) {
             byte[] buffer = new byte[8192];
             int len;
             while ((len = is.read(buffer)) != -1) {
@@ -347,7 +353,7 @@ public final class SortAnalyzer {
         try (ZipFile zf = new ZipFile(DOWNLOAD_TEMP_FILE)) {
             final ZipEntry EXTRA_SORTS_JAR_ENTRY = zf.getEntry(EXTRA_SORTS_JAR_NAME);
             if (monitor != null) {
-                final int size = (int)EXTRA_SORTS_JAR_ENTRY.getSize();
+                final int size = (int) EXTRA_SORTS_JAR_ENTRY.getSize();
                 if (size > 0) { // Negative if size unknown or overflow (extremely unlikely)
                     partLength = size;
                     monitor.setMaximum(totalProgress + size);
@@ -358,9 +364,8 @@ public final class SortAnalyzer {
                 monitor.setNote("Extracting...");
             }
             try (
-                InputStream is = zf.getInputStream(EXTRA_SORTS_JAR_ENTRY);
-                OutputStream os = new FileOutputStream(EXTRA_SORTS_FILE);
-            ) {
+                    InputStream is = zf.getInputStream(EXTRA_SORTS_JAR_ENTRY);
+                    OutputStream os = new FileOutputStream(EXTRA_SORTS_FILE);) {
                 byte[] buffer = new byte[8192];
                 int len;
                 while ((len = is.read(buffer)) != -1) {
@@ -388,34 +393,44 @@ public final class SortAnalyzer {
         String findPackageName() {
             i = 0;
             while (true) {
-                if (skipWhitespace()) break;
+                if (skipWhitespace())
+                    break;
 
                 if (c == '/') {
-                    if (advance()) break;
+                    if (advance())
+                        break;
                     if (c == '/') {
                         while (true) {
-                            if (advance() || c == '\n') break;
+                            if (advance() || c == '\n')
+                                break;
                         }
                     } else if (c == '*') {
                         while (true) {
-                            if (advance()) break;
-                            if (c == '*' && (advance() || c == '/')) break;
+                            if (advance())
+                                break;
+                            if (c == '*' && (advance() || c == '/'))
+                                break;
                         }
                     } else {
-                        throw new IllegalArgumentException("/ by itself (not part of a comment) before class declaration");
+                        throw new IllegalArgumentException(
+                                "/ by itself (not part of a comment) before class declaration");
                     }
                     continue;
                 }
 
                 if (c == 'p') {
-                    if (advance() || c == 'u') break; // public
-                    if (c != 'a') throw new IllegalArgumentException("Except u or a after p");
+                    if (advance() || c == 'u')
+                        break; // public
+                    if (c != 'a')
+                        throw new IllegalArgumentException("Except u or a after p");
                     expectWord("ckage", "package");
-                    if (skipWhitespace()) throw new IllegalArgumentException("Expect package name");
+                    if (skipWhitespace())
+                        throw new IllegalArgumentException("Expect package name");
                     return readPackageName();
                 }
 
-                if (c == 'i' || c == 'a' || c == 'c' || c == 'r' || c == 'e' || c == 'f') break;
+                if (c == 'i' || c == 'a' || c == 'c' || c == 'r' || c == 'e' || c == 'f')
+                    break;
             }
             return "";
         }
@@ -429,7 +444,8 @@ public final class SortAnalyzer {
                     if (Character.isJavaIdentifierStart(c)) {
                         result.appendCodePoint(c);
                     } else {
-                        throw new IllegalArgumentException("Illegal character in package name: " + new String(Character.toChars(c)));
+                        throw new IllegalArgumentException(
+                                "Illegal character in package name: " + new String(Character.toChars(c)));
                     }
                     isAfterDot = false;
                 } else {
@@ -439,7 +455,8 @@ public final class SortAnalyzer {
                         result.append('.');
                         isAfterDot = true;
                     } else {
-                        throw new IllegalArgumentException("Illegal character in package name: " + new String(Character.toChars(c)));
+                        throw new IllegalArgumentException(
+                                "Illegal character in package name: " + new String(Character.toChars(c)));
                     }
                 }
                 // @checkstyle:on IndentationCheck
@@ -452,14 +469,16 @@ public final class SortAnalyzer {
 
         private boolean skipWhitespace() {
             do {
-                if (advance()) return true;
+                if (advance())
+                    return true;
             } while (Character.isWhitespace(c));
             return false;
         }
 
         private boolean advance() {
             // True indicates EOF
-            if (i >= source.length()) return true;
+            if (i >= source.length())
+                return true;
             c = source.codePointAt(i);
             i += Character.charCount(c);
             return false;
@@ -467,7 +486,8 @@ public final class SortAnalyzer {
 
         private void expectWord(String word, String fullWord) {
             for (int j = 0; j < word.length(); j++) {
-                if (advance() || c != word.charAt(j)) throw new IllegalArgumentException("EOL or unexpected character in word '" + fullWord + "'");
+                if (advance() || c != word.charAt(j))
+                    throw new IllegalArgumentException("EOL or unexpected character in word '" + fullWord + "'");
             }
         }
     }
@@ -486,16 +506,13 @@ public final class SortAnalyzer {
     public static JavaCompiler tryGetJavaCompiler() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
-            if (
-                JOptionPane.showConfirmDialog(
+            if (JOptionPane.showConfirmDialog(
                     null,
                     "You must install a JDK on your system in order to import sorts.\n" +
-                        "Would you like to download one now?",
+                            "Would you like to download one now?",
                     "Import Sort",
                     JOptionPane.YES_NO_OPTION,
-                    JOptionPane.ERROR_MESSAGE
-                ) == JOptionPane.YES_OPTION
-            ) {
+                    JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
                 try {
                     Desktop.getDesktop().browse(new URI("https://adoptium.net/temurin/releases"));
                 } catch (IOException e) {
@@ -510,7 +527,8 @@ public final class SortAnalyzer {
 
     public boolean importSort(File file, boolean showConfirmation) {
         // SLightly modified from https://stackoverflow.com/a/40772073/8840278
-        // Pattern packagePattern = Pattern.compile("package (([a-zA-Z]{1}[a-zA-Z\\d_]*\\.)*[a-zA-Z][a-zA-Z\\d_]*);");
+        // Pattern packagePattern = Pattern.compile("package
+        // (([a-zA-Z]{1}[a-zA-Z\\d_]*\\.)*[a-zA-Z][a-zA-Z\\d_]*);");
         String originalContents;
         try {
             originalContents = new String(Files.readAllBytes(file.toPath()));
@@ -560,23 +578,24 @@ public final class SortAnalyzer {
             fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singletonList(CACHE_DIR));
             // @checkstyle:off ParenPadCheck
             CompilationTask task = compiler.getTask(
-                output,        // out
-                fileManager,   // fileManager
-                null,          // diagnosticListener
-                Arrays.asList( // options
-                    "-classpath", System.getProperty("java.class.path")
-                ),
-                null,          // classes
-                jFiles         // compilationUnits
+                    output, // out
+                    fileManager, // fileManager
+                    null, // diagnosticListener
+                    Arrays.asList( // options
+                            "-classpath", System.getProperty("java.class.path")),
+                    null, // classes
+                    jFiles // compilationUnits
             );
             // @checkstyle:on ParenPadCheck
             try {
-                // Code that would work except that reflection is safer (I think) when using APIs that may be removed
-                // com.sun.tools.javac.main.Main.Result result = ((com.sun.tools.javac.api.JavacTaskImpl)task).doCall();
+                // Code that would work except that reflection is safer (I think) when using
+                // APIs that may be removed
+                // com.sun.tools.javac.main.Main.Result result =
+                // ((com.sun.tools.javac.api.JavacTaskImpl)task).doCall();
                 // success = result.exitCode;
                 Method doCall = task.getClass().getDeclaredMethod("doCall");
                 Object result = doCall.invoke(task);
-                success = (int)result.getClass().getDeclaredField("exitCode").get(result);
+                success = (int) result.getClass().getDeclaredField("exitCode").get(result);
             } catch (Exception e) {
                 success = task.call() ? 0 : 1;
             }
@@ -585,17 +604,14 @@ public final class SortAnalyzer {
             success = -1;
         }
         if (success != 0) {
-            if (
-                JOptionPane.showConfirmDialog(
+            if (JOptionPane.showConfirmDialog(
                     null,
                     "Failed to compile: " + file +
-                    "\nError code " + success + "\n" +
-                    "Would you like to open the log file?",
+                            "\nError code " + success + "\n" +
+                            "Would you like to open the log file?",
                     "Import Sort",
                     JOptionPane.YES_NO_OPTION,
-                    JOptionPane.ERROR_MESSAGE
-                ) == JOptionPane.YES_OPTION
-            ) {
+                    JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
                 try {
                     Desktop.getDesktop().open(logFile);
                 } catch (IOException e) {
@@ -614,37 +630,35 @@ public final class SortAnalyzer {
         String[][] maybeNames;
         try {
             maybeNames = StreamSupport.stream(
-                fileManager.list(StandardLocation.CLASS_OUTPUT, "", Collections.singleton(JavaFileObject.Kind.CLASS), true).spliterator(),
-                false
-            )
-                .map(fobj -> {
-                    File jioFile = new File(fobj.getName());
-                    Path relativePath = CACHE_PATH.relativize(jioFile.getParentFile().toPath());
-                    String baseName = jioFile.getName();
-                    return new String[] {
-                        relativePath.toString().replace(File.separatorChar, '.'),
-                        baseName.substring(0, baseName.lastIndexOf('.'))
-                    };
-                })
-                .filter(fc ->
-                    packageName.equals(fc[0]) && rawClassName.equals(fc[1])
-                )
-                .toArray(String[][]::new);
+                    fileManager.list(StandardLocation.CLASS_OUTPUT, "",
+                            Collections.singleton(JavaFileObject.Kind.CLASS), true).spliterator(),
+                    false)
+                    .map(fobj -> {
+                        File jioFile = new File(fobj.getName());
+                        Path relativePath = CACHE_PATH.relativize(jioFile.getParentFile().toPath());
+                        String baseName = jioFile.getName();
+                        return new String[] {
+                                relativePath.toString().replace(File.separatorChar, '.'),
+                                baseName.substring(0, baseName.lastIndexOf('.'))
+                        };
+                    })
+                    .filter(fc -> packageName.equals(fc[0]) && rawClassName.equals(fc[1]))
+                    .toArray(String[][]::new);
         } catch (Exception e) {
             JErrorPane.invokeErrorMessage(e, "Sort Import");
             return false;
         }
         if (maybeNames.length == 2) {
             JErrorPane.invokeCustomErrorMessage(
-                "Multiple sorts found that match this file (" +
-                Arrays.deepToString(maybeNames) +
-                "). Please contact the sort devs of all sorts named " +
-                file.getName()
-            );
+                    "Multiple sorts found that match this file (" +
+                            Arrays.deepToString(maybeNames) +
+                            "). Please contact the sort devs of all sorts named " +
+                            file.getName());
             return false;
         }
         if (maybeNames.length == 0) {
-            JErrorPane.invokeCustomErrorMessage("The resulting sort file could not be located. Please report this on the bug tracker.");
+            JErrorPane.invokeCustomErrorMessage(
+                    "The resulting sort file could not be located. Please report this on the bug tracker.");
             return false;
         }
         final String name;
@@ -665,7 +679,8 @@ public final class SortAnalyzer {
         if (showConfirmation) {
             sortSorts();
             arrayVisualizer.refreshSorts();
-            JOptionPane.showMessageDialog(null, "Successfully imported sort " + name, "Import Sort", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Successfully imported sort " + name, "Import Sort",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
         return true;
     }
@@ -716,11 +731,13 @@ public final class SortAnalyzer {
         boolean warned = false;
 
         if (sort.isBogoSort() && !sort.hasUnreasonableLimit()) {
-            suggestions.append("- ").append(sort.getRunName()).append(" is a bogosort. It should have an unreasonabe limit.\n");
+            suggestions.append("- ").append(sort.getRunName())
+                    .append(" is a bogosort. It should have an unreasonabe limit.\n");
             warned = true;
         }
         if (sort.isRadixSort() && !sort.isBucketSort()) {
-            suggestions.append("- ").append(sort.getRunName()).append(" is a radix sort and should also be classified as a bucket sort.\n");
+            suggestions.append("- ").append(sort.getRunName())
+                    .append(" is a radix sort and should also be classified as a bucket sort.\n");
             warned = true;
         }
 
@@ -735,7 +752,7 @@ public final class SortAnalyzer {
         // SortInfo[] sorts = new SortInfo[this.sorts.size()];
 
         // for (int i = 0; i < sorts.length; i++) {
-        //     sorts[i] = new SortInfo(i, this.sorts.get(i));
+        // sorts[i] = new SortInfo(i, this.sorts.get(i));
         // }
 
         // return sorts;
@@ -751,6 +768,7 @@ public final class SortAnalyzer {
 
         return invalidSorts;
     }
+
     public String[] getSuggestions() {
         if (suggestions.size() < 1) {
             return null;

@@ -4,6 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.utils.ArrayWaveSound;
 
 /*
@@ -45,7 +47,7 @@ public class WaveFrame extends javax.swing.JFrame {
         gblContentPane.rowHeights = new int[] { 0, 0 };
         contentPane.setLayout(gblContentPane);
 
-        JLabel lblFreq = new JLabel("Wave Frequency:");
+        JLabel lblFreq = new JLabel("Wave Freq:");
         GridBagConstraints gbcLblFreq = new GridBagConstraints();
         gbcLblFreq.gridx = 0;
         gbcLblFreq.gridy = 0;
@@ -60,7 +62,7 @@ public class WaveFrame extends javax.swing.JFrame {
         JSpinner spinFreq = new JSpinner(sldFreq);
         contentPane.add(spinFreq, gbcsldFreq);
 
-        JLabel lblVol = new JLabel("Wave Volume (in %):");
+        JLabel lblVol = new JLabel("Wave Vol(in %):");
         GridBagConstraints gbcLblVol = new GridBagConstraints();
         gbcLblVol.gridx = 1;
         gbcLblVol.gridy = 0;
@@ -74,6 +76,22 @@ public class WaveFrame extends javax.swing.JFrame {
         gbcsldVol.gridy = 1;
         JSpinner spinVol = new JSpinner(sldVol);
         contentPane.add(spinVol, gbcsldVol);
+
+        JLabel lblFlt = new JLabel("Filter Cutoff:");
+        GridBagConstraints gbcLblFlt = new GridBagConstraints();
+        gbcLblFlt.gridx = 2;
+        gbcLblFlt.gridy = 0;
+        contentPane.add(lblFlt, gbcLblFlt);
+
+        SpinnerModel sldFlt = new SpinnerNumberModel((int) (48000), 0, 48000, 100);
+        sldFlt.addChangeListener(
+                e -> ArrayVisualizer.getInstance().getSounds()
+                        .setFilter(((SpinnerNumberModel) e.getSource()).getNumber().floatValue()));
+        GridBagConstraints gbcsldFlt = new GridBagConstraints();
+        gbcsldFlt.gridx = 2;
+        gbcsldFlt.gridy = 1;
+        JSpinner spinFlt = new JSpinner(sldFlt);
+        contentPane.add(spinFlt, gbcsldFlt);
         setAlwaysOnTop(true);
     }
 }

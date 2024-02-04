@@ -16,20 +16,20 @@ runGroup(shuffles.size() + distributions.size()) { // The number of inputs will 
             } else {
                 arrayv.arrayManager.setShuffleSingle(shuffle)
             }
-            run BubblescanQuickSort go 2048.numbers
+            run CircleHalverSort go 2048.numbers
         } else {
             arrayv.setUniqueItems(64)
             category = "Few Uniques (64)"
             arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
-            run BubblescanQuickSort go 2048.numbers
+            run CircleHalverSort go 2048.numbers
             category = "Few Uniques (32)"
             arrayv.setUniqueItems(32)
             arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
-            run BubblescanQuickSort go 2048.numbers
+            run CircleHalverSort go 2048.numbers
             category = "Few Uniques (16)"
             arrayv.setUniqueItems(16)
             arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
-            run BubblescanQuickSort go 2048.numbers
+            run CircleHalverSort go 2048.numbers
             arrayv.setUniqueItems(2048)
         }
         
@@ -43,7 +43,7 @@ runGroup(shuffles.size() + distributions.size()) { // The number of inputs will 
             } else {
                 arrayv.arrayManager.setShuffleSingle(distrib)
             }
-            run BubblescanQuickSort go 2048.numbers
+            run CircleHalverSort go 2048.numbers
         }
         if (distrib == Distributions.CUSTOM)
         return;
