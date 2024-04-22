@@ -36,7 +36,7 @@ public final class GraphReader {
         }
     }
 
-    public static final int[] COMPATIBLE_VERSIONS = {0, 1, 2, 3};
+    public static final int[] COMPATIBLE_VERSIONS = { 0, 1, 2, 3 };
     static Set<Integer> compatibleVersionsSet;
 
     Scanner scanner;
@@ -48,10 +48,9 @@ public final class GraphReader {
         result = null;
         if (compatibleVersionsSet == null) {
             compatibleVersionsSet = Collections.unmodifiableSet(
-                Arrays.stream(COMPATIBLE_VERSIONS)
-                      .boxed()
-                      .collect(Collectors.toSet())
-            );
+                    Arrays.stream(COMPATIBLE_VERSIONS)
+                            .boxed()
+                            .collect(Collectors.toSet()));
         }
     }
 
@@ -92,10 +91,12 @@ public final class GraphReader {
     private void read() throws IOException, MalformedGraphFileException {
         version = scanner.hasNextInt() ? scanner.nextInt() : 0;
         if (!compatibleVersionsSet.contains(version)) {
-            throw new MalformedGraphFileException("Unsupported version for reading: " + version + " (Supported versions: "
-                + Arrays.stream(COMPATIBLE_VERSIONS)
-                        .mapToObj(String::valueOf)
-                        .collect(Collectors.joining(", ", "{", "}")) + ")");
+            throw new MalformedGraphFileException(
+                    "Unsupported version for reading: " + version + " (Supported versions: "
+                            + Arrays.stream(COMPATIBLE_VERSIONS)
+                                    .mapToObj(String::valueOf)
+                                    .collect(Collectors.joining(", ", "{", "}"))
+                            + ")");
         }
         result = new ShuffleGraph();
         partialNodes = new ArrayList<>();
@@ -144,7 +145,8 @@ public final class GraphReader {
             } catch (IndexOutOfBoundsException e) {
                 String message = e.getMessage();
                 int id = Integer.parseInt(message.split(" ", 3)[1]);
-                MalformedGraphFileException newError = new MalformedGraphFileException("No connection with the ID " + id);
+                MalformedGraphFileException newError = new MalformedGraphFileException(
+                        "No connection with the ID " + id);
                 newError.initCause(e);
                 throw newError;
             }
@@ -250,7 +252,8 @@ public final class GraphReader {
 
     private void readConnection() throws MalformedGraphFileException {
         if (version >= 3) {
-            throw new MalformedGraphFileException("Invalid identifier type \"C\": Connections were removed in format v3");
+            throw new MalformedGraphFileException(
+                    "Invalid identifier type \"C\": Connections were removed in format v3");
         }
         if (!scanner.hasNextInt()) {
             throw new MalformedGraphFileException("Expected fromNode ID in connection declaration");

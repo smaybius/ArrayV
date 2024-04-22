@@ -32,7 +32,7 @@ public final class CommonUtils {
         }
         Map.Entry<L, R>[] result = new Map.Entry[values.length >> 1];
         for (int i = 0, j = 0; i < result.length; i++, j += 2) {
-            result[i] = new SimpleImmutableEntry<>((L)values[j], (R)values[j + 1]);
+            result[i] = new SimpleImmutableEntry<>((L) values[j], (R) values[j + 1]);
         }
         return result;
     }

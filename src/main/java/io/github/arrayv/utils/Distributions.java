@@ -39,6 +39,7 @@ SOFTWARE.
 
 public enum Distributions {
     LINEAR {
+        @Override
         public String getName() {
             return "Linear";
         }
@@ -52,6 +53,7 @@ public enum Distributions {
         }
     },
     SIMILAR {
+        @Override
         public String getName() {
             return "Few Unique";
         }
@@ -78,6 +80,7 @@ public enum Distributions {
         }
     },
     EQUAL {
+        @Override
         public String getName() {
             return "No Unique";
         }
@@ -93,6 +96,7 @@ public enum Distributions {
         }
     },
     RANDOM {
+        @Override
         public String getName() {
             return "Random";
         }
@@ -106,6 +110,7 @@ public enum Distributions {
         }
     },
     SQUARE {
+        @Override
         public String getName() {
             return "Quadratic";
         }
@@ -119,6 +124,7 @@ public enum Distributions {
         }
     },
     SQRT {
+        @Override
         public String getName() {
             return "Square Root";
         }
@@ -132,6 +138,7 @@ public enum Distributions {
         }
     },
     CUBIC {
+        @Override
         public String getName() {
             return "Cubic (Centered)";
         }
@@ -147,6 +154,7 @@ public enum Distributions {
         }
     },
     QUINTIC {
+        @Override
         public String getName() {
             return "Quintic (Centered)";
         }
@@ -162,6 +170,7 @@ public enum Distributions {
         }
     },
     CBRT {
+        @Override
         public String getName() {
             return "Cube Root (Centered)";
         }
@@ -181,6 +190,7 @@ public enum Distributions {
         }
     },
     QTRT {
+        @Override
         public String getName() {
             return "Fifth Root (Centered)";
         }
@@ -200,6 +210,7 @@ public enum Distributions {
         }
     },
     SINE {
+        @Override
         public String getName() {
             return "Sine Wave";
         }
@@ -215,6 +226,7 @@ public enum Distributions {
         }
     },
     COSINE {
+        @Override
         public String getName() {
             return "Cosine Wave";
         }
@@ -231,6 +243,7 @@ public enum Distributions {
     },
     // The four distirbutions below may need some fixes.
     TANGENT {
+        @Override
         public String getName() {
             return "Tangent Wave";
         }
@@ -253,6 +266,7 @@ public enum Distributions {
         }
     },
     COTANGENT {
+        @Override
         public String getName() {
             return "Cotangent Wave";
         }
@@ -275,6 +289,7 @@ public enum Distributions {
         }
     },
     SECANT {
+        @Override
         public String getName() {
             return "Secant Wave";
         }
@@ -297,6 +312,7 @@ public enum Distributions {
         }
     },
     COSECANT {
+        @Override
         public String getName() {
             return "Cosecant Wave";
         }
@@ -319,6 +335,7 @@ public enum Distributions {
         }
     },
     SINC {
+        @Override
         public String getName() {
             return "Sinc Function";
         }
@@ -351,6 +368,7 @@ public enum Distributions {
         }
     },
     PERLIN_NOISE {
+        @Override
         public String getName() {
             return "Perlin Noise";
         }
@@ -401,6 +419,7 @@ public enum Distributions {
         }
     },
     PERLIN_NOISE_CURVE {
+        @Override
         public String getName() {
             return "Perlin Noise Curve";
         }
@@ -416,6 +435,7 @@ public enum Distributions {
         }
     },
     BELL_CURVE {
+        @Override
         public String getName() {
             return "Bell Curve";
         }
@@ -443,6 +463,7 @@ public enum Distributions {
         }
     },
     RULER {
+        @Override
         public String getName() {
             return "Ruler";
         }
@@ -483,6 +504,7 @@ public enum Distributions {
         }
     },
     BLANCMANGE {
+        @Override
         public String getName() {
             return "Blancmange Curve";
         }
@@ -514,6 +536,7 @@ public enum Distributions {
         }
     },
     CANTOR {
+        @Override
         public String getName() {
             return "Cantor Function";
         }
@@ -546,6 +569,7 @@ public enum Distributions {
         }
     },
     DIVISORS {// O(n^1.5)
+        @Override
         public String getName() {
             return "Sum of Divisors";
         }
@@ -585,6 +609,7 @@ public enum Distributions {
         }
     },
     FSD {// fly straight dangit (OEIS A133058)
+        @Override
         public String getName() {
             return "OEIS \"Fly Straight, Damnit!\" Function";
         }
@@ -615,6 +640,7 @@ public enum Distributions {
         }
     },
     REVLOG {
+        @Override
         public String getName() {
             return "Decreasing Random";
         }
@@ -630,6 +656,7 @@ public enum Distributions {
         }
     },
     INCREASING_RANDOM {
+        @Override
         public String getName() {
             return "Increasing Random";
         }
@@ -645,6 +672,7 @@ public enum Distributions {
         }
     },
     MODULO {
+        @Override
         public String getName() {
             return "Modulo Function";
         }
@@ -658,6 +686,7 @@ public enum Distributions {
         }
     },
     DIGITS_SUM { // O(n log_10(n))
+        @Override
         public String getName() {
             return "Sum of Digits";
         }
@@ -684,6 +713,7 @@ public enum Distributions {
         }
     },
     DIGITS_PROD {
+        @Override
         public String getName() {
             return "Product of Digits";
         }
@@ -950,6 +980,7 @@ public enum Distributions {
         private int[] refarray;
         private int length;
 
+        @Override
         public String getName() {
             return "Custom";
         }

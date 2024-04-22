@@ -379,20 +379,11 @@ public final class Sounds {
 
     private void assignInstruments() {
         try {
-            int programIndex;
-
-            // TODO: Consider making into a method
-            switch (this.instrumentChoice) {
-                case 0:
-                    programIndex = DEFAULT_ROCK_ORGAN_INDEX;
-                    break;
-                case 1:
-                    programIndex = this.sineWaveIndex;
-                    break;
-                default:
-                    programIndex = this.instrumentChoice - 2;
-                    break;
-            }
+            int programIndex = switch (this.instrumentChoice) {
+                case 0 -> DEFAULT_ROCK_ORGAN_INDEX;
+                case 1 -> this.sineWaveIndex;
+                default -> this.instrumentChoice - 2;
+            };
 
             for (int i = 0; i < this.numChannels; i++) {
                 this.channels[i] = this.synth.getChannels()[i];
@@ -428,20 +419,11 @@ public final class Sounds {
                             break;
                     }
 
-                    int savedInstrument;
-                    // TODO: Consider making into a method
-                    switch (Sounds.this.instrumentChoice) {
-                        case 0:
-                            savedInstrument = DEFAULT_ROCK_ORGAN_INDEX;
-                            break;
-                        case 1:
-                            savedInstrument = Sounds.this.sineWaveIndex;
-                            break;
-                        default:
-                            savedInstrument = Sounds.this.instrumentChoice - 2;
-                            break;
-                    }
-
+                    int savedInstrument = switch (Sounds.this.instrumentChoice) {
+                        case 0 -> DEFAULT_ROCK_ORGAN_INDEX;
+                        case 1 -> Sounds.this.sineWaveIndex;
+                        default -> Sounds.this.instrumentChoice - 2;
+                    };
                     try {
                         for (int i = 0; i < Sounds.this.numChannels; i++) {
                             Sounds.this.channels[i].programChange(
@@ -474,20 +456,11 @@ public final class Sounds {
                             break;
                     }
 
-                    int savedInstrument;
-                    // TODO: Consider making into a method
-                    switch (Sounds.this.instrumentChoice) {
-                        case 0:
-                            savedInstrument = DEFAULT_ROCK_ORGAN_INDEX;
-                            break;
-                        case 1:
-                            savedInstrument = Sounds.this.sineWaveIndex;
-                            break;
-                        default:
-                            savedInstrument = Sounds.this.instrumentChoice - 2;
-                            break;
-                    }
-
+                    int savedInstrument = switch (Sounds.this.instrumentChoice) {
+                        case 0 -> DEFAULT_ROCK_ORGAN_INDEX;
+                        case 1 -> Sounds.this.sineWaveIndex;
+                        default -> Sounds.this.instrumentChoice - 2;
+                    };
                     try {
                         Sounds.this.channels[0].programChange(
                                 Sounds.this.synth.getLoadedInstruments()[Sounds.this.testInstrumentChoice].getPatch()

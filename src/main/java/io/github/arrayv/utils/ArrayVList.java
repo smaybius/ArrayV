@@ -344,10 +344,12 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
         int cursor; // index of next element to return
         int lastRet = -1; // index of last element returned; -1 if no such
 
+        @Override
         public boolean hasNext() {
             return cursor != count;
         }
 
+        @Override
         public Integer next() {
             int i = cursor;
             if (i >= count)
@@ -397,18 +399,22 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
             cursor = index;
         }
 
+        @Override
         public boolean hasPrevious() {
             return cursor != 0;
         }
 
+        @Override
         public int nextIndex() {
             return cursor;
         }
 
+        @Override
         public int previousIndex() {
             return cursor - 1;
         }
 
+        @Override
         public Integer previous() {
             int i = cursor - 1;
             if (i < 0)
@@ -420,6 +426,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
             return internal[lastRet = i];
         }
 
+        @Override
         public void set(Integer e) {
             if (lastRet < 0)
                 throw new IllegalStateException();
@@ -431,6 +438,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
             }
         }
 
+        @Override
         public void add(Integer e) {
             try {
                 int i = cursor;
@@ -470,11 +478,13 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
             return oldValue;
         }
 
+        @Override
         public Integer get(int index) {
             rangeCheck(index);
             return ArrayVList.this.internal[offset + index];
         }
 
+        @Override
         public int size() {
             return this.size;
         }
@@ -486,6 +496,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
             size++;
         }
 
+        @Override
         public Integer remove(int index) {
             rangeCheck(index);
             int result = parent.remove(parentOffset + index);
@@ -493,20 +504,24 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
             return result;
         }
 
+        @Override
         protected void removeRange(int fromIndex, int toIndex) {
             parent.removeRange(parentOffset + fromIndex,
                     parentOffset + toIndex);
             this.size -= toIndex - fromIndex;
         }
 
+        @Override
         public Iterator<Integer> iterator() {
             return listIterator();
         }
 
+        @Override
         public ListIterator<Integer> listIterator(final int index) {
             return null;
         }
 
+        @Override
         public List<Integer> subList(int fromIndex, int toIndex) {
             return null;
             // subListRangeCheck(fromIndex, toIndex, size);
@@ -527,6 +542,7 @@ public class ArrayVList extends AbstractList<Integer> implements RandomAccess, C
             return "Index: " + index + ", Size: " + this.size;
         }
 
+        @Override
         public Spliterator<Integer> spliterator() {
             return null;
         }

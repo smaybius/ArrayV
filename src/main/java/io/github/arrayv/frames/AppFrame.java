@@ -30,6 +30,8 @@ SOFTWARE.
 
 public interface AppFrame {
     void reposition();
+
     boolean isVisible();
+
     void dispose();
 }

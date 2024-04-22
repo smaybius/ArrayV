@@ -82,7 +82,7 @@ public final class ArrayManager {
         this.mutableLength = mutableLength;
     }
 
-    //TODO: Fix minimum to zero
+    // TODO: Fix minimum to zero
     public void initializeArray(int[] array) {
         if (arrayVisualizer.doingStabilityCheck()) {
             arrayVisualizer.resetStabilityTable();
@@ -96,15 +96,16 @@ public final class ArrayManager {
             temp = new int[currentLen];
         } catch (OutOfMemoryError e) {
             if (!hadDistributionAllocationError)
-                JErrorPane.invokeCustomErrorMessage("Failed to allocate temporary array for distribution. (will use main array, which may have side-effects.)");
+                JErrorPane.invokeCustomErrorMessage(
+                        "Failed to allocate temporary array for distribution. (will use main array, which may have side-effects.)");
             hadDistributionAllocationError = true;
             temp = array;
         }
         distribution.initializeArray(temp, this.arrayVisualizer);
 
-        double uniqueFactor = (double)currentLen/arrayVisualizer.getUniqueItems();
+        double uniqueFactor = (double) currentLen / arrayVisualizer.getUniqueItems();
         for (int i = 0; i < currentLen; i++)
-            temp[i] = (int)(uniqueFactor*(int)(temp[i]/uniqueFactor))+(int)uniqueFactor/2;
+            temp[i] = (int) (uniqueFactor * (int) (temp[i] / uniqueFactor)) + (int) uniqueFactor / 2;
 
         System.arraycopy(temp, 0, array, 0, currentLen);
         arrayVisualizer.updateNow();
@@ -113,15 +114,19 @@ public final class ArrayManager {
     public String[] getShuffleIDs() {
         return this.shuffleIDs;
     }
+
     public Shuffles[] getShuffles() {
         return this.shuffleTypes;
     }
+
     public ShuffleGraph getShuffle() {
         return this.shuffle;
     }
 
     /**
-     * @deprecated This method is deprecatated. Please use {@link #setShuffleSingle(Shuffles)} or {@link #setShuffle(ShuffleGraph)} instead.
+     * @deprecated This method is deprecatated. Please use
+     *             {@link #setShuffleSingle(Shuffles)} or
+     *             {@link #setShuffle(ShuffleGraph)} instead.
      * @see #setShuffleSingle(Shuffles)
      * @see #setShuffle(ShuffleGraph)
      */
@@ -137,9 +142,11 @@ public final class ArrayManager {
     public ShuffleGraph setShuffleSingle(Shuffles shuffle) {
         return this.setShuffle(ShuffleGraph.single(shuffle));
     }
+
     public ShuffleGraph setShuffleSingle(Distributions distribution) {
         return this.setShuffle(ShuffleGraph.single(distribution));
     }
+
     public ShuffleGraph setShuffleSingle(Distributions distribution, boolean warped) {
         return this.setShuffle(ShuffleGraph.single(distribution, warped));
     }
@@ -147,12 +154,15 @@ public final class ArrayManager {
     public String[] getDistributionIDs() {
         return this.distributionIDs;
     }
+
     public Distributions[] getDistributions() {
         return this.distributionTypes;
     }
+
     public Distributions getDistribution() {
         return this.distribution;
     }
+
     public void setDistribution(Distributions choice) {
         this.distribution = choice;
         this.distribution.selectDistribution(arrayVisualizer.getArray(), arrayVisualizer);
@@ -173,7 +183,7 @@ public final class ArrayManager {
         double speed = Delays.getSleepRatio();
 
         if (arrayVisualizer.isActive()) {
-            double sleepRatio = arrayVisualizer.getCurrentLength()/1024d;
+            double sleepRatio = arrayVisualizer.getCurrentLength() / 1024d;
             sleepRatio *= shuffle.getSleepRatio();
             Delays.setSleepRatio(sleepRatio);
         }
@@ -190,20 +200,20 @@ public final class ArrayManager {
         double speed = Delays.getSleepRatio();
 
         if (arrayVisualizer.isActive()) {
-            double sleepRatio = arrayVisualizer.getCurrentLength()/1024d;
+            double sleepRatio = arrayVisualizer.getCurrentLength() / 1024d;
             Delays.setSleepRatio(sleepRatio);
         }
 
-        int[] counts    = new int[length];
+        int[] counts = new int[length];
         int[] prefixSum = new int[length];
-        int[] table     = arrayVisualizer.getStabilityTable();
+        int[] table = arrayVisualizer.getStabilityTable();
 
         for (int i = 0; i < length; i++)
             counts[array[i]]++;
 
         prefixSum[0] = counts[0];
         for (int i = 1; i < length; i++)
-            prefixSum[i] = counts[i] + prefixSum[i-1];
+            prefixSum[i] = counts[i] + prefixSum[i - 1];
 
         for (int i = 0, j = 0; j < length; i++) {
             while (counts[i] > 0) {
@@ -212,7 +222,7 @@ public final class ArrayManager {
             }
         }
 
-        for (int i = length-1; i >= 0; i--)
+        for (int i = length - 1; i >= 0; i--)
             Writes.write(array, i, --prefixSum[array[i]], 0.5, true, false);
 
         arrayVisualizer.setIndexTable();

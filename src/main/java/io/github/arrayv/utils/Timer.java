@@ -68,10 +68,14 @@ public final class Timer {
             minuteFormat = (this.elapsedTime / 60) + ":" + secondFormat;
         }
 
-        if (!this.timerEnabled && this.elapsedTime == 0) return "-:--";
-        else if (this.elapsedTime >= 60)                 return minuteFormat;
-        else if (this.elapsedTime >= 1)                  return "0:" + secondFormat;
-        else                                             return "0:00";
+        if (!this.timerEnabled && this.elapsedTime == 0)
+            return "-:--";
+        else if (this.elapsedTime >= 60)
+            return minuteFormat;
+        else if (this.elapsedTime >= 1)
+            return "0:" + secondFormat;
+        else
+            return "0:00";
     }
 
     public String prettifyTime(double time) {
@@ -80,12 +84,19 @@ public final class Timer {
         if (!this.useRealTimer) {
             return "Disabled";
         } else if (realTime == 0) {
-            if (this.timerEnabled) return "0.000ms";
-            else                   return "---ms";
-        } else if (realTime < 0.001)    return "< 0.001ms";
-        else if (realTime >= 60000.000) return "~" + this.formatter.format((int) (realTime / 60000)) + "m" + (int) ((realTime % 60000) / 1000) + "s";
-        else if (realTime >= 1000.000)  return "~" + this.formatter.format(realTime / 1000) + "s";
-        else                            return "~" + this.formatter.format(realTime) + "ms";
+            if (this.timerEnabled)
+                return "0.000ms";
+            else
+                return "---ms";
+        } else if (realTime < 0.001)
+            return "< 0.001ms";
+        else if (realTime >= 60000.000)
+            return "~" + this.formatter.format((int) (realTime / 60000)) + "m" + (int) ((realTime % 60000) / 1000)
+                    + "s";
+        else if (realTime >= 1000.000)
+            return "~" + this.formatter.format(realTime / 1000) + "s";
+        else
+            return "~" + this.formatter.format(realTime) + "ms";
     }
 
     public String getRealTime() {
@@ -97,7 +108,8 @@ public final class Timer {
     }
 
     public void enableRealTimer() {
-        if (useRealTimer) this.timerEnabled = true;
+        if (useRealTimer)
+            this.timerEnabled = true;
         this.sortRunTime = System.nanoTime();
         this.realTimer = 0;
     }
@@ -113,7 +125,8 @@ public final class Timer {
     public void startLap(String message) {
         this.operation = message;
         this.categoricalTimes.putIfAbsent(message, 0d);
-        if (this.timerEnabled) this.timeStart = System.nanoTime();
+        if (this.timerEnabled)
+            this.timeStart = System.nanoTime();
     }
 
     public void startLap() {

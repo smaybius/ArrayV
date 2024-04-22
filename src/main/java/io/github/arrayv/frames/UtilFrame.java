@@ -174,14 +174,10 @@ public final class UtilFrame extends javax.swing.JFrame {
         jCheckBox9.setText("Show Aux Arrays");
         jCheckBox9.addActionListener(evt -> jCheckBox9ActionPerformed());
 
-        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
-                "Sorting",
-                "AntiQSort",
-                "Stability Check",
-                "Sorting Networks",
-                "Reversed Sorting"
+        jComboBox1.setModel(new DefaultComboBoxModel<>(
+                new String[] { "Sorting", "AntiQSort", "Stability Check", "Sorting Networks", "Reversed Sorting"
                 // "*Simple* Benchmarking"
-        }));
+                }));
         jComboBox1.addActionListener(evt -> jComboBox1ActionPerformed());
         if (arrayVisualizer.isDisabledStabilityCheck()) {
             jComboBox1.removeItem("Stability Check");
@@ -201,107 +197,56 @@ public final class UtilFrame extends javax.swing.JFrame {
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
-                                        .addComponent(jLabel1)
-                                        .addGroup(layout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
-                                                .addComponent(this.jCheckBox1)
-                                                .addComponent(this.jCheckBox2)
-                                                .addComponent(this.jCheckBox3)
-                                                .addComponent(this.jCheckBox4)
-                                                .addComponent(this.jCheckBox6)
-                                                .addComponent(this.jCheckBox7)
-                                                .addComponent(this.jCheckBox8)
-                                                .addComponent(this.jCheckBox9)
-                                                .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                true)
-                                                        .addComponent(this.jCheckBox5)
-                                                        .addGroup(layout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.CENTER)
-                                                                .addComponent(jButton7,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(this.jButton6,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(jButton5,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(jButton4,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(jButton3,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(this.jButton2,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(this.jButton1,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(runScriptButton,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(this.jComboBox1,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)))))
-                                .addGap(0, 10, Short.MAX_VALUE)));
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel1)
-                                .addGap(7, 7, 7)
-                                .addComponent(this.jComboBox1)
-                                .addGap(10, 10, 10)
-                                .addComponent(this.jButton2)
-                                .addGap(5, 5, 5)
-                                .addComponent(this.jCheckBox2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(this.jCheckBox8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(this.jCheckBox9)
-                                .addGap(7, 7, 7)
-                                .addComponent(jButton3)
-                                .addGap(12, 12, 12)
-                                .addComponent(this.jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(this.jButton6)
-                                .addGap(7, 7, 7)
-                                .addComponent(this.jCheckBox1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(this.jCheckBox7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(this.jCheckBox5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(this.jCheckBox3)
-                                .addGap(8, 8, 8)
-                                .addComponent(jButton5)
-                                .addGap(5, 5, 5)
-                                .addComponent(this.jCheckBox6)
-                                .addComponent(this.jCheckBox4)
-                                .addGap(5, 5, 5)
-                                .addComponent(runScriptButton)
-                                .addGap(8, 8, 8)));
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
+                .addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout
+                        .createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true).addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+                                .addComponent(this.jCheckBox1).addComponent(this.jCheckBox2)
+                                .addComponent(this.jCheckBox3).addComponent(this.jCheckBox4)
+                                .addComponent(this.jCheckBox6).addComponent(this.jCheckBox7)
+                                .addComponent(this.jCheckBox8).addComponent(this.jCheckBox9)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
+                                        .addComponent(this.jCheckBox5)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                                .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(this.jButton6, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(this.jButton2, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(this.jButton1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(runScriptButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(this.jComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addGap(0, 10, Short.MAX_VALUE)));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+                .addGroup(layout.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabel1).addGap(7, 7, 7)
+                        .addComponent(this.jComboBox1).addGap(10, 10, 10).addComponent(this.jButton2).addGap(5, 5, 5)
+                        .addComponent(this.jCheckBox2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.jCheckBox8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.jCheckBox9).addGap(7, 7, 7).addComponent(jButton3).addGap(12, 12, 12)
+                        .addComponent(this.jButton1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton7).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.jButton6).addGap(7, 7, 7).addComponent(this.jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.jCheckBox7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.jCheckBox5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.jCheckBox3).addGap(8, 8, 8).addComponent(jButton5).addGap(5, 5, 5)
+                        .addComponent(this.jCheckBox6).addComponent(this.jCheckBox4).addGap(5, 5, 5)
+                        .addComponent(runScriptButton).addGap(8, 8, 8)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -453,14 +398,12 @@ public final class UtilFrame extends javax.swing.JFrame {
 
     private void jCheckBox9ActionPerformed() {// GEN-FIRST:event_jButton4ActionPerformed
         if (!jCheckBox9WarningShown && jCheckBox9.isSelected()) {
-            if (JOptionPane.showConfirmDialog(
-                    null,
+            if (JOptionPane.showConfirmDialog(null,
                     "<html>This will cause some sorts have extreme strobing/flashing."
                             + "<br><strong>It is highly recommended to NOT enable the \"" + jCheckBox9.getText()
                             + "\" option if you may be at risk of seizures.</strong>"
                             + "<br>Are you sure you wish to enable this option?</html>",
-                    "Seizure Warning",
-                    JOptionPane.YES_NO_OPTION,
+                    "Seizure Warning", JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
                 jCheckBox9.setSelected(false);
                 return;
@@ -504,10 +447,9 @@ public final class UtilFrame extends javax.swing.JFrame {
                 jButton6.setEnabled(true);
                 arrayVisualizer.setComparator(4);
                 if (arrayVisualizer.getCurrentLength() > 1024) {
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Large sorting networks can take a long time (and high RAM usage) to visualize.\n" +
-                                    "A length of 1024 or less is recommended.",
+                    JOptionPane.showMessageDialog(null,
+                            "Large sorting networks can take a long time (and high RAM usage) to visualize.\n"
+                                    + "A length of 1024 or less is recommended.",
                             "Sorting Network Visualizer", JOptionPane.WARNING_MESSAGE);
                 }
                 break;

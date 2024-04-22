@@ -2,12 +2,13 @@ package io.github.arrayv.utils;
 
 // @checkstyle:off TypeNameCheck
 public final class m {
-// @checkstyle:on TypeNameCheck
+    // @checkstyle:on TypeNameCheck
     private m() {
     }
 
     /**
      * Returns the logarithm base BASE of the number X
+     *
      * @param x
      * @param base
      * @return The resulting logarithm
@@ -18,16 +19,18 @@ public final class m {
 
     /**
      * Returns the truncated logarithm base BASE of the number X
+     *
      * @param x
      * @param base
      * @return The resulting truncated logarithm
      */
     public static int flog(double x, double base) {
-        return (int)m.log(x, base);
+        return (int) m.log(x, base);
     }
 
     /**
      * Returns the logarithm base 2 of the number X
+     *
      * @param x
      * @return The resulting logarithm
      */
@@ -37,6 +40,7 @@ public final class m {
 
     /**
      * Returns the truncated logarithm base 2 of the number X
+     *
      * @param x
      * @return The resulting truncated logarithm
      */
@@ -46,6 +50,7 @@ public final class m {
 
     /**
      * Returns the logarithm base 10 of the number X
+     *
      * @param x
      * @return The resulting logarithm
      */
@@ -55,6 +60,7 @@ public final class m {
 
     /**
      * Returns the truncated logarithm base 10 of the number X
+     *
      * @param x
      * @return The resulting truncated logarithm
      */
@@ -64,6 +70,7 @@ public final class m {
 
     /**
      * Returns the logarithm base e of the number X
+     *
      * @param x
      * @return The resulting logarithm
      */
@@ -73,6 +80,7 @@ public final class m {
 
     /**
      * Returns X raised to the power of Y
+     *
      * @param x
      * @param y
      * @return X raised to the power of Y
@@ -82,40 +90,46 @@ public final class m {
     }
 
     /**
-     * Returns X raised to the power of Y and truncated to the nearest integer closest to zero
+     * Returns X raised to the power of Y and truncated to the nearest integer
+     * closest to zero
+     *
      * @param x
      * @param y
-     * @return X raised to the power of Y and truncated to the nearest integer closest to zero
+     * @return X raised to the power of Y and truncated to the nearest integer
+     *         closest to zero
      */
     public static int fpow(double x, double y) {
-        return (int)Math.pow(x, y);
+        return (int) Math.pow(x, y);
     }
 
     /**
      * Rounds X down to the nearest value closest to -inf
+     *
      * @param x
      * @return X rounded down to the nearest value closest to -inf
      */
     public static int lowFloor(double x) {
-        return (int)Math.floor(x);
+        return (int) Math.floor(x);
     }
 
     /**
      * Truncates X
+     *
      * @param x
      * @return The truncated value of X
      */
     public static int floor(double x) {
-        return (int)x;
+        return (int) x;
     }
 
     /**
      * Rounds X up to the nearest value closest to +inf
+     *
      * @param x
      * @return X rounded up to the nearest value closest to +inf
      */
     public static int ceil(double x) {
-        return (int)Math.ceil(x);
+        return (int) Math.ceil(x);
     }
 
     // @checkstyle:off ConstantNameCheck

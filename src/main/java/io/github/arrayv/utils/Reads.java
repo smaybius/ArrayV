@@ -69,8 +69,10 @@ public final class Reads {
             this.comparisons = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         } else {
-            if (this.comparisons == 1) return this.comparisons + " Comparison";
-            else                       return this.formatter.format(this.comparisons) + " Comparisons";
+            if (this.comparisons == 1)
+                return this.comparisons + " Comparison";
+            else
+                return this.formatter.format(this.comparisons) + " Comparisons";
         }
     }
 
@@ -83,11 +85,12 @@ public final class Reads {
     }
 
     public int compareValues(int left, int right) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
         this.comparisons++;
 
         if (arrayVisualizer.doingStabilityCheck()) {
-            left  = arrayVisualizer.getStabilityValue(left);
+            left = arrayVisualizer.getStabilityValue(left);
             right = arrayVisualizer.getStabilityValue(right);
         }
 
@@ -95,9 +98,12 @@ public final class Reads {
 
         Timer.startLap("Compare");
 
-        if (left > right)      cmpVal =  1;
-        else if (left < right) cmpVal = -1;
-        else                   cmpVal =  0;
+        if (left > right)
+            cmpVal = 1;
+        else if (left < right)
+            cmpVal = -1;
+        else
+            cmpVal = 0;
 
         Timer.stopLap();
 
@@ -112,16 +118,20 @@ public final class Reads {
     }
 
     public int compareOriginalValues(int left, int right) {
-        if (arrayVisualizer.sortCanceled()) throw new StopSort();
+        if (arrayVisualizer.sortCanceled())
+            throw new StopSort();
         this.comparisons++;
 
         int cmpVal = 0;
 
         Timer.startLap("Compare");
 
-        if (left > right)      cmpVal =  1;
-        else if (left < right) cmpVal = -1;
-        else                  cmpVal =  0;
+        if (left > right)
+            cmpVal = 1;
+        else if (left < right)
+            cmpVal = -1;
+        else
+            cmpVal = 0;
 
         Timer.stopLap();
 
@@ -189,7 +199,8 @@ public final class Reads {
         int max = 0;
 
         for (int i = 0; i < length; i++) {
-            if (arrayVisualizer.sortCanceled()) throw new StopSort();
+            if (arrayVisualizer.sortCanceled())
+                throw new StopSort();
 
             int val = array[i];
             if (arrayVisualizer.doingStabilityCheck())
@@ -197,7 +208,8 @@ public final class Reads {
 
             Timer.startLap("Analysis");
 
-            if (val > max) max = val;
+            if (val > max)
+                max = val;
 
             Timer.stopLap();
 
@@ -220,7 +232,8 @@ public final class Reads {
         int min = 0;
 
         for (int i = 0; i < length; i++) {
-            if (arrayVisualizer.sortCanceled()) throw new StopSort();
+            if (arrayVisualizer.sortCanceled())
+                throw new StopSort();
 
             int val = array[i];
             if (arrayVisualizer.doingStabilityCheck())
@@ -228,7 +241,8 @@ public final class Reads {
 
             Timer.startLap("Analysis");
 
-            if (val < min) min = val;
+            if (val < min)
+                min = val;
 
             Timer.stopLap();
 
@@ -251,7 +265,8 @@ public final class Reads {
         int max = 0;
 
         for (int i = 0; i < length; i++) {
-            if (arrayVisualizer.sortCanceled()) throw new StopSort();
+            if (arrayVisualizer.sortCanceled())
+                throw new StopSort();
 
             int val = array[i];
             if (arrayVisualizer.doingStabilityCheck())
@@ -259,7 +274,8 @@ public final class Reads {
 
             Timer.startLap("Analysis");
 
-            if (val > max) max = val;
+            if (val > max)
+                max = val;
 
             Timer.stopLap();
 
@@ -282,7 +298,8 @@ public final class Reads {
         int max = 0;
 
         for (int i = 0; i < length; i++) {
-            if (arrayVisualizer.sortCanceled()) throw new StopSort();
+            if (arrayVisualizer.sortCanceled())
+                throw new StopSort();
 
             int val = array[i];
             if (arrayVisualizer.doingStabilityCheck())
@@ -290,7 +307,8 @@ public final class Reads {
 
             Timer.startLap("Analysis");
 
-            if (val > max) max = val;
+            if (val > max)
+                max = val;
 
             Timer.stopLap();
 
@@ -314,7 +332,8 @@ public final class Reads {
         int max = 0;
 
         for (int i = 0; i < length; i++) {
-            if (arrayVisualizer.sortCanceled()) throw new StopSort();
+            if (arrayVisualizer.sortCanceled())
+                throw new StopSort();
 
             int val = array[i];
             if (arrayVisualizer.doingStabilityCheck())
@@ -322,7 +341,8 @@ public final class Reads {
 
             Timer.startLap("Analysis");
 
-            if (val > max) max = val;
+            if (val > max)
+                max = val;
 
             Timer.stopLap();
 

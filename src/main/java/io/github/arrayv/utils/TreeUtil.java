@@ -38,7 +38,8 @@ public class TreeUtil {
         return countSelfAndChildren(node.getRight());
     }
 
-    public void addNodeToTree(Tree tree, final io.github.arrayv.utils.Tree.Node root, io.github.arrayv.utils.Tree.Node node) {
+    public void addNodeToTree(Tree tree, final io.github.arrayv.utils.Tree.Node root,
+            io.github.arrayv.utils.Tree.Node node) {
         if (root == null) {
             tree.setRoot(node);
             return;
@@ -179,8 +180,8 @@ public class TreeUtil {
     }
 
     public void reconstructIfUnbalanced(Tree tree) {
-//        int leftChildren = countLeftChildren(tree.getRoot());
-//        int rightChildren = countRightChildren(tree.getRoot());
+        // int leftChildren = countLeftChildren(tree.getRoot());
+        // int rightChildren = countRightChildren(tree.getRoot());
         int leftChildren = tree.getLeftCount();
         int rightChildren = tree.getRightCount();
         if (Math.abs(leftChildren - rightChildren) < 2) {

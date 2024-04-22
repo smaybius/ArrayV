@@ -71,16 +71,20 @@ public final class Delays {
         }
         return currDelay + "ms";
     }
-    //TODO: This is a mess.
+
+    // TODO: This is a mess.
     public double getDisplayedDelay() {
         return this.currentDelay;
     }
+
     public void setDisplayedDelay(double value) {
         this.currentDelay = value;
     }
+
     public void setCurrentDelay(double value) {
         this.delay = value;
     }
+
     public void updateCurrentDelay(double oldRatio, double newRatio) {
         this.delay = (this.delay * oldRatio) / newRatio;
         this.currentDelay = this.delay;
@@ -90,7 +94,8 @@ public final class Delays {
             this.delay = this.currentDelay = 0;
         }
     }
-    //TODO: Remove when sorts receive ArrayVisualizer
+
+    // TODO: Remove when sorts receive ArrayVisualizer
     public void updateDelayForTimeSort(double value) {
         this.setDisplayedDelay(value);
         this.Sounds.changeNoteDelayAndFilter((int) value);
@@ -99,6 +104,7 @@ public final class Delays {
     public double getSleepRatio() {
         return this.sleepRatio;
     }
+
     public void setSleepRatio(double sleepRatio) {
         this.sleepRatio = sleepRatio;
     }
@@ -106,20 +112,25 @@ public final class Delays {
     public boolean skipped() {
         return this.skipped;
     }
+
     public void changeSkipped(boolean skipped) {
         this.skipped = skipped;
-        if (this.skipped) this.Sounds.changeNoteDelayAndFilter(1);
+        if (this.skipped)
+            this.Sounds.changeNoteDelayAndFilter(1);
     }
 
     public boolean paused() {
         return this.paused;
     }
+
     public void changePaused(boolean paused) {
         this.paused = paused;
         this.Sounds.toggleSound(!paused);
     }
+
     public void togglePaused() {
-        this.changePaused(!this.paused);;
+        this.changePaused(!this.paused);
+        ;
     }
 
     public void disableStepping() {
@@ -167,7 +178,8 @@ public final class Delays {
         this.Sounds.changeNoteDelayAndFilter((int) this.currentDelay);
 
         try {
-            // With this for loop, you can change the speed of sorts without waiting for the current delay to finish.
+            // With this for loop, you can change the speed of sorts without waiting for the
+            // current delay to finish.
             if (!this.skipped) {
                 while (this.delay >= 1) {
                     Thread.sleep(1);

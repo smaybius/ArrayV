@@ -18,8 +18,10 @@ import org.codehaus.groovy.runtime.MethodClosure;
 import java.util.Map;
 
 /**
- * This class defines methods and properties directly accessible from within Groovy scripts.
- * Methods and properties in this class can be directly named without prefixing them with {@code GroovyLocals.}.
+ * This class defines methods and properties directly accessible from within
+ * Groovy scripts.
+ * Methods and properties in this class can be directly named without prefixing
+ * them with {@code GroovyLocals.}.
  */
 public final class GroovyLocals {
     // No instancing!
@@ -27,11 +29,15 @@ public final class GroovyLocals {
     }
 
     /**
-     * <p>Property for the main {@link ArrayVisualizer} instance.</p>
+     * <p>
+     * Property for the main {@link ArrayVisualizer} instance.
+     * </p>
      * Intended to be used like this (example):
+     *
      * <pre>
      * println arrayv.sortAnalyzer
      * </pre>
+     *
      * @return The main {@link ArrayVisualizer} instance
      */
     public static ArrayVisualizer getArrayv() {
@@ -40,8 +46,10 @@ public final class GroovyLocals {
 
     /**
      * Get a sort by its internal name, which is usually the name of the sort class.
+     *
      * @param internalName The internal name to find the sort by
-     * @return The sort with this internal name or {@code null} if no sort with the given internal name was found
+     * @return The sort with this internal name or {@code null} if no sort with the
+     *         given internal name was found
      */
     public static SortInfo getSort(String internalName) {
         return getSort(internalName, SortNameType.INTERNAL_NAME);
@@ -49,18 +57,24 @@ public final class GroovyLocals {
 
     /**
      * Get a sort by name
-     * @param name The name of the sort
-     * @param nameType The type of name to search by (such as list name, run name, etc.).
-     * See {@link SortNameType} for more details
-     * @return The sort with this name or {@code null} if no sort with the given name and name type was found
+     *
+     * @param name     The name of the sort
+     * @param nameType The type of name to search by (such as list name, run name,
+     *                 etc.).
+     *                 See {@link SortNameType} for more details
+     * @return The sort with this name or {@code null} if no sort with the given
+     *         name and name type was found
      */
     public static SortInfo getSort(String name, SortNameType nameType) {
         return getArrayv().getSortAnalyzer().getSortByName(nameType, name);
     }
 
     /**
-     * <p>Creates (and adds) a new sorting algorithm to this ArrayV instance.</p>
+     * <p>
+     * Creates (and adds) a new sorting algorithm to this ArrayV instance.
+     * </p>
      * Here's an example:
+     *
      * <pre>
      * def sortFn(array, length) {
      *     // Sorting algorithm code here
@@ -72,29 +86,29 @@ public final class GroovyLocals {
      *     unreasonableLimit 1024
      * }
      * </pre>
-     * @param sort The sort method/function/closure to add.
-     * This closure can follow any of the signatures listed in {@link SortFunctionSignatures}
+     *
+     * @param sort     The sort method/function/closure to add.
+     *                 This closure can follow any of the signatures listed in
+     *                 {@link SortFunctionSignatures}
      * @param metadata The closure used to define metadata.
-     * See above for an example, and {@link SortInfo.Builder} for the list of metadata methods you can use.
-     * @return The {@link SortInfo} object associated with the newly created algorithm
+     *                 See above for an example, and {@link SortInfo.Builder} for
+     *                 the list of metadata methods you can use.
+     * @return The {@link SortInfo} object associated with the newly created
+     *         algorithm
      */
     public static SortInfo newSort(
-        @ClosureParams(
-            value = FromAbstractTypeMethods.class,
-            options = {"io.github.arrayv.groovyapi.GroovyLocals$SortFunctionSignatures"}
-        ) Closure<?> sort,
-        @DelegatesTo(SortInfo.Builder.class) Closure<?> metadata
-    ) {
+            @ClosureParams(value = FromAbstractTypeMethods.class, options = {
+                    "io.github.arrayv.groovyapi.GroovyLocals$SortFunctionSignatures" }) Closure<?> sort,
+            @DelegatesTo(SortInfo.Builder.class) Closure<?> metadata) {
         switch (sort.getMaximumNumberOfParameters()) {
             case 2:
             case 3:
                 break;
             default:
                 throw new IllegalArgumentException(
-                    "Illegal number of arguments for Groovy sort function: "
-                        + sort.getMaximumNumberOfParameters()
-                        + ". Must be one of: 2, 3"
-                );
+                        "Illegal number of arguments for Groovy sort function: "
+                                + sort.getMaximumNumberOfParameters()
+                                + ". Must be one of: 2, 3");
         }
 
         SortInfo.Builder builder = SortInfo.builder();
@@ -106,16 +120,17 @@ public final class GroovyLocals {
 
         if (sort instanceof MethodClosure) {
             // The method has a name!
-            builder.internalName(((MethodClosure)sort).getMethod());
+            builder.internalName(((MethodClosure) sort).getMethod());
         }
 
         SortInfo[] sortInfo = new SortInfo[1];
 
         final class GroovySort extends Sort {
             // @checkstyle:off RedundantModifierCheck
-            // This needs to be public so it can be accessed from reflection/java.lang.invoke
+            // This needs to be public so it can be accessed from
+            // reflection/java.lang.invoke
             public GroovySort() {
-            // @checkstyle:on RedundantModifierCheck
+                // @checkstyle:on RedundantModifierCheck
                 super(ArrayVisualizer.getInstance());
             }
 
@@ -138,6 +153,7 @@ public final class GroovyLocals {
 
     /**
      * Registers a sort with the sort list
+     *
      * @param sort The sort to register
      * @return The {@code sort} parameter, but likely with a different id
      */
@@ -149,6 +165,7 @@ public final class GroovyLocals {
 
     /**
      * Registers a sort with the sort list
+     *
      * @param sort The sort instance to convert to a {@link SortInfo}
      * @return The registered {@link SortInfo} object
      */
@@ -158,6 +175,7 @@ public final class GroovyLocals {
 
     /**
      * Registers a sort with the sort list
+     *
      * @param sort The sort class to convert to a {@link SortInfo}
      * @return The registered {@link SortInfo} object
      */
@@ -167,6 +185,7 @@ public final class GroovyLocals {
 
     /**
      * Prepares to run a sorting algorithm
+     *
      * @param sort The sorting algorithm to run
      * @return A {@link RunSortBuilder} for setting up sort running parameters
      */
@@ -175,9 +194,13 @@ public final class GroovyLocals {
     }
 
     /**
-     * Effectively an alias for {@link #run(SortInfo)}, but designed around a special
-     * case dealing with TimSort and DualPivotQuickSort, as Groovy loads the java.util classes instead
-     * @param sort The class to coerce to a {@link SortInfo} using {@code getSort(sort.getSimpleName())}
+     * Effectively an alias for {@link #run(SortInfo)}, but designed around a
+     * special
+     * case dealing with TimSort and DualPivotQuickSort, as Groovy loads the
+     * java.util classes instead
+     *
+     * @param sort The class to coerce to a {@link SortInfo} using
+     *             {@code getSort(sort.getSimpleName())}
      * @return A {@link RunSortBuilder} for setting up sort running parameters
      */
     public static RunSortBuilder run(Class<?> sort) {
@@ -187,8 +210,10 @@ public final class GroovyLocals {
     /**
      * Runs a sort, but adds the ability to pass Groovy map arguments,
      * e.g.: {@code run(BubbleSort, numbers: 2048, speed: 0.75)}
-     * @param options Groovy map arguments. See {@link RunSortBuilder} for valid keys
-     * @param sort The sorting algorithm to run
+     *
+     * @param options Groovy map arguments. See {@link RunSortBuilder} for valid
+     *                keys
+     * @param sort    The sorting algorithm to run
      * @return A {@link RunSortBuilder} for setting up sort running parameters
      */
     public static RunSortBuilder run(Map<String, Object> options, SortInfo sort) {
@@ -197,6 +222,7 @@ public final class GroovyLocals {
 
     /**
      * Combination of {@link #run(Class)} and {@link #run(Map, SortInfo)}
+     *
      * @param options
      * @param sort
      * @return
@@ -207,6 +233,7 @@ public final class GroovyLocals {
 
     /**
      * Get the current category display
+     *
      * @return The current category
      */
     public static String getCategory() {
@@ -215,6 +242,7 @@ public final class GroovyLocals {
 
     /**
      * Set the current category display
+     *
      * @param category The category to display
      */
     public static void setCategory(String category) {
@@ -222,10 +250,14 @@ public final class GroovyLocals {
     }
 
     /**
-     * Setus up a run group. Run groups run in a separate thread and keep track of the number of sorts remaining.
-     * This particular method simply joins on the new thread. If you wish for finer-grained control, see {@link #runGroupInThread(Integer, Runnable)}.
+     * Setus up a run group. Run groups run in a separate thread and keep track of
+     * the number of sorts remaining.
+     * This particular method simply joins on the new thread. If you wish for
+     * finer-grained control, see {@link #runGroupInThread(Integer, Runnable)}.
+     *
      * @param sortCount The total number of sorts in this group
-     * @param run A closure around the code to run. Generally built of mostly {@link #run} calls
+     * @param run       A closure around the code to run. Generally built of mostly
+     *                  {@link #run} calls
      */
     public static void runGroup(Integer sortCount, Runnable run) {
         try {
@@ -236,10 +268,14 @@ public final class GroovyLocals {
     }
 
     /**
-     * Setus up a run group. Run groups run in a separate thread and keep track of the number of sorts remaining.
-     * This is identical to {@link #runGroup}, except that it returns the new thread instead of simply joining on it.
+     * Setus up a run group. Run groups run in a separate thread and keep track of
+     * the number of sorts remaining.
+     * This is identical to {@link #runGroup}, except that it returns the new thread
+     * instead of simply joining on it.
+     *
      * @param sortCount The total number of sorts in this group
-     * @param run A closure around the code to run. Generally built of mostly {@link #run} calls
+     * @param run       A closure around the code to run. Generally built of mostly
+     *                  {@link #run} calls
      * @return The newly created group thread
      */
     public static Thread runGroupInThread(Integer sortCount, Runnable run) {
@@ -247,23 +283,26 @@ public final class GroovyLocals {
     }
 
     /**
-     * Similar to {@link #runGroupInThread(Integer, Runnable)}, except that it has an extra {@code isRunAll parameter}.
-     * This method is generally intended only to be used internally by {@link SortPrompt#jButton1ActionPerformed}.
+     * Similar to {@link #runGroupInThread(Integer, Runnable)}, except that it has
+     * an extra {@code isRunAll parameter}.
+     * This method is generally intended only to be used internally by
+     * {@link SortPrompt#jButton1ActionPerformed}.
+     *
      * @param sortCount The total number of sorts in this group
-     * @param run A closure around the code to run. Generally built of mostly {@link #run} calls
-     * @param isRunAll If this is {@code true}, the group will behave as if it was Showcase Sorts.
+     * @param run       A closure around the code to run. Generally built of mostly
+     *                  {@link #run} calls
+     * @param isRunAll  If this is {@code true}, the group will behave as if it was
+     *                  Showcase Sorts.
      * @return The newly created group thread
      */
     public static Thread runGroupInThread(Integer sortCount, Runnable run, boolean isRunAll) {
         final ArrayVisualizer arrayVisualizer = getArrayv();
         final ArrayManager arrayManager = arrayVisualizer.getArrayManager();
         final Sounds Sounds = arrayVisualizer.getSounds();
-        final String threadName =
-            (isRunAll ? "RunAll" : "SortGroup") + (
-                (Thread.currentThread() instanceof ScriptThread)
-                    ? ("-" + ((ScriptThread)Thread.currentThread()).getScript().getClass().getName())
-                    : ""
-            );
+        final String threadName = (isRunAll ? "RunAll" : "SortGroup")
+                + ((Thread.currentThread() instanceof ScriptThread)
+                        ? ("-" + ((ScriptThread) Thread.currentThread()).getScript().getClass().getName())
+                        : "");
 
         Sounds.toggleSound(true);
         Thread sortingThread = new Thread(() -> {
@@ -303,8 +342,9 @@ public final class GroovyLocals {
     /**
      * Registers an event handler and returns the handler object.
      * See {@link ArrayVEventHandler} for more details.
+     *
      * @param eventType The type of the event to handle
-     * @param cb The callback to run for the event
+     * @param cb        The callback to run for the event
      * @return The registered event handler
      */
     public static ArrayVEventHandler registerEventHandler(ArrayVEventHandler.EventType eventType, Runnable cb) {
@@ -314,14 +354,24 @@ public final class GroovyLocals {
     }
 
     /**
-     * <p>Register a closer.</p>
+     * <p>
+     * Register a closer.
+     * </p>
      *
-     * <p>Ok, so what is a closer? A closer is ArrayV's Groovy API's equivalent of finalizers. Closers
-     * fix many of the flaws of finalizers. Closers are <i>guaranteed</i> to be called when the thread
-     * exits, whereas finalizers may <i>never</i> be called. Closers are also guaranteed to be called
-     * in the thread they are registered in, whereas finalizers may be called from any any thread.
-     * Furthermore, finalizers have been deprecated and are scheduled to be removed at some point in
-     * the future.</p>
+     * <p>
+     * Ok, so what is a closer? A closer is ArrayV's Groovy API's equivalent of
+     * finalizers. Closers
+     * fix many of the flaws of finalizers. Closers are <i>guaranteed</i> to be
+     * called when the thread
+     * exits, whereas finalizers may <i>never</i> be called. Closers are also
+     * guaranteed to be called
+     * in the thread they are registered in, whereas finalizers may be called from
+     * any any thread.
+     * Furthermore, finalizers have been deprecated and are scheduled to be removed
+     * at some point in
+     * the future.
+     * </p>
+     *
      * @param closer The closer to register
      */
     public static void registerCloser(Runnable closer) {
@@ -331,10 +381,11 @@ public final class GroovyLocals {
         boolean forRgc = rgc != null;
         if (forCThread && forRgc) {
             // Could be called in multiple places
-            final boolean[] hasBeenRun = {false};
+            final boolean[] hasBeenRun = { false };
             final Runnable originalCloser = closer;
             closer = () -> {
-                if (hasBeenRun[0]) return;
+                if (hasBeenRun[0])
+                    return;
                 try {
                     originalCloser.run();
                 } finally {
@@ -343,7 +394,7 @@ public final class GroovyLocals {
             };
         }
         if (forCThread) {
-            ((ScriptThread)cThread).closers.add(closer);
+            ((ScriptThread) cThread).closers.add(closer);
         }
         if (forRgc) {
             rgc.closers.add(closer);
@@ -354,14 +405,18 @@ public final class GroovyLocals {
     }
 
     /**
-     * This abstract class declares which signatures the closures passed into {@link GroovyLocals#newSort} can use.
+     * This abstract class declares which signatures the closures passed into
+     * {@link GroovyLocals#newSort} can use.
      */
     public abstract static class SortFunctionSignatures {
         /**
-         * This signature takes all the information that is standard with {@link Sort#runSort}
-         * @param array The main array, which is sized at the maximum arrays size
-         * @param length The current length of the array.
-         * Accessing any indices outside of the range [0, length) is considered illegal.
+         * This signature takes all the information that is standard with
+         * {@link Sort#runSort}
+         *
+         * @param array   The main array, which is sized at the maximum arrays size
+         * @param length  The current length of the array.
+         *                Accessing any indices outside of the range [0, length) is
+         *                considered illegal.
          * @param buckets Any extra parameter passed to the sort
          */
         public abstract void standardOptions(int[] array, int length, int buckets);
@@ -369,6 +424,7 @@ public final class GroovyLocals {
         /**
          * Same as {@link #standardOptions}, but takes no buckets argument.
          * This is primarily useful if your sort takes no additional user input.
+         *
          * @param array
          * @param length
          */

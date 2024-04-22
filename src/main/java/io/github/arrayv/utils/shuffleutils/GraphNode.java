@@ -30,16 +30,16 @@ public class GraphNode {
         this(shuffle, graph, 0, 0);
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
         }
-        if (o instanceof GraphNode) {
-            GraphNode other = (GraphNode)o;
-            return this.x     == other.x
-                && this.y     == other.y
-                && this.graph == other.graph
-                && this.shuffle.equals(other.shuffle);
+        if (o instanceof GraphNode other) {
+            return this.x == other.x
+                    && this.y == other.y
+                    && this.graph == other.graph
+                    && this.shuffle.equals(other.shuffle);
         } else if (o instanceof ShuffleInfo) {
             return this.shuffle.equals(o);
         } else {
@@ -70,10 +70,9 @@ public class GraphNode {
         graph.calcTextSize(text, WIDTH, g);
         Rectangle2D rect = AWTUtils.getStringBounds(g, text);
         g.drawString(
-            text,
-            (int)(x + WIDTH / 2 - rect.getWidth() / 2),
-            (int)(y + HEIGHT / 2 + rect.getHeight() / 2)
-        );
+                text,
+                (int) (x + WIDTH / 2 - rect.getWidth() / 2),
+                (int) (y + HEIGHT / 2 + rect.getHeight() / 2));
     }
 
     public void drag(Point rel) {

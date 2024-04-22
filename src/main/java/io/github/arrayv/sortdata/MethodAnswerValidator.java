@@ -30,7 +30,8 @@ public final class MethodAnswerValidator implements IntUnaryOperator {
         this(sort.getClass());
     }
 
-    private static MethodHandle getMh(Class<? extends Sort> sortClass) throws NoSuchMethodException, IllegalAccessException {
+    private static MethodHandle getMh(Class<? extends Sort> sortClass)
+            throws NoSuchMethodException, IllegalAccessException {
         return LOOKUP.findStatic(sortClass, "validateAnswer", VALIDATOR_TYPE);
     }
 
@@ -41,7 +42,7 @@ public final class MethodAnswerValidator implements IntUnaryOperator {
     @Override
     public int applyAsInt(int answer) {
         try {
-            return (int)mh.invokeExact(answer);
+            return (int) mh.invokeExact(answer);
         } catch (RuntimeException | Error e) {
             throw e;
         } catch (Throwable e) {

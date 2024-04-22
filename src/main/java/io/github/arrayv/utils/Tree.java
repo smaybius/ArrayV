@@ -61,7 +61,6 @@ public class Tree {
         private Integer value;
         private int index;
 
-
         private Node parent;
         private Node left;
         private Node right;

@@ -61,12 +61,12 @@ public final class Renderer {
 
     private volatile int amt;
 
-    private int linkedpixdrawx; //TODO: Change names
+    private int linkedpixdrawx; // TODO: Change names
     private int linkedpixdrawy;
 
-    private int doth; //TODO: Change names
+    private int doth; // TODO: Change names
     private int dotw;
-    private int dots; //TODO: Change name to dotDims/dotDimensions
+    private int dots; // TODO: Change name to dotDims/dotDimensions
 
     public Renderer(ArrayVisualizer arrayVisualizer) {
         arrayVisualizer.setWindowHeight();
@@ -76,36 +76,47 @@ public final class Renderer {
     public double getXScale() {
         return this.xScale;
     }
+
     public double getYScale() {
         return this.yScale;
     }
+
     public int getOffset() {
         return this.amt;
     }
+
     public int getYOffset() {
         return this.yoffset;
     }
+
     public int getViewSize() {
         return this.vsize;
     }
+
     public int halfViewSize() {
         return this.vsize / 2;
     }
+
     public int getArrayLength() {
         return this.length;
     }
+
     public int getDotWidth() {
         return this.dotw;
     }
+
     public int getDotHeight() {
         return this.doth;
     }
+
     public int getDotDimensions() {
         return this.dots;
     }
+
     public int getLineX() {
         return this.linkedpixdrawx;
     }
+
     public int getLineY() {
         return this.linkedpixdrawy;
     }
@@ -113,9 +124,11 @@ public final class Renderer {
     public void setOffset(int amount) {
         this.amt = amount;
     }
+
     public void setLineX(int x) {
         this.linkedpixdrawx = x;
     }
+
     public void setLineY(int y) {
         this.linkedpixdrawy = y;
     }
@@ -166,9 +179,9 @@ public final class Renderer {
             arrayVisualizer.updateCoordinates();
 
             /*
-            if (v != null && v.isVisible())
-                v.reposition();
-            */
+             * if (v != null && v.isVisible())
+             * v.reposition();
+             */
 
             if (windowState.resized()) {
                 arrayVisualizer.updateDimensions();
@@ -178,38 +191,40 @@ public final class Renderer {
 
         arrayVisualizer.renderBackground();
 
-        //CURRENT = WINDOW
-        //WINDOW = C VARIABLES
+        // CURRENT = WINDOW
+        // WINDOW = C VARIABLES
 
         this.yScale = (double) (this.vsize) / arrayVisualizer.getCurrentLength();
 
-        this.dotw = (int) (2 * (arrayVisualizer.currentWidth()  / 640.0));
+        this.dotw = (int) (2 * (arrayVisualizer.currentWidth() / 640.0));
 
-        this.vsize = (arrayVisualizer.currentHeight() - 96) / (arrayVisualizer.externalArraysEnabled() ? Math.min(arrayVisualizer.getArrays().size(), 7) : 1);
+        this.vsize = (arrayVisualizer.currentHeight() - 96)
+                / (arrayVisualizer.externalArraysEnabled() ? Math.min(arrayVisualizer.getArrays().size(), 7) : 1);
         this.yoffset = 96;
     }
 
     private void updateVisualsPerArray(ArrayVisualizer arrayVisualizer, int[] array, int length) {
 
-        //CURRENT = WINDOW
-        //WINDOW = C VARIABLES
+        // CURRENT = WINDOW
+        // WINDOW = C VARIABLES
 
         this.xScale = (double) (arrayVisualizer.currentWidth() - 40) / length;
 
-        this.amt = 0; //TODO: rename to barCount
+        this.amt = 0; // TODO: rename to barCount
 
         this.linkedpixdrawx = 0;
         this.linkedpixdrawy = 0;
 
         this.doth = (int) (2 * (this.vsize / 480.0));
-        this.dots = (this.dotw + this.doth) / 2; //TODO: Does multiply/divide by 2 like this cancel out??
+        this.dots = (this.dotw + this.doth) / 2; // TODO: Does multiply/divide by 2 like this cancel out??
 
         this.length = length;
 
         arrayVisualizer.resetMainStroke();
     }
 
-    public void drawVisual(VisualStyles visualStyle, int[][] arrays, ArrayVisualizer arrayVisualizer, Highlights Highlights) {
+    public void drawVisual(VisualStyles visualStyle, int[][] arrays, ArrayVisualizer arrayVisualizer,
+            Highlights Highlights) {
         if (arrayVisualizer.externalArraysEnabled()) {
             this.auxActive = true;
             for (int i = Math.min(arrays.length - 1, 6); i > 0; i--) {

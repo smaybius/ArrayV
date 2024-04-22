@@ -33,7 +33,7 @@ public final class ExportShuffleDialog extends FileDialog {
         fileDialog.setDialogTitle("Choose where to export the current shuffle graph...");
 
         this.file = fileDialog.showSaveDialog(null) == JFileChooser.APPROVE_OPTION
-            ? fileDialog.getSelectedFile()
-            : null;
+                ? fileDialog.getSelectedFile()
+                : null;
     }
 }

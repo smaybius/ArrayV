@@ -14,7 +14,7 @@ public final class ImportSortDialog extends FileDialog {
         fileDialog.setDialogTitle("Choose a sort file to import...");
 
         this.file = fileDialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION
-            ? fileDialog.getSelectedFile()
-            : null;
+                ? fileDialog.getSelectedFile()
+                : null;
     }
 }

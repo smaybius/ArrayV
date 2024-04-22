@@ -56,11 +56,13 @@ public final class ViewPrompt extends javax.swing.JFrame implements AppFrame {
     }
 
     @Override
-    public void reposition(){
-        setLocation(frame.getX() + ((frame.getWidth() - getWidth()) / 2), frame.getY() + ((frame.getHeight() - getHeight()) / 2));
+    public void reposition() {
+        setLocation(frame.getX() + ((frame.getWidth() - getWidth()) / 2),
+                frame.getY() + ((frame.getHeight() - getHeight()) / 2));
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         javax.swing.JLabel jLabel1 = new javax.swing.JLabel();
@@ -133,64 +135,70 @@ public final class ViewPrompt extends javax.swing.JFrame implements AppFrame {
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         layout.setHorizontalGroup(
-            layout.createParallelGroup(Alignment.CENTER)
-                .addComponent(jLabel1)
-                .addGroup(Alignment.LEADING, layout.createSequentialGroup()
-                    .addGap(18)
-                    .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(barGraph, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                        .addComponent(rainbow, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                        .addComponent(colorCircle, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                        .addComponent(disparity, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(disparityBarGraph, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(disparityDots, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                        .addComponent(sineWave, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                        .addComponent(waveDots, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                        .addComponent(dotGraph, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                        .addComponent(hoopStack, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(pixelMesh, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                        .addComponent(spiral, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                        .addComponent(customImage, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                        .addComponent(spiralDots, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(disparityChords, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGap(18))
-        );
+                layout.createParallelGroup(Alignment.CENTER)
+                        .addComponent(jLabel1)
+                        .addGroup(Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(18)
+                                .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                        .addComponent(barGraph, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105,
+                                                Short.MAX_VALUE)
+                                        .addComponent(rainbow, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                        .addComponent(colorCircle, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                        .addComponent(disparity, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(disparityBarGraph, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                        .addComponent(disparityDots, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105,
+                                                Short.MAX_VALUE)
+                                        .addComponent(sineWave, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                        .addComponent(waveDots, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                        .addComponent(dotGraph, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                        .addComponent(hoopStack, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                        .addComponent(pixelMesh, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105,
+                                                Short.MAX_VALUE)
+                                        .addComponent(spiral, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                        .addComponent(customImage, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                        .addComponent(spiralDots, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(disparityChords, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18)));
         layout.setVerticalGroup(
-            layout.createParallelGroup(Alignment.CENTER)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(7)
-                    .addComponent(jLabel1)
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(barGraph)
-                        .addComponent(disparityDots)
-                        .addComponent(pixelMesh))
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(rainbow)
-                        .addComponent(sineWave)
-                        .addComponent(spiral))
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(colorCircle)
-                        .addComponent(waveDots)
-                        .addComponent(customImage))
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(disparity)
-                        .addComponent(dotGraph)
-                        .addComponent(spiralDots))
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(hoopStack)
-                        .addComponent(disparityBarGraph)
-                        .addComponent(disparityChords))
-                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(Alignment.CENTER)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(7)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(barGraph)
+                                        .addComponent(disparityDots)
+                                        .addComponent(pixelMesh))
+                                .addPreferredGap(ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(rainbow)
+                                        .addComponent(sineWave)
+                                        .addComponent(spiral))
+                                .addPreferredGap(ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(colorCircle)
+                                        .addComponent(waveDots)
+                                        .addComponent(customImage))
+                                .addPreferredGap(ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(disparity)
+                                        .addComponent(dotGraph)
+                                        .addComponent(spiralDots))
+                                .addPreferredGap(ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(hoopStack)
+                                        .addComponent(disparityBarGraph)
+                                        .addComponent(disparityChords))
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         getContentPane().setLayout(layout);
 
         pack();
@@ -205,90 +213,109 @@ public final class ViewPrompt extends javax.swing.JFrame implements AppFrame {
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void dotGraphActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.DOTS);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void rainbowActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.RAINBOW);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void triangleMeshActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.PIXEL_MESH);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void colorCircleActionPerformed(java.awt.event.ActionEvent evt) {
-        //TODO: Pointer as separate option
+        // TODO: Pointer as separate option
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.COLOR_CIRCLE);
-        if (arrayVisualizer.getCurrentLength() == 2) arrayVisualizer.setCurrentLength(4);
+        if (arrayVisualizer.getCurrentLength() == 2)
+            arrayVisualizer.setCurrentLength(4);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void spiralActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.SPIRAL);
-        if (arrayVisualizer.getCurrentLength() == 2) arrayVisualizer.setCurrentLength(4);
+        if (arrayVisualizer.getCurrentLength() == 2)
+            arrayVisualizer.setCurrentLength(4);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void disparityActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.DISP_CIRCLE);
-        if (arrayVisualizer.getCurrentLength() == 2) arrayVisualizer.setCurrentLength(4);
+        if (arrayVisualizer.getCurrentLength() == 2)
+            arrayVisualizer.setCurrentLength(4);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void customImageActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.CUSTOM_IMAGE);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void disparityDotsActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.DISP_DOTS);
-        if (arrayVisualizer.getCurrentLength() == 2) arrayVisualizer.setCurrentLength(4);
+        if (arrayVisualizer.getCurrentLength() == 2)
+            arrayVisualizer.setCurrentLength(4);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void spiralDotsActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.SPIRAL_DOTS);
-        if (arrayVisualizer.getCurrentLength() == 2) arrayVisualizer.setCurrentLength(4);
+        if (arrayVisualizer.getCurrentLength() == 2)
+            arrayVisualizer.setCurrentLength(4);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void sineWaveActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.SINE_WAVE);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void waveDotsActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.WAVE_DOTS);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void hoopStackActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.HOOP_STACK);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void disparityBarGraphActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.DISP_BARS);
         utilFrame.jButton2ResetText();
         dispose();
     }
+
     private void disparityChordsActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         arrayVisualizer.setVisual(VisualStyles.DISP_CHORDS);

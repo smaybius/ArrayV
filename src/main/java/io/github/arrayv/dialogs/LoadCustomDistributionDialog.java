@@ -33,7 +33,7 @@ public final class LoadCustomDistributionDialog extends FileDialog {
         fileDialog.setDialogTitle("Choose a distribution file...");
 
         this.file = fileDialog.showDialog(null, "Select") == JFileChooser.APPROVE_OPTION
-            ? fileDialog.getSelectedFile()
-            : null;
+                ? fileDialog.getSelectedFile()
+                : null;
     }
 }

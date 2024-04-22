@@ -39,6 +39,7 @@ public enum Shuffles {
         // I highly encourage you read this. It's quite fascinating:
         // http://datagenetics.com/blog/november42014/index.html
 
+        @Override
         public String getName() {
             return "Random";
         }
@@ -52,6 +53,7 @@ public enum Shuffles {
         }
     },
     NCRANDOM {
+        @Override
         public String getName() {
             return "Non-Cyclic Random";
         }
@@ -84,6 +86,7 @@ public enum Shuffles {
         }
     },
     REVERSE {
+        @Override
         public String getName() {
             return "Reverse";
         }
@@ -97,6 +100,7 @@ public enum Shuffles {
         }
     },
     ALMOST {
+        @Override
         public String getName() {
             return "Slight Shuffle";
         }
@@ -115,6 +119,7 @@ public enum Shuffles {
         }
     },
     ALREADY {
+        @Override
         public String getName() {
             return "No Shuffle";
         }
@@ -131,6 +136,7 @@ public enum Shuffles {
         }
     },
     SORTED {
+        @Override
         public String getName() {
             return "Sorted";
         }
@@ -144,6 +150,7 @@ public enum Shuffles {
         }
     },
     NAIVE {
+        @Override
         public String getName() {
             return "Naive Random";
         }
@@ -159,6 +166,7 @@ public enum Shuffles {
         }
     },
     SHUFFLED_TAIL {
+        @Override
         public String getName() {
             return "Scrambled Tail";
         }
@@ -186,6 +194,7 @@ public enum Shuffles {
         }
     },
     SHUFFLED_HEAD {
+        @Override
         public String getName() {
             return "Scrambled Head";
         }
@@ -213,6 +222,7 @@ public enum Shuffles {
         }
     },
     SHUFFLED_BOTHSIDES {
+        @Override
         public String getName() {
             return "Scrambled Both Sides";
         }
@@ -254,6 +264,7 @@ public enum Shuffles {
         }
     },
     MOVED_ELEMENT {
+        @Override
         public String getName() {
             return "Shifted Element";
         }
@@ -274,6 +285,7 @@ public enum Shuffles {
         }
     },
     MOVED_BLOCK {
+        @Override
         public String getName() {
             return "Shifted Block";
         }
@@ -315,6 +327,7 @@ public enum Shuffles {
         }
     },
     RANDOM_SWAP {
+        @Override
         public String getName() {
             return "Random Swap";
         }
@@ -331,6 +344,7 @@ public enum Shuffles {
         }
     },
     RANDOM_PULL {
+        @Override
         public String getName() {
             return "Random Pull";
         }
@@ -347,6 +361,7 @@ public enum Shuffles {
         }
     },
     RANDOM_BLOCKSWAP {
+        @Override
         public String getName() {
             return "Random Blockswap";
         }
@@ -395,6 +410,7 @@ public enum Shuffles {
         }
     },
     RANDOM_ROTATION {
+        @Override
         public String getName() {
             return "Random Rotation";
         }
@@ -413,6 +429,7 @@ public enum Shuffles {
         }
     },
     FIRST_LAST {
+        @Override
         public String getName() {
             return "First Item Last";
         }
@@ -431,6 +448,7 @@ public enum Shuffles {
         }
     },
     LAST_FIRST {
+        @Override
         public String getName() {
             return "Last Item First";
         }
@@ -449,6 +467,7 @@ public enum Shuffles {
         }
     },
     SWAPPED_ENDS {
+        @Override
         public String getName() {
             return "Swapped Ends";
         }
@@ -462,6 +481,7 @@ public enum Shuffles {
         }
     },
     SWAPPED_PAIRS {
+        @Override
         public String getName() {
             return "Swapped Pairs";
         }
@@ -476,6 +496,7 @@ public enum Shuffles {
         }
     },
     RANDOM_REVERSAL {
+        @Override
         public String getName() {
             return "Random Reversal";
         }
@@ -492,6 +513,7 @@ public enum Shuffles {
         }
     },
     NOISY {
+        @Override
         public String getName() {
             return "Noisy";
         }
@@ -510,6 +532,7 @@ public enum Shuffles {
         }
     },
     SHUFFLED_ODDS {
+        @Override
         public String getName() {
             return "Scrambled Odds";
         }
@@ -529,6 +552,7 @@ public enum Shuffles {
         }
     },
     FINAL_MERGE {
+        @Override
         public String getName() {
             return "Final Merge Pass";
         }
@@ -555,6 +579,7 @@ public enum Shuffles {
         }
     },
     REAL_FINAL_MERGE {
+        @Override
         public String getName() {
             return "Shuffled Final Merge";
         }
@@ -572,6 +597,7 @@ public enum Shuffles {
         }
     },
     SHUFFLED_SECOND_HALF {
+        @Override
         public String getName() {
             return "Scrambled Second Half";
         }
@@ -598,6 +624,7 @@ public enum Shuffles {
         }
     },
     SHUFFLED_FIRST_HALF {
+        @Override
         public String getName() {
             return "Scrambled First Half";
         }
@@ -624,6 +651,7 @@ public enum Shuffles {
         }
     },
     PARTITIONED {
+        @Override
         public String getName() {
             return "Partitioned";
         }
@@ -641,6 +669,7 @@ public enum Shuffles {
         }
     },
     QUICK_PARTITIONED {
+        @Override
         public String getName() {
             return "Quick Partitioned";
         }
@@ -660,6 +689,7 @@ public enum Shuffles {
         }
     },
     INCREASING_REVERSALS {
+        @Override
         public String getName() {
             return "Increasingly Reversed";
         }
@@ -679,6 +709,7 @@ public enum Shuffles {
         }
     },
     INCREASING_SWAPS { // TODO: Is this accurate?
+        @Override
         public String getName() {
             return "Increasingly Swapped";
         }
@@ -698,6 +729,7 @@ public enum Shuffles {
         }
     },
     STRANGE_PASS {
+        @Override
         public String getName() {
             return "First Strange Pass";
         }
@@ -737,6 +769,7 @@ public enum Shuffles {
         }
     },
     SAWTOOTH {
+        @Override
         public String getName() {
             return "Sawtooth";
         }
@@ -763,6 +796,7 @@ public enum Shuffles {
         }
     },
     ORGAN {
+        @Override
         public String getName() {
             return "Pipe Organ";
         }
@@ -789,6 +823,7 @@ public enum Shuffles {
         }
     },
     FINAL_BITONIC {
+        @Override
         public String getName() {
             return "Final Bitonic Pass";
         }
@@ -817,6 +852,7 @@ public enum Shuffles {
         }
     },
     PENULTIMATE_BITONIC {
+        @Override
         public String getName() {
             return "Penultimate Bitonic Pass";
         }
@@ -851,6 +887,7 @@ public enum Shuffles {
         }
     },
     TRIANGLE_WAVE {
+        @Override
         public String getName() {
             return "Triangle Wave";
         }
@@ -892,6 +929,7 @@ public enum Shuffles {
         }
     },
     REVERSE_FINAL_MERGE {
+        @Override
         public String getName() {
             return "Reverse Final Merge Pass";
         }
@@ -920,6 +958,7 @@ public enum Shuffles {
         }
     },
     REVERSE_SAWTOOTH {
+        @Override
         public String getName() {
             return "Reverse Sawtooth";
         }
@@ -948,6 +987,7 @@ public enum Shuffles {
         }
     },
     INTERLACED {
+        @Override
         public String getName() {
             return "Interlaced";
         }
@@ -980,6 +1020,7 @@ public enum Shuffles {
         }
     },
     DOUBLE_LAYERED {
+        @Override
         public String getName() {
             return "Double Layered";
         }
@@ -997,6 +1038,7 @@ public enum Shuffles {
         }
     },
     DIAMOND {
+        @Override
         public String getName() {
             return "Diamond Input";
         }
@@ -1030,6 +1072,7 @@ public enum Shuffles {
         }
     },
     FINAL_RADIX {
+        @Override
         public String getName() {
             return "Final Radix";
         }
@@ -1058,6 +1101,7 @@ public enum Shuffles {
         }
     },
     REAL_FINAL_RADIX {
+        @Override
         public String getName() {
             return "Real Final Radix";
         }
@@ -1099,6 +1143,7 @@ public enum Shuffles {
         }
     },
     REC_RADIX {
+        @Override
         public String getName() {
             return "Recursive Final Radix";
         }
@@ -1147,6 +1192,7 @@ public enum Shuffles {
         }
     },
     HALF_ROTATION {
+        @Override
         public String getName() {
             return "Half Rotation";
         }
@@ -1175,6 +1221,7 @@ public enum Shuffles {
         }
     },
     QUARTER_ROTATION {
+        @Override
         public String getName() {
             return "Quarter Rotation";
         }
@@ -1203,6 +1250,7 @@ public enum Shuffles {
         }
     },
     PARTIAL_REVERSE {
+        @Override
         public String getName() {
             return "Half Reversed";
         }
@@ -1218,6 +1266,7 @@ public enum Shuffles {
         }
     },
     BST_TRAVERSAL {
+        @Override
         public String getName() {
             return "Binary Search Tree";
         }
@@ -1274,6 +1323,7 @@ public enum Shuffles {
         }
     },
     INV_BST {
+        @Override
         public String getName() {
             return "Inverted BST";
         }
@@ -1341,6 +1391,7 @@ public enum Shuffles {
         }
     },
     LOG_SLOPES {
+        @Override
         public String getName() {
             return "Logarithmic Slopes";
         }
@@ -1366,6 +1417,7 @@ public enum Shuffles {
         }
     },
     HEAPIFIED {
+        @Override
         public String getName() {
             return "Max Heapified";
         }
@@ -1381,6 +1433,7 @@ public enum Shuffles {
         }
     },
     MIN_HEAPIFIED {
+        @Override
         public String getName() {
             return "Min Heapified";
         }
@@ -1396,6 +1449,7 @@ public enum Shuffles {
         }
     },
     FLIPPED_MIN_HEAPIFIED {
+        @Override
         public String getName() {
             return "Flipped Min Heapified";
         }
@@ -1412,6 +1466,7 @@ public enum Shuffles {
         }
     },
     MIN_MAX_HEAPIFIED {
+        @Override
         public String getName() {
             return "Min-Max Heapified";
         }
@@ -1428,6 +1483,7 @@ public enum Shuffles {
         }
     },
     WEAK_HEAPIFIED {
+        @Override
         public String getName() {
             return "Weak Heapified";
         }
@@ -1462,6 +1518,7 @@ public enum Shuffles {
         }
     },
     TERNARY_HEAPIFIED {
+        @Override
         public String getName() {
             return "Ternary Heapified";
         }
@@ -1476,6 +1533,7 @@ public enum Shuffles {
         }
     },
     BIN_SIFT_HEAPIFIED {
+        @Override
         public String getName() {
             return "Binary Sift Heapified";
         }
@@ -1490,6 +1548,7 @@ public enum Shuffles {
         }
     },
     DOUBLE_HEAPIFIED {
+        @Override
         public String getName() {
             return "Double Heapified";
         }
@@ -1504,6 +1563,7 @@ public enum Shuffles {
         }
     },
     LOG_NARY_HEAP {
+        @Override
         public String getName() {
             return "Log n-ary Heapified";
         }
@@ -1518,6 +1578,7 @@ public enum Shuffles {
         }
     },
     VELV_HEAP {
+        @Override
         public String getName() {
             return "Velvet Heapified";
         }
@@ -1543,6 +1604,7 @@ public enum Shuffles {
         }
     },
     BINOMIAL_HEAPIFIED {
+        @Override
         public String getName() {
             return "Binomial Heapified";
         }
@@ -1572,6 +1634,7 @@ public enum Shuffles {
         }
     },
     BOTTOM_UP_HEAPIFIED {
+        @Override
         public String getName() {
             return "Bottom-Up Heapified";
         }
@@ -1587,6 +1650,7 @@ public enum Shuffles {
         }
     },
     FIBONACCI_HEAPIFIED {
+        @Override
         public String getName() {
             return "Fibonacci Heapified";
         }
@@ -1610,6 +1674,7 @@ public enum Shuffles {
         }
     },
     GEAPIFIED {
+        @Override
         public String getName() {
             return "Geapified";
         }
@@ -1624,6 +1689,7 @@ public enum Shuffles {
         }
     },
     PURE_FIBONACCI_HEAPIFIED {
+        @Override
         public String getName() {
             return "Pure Fibonacci Heapified";
         }
@@ -1643,6 +1709,7 @@ public enum Shuffles {
         }
     },
     NARNIA {
+        @Override
         public String getName() {
             return "Narnia Heapified";
         }
@@ -1754,6 +1821,7 @@ public enum Shuffles {
         }
     },
     SMOOTH {
+        @Override
         public String getName() {
             return "Smoothified";
         }
@@ -1768,6 +1836,7 @@ public enum Shuffles {
         }
     },
     BINOMIAL_SMOOTH {
+        @Override
         public String getName() {
             return "Binomial Smoothified";
         }
@@ -1783,6 +1852,7 @@ public enum Shuffles {
         }
     },
     POPLAR {
+        @Override
         public String getName() {
             return "Poplarified";
         }
@@ -1797,6 +1867,7 @@ public enum Shuffles {
         }
     },
     LAZY_HEAPIFIED {
+        @Override
         public String getName() {
             return "Lazy Heapified";
         }
@@ -1814,6 +1885,7 @@ public enum Shuffles {
         }
     },
     OPTI_LAZY_HEAPIFIED {
+        @Override
         public String getName() {
             return "Opti. Lazy Heapified";
         }
@@ -1846,6 +1918,7 @@ public enum Shuffles {
         }
     },
     TRI_HEAP {
+        @Override
         public String getName() {
             return "Triangular Heapified";
         }
@@ -1871,6 +1944,7 @@ public enum Shuffles {
         }
     },
     PSEUDO_HEAPIFIED {
+        @Override
         public String getName() {
             return "Pseudo Heapified";
         }
@@ -1908,6 +1982,7 @@ public enum Shuffles {
         }
     },
     SCROLL_HEAPIFIED {
+        @Override
         public String getName() {
             return "Scroll Heap Hunterified";
         }
@@ -1933,6 +2008,7 @@ public enum Shuffles {
         }
     },
     CIRCLE {
+        @Override
         public String getName() {
             return "First Circle Pass";
         }
@@ -1982,6 +2058,7 @@ public enum Shuffles {
         }
     },
     PAIRWISE {
+        @Override
         public String getName() {
             return "Final Pairwise Pass";
         }
@@ -2027,6 +2104,7 @@ public enum Shuffles {
         }
     },
     PAIRWISED {
+        @Override
         public String getName() {
             return "Pairwised";
         }
@@ -2060,6 +2138,7 @@ public enum Shuffles {
         }
     },
     HALVER {
+        @Override
         public String getName() {
             return "Circle Halver Pass";
         }
@@ -2094,6 +2173,7 @@ public enum Shuffles {
         }
     },
     REC_REV {
+        @Override
         public String getName() {
             return "Recursive Reversal";
         }
@@ -2122,6 +2202,7 @@ public enum Shuffles {
         }
     },
     GRAY_CODE {
+        @Override
         public String getName() {
             return "Gray Code Fractal";
         }
@@ -2153,6 +2234,7 @@ public enum Shuffles {
         }
     },
     SIERPINSKI {
+        @Override
         public String getName() {
             return "Sierpinski Triangle";
         }
@@ -2200,6 +2282,7 @@ public enum Shuffles {
         }
     },
     TRIANGULAR {
+        @Override
         public String getName() {
             return "Triangular";
         }
@@ -2253,6 +2336,7 @@ public enum Shuffles {
         }
     },
     ANTI_CIRCLE {
+        @Override
         public String getName() {
             return "Backwards Circle Pass";
         }
@@ -2306,6 +2390,7 @@ public enum Shuffles {
         }
     },
     MODULO {
+        @Override
         public String getName() {
             return "Modulo";
         }
@@ -2323,6 +2408,7 @@ public enum Shuffles {
         }
     },
     QSORT_BAD {
+        @Override
         public String getName() {
             return "Quicksort Adversary";
         }
@@ -2365,6 +2451,7 @@ public enum Shuffles {
             }
         }
 
+        @Override
         public String getName() {
             return "PDQ Adversary";
         }
@@ -2722,6 +2809,7 @@ public enum Shuffles {
         }
     },
     GRAIL_BAD {
+        @Override
         public String getName() {
             return "Grailsort Adversary";
         }
@@ -2787,6 +2875,7 @@ public enum Shuffles {
         }
     },
     SHUF_MERGE_BAD {
+        @Override
         public String getName() {
             return "Shuffle Merge Adversary";
         }
@@ -3141,6 +3230,7 @@ public enum Shuffles {
             return "Prime Numbers";
         }
 
+        @Override
         public void shuffleArray(int[] array, ArrayVisualizer arrayVisualizer, Delays delays, Highlights highlights,
                 Writes writes) {
             int currentLen = arrayVisualizer.getCurrentLength();
@@ -3202,6 +3292,7 @@ public enum Shuffles {
         }
     },
     ONLY_RUNS {
+        @Override
         public String getName() {
             return "Random Runs";
         }
@@ -3223,6 +3314,7 @@ public enum Shuffles {
         }
     },
     RUNS {
+        @Override
         public String getName() {
             return "Random Runs + Scrambles";
         }

@@ -26,6 +26,7 @@ public final class ScriptManager {
      * A {@link Thread} subclass that manages the execution of a Groovy script.
      * A common use for this class is using it to get the current thread's
      * {@link Script} or the path to the script file.
+     *
      * @see Thread
      */
     public static final class ScriptThread extends Thread {
@@ -60,6 +61,7 @@ public final class ScriptManager {
 
         /**
          * The path to the .groovy script file running in this thread
+         *
          * @return The path to the script
          */
         public File getPath() {
@@ -68,6 +70,7 @@ public final class ScriptManager {
 
         /**
          * The {@link Script} running in this thread
+         *
          * @return The {@link Script} running in this thread
          * @see Script
          */
@@ -94,26 +97,27 @@ public final class ScriptManager {
     private Map<String, Script> defaultScripts;
 
     /**
-     * Construct a ScriptManager instance. This may only be called from {@link ArrayVisualizer}.
+     * Construct a ScriptManager instance. This may only be called from
+     * {@link ArrayVisualizer}.
      * If you wish to get a reference to the ArrayV ScriptManager, use
      * {@code ArrayVisualizer.getInstance().getScriptManager()}.
+     *
      * @throws IllegalStateException When you call this constructor.
      */
     public ScriptManager() throws IllegalStateException {
         // Index 0 is Thread, and index 1 is ScriptManager
         if (!Thread.currentThread().getStackTrace()[2].getClassName().equals(ArrayVisualizer.class.getName())) {
             throw new IllegalStateException("Only ArrayVisualizer can create a ScriptManager instance. "
-                + "As such, there can only one ScriptManager instance. You can get obtain it with "
-                + "ArrayVisualizer.getInstance().getScriptManager()");
+                    + "As such, there can only one ScriptManager instance. You can get obtain it with "
+                    + "ArrayVisualizer.getInstance().getScriptManager()");
         }
         final CompilerConfiguration compilerConfig = new CompilerConfiguration();
         compilerConfig.addCompilationCustomizers(
-            new ImportCustomizer()
-                .addStarImports("io.github.arrayv.sortdata")
-                .addStarImports("io.github.arrayv.groovyapi")
-                .addStaticStars("io.github.arrayv.groovyapi.GroovyLocals")
-                .addImports("io.github.arrayv.groovyapi.ArrayVEventHandler.EventType")
-        );
+                new ImportCustomizer()
+                        .addStarImports("io.github.arrayv.sortdata")
+                        .addStarImports("io.github.arrayv.groovyapi")
+                        .addStaticStars("io.github.arrayv.groovyapi.GroovyLocals")
+                        .addImports("io.github.arrayv.groovyapi.ArrayVEventHandler.EventType"));
         compilerConfig.setScriptBaseClass("io.github.arrayv.groovyapi.ArrayVScript");
         compilerConfig.getClasspath().add(INSTALLED_SCRIPTS_ROOT.getPath());
         this.shell = new GroovyShell(compilerConfig);
@@ -123,6 +127,7 @@ public final class ScriptManager {
 
     /**
      * The {@link GroovyShell} associated with the script manager
+     *
      * @return The GroovyShell associated with the script manager
      * @see GroovyShell
      */
@@ -136,6 +141,7 @@ public final class ScriptManager {
 
     /**
      * Get the event handlers for the specified event type
+     *
      * @param eventType The type of event to obtain handlers for
      * @return The event handlers
      */
@@ -145,6 +151,7 @@ public final class ScriptManager {
 
     /**
      * Run the event handlers for the specified event type
+     *
      * @param eventType The type of event to handle
      */
     public void runEventHandlers(ArrayVEventHandler.EventType eventType) {
@@ -168,6 +175,7 @@ public final class ScriptManager {
     /**
      * Register event handlers. {@link ArrayVEventHandler#register} is preferred
      * over this unless you're registering multiple handlers at once.
+     *
      * @param handlers The event handlers to register
      */
     public void registerEventHandlers(ArrayVEventHandler... handlers) {
@@ -179,6 +187,7 @@ public final class ScriptManager {
     /**
      * Unegister event handlers. {@link ArrayVEventHandler#unregister} is preferred
      * over this unless you're unregistering multiple handlers at once.
+     *
      * @param handlers The event handlers to unregister
      */
     public void unregisterEventHandlers(ArrayVEventHandler... handlers) {
@@ -198,6 +207,7 @@ public final class ScriptManager {
 
     /**
      * Compile and run the script at the specified path
+     *
      * @param path The path of the script
      * @return The loaded {@link Script} object
      */
@@ -214,6 +224,7 @@ public final class ScriptManager {
 
     /**
      * Compile and run the script at the specified URL
+     *
      * @param url The URL of the script
      * @return The loaded {@link Script} object
      */
@@ -232,6 +243,7 @@ public final class ScriptManager {
 
     /**
      * Compile and run the specified script in a new thread
+     *
      * @param path The path of the script
      * @return The {@link ScriptThread} the script was run in
      * @see ScriptThread
@@ -250,16 +262,21 @@ public final class ScriptManager {
     }
 
     /**
-     * <p>Load the default scripts. These are the union of the scripts embedded
-     * in the ArrayV JAR and the scripts in the {@code scripts} directory.</p>
+     * <p>
+     * Load the default scripts. These are the union of the scripts embedded
+     * in the ArrayV JAR and the scripts in the {@code scripts} directory.
+     * </p>
      *
-     * <p>This method may only be called once, from {@link ArrayVisualizer}</p>
+     * <p>
+     * This method may only be called once, from {@link ArrayVisualizer}
+     * </p>
      *
      * @throws IllegalStateException When you call this method.
      */
     public Map<String, Script> loadDefaultScripts() throws IOException, IllegalStateException {
         if (defaultScripts != null) {
-            throw new IllegalStateException("Cannot load default scripts more than once (i.e. you should not be calling this method)");
+            throw new IllegalStateException(
+                    "Cannot load default scripts more than once (i.e. you should not be calling this method)");
         }
         defaultScripts = new HashMap<>();
         loadBuiltinScripts();
@@ -272,7 +289,7 @@ public final class ScriptManager {
             INSTALLED_SCRIPTS_ROOT.mkdir();
             return;
         }
-        //noinspection DataFlowIssue
+        // noinspection DataFlowIssue
         for (File subFile : INSTALLED_SCRIPTS_ROOT.listFiles()) {
             if (!subFile.isFile() || !subFile.getPath().endsWith(".groovy")) {
                 continue;
@@ -285,6 +302,7 @@ public final class ScriptManager {
     /**
      * The default scripts. See {@link #loadDefaultScripts()} for a description
      * of what default scripts are
+     *
      * @return The default scripts
      * @see #loadDefaultScripts()
      */
@@ -305,10 +323,12 @@ public final class ScriptManager {
         }
     }
 
-    // Modified from https://github.com/apache/groovy/blob/master/src/main/java/org/codehaus/groovy/control/SourceExtensionHandler.java
+    // Modified from
+    // https://github.com/apache/groovy/blob/master/src/main/java/org/codehaus/groovy/control/SourceExtensionHandler.java
     private static Set<String> findBuiltinScripts(ClassLoader loader) throws IOException {
         Set<String> scripts = new LinkedHashSet<>();
-        Enumeration<URL> globalServices = loader.getResources("META-INF/arrayv/io.github.arrayv.groovyapi.BuiltinScripts");
+        Enumeration<URL> globalServices = loader
+                .getResources("META-INF/arrayv/io.github.arrayv.groovyapi.BuiltinScripts");
         if (!globalServices.hasMoreElements()) {
             globalServices = loader.getResources("META-INF/arrayv/io.github.arrayv.groovyapi.BuiltinScripts");
         }

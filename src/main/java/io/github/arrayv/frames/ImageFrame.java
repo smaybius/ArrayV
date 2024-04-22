@@ -53,10 +53,10 @@ public class ImageFrame extends JFrame {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         GridBagLayout gblContentPane = new GridBagLayout();
-        gblContentPane.columnWidths = new int[]{0, 0, 0};
-        gblContentPane.rowHeights = new int[]{0, 32, 0, 0, 0};
-        gblContentPane.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-        gblContentPane.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+        gblContentPane.columnWidths = new int[] { 0, 0, 0 };
+        gblContentPane.rowHeights = new int[] { 0, 32, 0, 0, 0 };
+        gblContentPane.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+        gblContentPane.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
         contentPane.setLayout(gblContentPane);
 
         JLabel lblNewLabel = new JLabel("Current image:");
@@ -110,7 +110,8 @@ public class ImageFrame extends JFrame {
 
     public void updatePreview(CustomImage visual) {
         BufferedImage img = visual.getImage();
-        Image scaledImg = img.getScaledInstance((int) (this.lblNewLabel2.getWidth() * 0.75), this.lblNewLabel2.getHeight(), Image.SCALE_SMOOTH);
+        Image scaledImg = img.getScaledInstance((int) (this.lblNewLabel2.getWidth() * 0.75),
+                this.lblNewLabel2.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon imageIcon = new ImageIcon(scaledImg);
         this.lblNewLabel2.setIcon(imageIcon);
         this.lblNewLabel2.setText("");

@@ -31,7 +31,8 @@ public final class NewSortInstance implements Supplier<Sort> {
         this(sort.getClass());
     }
 
-    private static MethodHandle getMh(Class<? extends Sort> sortClass) throws NoSuchMethodException, IllegalAccessException {
+    private static MethodHandle getMh(Class<? extends Sort> sortClass)
+            throws NoSuchMethodException, IllegalAccessException {
         return LOOKUP.findConstructor(sortClass, CONSTRUCTOR_TYPE);
     }
 
@@ -42,7 +43,7 @@ public final class NewSortInstance implements Supplier<Sort> {
     @Override
     public Sort get() {
         try {
-            return (Sort)mh.invoke(ArrayVisualizer.getInstance());
+            return (Sort) mh.invoke(ArrayVisualizer.getInstance());
         } catch (RuntimeException | Error e) {
             throw e;
         } catch (Throwable e) {

@@ -126,11 +126,7 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
     }
 
     public Iterable<GraphNode> connectedNodesIterable() {
-        return new Iterable<GraphNode>() {
-            public Iterator<GraphNode> iterator() {
-                return ShuffleGraph.this.iterateConnectedNodes();
-            }
-        };
+        return ShuffleGraph.this::iterateConnectedNodes;
     }
 
     public void draw(Graphics2D g) {
@@ -214,20 +210,20 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
 
     public void calcTextSize(String text, int fit, Graphics2D g) {
         if (textSizes.containsKey(text)) {
-            g.setFont(g.getFont().deriveFont((float)textSizes.get(text)));
+            g.setFont(g.getFont().deriveFont((float) textSizes.get(text)));
             return;
         }
         int size = DEFAULT_TEXT_SIZE;
-        g.setFont(g.getFont().deriveFont((float)size));
+        g.setFont(g.getFont().deriveFont((float) size));
         while (g.getFontMetrics().stringWidth(text) >= fit) {
             size--;
-            g.setFont(g.getFont().deriveFont((float)size));
+            g.setFont(g.getFont().deriveFont((float) size));
         }
         textSizes.put(text, size);
     }
 
-
     // Collection<ShuffleInfo> code
+    @Override
     public int size() {
         int size = 0;
         GraphNode node = this.nodes.get(0);
@@ -242,6 +238,7 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         return size - 1;
     }
 
+    @Override
     public void clear() {
         this.nodes.subList(1, this.nodes.size()).clear();
         this.nodes.get(0).setPostConnection(null);
@@ -263,11 +260,13 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         return previous;
     }
 
+    @Override
     public boolean add(ShuffleInfo shuffle) {
         add(shuffle, findLast());
         return true;
     }
 
+    @Override
     public boolean addAll(Collection<? extends ShuffleInfo> c) {
         GraphNode after = findLast();
         for (ShuffleInfo shuffle : c) {
@@ -313,10 +312,12 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         return null;
     }
 
+    @Override
     public boolean contains(Object o) {
         return find(o) != null;
     }
 
+    @Override
     public boolean containsAll(Collection<?> c) {
         for (Object o : c) {
             if (!contains(o)) {
@@ -326,10 +327,12 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         return true;
     }
 
+    @Override
     public boolean isEmpty() {
         return iterator().hasNext();
     }
 
+    @Override
     public boolean remove(Object o) {
         GraphNode found = find(o);
         if (found == null) {
@@ -339,6 +342,7 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         return true;
     }
 
+    @Override
     public boolean removeAll(Collection<?> c) {
         boolean affected = false;
         for (Object o : c) {
@@ -347,10 +351,12 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         return affected;
     }
 
+    @Override
     public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Object[] toArray() {
         List<ShuffleInfo> result = new ArrayList<>();
         for (ShuffleInfo shuffle : this) {
@@ -359,15 +365,16 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         return result.toArray();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
         Class<?> type = a.getClass().getComponentType();
         if (type == ShuffleInfo.class || type == Object.class) {
             int mySize = size();
             if (mySize > a.length) {
-                return (T[])toArray();
+                return (T[]) toArray();
             }
-            ShuffleInfo[] result = (ShuffleInfo[])a;
+            ShuffleInfo[] result = (ShuffleInfo[]) a;
             int i = 0;
             GraphNode node = this.nodes.get(0);
             while (node != null) {
@@ -389,6 +396,7 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
         }
     }
 
+    @Override
     public Iterator<ShuffleInfo> iterator() {
         return new GraphIterator(this);
     }
@@ -452,16 +460,20 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
             this.it = new NodeIterator(graph);
         }
 
+        @Override
         public boolean hasNext() {
             return this.it.hasNext();
         }
 
+        @Override
         public ShuffleInfo next() {
             return this.it.next().getValue();
         }
 
+        @Override
         public void remove() {
-            this.it.remove();;
+            this.it.remove();
+            ;
         }
     }
 
@@ -484,10 +496,12 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
             return null;
         }
 
+        @Override
         public boolean hasNext() {
             return this.nextNode != null;
         }
 
+        @Override
         public GraphNode next() {
             if (this.nextNode == null) {
                 throw new NoSuchElementException();
@@ -497,6 +511,7 @@ public class ShuffleGraph implements Collection<ShuffleInfo> {
             return this.currentNode;
         }
 
+        @Override
         public void remove() {
             this.nextNode.delete();
             this.nextNode = findNext();

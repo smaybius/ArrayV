@@ -37,7 +37,7 @@ public final class RunScriptDialog extends FileDialog {
         fileDialog.addChoosableFileFilter(groovyFiles);
 
         this.file = fileDialog.showDialog(null, "Select") == JFileChooser.APPROVE_OPTION
-            ? fileDialog.getSelectedFile()
-            : null;
+                ? fileDialog.getSelectedFile()
+                : null;
     }
 }

@@ -66,18 +66,20 @@ public final class ArrayFrame extends javax.swing.JFrame {
         setUndecorated(true);
         initComponents();
         setBounds(
-            Math.min((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth(), frame.getX() + frame.getWidth()),
-            frame.getY() + 29,
-            getWidth(),
-            arrayVisualizer.getUtilFrame().getHeight()
-        );
+                Math.min((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth(),
+                        frame.getX() + frame.getWidth()),
+                frame.getY() + 29,
+                getWidth(),
+                arrayVisualizer.getUtilFrame().getHeight());
         setAlwaysOnTop(false);
         setVisible(true);
     }
 
-    public void reposition(){
+    public void reposition() {
         toFront();
-        setLocation(Math.min((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth() - utilFrame.getWidth(), frame.getX() + frame.getWidth()), frame.getY() + 29);
+        setLocation(Math.min(
+                (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth() - utilFrame.getWidth(),
+                frame.getX() + frame.getWidth()), frame.getY() + 29);
     }
 
     public void setLengthSlider(int length) {
@@ -95,31 +97,34 @@ public final class ArrayFrame extends javax.swing.JFrame {
     }
 
     private int getSomethingSize(String title, String message) {
-        String input = JEnhancedOptionPane.showInputDialog(title, message, new Object[] {"Ok", "Cancel"});
-        //noinspection DataFlowIssue
+        String input = JEnhancedOptionPane.showInputDialog(title, message, new Object[] { "Ok", "Cancel" });
+        // noinspection DataFlowIssue
         int integer = Integer.parseInt(input);
         return Math.abs(integer);
     }
 
     private int calculateLength(int sliderValue) {
-        return (int)Math.pow(2, sliderValue / 100000.0);
+        return (int) Math.pow(2, sliderValue / 100000.0);
     }
 
     private int calculateSliderValue(int length) {
-        return (int)Math.ceil(Math.log(length) / Math.log(2) * 100000);
+        return (int) Math.ceil(Math.log(length) / Math.log(2) * 100000);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         KeyListener kListener = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
             }
+
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SHIFT)
                     lockToPow2 = true;
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SHIFT)
@@ -154,26 +159,27 @@ public final class ArrayFrame extends javax.swing.JFrame {
         jSlider1.setLabelTable(labels);
         jSlider1.setPaintLabels(true);
         jSlider1.setPaintTicks(true);
-        //jSlider.setSnapToTicks(true);
+        // jSlider.setSnapToTicks(true);
         jSlider1.addChangeListener(event -> {
             if (arrayManager.isLengthMutable()) {
                 int value1 = jSlider1.getValue();
                 if (lockToPow2) {
-                    value1 = (int)(Math.round(value1 / 100000.0) * 100000);
+                    value1 = (int) (Math.round(value1 / 100000.0) * 100000);
                     jSlider1.setValue(value1);
                 }
                 int oldValue1 = calculateSliderValue(arrayVisualizer.getCurrentLength());
                 arrayVisualizer.setCurrentLength(calculateLength(value1));
                 // double mult = (double)jSlider2.getValue() / (double)oldValue1;
-                double divver = (double)oldValue1 / (double)jSlider2.getValue();
-                jSlider2.setValue((int)(value1 / divver));
-                //ArrayVisualizer.setEqualItems((int) Math.pow(2, jSlider.getValue()));
+                double divver = (double) oldValue1 / (double) jSlider2.getValue();
+                jSlider2.setValue((int) (value1 / divver));
+                // ArrayVisualizer.setEqualItems((int) Math.pow(2, jSlider.getValue()));
                 arrayManager.initializeArray(array);
             } else {
                 int currentLength = arrayVisualizer.getCurrentLength();
                 jSlider1.setValue(calculateSliderValue(currentLength));
             }
-            //if (ArrayVisualizer.getVisualStyles() == visuals.VisualStyles.CIRCULAR && jSlider1.getValue() == 1) jSlider1.setValue(2);
+            // if (ArrayVisualizer.getVisualStyles() == visuals.VisualStyles.CIRCULAR &&
+            // jSlider1.getValue() == 1) jSlider1.setValue(2);
 
             Highlights.clearAllMarks();
         });
@@ -193,15 +199,19 @@ public final class ArrayFrame extends javax.swing.JFrame {
                     }
                 }
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
             }
@@ -212,7 +222,7 @@ public final class ArrayFrame extends javax.swing.JFrame {
         jSlider2.setLabelTable(labels);
         jSlider2.setPaintLabels(true);
         jSlider2.setPaintTicks(true);
-        //jSlider2.setSnapToTicks(true);
+        // jSlider2.setSnapToTicks(true);
         jSlider2.addChangeListener(event -> {
             if (arrayManager.isLengthMutable()) {
                 if (jSlider2.getValue() > jSlider1.getValue()) {
@@ -220,11 +230,11 @@ public final class ArrayFrame extends javax.swing.JFrame {
                 } else {
                     int value12 = jSlider2.getValue();
                     if (lockToPow2) {
-                        value12 = (int)(Math.round(value12 / 100000.0) * 100000);
+                        value12 = (int) (Math.round(value12 / 100000.0) * 100000);
                         jSlider2.setValue(value12);
                     }
                     arrayVisualizer.setUniqueItems(calculateLength(value12));
-                    //ArrayVisualizer.setEqualItems((int) Math.pow(2, jSlider2.getValue()));
+                    // ArrayVisualizer.setEqualItems((int) Math.pow(2, jSlider2.getValue()));
                     arrayManager.initializeArray(array);
                 }
             } else {
@@ -250,56 +260,63 @@ public final class ArrayFrame extends javax.swing.JFrame {
                     }
                 }
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
             }
         });
         jSlider2.addKeyListener(kListener);
 
-        final int sliderGap = UIManager.getLookAndFeel().getClass().getName().equals("com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ? 250 : 175;
+        final int sliderGap = UIManager.getLookAndFeel().getClass().getName()
+                .equals("com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ? 250 : 175;
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
-                        .addComponent(jLabel1)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
-                            .addComponent(this.jSlider1)
-                            .addGap(0, 10, Short.MAX_VALUE))))
-                .addGap(sliderGap, sliderGap, sliderGap)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
-                        .addComponent(jLabel2)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
-                            .addComponent(this.jSlider2)
-                            .addGap(0, 10, Short.MAX_VALUE))))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+                                        .addComponent(jLabel1)
+                                        .addGroup(layout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+                                                .addComponent(this.jSlider1)
+                                                .addGap(0, 10, Short.MAX_VALUE))))
+                        .addGap(sliderGap, sliderGap, sliderGap)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
+                                        .addComponent(jLabel2)
+                                        .addGroup(layout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
+                                                .addComponent(this.jSlider2)
+                                                .addGap(0, 10, Short.MAX_VALUE)))));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(5, 5, 5)
-                    .addComponent(jLabel1)
-                    .addGap(5, 5, 5)
-                    .addComponent(this.jSlider1, utilFrame.getHeight() - 26, utilFrame.getHeight() - 26, utilFrame.getHeight() - 26))
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(5, 5, 5)
-                    .addComponent(jLabel2)
-                    .addGap(5, 5, 5)
-                    .addComponent(this.jSlider2, utilFrame.getHeight() - 26, utilFrame.getHeight() - 26, utilFrame.getHeight() - 26))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel1)
+                                .addGap(5, 5, 5)
+                                .addComponent(this.jSlider1, utilFrame.getHeight() - 26, utilFrame.getHeight() - 26,
+                                        utilFrame.getHeight() - 26))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel2)
+                                .addGap(5, 5, 5)
+                                .addComponent(this.jSlider2, utilFrame.getHeight() - 26, utilFrame.getHeight() - 26,
+                                        utilFrame.getHeight() - 26)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

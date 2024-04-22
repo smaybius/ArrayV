@@ -33,7 +33,7 @@ public final class SaveArrayDialog extends FileDialog {
         fileDialog.setDialogTitle("Choose where to save the contents of the main array...");
 
         this.file = fileDialog.showSaveDialog(null) == JFileChooser.APPROVE_OPTION
-            ? fileDialog.getSelectedFile()
-            : null;
+                ? fileDialog.getSelectedFile()
+                : null;
     }
 }

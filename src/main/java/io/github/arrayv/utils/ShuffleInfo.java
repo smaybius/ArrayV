@@ -61,12 +61,12 @@ public final class ShuffleInfo {
         return this.warpDistribution;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
         }
-        if (o instanceof ShuffleInfo) {
-            ShuffleInfo other = (ShuffleInfo) o;
+        if (o instanceof ShuffleInfo other) {
             if (this.isDistribution != other.isDistribution) {
                 return false;
             }

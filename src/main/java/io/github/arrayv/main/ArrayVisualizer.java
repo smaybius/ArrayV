@@ -247,6 +247,7 @@ public final class ArrayVisualizer {
             }
         });
         this.window.setDropTarget(new DropTarget() {
+            @Override
             @SuppressWarnings("unchecked")
             public synchronized void drop(DropTargetDropEvent e) {
                 try {

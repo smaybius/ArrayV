@@ -345,10 +345,9 @@ public final class SortInfo {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof SortInfo)) {
+        if (!(obj instanceof SortInfo other)) {
             return false;
         }
-        SortInfo other = (SortInfo) obj;
         if (bogoSort != other.bogoSort) {
             return false;
         }

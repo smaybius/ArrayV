@@ -9,7 +9,8 @@ import java.util.Set;
  */
 public final class RunGroupContext {
     /**
-     * The {@link ThreadLocal} object used for getting and setting the thread RunGroupContext
+     * The {@link ThreadLocal} object used for getting and setting the thread
+     * RunGroupContext
      */
     public static final ThreadLocal<RunGroupContext> CONTEXT = new ThreadLocal<>();
 
@@ -19,8 +20,10 @@ public final class RunGroupContext {
     private int sortNumber;
 
     /**
-     * Creates a RunGroupContext with the specified number of sorts and a base length
-     * @param sortCount See {@link #getSortCount}
+     * Creates a RunGroupContext with the specified number of sorts and a base
+     * length
+     *
+     * @param sortCount      See {@link #getSortCount}
      * @param startingLength See {@link #getStartingLength}
      */
     public RunGroupContext(int sortCount, int startingLength) {
@@ -32,6 +35,7 @@ public final class RunGroupContext {
 
     /**
      * The number of sorts in the current run group
+     *
      * @return The number of sorts in the current run group
      */
     public int getSortCount() {
@@ -40,6 +44,7 @@ public final class RunGroupContext {
 
     /**
      * The base length for the current run group
+     *
      * @return The base length for the current run group
      */
     public int getStartingLength() {
@@ -48,6 +53,7 @@ public final class RunGroupContext {
 
     /**
      * The current sorting algorithm index
+     *
      * @return The current sorting algorithm index
      */
     public int getSortNumber() {
@@ -56,6 +62,7 @@ public final class RunGroupContext {
 
     /**
      * Increments and returns the new sorting algorithm index
+     *
      * @return The newly incremented indexed
      * @see #getSortNumber
      */

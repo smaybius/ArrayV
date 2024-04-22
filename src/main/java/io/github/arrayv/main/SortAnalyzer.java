@@ -119,7 +119,7 @@ public final class SortAnalyzer {
     /**
      * Like {@link #addSort}, but also sorts it.
      * This is equivalent to, but more efficient than:
-     * 
+     *
      * <pre>
      * addSort(sort);
      * sortSorts();

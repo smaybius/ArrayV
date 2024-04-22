@@ -55,7 +55,8 @@ public class WaveFrame extends javax.swing.JFrame {
 
         SpinnerModel sldFreq = new SpinnerNumberModel((int) arrayWaveSound.getFrequency(), 10, 5000, 10);
         sldFreq.addChangeListener(
-                e -> arrayWaveSound.setFrequency((((SpinnerNumberModel) e.getSource()).getNumber().floatValue())));
+                e -> arrayWaveSound.setFrequency(
+                        (((SpinnerNumberModel) e.getSource()).getNumber().floatValue())));
         GridBagConstraints gbcsldFreq = new GridBagConstraints();
         gbcsldFreq.gridx = 0;
         gbcsldFreq.gridy = 1;
@@ -70,7 +71,8 @@ public class WaveFrame extends javax.swing.JFrame {
 
         SpinnerModel sldVol = new SpinnerNumberModel((int) (arrayWaveSound.getGain() * 100), 0, 70, 10);
         sldVol.addChangeListener(
-                e -> arrayWaveSound.setGain(((SpinnerNumberModel) e.getSource()).getNumber().floatValue() / 100));
+                e -> arrayWaveSound.setGain(
+                        ((SpinnerNumberModel) e.getSource()).getNumber().floatValue() / 100));
         GridBagConstraints gbcsldVol = new GridBagConstraints();
         gbcsldVol.gridx = 1;
         gbcsldVol.gridy = 1;
@@ -84,9 +86,8 @@ public class WaveFrame extends javax.swing.JFrame {
         contentPane.add(lblFlt, gbcLblFlt);
 
         SpinnerModel sldFlt = new SpinnerNumberModel((int) (48000), 0, 48000, 100);
-        sldFlt.addChangeListener(
-                e -> ArrayVisualizer.getInstance().getSounds()
-                        .setFilter(((SpinnerNumberModel) e.getSource()).getNumber().floatValue()));
+        sldFlt.addChangeListener(e -> ArrayVisualizer.getInstance().getSounds()
+                .setFilter(((SpinnerNumberModel) e.getSource()).getNumber().floatValue()));
         GridBagConstraints gbcsldFlt = new GridBagConstraints();
         gbcsldFlt.gridx = 2;
         gbcsldFlt.gridy = 1;

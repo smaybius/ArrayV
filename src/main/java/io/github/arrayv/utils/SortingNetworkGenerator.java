@@ -49,9 +49,9 @@ public final class SortingNetworkGenerator {
 
         boolean hasSameInput(Comparator other) {
             return this.i1 == other.i1 ||
-                   this.i1 == other.i2 ||
-                   this.i2 == other.i1 ||
-                   this.i2 == other.i2;
+                    this.i1 == other.i2 ||
+                    this.i2 == other.i1 ||
+                    this.i2 == other.i2;
         }
     }
 
@@ -112,18 +112,16 @@ public final class SortingNetworkGenerator {
         if (small) {
             writer = new WriterBuilderProxy(new StringBuilder());
             monitor = new ProgressMonitor(
-                ArrayVisualizer.getInstance().getWindow(),
-                "Visualizing sorting network...",
-                "Generating SVG",
-                0, comparators.length
-            );
+                    ArrayVisualizer.getInstance().getWindow(),
+                    "Visualizing sorting network...",
+                    "Generating SVG",
+                    0, comparators.length);
         } else {
             monitor = new ProgressMonitor(
-                ArrayVisualizer.getInstance().getWindow(),
-                "Visualizing sorting network...",
-                "Pre-calculating image width",
-                0, comparators.length * 2
-            );
+                    ArrayVisualizer.getInstance().getWindow(),
+                    "Visualizing sorting network...",
+                    "Pre-calculating image width",
+                    0, comparators.length * 2);
             for (Comparator c : comparators) {
                 for (Comparator other : groupComparators) {
                     if (c.hasSameInput(other)) {
@@ -153,7 +151,8 @@ public final class SortingNetworkGenerator {
 
                 if ((++progress & 1023) == 0) {
                     monitor.setProgress(progress);
-                    if (monitor.isCanceled()) return true;
+                    if (monitor.isCanceled())
+                        return true;
                 }
             }
             groupComparators.clear();
@@ -193,15 +192,18 @@ public final class SortingNetworkGenerator {
 
             int y0 = (c.i1 + 1) * yScale;
             int y1 = (c.i2 + 1) * yScale;
-            writer.write("<circle cx='" + cx + "' cy='" + y0 + "' r='3' style='stroke:black;stroke-width:1;fill=yellow'/>" +
-                         "<line x1='" + cx + "' y1='" + y0 + "' x2='" + cx + "' y2='" + y1 + "' style='stroke:black;stroke-width:1'/>" +
-                         "<circle cx='" + cx + "' cy='" + y1 + "' r='3' style='stroke:black;stroke-width:1;fill=yellow'/>");
+            writer.write("<circle cx='" + cx + "' cy='" + y0
+                    + "' r='3' style='stroke:black;stroke-width:1;fill=yellow'/>" +
+                    "<line x1='" + cx + "' y1='" + y0 + "' x2='" + cx + "' y2='" + y1
+                    + "' style='stroke:black;stroke-width:1'/>" +
+                    "<circle cx='" + cx + "' cy='" + y1 + "' r='3' style='stroke:black;stroke-width:1;fill=yellow'/>");
             groupComparators.add(c);
             groupPositions.add(cx);
 
             if ((++progress & 1023) == 0) {
                 monitor.setProgress(progress);
-                if (monitor.isCanceled()) return true;
+                if (monitor.isCanceled())
+                    return true;
             }
         }
         groupComparators.clear();
@@ -210,7 +212,8 @@ public final class SortingNetworkGenerator {
         w += xScale;
         for (int i = 0; i < n; i++) {
             int y = yScale + i * yScale;
-            writer.write("<line x1='0' y1='" + y + "' x2='" + w + "' y2='" + y + "' style='stroke:black;stroke-width:1'/>");
+            writer.write(
+                    "<line x1='0' y1='" + y + "' x2='" + w + "' y2='" + y + "' style='stroke:black;stroke-width:1'/>");
         }
 
         if (small) {
@@ -226,15 +229,14 @@ public final class SortingNetworkGenerator {
     public static boolean encodeNetwork(Comparator[] comparators, int inputLength, File file) {
         try (PrintWriter out = new PrintWriter(
                 new BufferedWriter(
-                    new OutputStreamWriter(
-                        new FileOutputStream(file), StandardCharsets.UTF_8
-                    ), OUT_BUFFER_SIZE),
-                false)
-            ) {
+                        new OutputStreamWriter(
+                                new FileOutputStream(file), StandardCharsets.UTF_8),
+                        OUT_BUFFER_SIZE),
+                false)) {
             boolean cancelled = encodeNetwork0(comparators, inputLength, out);
             if (cancelled) {
                 JOptionPane.showMessageDialog(null, "Sorting network visualization cancelled",
-                    "Sorting Network Visualizer", JOptionPane.INFORMATION_MESSAGE);
+                        "Sorting Network Visualizer", JOptionPane.INFORMATION_MESSAGE);
                 return false;
             }
         } catch (Exception e) {
@@ -265,18 +267,16 @@ public final class SortingNetworkGenerator {
             }
         } catch (OutOfMemoryError e) {
             JErrorPane.invokeCustomErrorMessage(
-                "ArrayV ran out of memory trying to visualize this sorting network.\n" +
-                "Either run ArrayV with more memory (or a smaller maximum length) or contemplate your life choices."
-            );
+                    "ArrayV ran out of memory trying to visualize this sorting network.\n" +
+                            "Either run ArrayV with more memory (or a smaller maximum length) or contemplate your life choices.");
             return null;
         }
         boolean shouldOpen = JOptionPane.showConfirmDialog(
-            ArrayVisualizer.getInstance().getMainWindow(),
-            "Successfully saved output to file \"" + file + "\"\nWould you like to open it now?",
-            "Sorting Network Visualizer",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.INFORMATION_MESSAGE
-        ) == JOptionPane.YES_OPTION; // false on NO_OPION or CLOSED_OPTION
+                ArrayVisualizer.getInstance().getMainWindow(),
+                "Successfully saved output to file \"" + file + "\"\nWould you like to open it now?",
+                "Sorting Network Visualizer",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE) == JOptionPane.YES_OPTION; // false on NO_OPION or CLOSED_OPTION
         if (shouldOpen) {
             Desktop desktop = Desktop.getDesktop();
             try {
