@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Binary Quick (Stackless)", showcaseName = "Binary Quick Sort (Stackless)", runName = "Binary Quick Sort (Stackless)")
+@SortMeta(name = "Stackless Binary Quick")
 public final class StacklessBinaryQuickSort extends Sort {
 	public StacklessBinaryQuickSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

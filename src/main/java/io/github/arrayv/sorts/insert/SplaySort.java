@@ -4,8 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-//
-@SortMeta(listName = "Tree (Splay)", showcaseName = "Tree Sort (Splay Balanced)", runName = "Tree Sort (Splay Balanced)")
+@SortMeta(name = "Splay")
 public final class SplaySort extends Sort {
 
     // Splay sort is an adaptive algorithm based on splay tree data structure

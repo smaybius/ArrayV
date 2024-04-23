@@ -10,7 +10,7 @@ import io.github.arrayv.sorts.templates.Sort;
  *
  * @author Sam Walko (Anonymous0726)
  */
-@SortMeta(listName = "Tree (AVL)", showcaseName = "Tree Sort (AVL Balanced)", runName = "Tree Sort (AVL Balanced)")
+@SortMeta(listName = "Tree (AVL)", runName = "AVL-Balanced Tree Sort")
 public final class AVLTreeSort extends Sort {
 	public AVLTreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

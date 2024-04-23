@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(listName = "Optimized Cocktail Shaker", showcaseName = "Optimized Cocktail Shaker Sort", runName = "Optimized Cocktail Shaker Sort")
+@SortMeta(name = "Optimized Cocktail Shaker")
 public final class OptimizedCocktailShakerSort extends Sort {
     public OptimizedCocktailShakerSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

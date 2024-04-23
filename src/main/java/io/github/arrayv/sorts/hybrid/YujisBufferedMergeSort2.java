@@ -29,8 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
-@SortMeta(listName = "Opti. A/Y", showcaseName = "Optimized Andrey/Yuji Sort", runName = "Optimized Andrey/Yuji Sort")
+@SortMeta(name = "Optimized Andrey/Yuji")
 public final class YujisBufferedMergeSort2 extends Sort {
 
 	public YujisBufferedMergeSort2(ArrayVisualizer arrayVisualizer) {

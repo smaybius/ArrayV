@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Weave Merge", showcaseName = "Weave Merge Sort", runName = "Weave Merge Sort")
+@SortMeta(name = "Weave Merge")
 public final class WeaveMergeSort extends Sort {
     public WeaveMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

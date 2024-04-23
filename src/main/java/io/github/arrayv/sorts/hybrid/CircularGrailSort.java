@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Circular Grail", showcaseName = "Circular Grail Sort", runName = "Circular Grail Sort")
+@SortMeta(name = "Circular Grail")
 public final class CircularGrailSort extends Sort {
 	public CircularGrailSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

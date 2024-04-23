@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Binary Merge", showcaseName = "Binary Merge Sort", runName = "Binary Merge Sort")
+@SortMeta(name = "Binary Merge")
 public final class BinaryMergeSort extends MergeSorting {
     public BinaryMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

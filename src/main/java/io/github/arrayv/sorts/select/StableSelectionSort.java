@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Stable Selection", showcaseName = "Stable Selection Sort", runName = "Stable Selection Sort")
+@SortMeta(name = "Stable Selection")
 public final class StableSelectionSort extends Sort {
 
     public StableSelectionSort(ArrayVisualizer arrayVisualizer) {

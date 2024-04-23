@@ -15,7 +15,7 @@ import io.github.arrayv.sorts.templates.Sort;
  */
 
 // Code refactored from the Python implementation found here: https://en.wikipedia.org/wiki/Pigeonhole_sort
-@SortMeta(listName = "Pigeonhole", showcaseName = "Pigeonhole Sort", runName = "Pigeonhole Sort")
+@SortMeta(name = "Pigeonhole")
 public final class PigeonholeSort extends Sort {
     public PigeonholeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

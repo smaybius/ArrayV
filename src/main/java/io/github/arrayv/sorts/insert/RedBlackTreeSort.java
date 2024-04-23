@@ -10,7 +10,7 @@ import io.github.arrayv.sorts.templates.Sort;
  *
  * @author Sam Walko (Anonymous0726)
  */
-@SortMeta(listName = "Tree (Red-Black)", showcaseName = "Tree Sort (Red-Black Balanced)", runName = "Tree Sort (Red-Black Balanced)")
+@SortMeta(listName = "Tree (Red-Black)", runName = "Red-Black-Balanced Tree Sort")
 public final class RedBlackTreeSort extends Sort {
 	public RedBlackTreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

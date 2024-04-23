@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Tree (Unbalanced, Classic)", showcaseName = "Tree Sort (Unbalanced, Classic)", runName = "Tree Sort (Unbalanced, Classic)")
+@SortMeta(name = "Classic Unbalanced Tree")
 public final class ClassicTreeSort extends Sort {
 	public ClassicTreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

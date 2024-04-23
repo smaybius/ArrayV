@@ -1,11 +1,13 @@
 package io.github.arrayv.sorts.hybrid;
 
+import javax.xml.crypto.Data;
+
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(listName = "Optimized Bottom-Up Merge", showcaseName = "Optimized Bottom-Up Merge Sort (std::stable_sort)", runName = "Optimized Bottom-Up Merge Sort (std::stable_sort)")
+@SortMeta(name = "Optimized Bottom-Up Merge")
 public final class OptimizedBottomUpMergeSort extends Sort {
     public OptimizedBottomUpMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

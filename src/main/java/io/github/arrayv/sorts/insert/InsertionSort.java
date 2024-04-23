@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Insertion", showcaseName = "Insertion Sort", runName = "Insertion Sort")
+@SortMeta(name = "Insertion")
 public final class InsertionSort extends InsertionSorting {
     public InsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

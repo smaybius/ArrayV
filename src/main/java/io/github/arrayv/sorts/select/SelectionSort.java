@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Selection", showcaseName = "Selection Sort", runName = "Selection Sort")
+@SortMeta(name = "Selection")
 public final class SelectionSort extends Sort {
     public SelectionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

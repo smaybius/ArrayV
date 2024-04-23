@@ -21,7 +21,7 @@ import io.github.arrayv.sorts.templates.Sort;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-@SortMeta(listName = "Tournament", showcaseName = "Tournament Sort", runName = "Tournament Sort")
+@SortMeta(name = "Tournament")
 public final class TournamentSort extends Sort {
     private int[] matches;
     private int tourney;

@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(name = "Binary Gnome")
+@SortMeta(listName = "Binary Gnome", runName = "Optimized Gnome Sort + Binary Search")
 public final class BinaryGnomeSort extends Sort {
     public BinaryGnomeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

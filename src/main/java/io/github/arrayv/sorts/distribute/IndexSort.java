@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Index", showcaseName = "Simple Static (Index) Sort", runName = "Simple Static (Index) Sort")
+@SortMeta(name = "Simple Static (Index)")
 public final class IndexSort extends Sort {
     public IndexSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

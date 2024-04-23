@@ -30,7 +30,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-@SortMeta(listName = "Quicksort (Stable, Parallel)", showcaseName = "Quicksort (Stable, Parallel)", runName = "Quicksort (Stable, Parallel)")
+@SortMeta(listName = "Stable Quick (Parallel)", runName = "Parallel Stable Quick Sort", unreasonableLimit = 4096)
 public final class StableQuickSortParallel extends Sort {
 	public StableQuickSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
@@ -47,6 +47,7 @@ public final class StableQuickSortParallel extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			StableQuickSortParallel.this.quickSortInt(a, b);
 		}
@@ -60,6 +61,7 @@ public final class StableQuickSortParallel extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			StableQuickSortParallel.this.quickSortExt(a, b);
 		}

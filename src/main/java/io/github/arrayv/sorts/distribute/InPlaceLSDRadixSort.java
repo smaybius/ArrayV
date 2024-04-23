@@ -36,7 +36,6 @@ public final class InPlaceLSDRadixSort extends Sort {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         this.setRunAllSortsName("In-Place LSD Radix Sort, Base " + bucketCount);
 

@@ -12,7 +12,6 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author EilrahcF
  *
  */
-
 @SortMeta(name = "Slope")
 public final class SlopeSort extends Sort {
 
@@ -21,6 +20,7 @@ public final class SlopeSort extends Sort {
 	 */
 	public SlopeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
+
 	}
 
 	@Override

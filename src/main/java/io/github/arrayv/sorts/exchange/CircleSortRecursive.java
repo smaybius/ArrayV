@@ -15,7 +15,7 @@ Texts.  A copy of the license is included in the section entitled "GNU
 Free Documentation License".
  *
  */
-@SortMeta(listName = "Circle (Recursive)", showcaseName = "Circlesort (Recursive)", runName = "Circlesort (Recursive)")
+@SortMeta(listName = "Circle (Recursive)", runName = "Recursive Circle Sort")
 public final class CircleSortRecursive extends CircleSorting {
     public CircleSortRecursive(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

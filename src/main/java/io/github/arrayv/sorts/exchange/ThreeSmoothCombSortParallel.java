@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Three-Smooth Comb (Parallel)", showcaseName = "Three-Smooth Combsort (Parallel)", runName = "Three-Smooth Combsort (Parallel)")
+@SortMeta(listName = "3-Smooth Comb (Parallel)", runName = "Parallel 3-Smooth Comb", unreasonableLimit = 4096)
 public final class ThreeSmoothCombSortParallel extends Sort {
 	public ThreeSmoothCombSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
@@ -43,6 +43,7 @@ public final class ThreeSmoothCombSortParallel extends Sort {
 			this.end = end;
 		}
 
+		@Override
 		public void run() {
 			ThreeSmoothCombSortParallel.this.recursiveComb(pos, gap, end);
 		}
@@ -57,6 +58,7 @@ public final class ThreeSmoothCombSortParallel extends Sort {
 			this.end = end;
 		}
 
+		@Override
 		public void run() {
 			ThreeSmoothCombSortParallel.this.powerOfThree(pos, gap, end);
 		}

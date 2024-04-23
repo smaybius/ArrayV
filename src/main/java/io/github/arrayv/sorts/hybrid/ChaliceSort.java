@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Chalice", showcaseName = "Chalice Sort", runName = "Chalice Sort")
+@SortMeta(name = "Chalice")
 public final class ChaliceSort extends BlockMergeSorting {
 	public ChaliceSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

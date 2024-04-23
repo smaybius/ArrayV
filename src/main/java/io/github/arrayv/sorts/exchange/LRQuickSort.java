@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(listName = "Quicksort (Left/Right Pointers)", showcaseName = "Quicksort (Left/Right Pointers)", runName = "Quicksort (Left/Right Pointers)")
+@SortMeta(listName = "Quick (Left/Right)", runName = "Quick Sort, Left/Right Pointers")
 public final class LRQuickSort extends Sort {
     public LRQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

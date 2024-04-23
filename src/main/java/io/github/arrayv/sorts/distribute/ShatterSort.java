@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(name = "Shatter", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
+@SortMeta(name = "Shatter", bucketSort = true)
 public final class ShatterSort extends ShatterSorting {
     public ShatterSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
@@ -37,6 +37,8 @@ public final class ShatterSort extends ShatterSorting {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
+        this.setRunAllSortsName("Shatter Sort, " + bucketCount + " Buckets");
+        this.setRunSortName("Shatter Sort, " + bucketCount + " Buckets");
         this.shatterSort(array, sortLength, bucketCount);
     }
 }

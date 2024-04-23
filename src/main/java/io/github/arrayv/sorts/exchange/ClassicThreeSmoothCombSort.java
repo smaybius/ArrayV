@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Three-Smooth Comb (Classic)", showcaseName = "Three-Smooth Comb Sort (Classic)", runName = "Three-Smooth Comb Sort (Classic)")
+@SortMeta(name = "Classic 3-Smooth Comb")
 public final class ClassicThreeSmoothCombSort extends Sort {
     public ClassicThreeSmoothCombSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

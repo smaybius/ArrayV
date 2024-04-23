@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(listName = "Andrey's Merge", showcaseName = "Andrey Astrelin's In-Place Merge Sort", runName = "Andrey Astrelin's In-Place Merge Sort")
+@SortMeta(name = "Andrey Astrelin's In-Place Merge")
 public class AndreySort extends Sort {
     public AndreySort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

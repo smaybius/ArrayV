@@ -8,7 +8,7 @@ import io.github.arrayv.sorts.templates.Sort;
  * This version of Odd-Even Sort was taken from here, written by Rachit Belwariar:
  * https://www.geeksforgeeks.org/odd-even-sort-brick-sort/
  */
-@SortMeta(listName = "Odd-Even", showcaseName = "Odd-Even Sort", runName = "Odd-Even Sort")
+@SortMeta(name = "Odd-Even")
 public final class OddEvenSort extends Sort {
     public OddEvenSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

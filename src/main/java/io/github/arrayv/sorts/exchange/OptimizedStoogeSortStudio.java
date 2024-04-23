@@ -14,7 +14,7 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author aphitorite - Sorting network optimizations
  * @author EilrahcF - Key ideas / concepts
  */
-@SortMeta(listName = "Optimized Stooge (Studio)", showcaseName = "Optimized Stooge (Studio) Sort", runName = "Optimized Stooge (Studio) Sort")
+@SortMeta(listName = "Optimized Stooge (The Studio Version)", runName = "Optimized Stooge Sort (The Studio Version)")
 public final class OptimizedStoogeSortStudio extends Sort {
 	public OptimizedStoogeSortStudio(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

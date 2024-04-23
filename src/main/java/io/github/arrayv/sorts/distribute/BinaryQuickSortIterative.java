@@ -20,7 +20,7 @@ import io.github.arrayv.sorts.templates.BinaryQuickSorting;
  *
  * @author Skeen
  */
-@SortMeta(listName = "Binary Quick (Iterative)", showcaseName = "Binary Quick Sort (Iterative)", runName = "Binary Quick Sort (Iterative)")
+@SortMeta(listName = "Binary Quick (Iterative)", runName = "Iterative Binary Quick Sort")
 public final class BinaryQuickSortIterative extends BinaryQuickSorting {
     public BinaryQuickSortIterative(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

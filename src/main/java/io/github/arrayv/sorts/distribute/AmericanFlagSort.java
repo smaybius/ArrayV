@@ -130,7 +130,6 @@ public final class AmericanFlagSort extends Sort {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         this.NUMBER_OF_BUCKETS = bucketCount;
 

@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Quicksort (Stable)", showcaseName = "Quicksort (Stable)", runName = "Quicksort (Stable)")
+@SortMeta(name = "Stable Quick")
 public final class StableQuickSort extends Sort {
     private int length;
 

@@ -38,7 +38,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /* methods copied from Grail Sort        */
 /*                                       */
 /*****************************************/
-@SortMeta(listName = "Opti. Lazy Stable", showcaseName = "Optimized Lazy Stable Sort", runName = "Optimized Lazy Stable Sort")
+@SortMeta(name = "Optimized Lazy Stable")
 public final class OptimizedLazyStableSort extends GrailSorting {
     public OptimizedLazyStableSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
@@ -69,6 +69,7 @@ public final class OptimizedLazyStableSort extends GrailSorting {
         }
     }
 
+    @Override
     protected void grailLazyStableSort(int[] arr, int pos, int len) {
         int dist;
         for (dist = 0; dist + 16 < len; dist += 16)

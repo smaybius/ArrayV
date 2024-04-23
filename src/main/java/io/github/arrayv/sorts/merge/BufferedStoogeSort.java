@@ -12,7 +12,7 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author thatsOven
  *
  */
-@SortMeta(listName = "Buffered Stooge", showcaseName = "Buffered Stooge Sort", runName = "Buffered Stooge Sort")
+@SortMeta(name = "Buffered Stooge")
 public final class BufferedStoogeSort extends Sort {
 
 	/**

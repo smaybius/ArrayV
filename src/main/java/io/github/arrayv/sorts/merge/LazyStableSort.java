@@ -38,7 +38,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /* methods copied from Grail Sort        */
 /*                                       */
 /*****************************************/
-@SortMeta(listName = "Lazy Stable", showcaseName = "Lazy Stable Sort", runName = "Lazy Stable Sort")
+@SortMeta(name = "Lazy Stable")
 public final class LazyStableSort extends GrailSorting {
     public LazyStableSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

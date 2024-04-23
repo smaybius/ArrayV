@@ -28,7 +28,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-@SortMeta(listName = "Mergesort (Parallel)", showcaseName = "Mergesort (Parallel)", runName = "Mergesort (Parallel)")
+@SortMeta(name = "Parallel Merge", unreasonableLimit = 4096)
 public final class MergeSortParallel extends Sort {
 	public MergeSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
@@ -45,6 +45,7 @@ public final class MergeSortParallel extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			MergeSortParallel.this.mergeSort(a, b);
 		}

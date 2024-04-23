@@ -2,7 +2,6 @@ package io.github.arrayv.sorts.insert;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.PriorityQueue;
 
 import io.github.arrayv.main.ArrayVisualizer;
@@ -21,7 +20,7 @@ import io.github.arrayv.utils.ArrayVList;
   Free Documentation License".
  *
  */
-@SortMeta(listName = "Patience", showcaseName = "Patience Sort", runName = "Patience Sort")
+@SortMeta(name = "Patience")
 public final class PatienceSort extends Sort {
 	public PatienceSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

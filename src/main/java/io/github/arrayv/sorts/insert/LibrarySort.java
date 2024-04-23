@@ -32,7 +32,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Library", showcaseName = "Library Sort", runName = "Library Sort")
+@SortMeta(name = "Library")
 public final class LibrarySort extends Sort {
 	public LibrarySort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

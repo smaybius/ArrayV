@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(listName = "Quicksort (Left/Right, Parallel)", showcaseName = "Quicksort (Left/Right, Parallel)", runName = "Quicksort (Left/Right, Parallel)")
+@SortMeta(listName = "Quick (Parallel, Left/Right)", runName = "Parallel Quick Sort, Left/Right Pointers", unreasonableLimit = 4096)
 public final class LRQuickSortParallel extends Sort {
 	public LRQuickSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
@@ -20,6 +20,7 @@ public final class LRQuickSortParallel extends Sort {
 			this.r = r;
 		}
 
+		@Override
 		public void run() {
 			LRQuickSortParallel.this.quickSort(p, r);
 		}

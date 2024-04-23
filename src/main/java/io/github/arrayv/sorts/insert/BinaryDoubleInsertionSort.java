@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Binary Double Insertion", showcaseName = "Binary Double Insertion Sort", runName = "Binary Double Insertion Sort")
+@SortMeta(name = "Binary Double Insertion")
 public final class BinaryDoubleInsertionSort extends Sort {
 	public BinaryDoubleInsertionSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

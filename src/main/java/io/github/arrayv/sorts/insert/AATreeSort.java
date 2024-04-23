@@ -9,7 +9,7 @@ import io.github.arrayv.sorts.templates.Sort;
  *
  * @author Sam Walko (Anonymous0726)
  */
-@SortMeta(listName = "Tree (AA)", showcaseName = "Tree Sort (AA Balanced)", runName = "Tree Sort (AA Balanced)")
+@SortMeta(listName = "Tree (AA)", runName = "AA-Balanced Tree Sort")
 public final class AATreeSort extends Sort {
 	public AATreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

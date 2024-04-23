@@ -34,7 +34,7 @@ import io.github.arrayv.sorts.templates.QuadSorting;
 /*
 	fluxsort 1.1.3.3
 */
-@SortMeta(listName = "Flux", showcaseName = "Flux Sort", runName = "Flux Sort")
+@SortMeta(name = "Flux")
 public final class FluxSort extends QuadSorting {
 	public FluxSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

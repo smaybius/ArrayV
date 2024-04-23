@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Cocktail Shaker", showcaseName = "Cocktail Shaker Sort", runName = "Cocktail Shaker Sort")
+@SortMeta(name = "Cocktail Shaker")
 public final class CocktailShakerSort extends Sort {
     public CocktailShakerSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

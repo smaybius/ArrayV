@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Library (Simplified)", showcaseName = "Library Sort (Simplified)", runName = "Library Sort (Simplified)")
+@SortMeta(name = "Simplified Library")
 public final class SimplifiedLibrarySort extends Sort {
 	public SimplifiedLibrarySort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

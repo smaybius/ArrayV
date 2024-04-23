@@ -28,7 +28,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-@SortMeta(listName = "Complete Graph", showcaseName = "Complete Graph Sort", runName = "Complete Graph Sort")
+@SortMeta(listName = "Complete Graph", runName = "Complete Graph Sorting Network")
 public final class CompleteGraphSort extends Sort {
 	public CompleteGraphSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

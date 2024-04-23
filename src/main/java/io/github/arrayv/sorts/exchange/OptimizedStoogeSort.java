@@ -6,7 +6,7 @@ import io.github.arrayv.sorts.templates.Sort;
 
 // Code refactored from: https://www.ijitee.org/wp-content/uploads/papers/v8i12/L31671081219.pdf
 // Written by Professors Amit Kishor and Pankaj Pratap Singh
-@SortMeta(listName = "Optimized Stooge (Kishor-Singh)", showcaseName = "Optimized Stooge (Kishor-Singh) Sort", runName = "Optimized Stooge (Kishor-Singh) Sort")
+@SortMeta(listName = "Optimized Stooge (Kishor-Singh)", runName = "Optimized Stooge Sort (Kishor-Singh)")
 public final class OptimizedStoogeSort extends Sort {
     public OptimizedStoogeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

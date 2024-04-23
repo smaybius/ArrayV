@@ -28,7 +28,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-@SortMeta(listName = "Hybrid Comb", showcaseName = "Hybrid Comb Sort", runName = "Hybrid Comb Sort")
+@SortMeta(name = "Hybrid Comb", question = "Enter shrink factor (input/100):", defaultAnswer = 130)
 public final class HybridCombSort extends CombSorting {
     public HybridCombSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
@@ -36,6 +36,6 @@ public final class HybridCombSort extends CombSorting {
 
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.combSort(array, currentLength, 1.3, true);
+        this.combSort(array, currentLength, bucketCount / 100d, true);
     }
 }

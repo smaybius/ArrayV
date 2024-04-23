@@ -21,7 +21,7 @@ applications, and to alter it and redistribute it freely, subject to the followi
 3. This notice may not be removed or altered from any source distribution.
  *
  */
-@SortMeta(listName = "Pattern-Defeating Quick", showcaseName = "Pattern-Defeating Quick Sort", runName = "Pattern-Defeating Quick Sort")
+@SortMeta(name = "Pattern-Defeating Quick")
 public final class PDQBranchedSort extends PDQSorting {
     public PDQBranchedSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

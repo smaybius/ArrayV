@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Asynchronous", showcaseName = "Asynchronous Sort", runName = "Asynchronous Sort")
+@SortMeta(name = "Asynchronous")
 public final class AsynchronousSort extends Sort {
     public AsynchronousSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

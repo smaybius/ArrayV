@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-@SortMeta(listName = "Recursive Shell", showcaseName = "Recursive Shell Sort", runName = "Recursive Shell Sort")
+@SortMeta(name = "Recursive Shell")
 public final class RecursiveShellSort extends Sort {
     public RecursiveShellSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

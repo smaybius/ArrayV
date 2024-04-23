@@ -1,7 +1,5 @@
 package io.github.arrayv.sorts.templates;
 
-import java.util.ArrayList;
-
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.utils.ArrayVList;
 

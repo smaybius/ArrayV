@@ -10,7 +10,7 @@ import io.github.arrayv.sorts.templates.Sort;
  *
  * @author Sam Walko (Anonymous0726)
  */
-@SortMeta(listName = "Tree (Unbalanced)", showcaseName = "Tree Sort (Unbalanced)", runName = "Tree Sort (Unbalanced)")
+@SortMeta(listName = "Tree (Unbalanced)", runName = "Unbalanced Tree Sort")
 public final class TreeSort extends Sort {
 	public TreeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

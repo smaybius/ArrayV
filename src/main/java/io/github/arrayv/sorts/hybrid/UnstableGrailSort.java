@@ -47,7 +47,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /* use GrailSortWithDynBuffer()                          */
 /*                                                       */
 /*********************************************************/
-@SortMeta(listName = "Unstable Grail", showcaseName = "Unstable Grail Sort", runName = "Unstable Grail Sort")
+@SortMeta(name = "Unstable Grail")
 public final class UnstableGrailSort extends UnstableGrailSorting {
     public UnstableGrailSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

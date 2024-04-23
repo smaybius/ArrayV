@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Tournament (Classic)", showcaseName = "Tournament Sort (Classic)", runName = "Tournament Sort (Classic)")
+@SortMeta(name = "Classic Tournament")
 public final class ClassicTournamentSort extends Sort {
 	public ClassicTournamentSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

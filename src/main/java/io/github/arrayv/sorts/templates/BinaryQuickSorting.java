@@ -51,20 +51,14 @@ public abstract class BinaryQuickSorting extends Sort {
     public void binaryQuickSort(int[] array, int p, int r, int bit) {
         Queue<Task> tasks = new LinkedList<>();
         tasks.add(new Task(p, r, bit));
-        Writes.changeAuxWrites(1);
-        Writes.changeAllocAmount(1);
 
         while (tasks.isEmpty() == false) {
             Task task = tasks.remove();
-            Writes.changeAuxWrites(1);
-            Writes.changeAllocAmount(-1);
             if (task.p < task.r && task.bit >= 0) {
                 int q = partition(array, task.p, task.r, task.bit);
                 Delays.sleep(1);
                 tasks.add(new Task(task.p, q, task.bit - 1));
                 tasks.add(new Task(q + 1, task.r, task.bit - 1));
-                Writes.changeAuxWrites(2);
-                Writes.changeAllocAmount(2);
             }
         }
     }

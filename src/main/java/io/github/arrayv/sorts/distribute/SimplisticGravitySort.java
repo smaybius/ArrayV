@@ -4,8 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
-// Author: McDude_73
-@SortMeta(listName = "Simplistic Gravity", showcaseName = "Simplistic Gravity Sort", runName = "Simplistic Gravity Sort")
+@SortMeta(name = "Simplistic Gravity")
 public final class SimplisticGravitySort extends Sort {
 
 	public SimplisticGravitySort(ArrayVisualizer arrayVisualizer) {

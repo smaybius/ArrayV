@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Circloid", showcaseName = "Circloid Sort", runName = "Circloid Sort")
+@SortMeta(name = "Circloid")
 public final class CircloidSort extends Sort {
     public CircloidSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
