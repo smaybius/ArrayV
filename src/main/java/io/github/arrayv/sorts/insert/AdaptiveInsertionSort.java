@@ -1,30 +1,24 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
+@SortMeta(name = "Adaptive Insertion")
 final public class AdaptiveInsertionSort extends Sort {
     public AdaptiveInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Adaptive Insertion");
-        this.setRunAllSortsName("Adaptive Insertion Sort");
-        this.setRunSortName("Adaptive Insertsort");
-        this.setCategory("Insertion Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private int findRun(int[] array, int a, int b, double sleep, boolean auxwrite) {
         int i = a + 1;
-        if(Reads.compareIndices(array, i - 1, i++, sleep, true) == 1) {
-            while(i < b && Reads.compareIndices(array, i - 1, i, sleep, true) == 1) i++;
+        if (Reads.compareIndices(array, i - 1, i++, sleep, true) == 1) {
+            while (i < b && Reads.compareIndices(array, i - 1, i, sleep, true) == 1)
+                i++;
             Writes.reversal(array, a, i - 1, sleep, true, false);
-        }
-        else while(i < b && Reads.compareIndices(array, i - 1, i, sleep, true) <= 0) i++;
+        } else
+            while (i < b && Reads.compareIndices(array, i - 1, i, sleep, true) <= 0)
+                i++;
         Highlights.clearMark(2);
         return i;
     }
@@ -47,7 +41,7 @@ final public class AdaptiveInsertionSort extends Sort {
             mini--;
         }
         --a;
-        while(mini > a && Reads.compareValues(array[mini], minv) > 0) {
+        while (mini > a && Reads.compareValues(array[mini], minv) > 0) {
             Writes.write(array, mini + 1, array[mini], sleep, true, auxwrite);
             mini--;
         }
@@ -58,10 +52,10 @@ final public class AdaptiveInsertionSort extends Sort {
         int i = findRun(array, a, b, sleep, auxwrite);
         if (i < b) {
             moveFront(array, a, i++, b, sleep, auxwrite);
-            while(i < b) {
+            while (i < b) {
                 int current = array[i];
                 int pos = i - 1;
-                while(Reads.compareValues(array[pos], current) > 0) {
+                while (Reads.compareValues(array[pos], current) > 0) {
                     Writes.write(array, pos + 1, array[pos], sleep, true, auxwrite);
                     pos--;
                 }

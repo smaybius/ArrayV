@@ -1,25 +1,18 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.GrailSorting;
 
+@SortMeta(name = "Quick Sandpaper")
 final public class QuickSPSort extends GrailSorting {
     public QuickSPSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Quick Sandpaper");
-        this.setRunAllSortsName("Quick Sandpaper Sort");
-        this.setRunSortName("Quick Sandpapersort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void compSwap(int[] array, int a, int b) {
-        a--; b--;
+        a--;
+        b--;
         if (Reads.compareIndices(array, a, b, 0.0125, true) > 0) {
             Writes.swap(array, a, b, 0.0125, true, false);
         }
@@ -37,10 +30,9 @@ final public class QuickSPSort extends GrailSorting {
                     compSwap(array, i, j);
                 }
             }
-        }
-        else {
+        } else {
             int rb, min, j;
-            rb = l + (int)Math.ceil(Math.sqrt(1 + (r - l)));
+            rb = l + (int) Math.ceil(Math.sqrt(1 + (r - l)));
             for (int i = l; i <= rb; i++) {
                 for (j = i; j <= r; j++) {
                     compSwap(array, i, j);

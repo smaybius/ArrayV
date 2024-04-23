@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,25 +29,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Bidirectional Insertion")
 final public class BidirectionalInsertionSort extends Sort {
     public BidirectionalInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Bidirectional Insertion");
-        this.setRunAllSortsName("Bidirectional Insertion Sort");
-        this.setRunSortName("Bidirectional Insertsort");
-        this.setCategory("Insertion Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     protected void insertFw(int[] array, int i, int current, double sleep, boolean auxwrite) {
         int pos = i - 1;
-        while(Reads.compareValues(array[pos], current) > 0){
+        while (Reads.compareValues(array[pos], current) > 0) {
             Writes.write(array, pos + 1, array[pos], sleep, true, auxwrite);
             pos--;
         }
@@ -55,7 +46,7 @@ final public class BidirectionalInsertionSort extends Sort {
 
     protected void insertBw(int[] array, int i, int current, double sleep, boolean auxwrite) {
         int pos = i - 1;
-        while(Reads.compareValues(array[pos], current) <= 0){
+        while (Reads.compareValues(array[pos], current) <= 0) {
             Writes.write(array, pos + 1, array[pos], sleep, true, auxwrite);
             pos--;
         }

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.merge.BlockSwapMergeSort;
 import io.github.arrayv.sorts.templates.Sort;
@@ -30,23 +31,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Quarter Merge")
 final public class QuarterMergeSort extends Sort {
     private BinaryInsertionSort binaryInserter;
     private BlockSwapMergeSort finalMerger;
 
     public QuarterMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Quarter Merge");
-        this.setRunAllSortsName("Quarter Merge Sort");
-        this.setRunSortName("Quarter Mergesort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void blockSwap(int[] array, int a, int b, int size) {
@@ -64,8 +55,7 @@ final public class QuarterMergeSort extends Sort {
         while (left < right && right < end) {
             if (Reads.compareIndices(array, bufferPointer, right, 0.5, true) <= 0) {
                 Writes.swap(array, bufferPointer++, left++, 0.5, true, false);
-            }
-            else {
+            } else {
                 Writes.swap(array, left++, right++, 0.5, true, false);
             }
         }
@@ -77,7 +67,8 @@ final public class QuarterMergeSort extends Sort {
 
     private int pow2lte(int value) {
         int val;
-        for (val = 1; val <= value; val <<= 1);
+        for (val = 1; val <= value; val <<= 1)
+            ;
         return val >> 1;
     }
 

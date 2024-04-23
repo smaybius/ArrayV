@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -12,21 +13,13 @@ CODED FOR ARRAYV BY PCBOYGAMES
 ------------------------------
 
 */
+@SortMeta(name = "Transpose Modulo Weave Merge")
 final public class TransposeModuloWeaveMergeSort extends Sort {
 
     QuadSort quad = new QuadSort(arrayVisualizer);
 
     public TransposeModuloWeaveMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-        this.setSortListName("Transpose by Modulo Weave Merge");
-        this.setRunAllSortsName("Transpose by Modulo Weave Merge Sort");
-        this.setRunSortName("Transpose by Modulo Weave Mergesort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     protected void weave(int[] array, int[] pieces, int start, int len, int base) {
@@ -50,7 +43,8 @@ final public class TransposeModuloWeaveMergeSort extends Sort {
             Highlights.markArray(1, left);
             Highlights.markArray(2, right);
             Delays.sleep(0.25);
-            if (Reads.compareValues(array[left], array[right]) > 0) Writes.swap(array, left, right, 0.25, true, false);
+            if (Reads.compareValues(array[left], array[right]) > 0)
+                Writes.swap(array, left, right, 0.25, true, false);
             left++;
             right--;
         }
@@ -88,15 +82,18 @@ final public class TransposeModuloWeaveMergeSort extends Sort {
                     Highlights.markArray(1, index);
                     Highlights.markArray(2, index + 1);
                     Delays.sleep(0.25);
-                    if (Reads.compareValues(array[index], array[index + 1]) > 0) Writes.swap(array, index, index + 1, 0.25, true, false);
-                }
-                else method(array, index, len);
+                    if (Reads.compareValues(array[index], array[index + 1]) > 0)
+                        Writes.swap(array, index, index + 1, 0.25, true, false);
+                } else
+                    method(array, index, len);
                 Highlights.clearAllMarks();
                 index += len;
             }
             len *= 2;
         }
-        if (len == currentLength) method(array, 0, currentLength);
-        else quad.runSort(array, currentLength, 0);
+        if (len == currentLength)
+            method(array, 0, currentLength);
+        else
+            quad.runSort(array, currentLength, 0);
     }
 }

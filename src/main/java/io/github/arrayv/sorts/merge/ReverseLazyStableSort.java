@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.merge;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -28,23 +29,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Reverse Lazy Stable")
 final public class ReverseLazyStableSort extends Sort {
     private double sleep = 0.5;
     private boolean auxarr = false;
 
     public ReverseLazyStableSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Reverse Lazy Stable");
-        this.setRunAllSortsName("Reverse Lazy Stable Sort");
-        this.setRunSortName("Reverse Lazy Stable Sort");
-        this.setCategory("Merge Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void rotateLeft(int[] array, int start, int dest, int size) {
@@ -62,8 +53,7 @@ final public class ReverseLazyStableSort extends Sort {
                 rotateSmart(array, start, dest, size / 2);
                 rotateSmart(array, start + size / 2, dest + size / 2, size - (size / 2));
             }
-        }
-        else {
+        } else {
             int tmp = array[start];
             for (int i = start; i > dest; i--) {
                 Writes.write(array, i, array[i - 1], sleep, !auxarr, auxarr);
@@ -85,8 +75,7 @@ final public class ReverseLazyStableSort extends Sort {
                 moved += size;
             }
             Highlights.clearMark(2);
-        }
-        else {
+        } else {
             int tmp = array[start];
             for (int i = start; i < dest; i++) {
                 Writes.write(array, i, array[i + 1], sleep, !auxarr, auxarr);
@@ -117,8 +106,7 @@ final public class ReverseLazyStableSort extends Sort {
         this.auxarr = auxWrite;
         if (start > dest) {
             this.rotateSmart(array, start, dest, size);
-        }
-        else {
+        } else {
             this.rotateSmart(array, start + size, start, dest - (start + size));
         }
         this.sleep = tsleep;
@@ -137,10 +125,10 @@ final public class ReverseLazyStableSort extends Sort {
 
             Delays.sleep(0.2);
 
-            if (Reads.compareValues(num, array[mid]) < 0) { // do NOT move equal elements to right of inserted element; this maintains stability!
+            if (Reads.compareValues(num, array[mid]) < 0) { // do NOT move equal elements to right of inserted element;
+                                                            // this maintains stability!
                 hi = mid;
-            }
-            else {
+            } else {
                 lo = mid + 1;
             }
         }
@@ -158,13 +146,14 @@ final public class ReverseLazyStableSort extends Sort {
             if (Reads.compareIndices(array, start, mid, 0.2, true) == -1) {
                 start++;
                 // if (Reads.compareIndices(array, start, mid, 0.2, true) == -1) {
-                //     start = binSearch(array, start + 1, mid, array[mid]);
+                // start = binSearch(array, start + 1, mid, array[mid]);
                 // }
                 int i;
                 for (i = 0; i < binSearchThreshold; i++) {
                     if (Reads.compareIndices(array, start, mid, 0.2, true) == -1)
                         start++;
-                    else break;
+                    else
+                        break;
                 }
                 if (i == binSearchThreshold) {
                     start = binSearch(array, start, mid, array[mid]);

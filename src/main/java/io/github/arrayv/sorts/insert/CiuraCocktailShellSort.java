@@ -1,13 +1,14 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
  * @author fungamer2
  *
  */
-
+@SortMeta(name = "Cocktail Shell (Ciura Gaps)")
 public final class CiuraCocktailShellSort extends Sort {
 
     /**
@@ -15,24 +16,15 @@ public final class CiuraCocktailShellSort extends Sort {
      */
     public CiuraCocktailShellSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-        this.setSortListName("Cocktail Shell (Ciura Gaps)");
-        this.setRunAllSortsName("Cocktail Shell Sort (Ciura Gaps)");
-        this.setRunSortName("Cocktail Shellsort (Ciura Gaps)");
-        this.setCategory("Insertion Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
-    int[] gaps = {1, 4, 10, 23, 57, 132, 301, 701};
+    int[] gaps = { 1, 4, 10, 23, 57, 132, 301, 701 };
 
     private int ciura(int n) {
         if (n <= gaps.length) {
             return gaps[n - 1];
         }
-        return (int)Math.pow(2.25, n);
+        return (int) Math.pow(2.25, n);
     }
 
     @Override

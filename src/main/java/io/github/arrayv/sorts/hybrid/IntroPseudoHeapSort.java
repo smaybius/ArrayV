@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
@@ -8,20 +9,11 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author mingyue12
  *
  */
+@SortMeta(name = "Pseudo-Heap (Introspective)")
 public final class IntroPseudoHeapSort extends Sort {
-
 
 	public IntroPseudoHeapSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
-		setSortListName("Iterative Intro Pseudo-Heap");
-		setRunAllSortsName("Iterative Introspective Pseudo-Heap Sort");
-		setRunSortName("Iterative Introspective Pseudo-Heapsort");
-		setCategory("Hybrid Sorts");
-		setBucketSort(false);
-		setRadixSort(false);
-		setUnreasonablySlow(false);
-		setUnreasonableLimit(0);
-		setBogoSort(false);
 
 	}
 
@@ -50,20 +42,21 @@ public final class IntroPseudoHeapSort extends Sort {
 
 	@Override
 	public void runSort(int[] array, int length, int bucketCount) {
-    	int threshold = 0, n = 1;
-    	for(; n < length; n*=2, threshold++);
+		int threshold = 0, n = 1;
+		for (; n < length; n *= 2, threshold++)
+			;
 
 		threshold /= 2;
-        int iterations = 0;
+		int iterations = 0;
 		boolean swapped = true;
 		while (swapped) {
 			swapped = false;
 			iterations++;
-            if(iterations >= threshold) {
-            	InsertionSort ins = new InsertionSort(arrayVisualizer);
-            	ins.customInsertSort(array, 0, length, 0.5, false);
-            	break;
-            }
+			if (iterations >= threshold) {
+				InsertionSort ins = new InsertionSort(arrayVisualizer);
+				ins.customInsertSort(array, 0, length, 0.5, false);
+				break;
+			}
 			for (int i = length - 2; i >= 0; i--) {
 				if (sift(array, i, length))
 					swapped = true;

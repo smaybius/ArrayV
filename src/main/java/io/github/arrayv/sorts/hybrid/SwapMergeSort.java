@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.BinaryInsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
@@ -29,22 +30,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Swap Merge")
 final public class SwapMergeSort extends Sort {
     private BinaryInsertionSort binaryInserter;
 
     public SwapMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("SwapMerge");
-        this.setRunAllSortsName("SwapMerge Sort");
-        this.setRunSortName("SwapMergeSort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void moveDown(int[] array, int start, int dest) {
@@ -60,11 +51,9 @@ final public class SwapMergeSort extends Sort {
         while (left < right) {
             if (left >= end || right >= end) {
                 break;
-            }
-            else if (Reads.compareValues(array[left], array[right]) <= 0) {
+            } else if (Reads.compareValues(array[left], array[right]) <= 0) {
                 left += 1;
-            }
-            else {
+            } else {
                 moveDown(array, right, left);
                 left += 1;
                 right += 1;
@@ -73,18 +62,17 @@ final public class SwapMergeSort extends Sort {
     }
 
     private void mergeRun(int[] array, int start, int mid, int end) {
-        if(start == mid) return;
-
-        mergeRun(array, start, (mid+start)/2, mid);
-        mergeRun(array, mid, (mid+end)/2, end);
-
-        if(end - start < 32) {
+        if (start == mid)
             return;
-        }
-        else if(end - start == 32) {
+
+        mergeRun(array, start, (mid + start) / 2, mid);
+        mergeRun(array, mid, (mid + end) / 2, end);
+
+        if (end - start < 32) {
+            return;
+        } else if (end - start == 32) {
             binaryInserter.customBinaryInsert(array, start, Math.min(array.length, end + 1), 0.333);
-        }
-        else {
+        } else {
             merge(array, start, mid, end);
         }
     }
@@ -93,7 +81,7 @@ final public class SwapMergeSort extends Sort {
     public void runSort(int[] array, int length, int bucketCount) {
         binaryInserter = new BinaryInsertionSort(arrayVisualizer);
 
-        if(length < 32) {
+        if (length < 32) {
             binaryInserter.customBinaryInsert(array, 0, length, 0.333);
             return;
         }

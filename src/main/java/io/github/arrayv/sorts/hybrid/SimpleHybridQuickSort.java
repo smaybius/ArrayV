@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.select.MaxHeapSort;
 import io.github.arrayv.sorts.templates.Sort;
@@ -9,19 +10,11 @@ import io.github.arrayv.sorts.templates.Sort;
  * @author Ayako-chan
  *
  */
+@SortMeta(name = "Simple Hybrid Quick")
 public final class SimpleHybridQuickSort extends Sort {
 
     public SimpleHybridQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-        setSortListName("Simple Hybrid Quick");
-        setRunAllSortsName("Simple Hybrid Quick Sort");
-        setRunSortName("Simple Hybrid Quicksort");
-        setCategory("Hybrid Sorts");
-        setBucketSort(false);
-        setRadixSort(false);
-        setUnreasonablySlow(false);
-        setUnreasonableLimit(0);
-        setBogoSort(false);
     }
 
     MaxHeapSort heapSorter;

@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.merge.BlockSwapMergeSort;
 import io.github.arrayv.sorts.merge.ReverseLazyStableSort;
 import io.github.arrayv.sorts.templates.Sort;
@@ -30,7 +31,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Quarter Merge (Stable)")
 final public class StableQuarterMergeSort extends Sort {
     ReverseLazyStableSort rotater;
     QuarterMergeSort sort;
@@ -38,16 +39,6 @@ final public class StableQuarterMergeSort extends Sort {
 
     public StableQuarterMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Stable Quarter Merge");
-        this.setRunAllSortsName("Stable Quarter Merge Sort");
-        this.setRunSortName("Stable Quarter Mergesort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(true);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private int ejectDuplicates(int[] array, int start, int mid, int end) {
@@ -74,12 +65,10 @@ final public class StableQuarterMergeSort extends Sort {
 
                 if (comp < 0) {
                     h = m;
-                }
-                else if (comp == 0) {
+                } else if (comp == 0) {
                     badCount++;
                     break;
-                }
-                else {
+                } else {
                     l = m + 1;
                 }
             }
@@ -106,8 +95,7 @@ final public class StableQuarterMergeSort extends Sort {
             // item has to go into position lo
             int j = compindex - 1;
 
-            while (j >= l)
-            {
+            while (j >= l) {
                 Writes.write(array, j + 1, array[j], 0.1, true, false);
                 j--;
             }

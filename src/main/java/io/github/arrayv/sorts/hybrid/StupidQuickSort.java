@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.insert.InsertionSort;
 import io.github.arrayv.sorts.templates.Sort;
 
@@ -25,40 +26,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Stupid Quick")
 final public class StupidQuickSort extends Sort {
 
-    public StupidQuickSort(ArrayVisualizer arrayVisualizer)  {
+    public StupidQuickSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Stupid Quick");
-        this.setRunAllSortsName("Stupid Quick Sort");
-        this.setRunSortName("Stupid Quicksort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        int times = (int)Math.sqrt(length);
+        int times = (int) Math.sqrt(length);
         for (int count = 0; count < times; count++) {
             int i = 0;
             int j = length - 1;
 
-            int pivotPos = (int)(Math.random() * length);
+            int pivotPos = (int) (Math.random() * length);
             int pivot = array[pivotPos];
 
             while (i < j) {
-                while (Reads.compareValues(array[i], pivot) == -1){
+                while (Reads.compareValues(array[i], pivot) == -1) {
                     i++;
                     Highlights.markArray(1, i);
                     Delays.sleep(1);
                 }
-                while (Reads.compareValues(array[j], pivot) == 1){
+                while (Reads.compareValues(array[j], pivot) == 1) {
                     j--;
                     Highlights.markArray(2, j);
                     Delays.sleep(1);
@@ -66,10 +57,10 @@ final public class StupidQuickSort extends Sort {
 
                 if (i < j) {
                     // Follow the pivot and highlight it.
-                    if(i == pivotPos) {
+                    if (i == pivotPos) {
                         Highlights.markArray(3, j);
                     }
-                    if(j == pivotPos) {
+                    if (j == pivotPos) {
                         Highlights.markArray(3, i);
                     }
 

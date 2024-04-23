@@ -4,12 +4,14 @@
 package io.github.arrayv.sorts.insert;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /**
  * @author PiotrGrochowski
  *
  */
+@SortMeta(name = "Adaptive Binary Insertion")
 public final class AdaptiveBinaryInsertionSort extends Sort {
 
     /**
@@ -17,29 +19,20 @@ public final class AdaptiveBinaryInsertionSort extends Sort {
      */
     public AdaptiveBinaryInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-        this.setSortListName("Adaptive Binary Insert");
-        this.setRunAllSortsName("Adaptive Binary Insertion Sort");
-        this.setRunSortName("Adaptive Binary Insertsort");
-        this.setCategory("Insertion Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     protected void abinaryinsert(int[] array, int start, int end, double sleep) {
         int count = 0;
         for (int i = start + 1; i < end; i++) {
             int num = array[i];
-            int v = (2*count / (i - start)) + 1; //I'VE SOLVED IT!!
+            int v = (2 * count / (i - start)) + 1; // I'VE SOLVED IT!!
             int lo = Math.max(i - v, start), hi = i;
-            while ((lo >= start) && (Reads.compareValues(array[lo], num) == 1)){
+            while ((lo >= start) && (Reads.compareValues(array[lo], num) == 1)) {
                 lo -= v;
                 hi -= v;
             }
             lo++;
-            if (lo < start){
+            if (lo < start) {
                 lo = start;
             }
             while (lo < hi) {
@@ -48,10 +41,10 @@ public final class AdaptiveBinaryInsertionSort extends Sort {
 
                 Delays.sleep(sleep);
 
-                if (Reads.compareValues(num, array[mid]) < 0) { // do NOT move equal elements to right of inserted element; this maintains stability!
+                if (Reads.compareValues(num, array[mid]) < 0) { // do NOT move equal elements to right of inserted
+                                                                // element; this maintains stability!
                     hi = mid;
-                }
-                else {
+                } else {
                     lo = mid + 1;
                 }
             }
@@ -61,9 +54,8 @@ public final class AdaptiveBinaryInsertionSort extends Sort {
 
             int j = i - 1;
 
-            if (j >= lo){
-                while (j >= lo)
-                {
+            if (j >= lo) {
+                while (j >= lo) {
                     Writes.write(array, j + 1, array[j], sleep, true, false);
                     j--;
                 }

@@ -3,6 +3,7 @@ package io.github.arrayv.sorts.distribute;
 import java.util.ArrayList;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.ArrayVList;
 
@@ -31,21 +32,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+@SortMeta(name = "Divisor")
 final public class DivisorSort extends Sort {
     public DivisorSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("Divisor");
-        // this.setRunAllID("Most Significant Digit Radix Sort");
-        this.setRunAllSortsName("Divisor Sort");
-        this.setRunSortName("Divisor Sort");
-        this.setCategory("Distribution Sorts");
-        this.setBucketSort(true);
-        this.setRadixSort(true);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private void safePush(ArrayList<ArrayVList> aList, int index, int value) {
