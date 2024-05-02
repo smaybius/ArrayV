@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "American Flag (Stackless)", showcaseName = "American Flag Sort (Stackless)", runName = "American Flag Sort (Stackless)", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
+@SortMeta(listName = "American Flag (Stackless)", runName = "American Flag Sort (Stackless)", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
 public final class StacklessAmericanFlagSort extends Sort {
 	public StacklessAmericanFlagSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

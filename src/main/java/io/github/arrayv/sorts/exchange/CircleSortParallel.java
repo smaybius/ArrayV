@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Circle (Parallel)", showcaseName = "Circlesort (Parallel)", runName = "Circlesort (Parallel)", unreasonableLimit = 4096)
+@SortMeta(listName = "Circle (Parallel)", runName = "Circlesort (Parallel)", unreasonableLimit = 4096)
 final public class CircleSortParallel extends ParallelCircleSorting {
 	public CircleSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

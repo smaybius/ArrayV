@@ -15,7 +15,7 @@ Texts.  A copy of the license is included in the section entitled "GNU
 Free Documentation License".
  *
  */
-@SortMeta(listName = "Circle (Iterative)", showcaseName = "Circlesort (Iterative)", runName = "Circlesort (Iterative)")
+@SortMeta(listName = "Circle (Iterative)", runName = "Circle Sort (Iterative)")
 public final class CircleSortIterative extends IterativeCircleSorting {
     public CircleSortIterative(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

@@ -32,7 +32,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Bufffer Partition Merge", showcaseName = "Bufffer Partition Merge Sort", runName = "Bufffer Partition Merge Sort")
+@SortMeta(listName = "Bufffer Partition Merge", runName = "Bufffer Partition Merge Sort")
 public final class BufferPartitionMergeSort extends Sort {
 	public BufferPartitionMergeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

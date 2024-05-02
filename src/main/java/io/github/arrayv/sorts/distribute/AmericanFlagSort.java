@@ -43,7 +43,7 @@ limitations under the License.
  * <br>
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-@SortMeta(listName = "American Flag", showcaseName = "American Flag Sort", runName = "American Flag Sort", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
+@SortMeta(listName = "American Flag", runName = "American Flag Sort", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
 public final class AmericanFlagSort extends Sort {
     private int NUMBER_OF_BUCKETS = 128; // ex. 10 for base 10 numbers
 

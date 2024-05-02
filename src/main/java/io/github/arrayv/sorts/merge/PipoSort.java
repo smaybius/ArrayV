@@ -39,48 +39,49 @@ public class PipoSort extends Sort {
     }
 
     void branchless_oddeven_sort(int[] array, int start, int nmemb) {
-        int swap;
-        int pta, pte;
-        int w = 1, x, y, z = 1;
+        int swap, pta, pte;
+        int w = 1;
+        boolean z = true, x, y;
 
         switch (nmemb) {
             default:
-                pte = nmemb - 3;
+                pte = start + nmemb - 3;
                 do {
-                    pta = pte + (z = z == 0 ? 1 : 0);
-
+                    z = !z;
+                    pta = pte + (!z ? 1 : 0);
                     do {
-                        x = Reads.compareValues(array[pta], array[pta + 1]) > 0 ? 1 : 0;
-                        y = x == 0 ? 1 : 0;
-                        swap = array[pta + y];
-                        Writes.write(array, pta, pta + x, 1, true, false);
+                        x = Reads.compareIndices(array, pta, pta + 1, 1, true) > 0;
+                        y = !x;
+                        swap = array[pta + (y == true ? 1 : 0)];
+                        Writes.write(array, pta, array[pta + (x == true ? 1 : 0)], 1, true, false);
                         Writes.write(array, pta + 1, swap, 1, true, false);
                         pta -= 2;
-                        w |= x;
+                        w |= (x == true ? 1 : 0);
                     } while (pta >= start);
                 } while (w-- > 0 && --nmemb > 0);
                 return;
             case 3:
                 pta = start;
-                x = Reads.compareValues(array[pta], array[pta + 1]) > 0 ? 1 : 0;
-                y = x == 0 ? 1 : 0;
-                swap = array[pta + y];
-                Writes.write(array, pta, array[pta + x], 1, true, false);
+                x = Reads.compareIndices(array, pta, pta + 1, 1, true) > 0;
+                y = !x;
+                swap = array[pta + (y == true ? 1 : 0)];
+                Writes.write(array, pta, array[pta + (x == true ? 1 : 0)], 1, true, false);
                 Writes.write(array, pta + 1, swap, 1, true, false);
                 pta++;
-                x = Reads.compareValues(array[pta], array[pta + 1]) > 0 ? 1 : 0;
-                y = x == 0 ? 1 : 0;
-                swap = array[pta + y];
-                Writes.write(array, pta, array[pta + x], 1, true, false);
+
+                x = Reads.compareIndices(array, pta, pta + 1, 1, true) > 0;
+                y = !x;
+                swap = array[pta + (y == true ? 1 : 0)];
+                Writes.write(array, pta, array[pta + (x == true ? 1 : 0)], 1, true, false);
                 Writes.write(array, pta + 1, swap, 1, true, false);
-                if (x == 0)
+                if (x == false)
                     return;
             case 2:
                 pta = start;
-                x = Reads.compareValues(array[pta], array[pta + 1]) > 0 ? 1 : 0;
-                y = x == 0 ? 1 : 0;
-                swap = array[pta + y];
-                Writes.write(array, pta, array[pta + x], 1, true, false);
+                x = Reads.compareIndices(array, pta, pta + 1, 1, true) > 0;
+                y = !x;
+                swap = array[pta + (y == true ? 1 : 0)];
+                Writes.write(array, pta, array[pta + (x == true ? 1 : 0)], 1, true, false);
                 Writes.write(array, pta + 1, swap, 1, true, false);
             case 1:
             case 0:
@@ -88,48 +89,47 @@ public class PipoSort extends Sort {
         }
     }
 
-    void oddeven_parity_merge(int[] from, int start, int[] dest, int deststart, int left, int right) {
-        int ptl, ptr, tpl, tpr, tpd, ptd;
-        int x;
+    // aux means that from is aux and dest is main
+    void oddeven_parity_merge(int[] from, int[] dest, int start, int dest_start, int left, int right, boolean aux) {
+        boolean x;
+        int ptl = start, ptr = start + left, ptd = dest_start;
+        int tpl = start + left - 1, tpr = start + left + right - 1, tpd = dest_start + left + right - 1;
 
-        ptl = start;
-        ptr = start + left;
-        ptd = deststart;
-        tpl = start + left - 1;
-        tpr = start + left + right - 1;
-        tpd = deststart + left + right - 1;
-
-        if (left < right) {
-            dest[ptd++] = Reads.compareValues(from[ptl], from[ptr]) <= 0 ? from[ptl++] : from[ptr++];
-        }
+        if (left < right)
+            Writes.write(dest, ptd++, Reads.compareIndices(from, ptl, ptr, 1, !aux) <= 0 ? from[ptl++] : from[ptr++], 1,
+                    aux, !aux);// shan't highlight aux
 
         while (--left > 0) {
-            x = Reads.compareValues(from[ptl], from[ptr]) <= 0 ? 1 : 0;
-            dest[ptd] = from[ptl];
-            ptl += x;
-            dest[ptd + x] = from[ptr];
-            ptr += x == 0 ? 1 : 0;
+            Highlights.clearAllMarks();
+            x = Reads.compareIndices(from, ptl, ptr, 1, !aux) <= 0;
+            Writes.write(dest, ptd, from[ptl], 0.25, aux, !aux);
+            ptl += x ? 1 : 0;
+            Writes.write(dest, ptd + (x ? 1 : 0), from[ptr], 0.25, aux, !aux);
+            ptr += !x ? 1 : 0;
             ptd++;
-            x = Reads.compareValues(from[tpl], from[tpr]) <= 0 ? 1 : 0;
-            dest[tpd] = from[tpl];
-            tpl -= x == 0 ? 1 : 0;
+
+            x = Reads.compareIndices(from, tpl, tpr, 1, !aux) <= 0;
+            Writes.write(dest, tpd, from[tpl], 0.25, aux, !aux);
+            tpl -= !x ? 1 : 0;
             tpd--;
-            dest[tpd + x] = from[tpr];
-            tpr -= x;
+            Writes.write(dest, tpd + (x ? 1 : 0), from[tpr], 0.25, aux, !aux);
+            tpr -= x ? 1 : 0;
         }
-        dest[tpd] = Reads.compareValues(from[tpl], from[tpr]) > 0 ? from[tpl] : from[tpr];
-        dest[ptd] = Reads.compareValues(from[ptl], from[ptr]) <= 0 ? from[ptl] : from[ptr];
+        Writes.write(dest, tpd, Reads.compareIndices(from, tpl, tpr, 1, !aux) > 0 ? from[tpl] : from[tpr], 1, aux,
+                !aux);
+        Writes.write(dest, ptd, Reads.compareIndices(from, ptl, ptr, 1, !aux) <= 0 ? from[ptl] : from[ptr], 1, aux,
+                !aux);
     }
 
-    public void auxiliary_rotation(int[] array, int[] swap, int left, int right) {
-        Writes.arraycopy(array, 0, swap, 0, left, 1, true, true);
+    public void auxiliary_rotation(int[] array, int[] swap, int start, int left, int right) {
+        Writes.arraycopy(array, start, swap, 0, left, 0.25, true, true);
 
-        Writes.arraycopy(array, left, array, 0, right, 1, true, false);
+        Writes.arraycopy(array, start + left, array, start, right, 0.25, true, true);
 
-        Writes.arraycopy(swap, 0, array, right, left, 1, true, false);
+        Writes.arraycopy(swap, 0, array, start + right, left, 1, true, false);
     }
 
-    void ping_pong_merge(int[] array, int start, int[] swap, int swapstart, int nmemb) {
+    void ping_pong_merge(int[] array, int start, int[] swap, int nmemb) {
         int quad1, quad2, quad3, quad4, half1, half2;
 
         if (nmemb <= 7) {
@@ -143,35 +143,35 @@ public class PipoSort extends Sort {
         quad3 = half2 / 2;
         quad4 = half2 - quad3;
 
-        ping_pong_merge(array, start, swap, swapstart, quad1);
-        ping_pong_merge(array, start + quad1, swap, swapstart, quad2);
-        ping_pong_merge(array, start + half1, swap, swapstart, quad3);
-        ping_pong_merge(array, start + half1 + quad3, swap, swapstart, quad4);
+        ping_pong_merge(array, start, swap, quad1);
+        ping_pong_merge(array, start + quad1, swap, quad2);
+        ping_pong_merge(array, start + half1, swap, quad3);
+        ping_pong_merge(array, start + half1 + quad3, swap, quad4);
 
-        if (Reads.compareValues(array[quad1 - 1], array[quad1]) <= 0
-                && Reads.compareValues(array[half1 - 1], array[half1]) <= 0
-                && Reads.compareValues(array[half1 + quad3 - 1], array[half1 + quad3]) <= 0) {
+        if (Reads.compareIndices(array, start + quad1 - 1, start + quad1, 1, true) <= 0
+                && Reads.compareIndices(array, start + half1 - 1, start + half1, 1, true) <= 0
+                && Reads.compareIndices(array, start + half1 + quad3 - 1, start + half1 + quad3, 1, true) <= 0) {
             return;
         }
 
-        if (Reads.compareValues(array[start], array[half1 - 1]) > 0
-                && Reads.compareValues(array[quad1], array[half1 + quad3 - 1]) > 0
-                && Reads.compareValues(array[half1], array[nmemb - 1]) > 0) {
-            auxiliary_rotation(array, swap, quad1, quad2 + half2);
-            auxiliary_rotation(array, swap, quad2, half2);
-            auxiliary_rotation(array, swap, quad3, quad4);
+        if (Reads.compareIndices(array, start, start + half1 - 1, 1, true) > 0
+                && Reads.compareIndices(array, start + quad1, start + half1 + quad3 - 1, 1, true) > 0
+                && Reads.compareIndices(array, start + half1, start + nmemb - 1, 1, true) > 0) {
+            auxiliary_rotation(array, swap, start, quad1, quad2 + half2);
+            auxiliary_rotation(array, swap, start, quad2, half2);
+            auxiliary_rotation(array, swap, start, quad3, quad4);
             return;
         }
 
-        oddeven_parity_merge(array, start, swap, swapstart, quad1, quad2);
-        oddeven_parity_merge(array, start + half1, swap, swapstart + half1, quad3, quad4);
-        oddeven_parity_merge(swap, swapstart, array, start, half1, half2);
+        oddeven_parity_merge(array, swap, start, 0, quad1, quad2, false);
+        oddeven_parity_merge(array, swap, start + half1, half1, quad3, quad4, false);
+        oddeven_parity_merge(swap, array, 0, start, half1, half2, true);
     }
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         int[] swap = Writes.createExternalArray(sortLength);
-        ping_pong_merge(array, 0, swap, 0, sortLength);
+        ping_pong_merge(array, 0, swap, sortLength);
         Writes.deleteExternalArray(swap);
     }
 

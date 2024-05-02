@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Improved Block Select", showcaseName = "Improved Block Selection Sort", runName = "Improved Block Selection Sort")
+@SortMeta(listName = "Improved Block Select", runName = "Improved Block Selection Sort")
 public final class ImprovedBlockSelectionSort extends Sort {
 	public ImprovedBlockSelectionSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

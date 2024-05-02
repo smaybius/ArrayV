@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Parallel Grail", showcaseName = "Parallel Grail Sort", runName = "Parallel Grail Sort")
+@SortMeta(listName = "Parallel Grail", runName = "Parallel Grail Sort")
 public final class ParallelGrailSort extends Sort {
 	public ParallelGrailSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
@@ -47,6 +47,7 @@ public final class ParallelGrailSort extends Sort {
 			this.nKeys = nKeys;
 		}
 
+		@Override
 		public void run() {
 			ParallelGrailSort.this.grailCommonSort(a, b, nKeys);
 		}
@@ -60,6 +61,7 @@ public final class ParallelGrailSort extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			ParallelGrailSort.this.lazyStableSort(a, b);
 		}
@@ -74,6 +76,7 @@ public final class ParallelGrailSort extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			ParallelGrailSort.this.redistFW(a, m, b);
 		}
@@ -88,6 +91,7 @@ public final class ParallelGrailSort extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			ParallelGrailSort.this.redistBW(a, m, b);
 		}

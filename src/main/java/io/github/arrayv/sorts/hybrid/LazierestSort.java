@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Lazierest", showcaseName = "Lazierest Sort", runName = "Lazierest Sort")
+@SortMeta(listName = "Lazierest", runName = "Lazierest Sort")
 public final class LazierestSort extends Sort {
 	public LazierestSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

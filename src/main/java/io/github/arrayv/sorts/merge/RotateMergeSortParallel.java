@@ -29,7 +29,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-@SortMeta(listName = "Rotate Mergesort (Parallel)", showcaseName = "Rotate Mergesort (Parallel)", runName = "Rotate Mergesort (Parallel)")
+@SortMeta(listName = "Rotate Mergesort (Parallel)", runName = "Rotate Mergesort (Parallel)")
 public final class RotateMergeSortParallel extends Sort {
 	public RotateMergeSortParallel(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
@@ -45,6 +45,7 @@ public final class RotateMergeSortParallel extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			RotateMergeSortParallel.this.rotateMergeSort(this.a, this.b);
 		}
@@ -59,6 +60,7 @@ public final class RotateMergeSortParallel extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			RotateMergeSortParallel.this.rotateMerge(a, m, b);
 		}

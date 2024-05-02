@@ -6,7 +6,7 @@ import io.github.arrayv.sorts.templates.GrailSorting;
 import io.github.arrayv.utils.Searches;
 
 //
-@SortMeta(listName = "Block Insertion", showcaseName = "Block Insertion Sort", runName = "Block Insertion Sort")
+@SortMeta(listName = "Block Insertion", runName = "Block Insertion Sort")
 public final class BlockInsertionSort extends GrailSorting {
     public BlockInsertionSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

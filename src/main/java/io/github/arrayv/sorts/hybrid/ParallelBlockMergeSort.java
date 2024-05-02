@@ -31,7 +31,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Parallel Block Merge", showcaseName = "Parallel Block Merge Sort", runName = "Parallel Block Merge Sort")
+@SortMeta(listName = "Parallel Block Merge", runName = "Parallel Block Merge Sort")
 public final class ParallelBlockMergeSort extends Sort {
 	public ParallelBlockMergeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
@@ -47,6 +47,7 @@ public final class ParallelBlockMergeSort extends Sort {
 			this.b = b;
 		}
 
+		@Override
 		public void run() {
 			ParallelBlockMergeSort.this.blockMergeSort(a, b);
 		}

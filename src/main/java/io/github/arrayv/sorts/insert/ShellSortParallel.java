@@ -4,7 +4,7 @@ import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.ShellSorting;
 
-@SortMeta(listName = "Shell (Parallel)", showcaseName = "Shell Sort (Parallel)", runName = "Shell Sort (Parallel)", question = "Choose a gap sequence:\n1: Original\n2: Powers of 2 plus 1\n3: Powers of 2 minus 1\n"
+@SortMeta(listName = "Shell (Parallel)", runName = "Shell Sort (Parallel)", question = "Choose a gap sequence:\n1: Original\n2: Powers of 2 plus 1\n3: Powers of 2 minus 1\n"
 		+
 		"4: 3-Smooth\n5: Powers of 3\n6: Sedgewick-Incerpi\n7: Sedgewick\n8: Odd-Even Sedgewick\n9: Gonnet-Baeza-Yates\n"
 		+
@@ -26,6 +26,7 @@ public final class ShellSortParallel extends ShellSorting {
 			this.g = g;
 		}
 
+		@Override
 		public void run() {
 			ShellSortParallel.this.gappedInsertion(a, b, g);
 		}

@@ -1,6 +1,10 @@
 package io.github.arrayv.sortdata;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotation to specify the sorting algorithm's metadata. This should only be
@@ -45,15 +49,6 @@ public @interface SortMeta {
      *         otherwise.
      */
     String runName() default "";
-
-    /**
-     * Explicit Showcase Sorts name (and scripting name). This is generated from
-     * {@link #name()} by default.
-     *
-     * @return The sort's explicit Showcase Sorts name, if it has one. {@code ""}
-     *         otherwise.
-     */
-    String showcaseName() default "";
 
     /**
      * Whether this sort is disabled. Disabled sorts won't be loaded.

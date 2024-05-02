@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Rotate MSD Radix", showcaseName = "Rotate MSD Radix Sort", runName = "Rotate MSD Radix Sort", question = "Enter base width (default: 4):", defaultAnswer = 4)
+@SortMeta(listName = "Rotate MSD Radix", runName = "Rotate MSD Radix Sort", question = "Enter base width (default: 4):", defaultAnswer = 4)
 public final class RotateMSDRadixSort extends Sort {
 	public RotateMSDRadixSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

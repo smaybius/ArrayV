@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Counting", showcaseName = "Counting Sort", runName = "Counting Sort")
+@SortMeta(listName = "Counting", runName = "Counting Sort")
 public final class CountingSort extends Sort {
     public CountingSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

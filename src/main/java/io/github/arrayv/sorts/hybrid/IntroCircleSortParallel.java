@@ -16,7 +16,7 @@ Texts.  A copy of the license is included in the section entitled "GNU
 Free Documentation License".
  *
  */
-@SortMeta(listName = "Intro Circle (Parallel)", showcaseName = "Parallel Introspective Circle Sort", runName = "Parallel Introspective Circle Sort")
+@SortMeta(listName = "Intro Circle (Parallel)", runName = "Parallel Introspective Circle Sort")
 public final class IntroCircleSortParallel extends ParallelCircleSorting {
     public IntroCircleSortParallel(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

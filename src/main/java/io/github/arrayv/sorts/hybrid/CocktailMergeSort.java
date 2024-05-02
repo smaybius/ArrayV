@@ -14,7 +14,7 @@ import io.github.arrayv.sorts.templates.TimSorting;
 // this is constant time, as the minrun value is not dependent on the number of elements we are sorting, but
 // Cocktail Shaker has worse constant factors than Insertion Sort. So basically, this is just for fun.
 // But hey, why not? ;)
-@SortMeta(listName = "Cocktail Merge", showcaseName = "Cocktail Merge Sort", runName = "Cocktail Merge Sort")
+@SortMeta(listName = "Cocktail Merge", runName = "Cocktail Merge Sort")
 public class CocktailMergeSort extends Sort {
     private TimSorting timSortInstance; // TimSort cannot be simply written off as an abstract class, as it creates an
                                         // instance of itself

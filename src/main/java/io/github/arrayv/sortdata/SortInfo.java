@@ -1,13 +1,13 @@
 package io.github.arrayv.sortdata;
 
-import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.templates.Sort;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
+
+import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sorts.templates.Sort;
 
 public final class SortInfo {
     private static final String NAME_MUST_BE_SPECIFIED = "name must be specified unless all three of listName, showcaseName, and runName are specified";
@@ -82,9 +82,9 @@ public final class SortInfo {
             this.runName = metaAnnotation.runName().isEmpty()
                     ? requireName(name) + " Sort"
                     : metaAnnotation.runName();
-            this.runAllName = metaAnnotation.showcaseName().isEmpty()
+            this.runAllName = metaAnnotation.runName().isEmpty()
                     ? requireName(name) + " Sort"
-                    : metaAnnotation.showcaseName();
+                    : metaAnnotation.runName();
             this.category = metaAnnotation.category().isEmpty() ? findSortCategory(sortClass)
                     : metaAnnotation.category();
             this.bogoSort = metaAnnotation.bogoSort();
@@ -127,11 +127,11 @@ public final class SortInfo {
                     ? requireName(name)
                     : metaAnnotation.listName();
             this.runName = metaAnnotation.runName().isEmpty()
-                    ? requireName(name) + "sort"
-                    : metaAnnotation.runName();
-            this.runAllName = metaAnnotation.showcaseName().isEmpty()
                     ? requireName(name) + " Sort"
-                    : metaAnnotation.showcaseName();
+                    : metaAnnotation.runName();
+            this.runAllName = metaAnnotation.runName().isEmpty()
+                    ? requireName(name) + " Sort"
+                    : metaAnnotation.runName();
             this.category = metaAnnotation.category().isEmpty() ? findSortCategory(sort.getClass())
                     : metaAnnotation.category();
             this.bogoSort = metaAnnotation.bogoSort();

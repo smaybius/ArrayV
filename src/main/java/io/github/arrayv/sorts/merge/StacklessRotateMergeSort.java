@@ -29,7 +29,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-@SortMeta(listName = "Rotate Mergesort (Stackless)", showcaseName = "Rotate Mergesort (Stackless)", runName = "Rotate Mergesort (Stackless)")
+@SortMeta(listName = "Rotate Mergesort (Stackless)", runName = "Rotate Mergesort (Stackless)")
 public final class StacklessRotateMergeSort extends Sort {
 	public StacklessRotateMergeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

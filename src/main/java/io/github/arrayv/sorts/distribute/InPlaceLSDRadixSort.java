@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "LSD Radix (In-Place)", showcaseName = "LSD Radix Sort (In-Place)", runName = "LSD Radix Sort (In-Place)", question = "Enter base width (default: 10):", defaultAnswer = 10)
+@SortMeta(listName = "LSD Radix (In-Place)", runName = "LSD Radix Sort (In-Place)", question = "Enter base width (default: 10):", defaultAnswer = 10)
 public final class InPlaceLSDRadixSort extends Sort {
     public InPlaceLSDRadixSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);

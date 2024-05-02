@@ -30,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Optimized Weave Merge", showcaseName = "Optimized Weave Merge Sort", runName = "Optimized Weave Merge Sort")
+@SortMeta(listName = "Optimized Weave Merge", runName = "Optimized Weave Merge Sort")
 public final class OptimizedWeaveMergeSort extends Sort {
 	public OptimizedWeaveMergeSort(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);

@@ -1,7 +1,7 @@
 package io.github.arrayv.sorts.concurrent;
 
-import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -29,7 +29,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-@SortMeta(listName = "Bose-Nelson (Iterative 2)", showcaseName = "Iterative Bose-Nelson Sorting Network 2", runName = "Iterative Bose-Nelson Sort 2")
+@SortMeta(listName = "Bose-Nelson (Iterative 2)", runName = "Iterative Bose-Nelson Sort 2")
 final public class BoseNelsonSortIterative2 extends Sort {
 	public BoseNelsonSortIterative2(ArrayVisualizer arrayVisualizer) {
 		super(arrayVisualizer);
