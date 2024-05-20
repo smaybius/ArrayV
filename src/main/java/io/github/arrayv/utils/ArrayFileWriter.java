@@ -6,10 +6,23 @@ import java.io.IOException;
 
 import io.github.arrayv.panes.JErrorPane;
 
+/**
+ *
+ * Writes the array to a file
+ */
 public final class ArrayFileWriter {
     private ArrayFileWriter() {
     }
 
+    /**
+     *
+     * Writes the main array to the file path.
+     *
+     * @param fileName the path or name
+     * @param array    the array
+     * @param length   how much of the array from the start
+     * @return whether it worked or not
+     */
     public static boolean writeArray(String fileName, int[] array, int length) {
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -21,6 +34,15 @@ public final class ArrayFileWriter {
         return true;
     }
 
+    /**
+     *
+     * Writes the main array to the file object.
+     *
+     * @param file   the file
+     * @param array  the array
+     * @param length how much of the array from the start
+     * @return whether it worked or not
+     */
     public static boolean writeArray(File file, int[] array, int length) {
         try {
             FileWriter writer = new FileWriter(file);

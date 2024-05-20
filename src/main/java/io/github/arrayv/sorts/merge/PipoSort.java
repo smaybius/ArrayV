@@ -1,6 +1,6 @@
 package io.github.arrayv.sorts.merge;
 /*
-	Copyright (C) 2014-2022 Igor van den Hoven ivdhoven@gmail.com
+	Copyright (C) 2014-2022 Igor van den Hoven ivdhoven@gmail.com, Java version by smaybius
 */
 
 import io.github.arrayv.main.ArrayVisualizer;

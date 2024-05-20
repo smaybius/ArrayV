@@ -54,7 +54,7 @@ public final class TimeSort extends Sort {
     @Override
     public void runSort(int[] array, int sortLength, int magnitude) throws Exception {
         insertSorter = new InsertionSort(this.arrayVisualizer);
-        this.setRunAllSortsName("Time Sort, Mul " + magnitude);
+        this.setRunSortName("Time Sort, Mul " + magnitude);
         this.setRunSortName("Time Sort, Mul " + magnitude);
         final int A = magnitude;
         next = 0;

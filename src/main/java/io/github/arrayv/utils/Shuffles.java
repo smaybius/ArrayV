@@ -5,7 +5,25 @@ import java.util.Queue;
 import java.util.Random;
 
 import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.sorts.select.*;
+import io.github.arrayv.sorts.select.AdaptiveVelvetSort;
+import io.github.arrayv.sorts.select.BinarySiftHeapSort;
+import io.github.arrayv.sorts.select.BinomialSmoothSort;
+import io.github.arrayv.sorts.select.BottomUpHeapSort;
+import io.github.arrayv.sorts.select.DoubleHeapSort;
+import io.github.arrayv.sorts.select.FibonacciHeapSort;
+import io.github.arrayv.sorts.select.FlippedMinHeapSort;
+import io.github.arrayv.sorts.select.GeapSort;
+import io.github.arrayv.sorts.select.LazyHeapSort;
+import io.github.arrayv.sorts.select.LogNaryHeapSort;
+import io.github.arrayv.sorts.select.MaxHeapSort;
+import io.github.arrayv.sorts.select.MinHeapSort;
+import io.github.arrayv.sorts.select.MinMaxHeapSort;
+import io.github.arrayv.sorts.select.PoplarHeapSort;
+import io.github.arrayv.sorts.select.PureFibHeapSort;
+import io.github.arrayv.sorts.select.SmoothSort;
+import io.github.arrayv.sorts.select.TernaryHeapSort;
+import io.github.arrayv.sorts.select.TriangularHeapSort;
+import io.github.arrayv.sorts.select.WeakHeapSort;
 import io.github.arrayv.sorts.templates.PDQSorting;
 
 /*
@@ -2306,7 +2324,7 @@ public enum Shuffles {
                 }
                 writes.write(triangle, i, triangle[j] + 1, delay ? 1 : 0, true, true);
                 if (reads.compareValues(triangle[i], max) > 0) {
-                    highlights.markArray(2, i);
+                    highlights.markArray(2, triangle[i]);
                     delays.sleep(delay ? 1 : 0);
                     max = triangle[i];
                 }

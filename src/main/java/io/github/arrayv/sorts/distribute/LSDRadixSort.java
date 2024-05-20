@@ -1,4 +1,5 @@
 package io.github.arrayv.sorts.distribute;
+
 import io.github.arrayv.main.ArrayVisualizer;
 import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
@@ -37,7 +38,7 @@ public final class LSDRadixSort extends Sort {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.setRunAllSortsName("Least Significant Digit Radix Sort, Base " + bucketCount);
+        this.setRunSortName("Least Significant Digit Radix Sort, Base " + bucketCount);
         this.setRunSortName("Least Significant Digit Radix Sort, Base " + bucketCount);
 
         int highestpower = Reads.analyzeMaxLog(array, sortLength, bucketCount, 0.5, true);

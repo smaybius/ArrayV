@@ -1,6 +1,7 @@
 package io.github.arrayv.sorts.hybrid;
 
 import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.sortdata.SortMeta;
 import io.github.arrayv.sorts.templates.Sort;
 
 /*
@@ -10,36 +11,26 @@ import io.github.arrayv.sorts.templates.Sort;
  * 
  * Implemented and optimized by thatsOven
  */
-
+@SortMeta(name = "KPT Merge")
 public class KPTMergeSort extends Sort {
     public KPTMergeSort(ArrayVisualizer arrayVisualizer) {
         super(arrayVisualizer);
-
-        this.setSortListName("KPT Merge");
-        this.setRunAllSortsName("KPT MergeSort");
-        this.setRunSortName("KPT MergeSort");
-        this.setCategory("Hybrid Sorts");
-        this.setBucketSort(false);
-        this.setRadixSort(false);
-        this.setUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
-        this.setBogoSort(false);
     }
 
     private final int MIN_SMALL_BLOCK = 32,
-                             RUN_SIZE = 32,
-                                    K = 4;
+            RUN_SIZE = 32,
+            K = 4;
 
     private int[] heap, ptrs;
-    private int   smallBlock, sqrtn;
+    private int smallBlock, sqrtn;
 
     private void blockSwapFW(int[] array, int a, int b, int len) {
-        for(int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
             Writes.swap(array, a + i, b + i, 0.5, true, false);
     }
 
     private void blockSwapBW(int[] array, int a, int b, int len) {
-        for(int i = len - 1; i >= 0; i--)
+        for (int i = len - 1; i >= 0; i--)
             Writes.swap(array, a + i, b + i, 0.5, true, false);
     }
 
@@ -63,22 +54,24 @@ public class KPTMergeSort extends Sort {
 
     public void rotate(int[] array, int a, int m, int b) {
         int rl = b - m,
-            ll = m - a;
+                ll = m - a;
 
         while (rl > 1 && ll > 1) {
             if (rl < ll) {
                 blockSwapFW(array, a, m, rl);
-                a  += rl;
+                a += rl;
                 ll -= rl;
             } else {
-                b  -= ll;
+                b -= ll;
                 rl -= ll;
-                blockSwapBW(array, a, b, ll); 
+                blockSwapBW(array, a, b, ll);
             }
         }
 
-        if      (rl == 1) insertToLeft( array, m, a);
-        else if (ll == 1) insertToRight(array, a, b - 1);
+        if (rl == 1)
+            insertToLeft(array, m, a);
+        else if (ll == 1)
+            insertToRight(array, a, b - 1);
     }
 
     private int binarySearch(int[] array, int a, int b, int value, boolean left) {
@@ -89,8 +82,9 @@ public class KPTMergeSort extends Sort {
 
             int cmp = Reads.compareIndexValue(array, m, value, 0.25, true);
             if (left ? cmp >= 0 : cmp > 0)
-                 b = m;
-            else a = m + 1;
+                b = m;
+            else
+                a = m + 1;
         }
 
         return a;
@@ -104,16 +98,18 @@ public class KPTMergeSort extends Sort {
 
     private void sortRuns(int[] array, int a, int b) {
         int i;
-        for (i = a; i < b - RUN_SIZE; i += RUN_SIZE) 
+        for (i = a; i < b - RUN_SIZE; i += RUN_SIZE)
             insertSort(array, i, i + RUN_SIZE);
 
-        if (i < b) insertSort(array, i, b);
+        if (i < b)
+            insertSort(array, i, b);
     }
 
-    // the authors didn't like in-place merging, but i'm sorry, it's just better in some cases
+    // the authors didn't like in-place merging, but i'm sorry, it's just better in
+    // some cases
     private void mergeInPlace(int[] array, int a, int m, int b) {
         int s = b - 1,
-            l = m - 1;
+                l = m - 1;
 
         while (s > l && l >= a) {
             if (Reads.compareIndices(array, l, s, 0, false) > 0) {
@@ -121,15 +117,16 @@ public class KPTMergeSort extends Sort {
                 rotate(array, p, l + 1, s + 1);
                 s -= l + 1 - p;
                 l = p - 1;
-            } else s--;
+            } else
+                s--;
         }
     }
 
     // they call it binary merge, but it's confusing for me
     private void gallopMerge(int[] array, int a0, int b0, int a1, int b1, int buf) {
-        int l = b0  - 1,
-            r = b1  - 1,
-            o = buf - 1;
+        int l = b0 - 1,
+                r = b1 - 1,
+                o = buf - 1;
 
         while (l >= a0 && r >= a1) {
             if (Reads.compareIndices(array, l, r, 1, true) > 0) {
@@ -153,13 +150,14 @@ public class KPTMergeSort extends Sort {
         blockSwapBW(array, m, buf, rl);
 
         int l = m - 1,
-            r = buf + rl - 1,
-            o = b - 1;
+                r = buf + rl - 1,
+                o = b - 1;
 
         for (; l >= a && r >= buf; o--) {
             if (Reads.compareIndices(array, r, l, 0.5, true) >= 0)
-                 Writes.swap(array, o, r--, 0.5, true, false);
-            else Writes.swap(array, o, l--, 0.5, true, false);
+                Writes.swap(array, o, r--, 0.5, true, false);
+            else
+                Writes.swap(array, o, l--, 0.5, true, false);
         }
 
         while (r >= buf)
@@ -175,12 +173,13 @@ public class KPTMergeSort extends Sort {
     private void siftDown(int[] array, int t, int r, int size) {
         while (2 * r + 2 < size) {
             int nxt = 2 * r + 1,
-                min = nxt + (this.keyLessThan(array, this.heap[nxt], this.heap[nxt + 1]) ? 0 : 1);
-            
+                    min = nxt + (this.keyLessThan(array, this.heap[nxt], this.heap[nxt + 1]) ? 0 : 1);
+
             if (this.keyLessThan(array, this.heap[min], t)) {
                 Writes.write(this.heap, r, this.heap[min], 0.25, true, true);
                 r = min;
-            } else break;
+            } else
+                break;
         }
 
         int min = 2 * r + 1;
@@ -196,7 +195,7 @@ public class KPTMergeSort extends Sort {
         int a = this.ptrs[0];
 
         for (int i = 0; i < size; i++)
-			Writes.write(this.heap, i, i, 0, false, true);
+            Writes.write(this.heap, i, i, 0, false, true);
 
         for (int i = (size - 1) / 2; i >= 0; i--)
             this.siftDown(array, this.heap[i], i, size);
@@ -208,7 +207,7 @@ public class KPTMergeSort extends Sort {
             Writes.swap(array, o++, this.ptrs[min], 1, true, false);
             Writes.write(this.ptrs, min, this.ptrs[min] + 1, 0, false, true);
 
-            if (this.ptrs[min] == Math.min(a + (min + 1) * r, b)) 
+            if (this.ptrs[min] == Math.min(a + (min + 1) * r, b))
                 this.siftDown(array, this.heap[--size], 0, size);
             else
                 this.siftDown(array, this.heap[0], 0, size);
@@ -227,9 +226,9 @@ public class KPTMergeSort extends Sort {
 
                 this.merge(array, K, a, r, i + kR);
             }
-                                    
-            int f    = i,
-                size = 0;
+
+            int f = i,
+                    size = 0;
             while (f < b) {
                 Writes.write(this.ptrs, size, f, 0, false, true);
                 f += r;
@@ -239,7 +238,8 @@ public class KPTMergeSort extends Sort {
             if (size > 1) {
                 if (size == 2)
                     simpleMerge(array, this.ptrs[0], this.ptrs[1], b, a);
-                else this.merge(array, size, a, r, b);
+                else
+                    this.merge(array, size, a, r, b);
             }
 
             r = kR;
@@ -254,8 +254,8 @@ public class KPTMergeSort extends Sort {
         }
 
         int h = n / 2 + (n & 1),
-            s = a + h;
-        
+                s = a + h;
+
         sortRuns(array, s, b);
 
         if (b - s > this.smallBlock)
@@ -273,7 +273,7 @@ public class KPTMergeSort extends Sort {
                 r = twoR;
             }
         }
-        
+
         return s;
     }
 
@@ -285,7 +285,8 @@ public class KPTMergeSort extends Sort {
         }
 
         int sqrtn = 1;
-        for (; sqrtn * sqrtn < n; sqrtn *= 2);
+        for (; sqrtn * sqrtn < n; sqrtn *= 2)
+            ;
         this.sqrtn = sqrtn;
 
         this.smallBlock = Math.max(n / (32 - Integer.numberOfLeadingZeros(n)), MIN_SMALL_BLOCK);
@@ -297,7 +298,7 @@ public class KPTMergeSort extends Sort {
         // i implemented it so it sorts the lower half first so fewer
         // routines would be necessary to make the sort work
         int h = n / 2 - (n & 1),
-            e = a + h;
+                e = a + h;
 
         sortRuns(array, a, e);
         this.bigMerges(array, a, e, e);
@@ -308,7 +309,7 @@ public class KPTMergeSort extends Sort {
                 mergeInPlace(array, a, e, b);
                 Writes.deleteExternalArrays(heap, ptrs);
                 return;
-            } 
+            }
 
             gallopMerge(array, a, e, p, b, p);
             e = p;

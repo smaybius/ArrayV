@@ -18,8 +18,7 @@ public @interface SortMeta {
     /**
      * The sort's name. This is generally of the form {@code "Something"} or
      * {@code "Something Sort"}. If not
-     * specified, all three of {@link #listName()}, {@link #runName()}, and
-     * {@link #showcaseName()} must be specified.
+     * specified, both {@link #listName()} and {@link #runName()} must be specified.
      *
      * @return The sort's annotated name.
      */

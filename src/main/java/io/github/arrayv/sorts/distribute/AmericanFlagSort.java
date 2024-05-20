@@ -43,7 +43,7 @@ limitations under the License.
  * <br>
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-@SortMeta(listName = "American Flag", runName = "American Flag Sort", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
+@SortMeta(name = "American Flag", question = "Enter number of buckets (default: 128):", defaultAnswer = 128)
 public final class AmericanFlagSort extends Sort {
     private int NUMBER_OF_BUCKETS = 128; // ex. 10 for base 10 numbers
 
@@ -133,7 +133,7 @@ public final class AmericanFlagSort extends Sort {
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         this.NUMBER_OF_BUCKETS = bucketCount;
 
-        this.setRunAllSortsName("American Flag Sort, " + this.NUMBER_OF_BUCKETS + " Buckets");
+        this.setRunSortName("American Flag Sort, " + this.NUMBER_OF_BUCKETS + " Buckets");
 
         int numberOfDigits = this.getMaxNumberOfDigits(array, sortLength); // Max number of digits
         int max = 1;

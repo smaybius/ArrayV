@@ -1,9 +1,15 @@
 package io.github.arrayv.main;
 
-import io.github.arrayv.panes.JErrorPane;
-import io.github.arrayv.utils.*;
-
 import java.util.Arrays;
+
+import io.github.arrayv.panes.JErrorPane;
+import io.github.arrayv.utils.Delays;
+import io.github.arrayv.utils.Distributions;
+import io.github.arrayv.utils.Highlights;
+import io.github.arrayv.utils.ShuffleGraph;
+import io.github.arrayv.utils.ShuffleInfo;
+import io.github.arrayv.utils.Shuffles;
+import io.github.arrayv.utils.Writes;
 
 /*
  *
@@ -31,7 +37,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
+/**
+ *
+ * ???
+ */
 public final class ArrayManager {
     private final io.github.arrayv.utils.Shuffles[] shuffleTypes;
     private final io.github.arrayv.utils.Distributions[] distributionTypes;
@@ -49,6 +58,10 @@ public final class ArrayManager {
     private Distributions distribution;
     private final Writes Writes;
 
+    /**
+     *
+     * ???
+     */
     public ArrayManager(ArrayVisualizer arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer;
 
@@ -74,15 +87,33 @@ public final class ArrayManager {
         this.mutableLength = true;
     }
 
+    /**
+     *
+     * Checks if the array length can be changed
+     *
+     * @return the answer
+     */
     public boolean isLengthMutable() {
         return this.mutableLength;
     }
 
+    /**
+     *
+     * Sets the changeability of the array length
+     *
+     * @param mutableLength the ability to change the length
+     */
     public void toggleMutableLength(boolean mutableLength) {
         this.mutableLength = mutableLength;
     }
 
     // TODO: Fix minimum to zero
+    /**
+     *
+     * Initializes the array with the distribution and shuffle.
+     *
+     * @param array the array
+     */
     public void initializeArray(int[] array) {
         if (arrayVisualizer.doingStabilityCheck()) {
             arrayVisualizer.resetStabilityTable();
@@ -111,58 +142,118 @@ public final class ArrayManager {
         arrayVisualizer.updateNow();
     }
 
+    /**
+     *
+     * The list of display names for the shuffles
+     *
+     * @return the current list
+     */
     public String[] getShuffleIDs() {
         return this.shuffleIDs;
     }
 
+    /**
+     *
+     * The list of shuffles in the enum
+     *
+     * @return the current list
+     */
     public Shuffles[] getShuffles() {
         return this.shuffleTypes;
     }
 
+    /**
+     *
+     * The current shuffle
+     *
+     * @return the current shuffle
+     */
     public ShuffleGraph getShuffle() {
         return this.shuffle;
     }
 
     /**
-     * @deprecated This method is deprecatated. Please use
-     *             {@link #setShuffleSingle(Shuffles)} or
-     *             {@link #setShuffle(ShuffleGraph)} instead.
-     * @see #setShuffleSingle(Shuffles)
-     * @see #setShuffle(ShuffleGraph)
+     *
+     * Set the shuffle combination to something else
+     *
+     * @param graph the graph
+     * @return the shuffle so additional methods can be called on it
      */
-    public void setShuffle(Shuffles choice) {
-        this.setShuffleSingle(choice);
-    }
-
     public ShuffleGraph setShuffle(ShuffleGraph graph) {
         this.shuffle = graph;
-        return graph; // return the shuffle so additional methods can be called on it
+        return graph;
     }
 
+    /**
+     *
+     * Set the single shuffle to something else
+     *
+     * @param shuffle the chosen shuffle
+     * @return the new shuffle
+     */
     public ShuffleGraph setShuffleSingle(Shuffles shuffle) {
         return this.setShuffle(ShuffleGraph.single(shuffle));
     }
 
+    /**
+     *
+     * Set the single shuffle to a different distribution
+     *
+     * @param distribution the chosen dist
+     * @return the new dist
+     */
     public ShuffleGraph setShuffleSingle(Distributions distribution) {
         return this.setShuffle(ShuffleGraph.single(distribution));
     }
 
+    /**
+     *
+     * Set the single shuffle to a different distribution
+     *
+     * @param distribution the chosen dist
+     * @param warped       ???
+     * @return the new dist
+     */
     public ShuffleGraph setShuffleSingle(Distributions distribution, boolean warped) {
         return this.setShuffle(ShuffleGraph.single(distribution, warped));
     }
 
+    /**
+     *
+     * The list of display names for the distributions
+     *
+     * @return the current list
+     */
     public String[] getDistributionIDs() {
         return this.distributionIDs;
     }
 
+    /**
+     *
+     * The list of distributions in the enum
+     *
+     * @return the current list
+     */
     public Distributions[] getDistributions() {
         return this.distributionTypes;
     }
 
+    /**
+     *
+     * The current distribution
+     *
+     * @return the current dist
+     */
     public Distributions getDistribution() {
         return this.distribution;
     }
 
+    /**
+     *
+     * Sets the initial input type of the array
+     *
+     * @param choice The item in the Distributions enum
+     */
     public void setDistribution(Distributions choice) {
         this.distribution = choice;
         this.distribution.selectDistribution(arrayVisualizer.getArray(), arrayVisualizer);
@@ -170,9 +261,24 @@ public final class ArrayManager {
             this.initializeArray(arrayVisualizer.getArray());
     }
 
+    /**
+     *
+     * ???
+     *
+     * @param shuffle ???
+     */
     public boolean containsShuffle(Shuffles shuffle) {
         return this.shuffle.contains(new ShuffleInfo(shuffle));
     }
+
+    /**
+     *
+     * Shuffles the array with the given shuffle
+     *
+     * @param array           The input
+     * @param currentLen      How long the array is
+     * @param arrayVisualizer Properties from the ArrayVisualizer class
+     */
 
     public void shuffleArray(int[] array, int currentLen, ArrayVisualizer arrayVisualizer) {
         this.initializeArray(array);
@@ -230,6 +336,14 @@ public final class ArrayManager {
         Delays.setSleepRatio(speed);
     }
 
+    /**
+     *
+     * ???
+     *
+     * @param array           the array
+     * @param currentLen      the length
+     * @param arrayVisualizer the properties in the ArrayVisualizer class
+     */
     public void refreshArray(int[] array, int currentLen, ArrayVisualizer arrayVisualizer) {
         try {
             Thread.sleep(1000);

@@ -80,7 +80,7 @@ public final class MSDRadixSort extends Sort {
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
         int highestpower = Reads.analyzeMaxLog(array, sortLength, bucketCount, 0.5, true);
 
-        this.setRunAllSortsName("Most Significant Digit Radix Sort, Base " + bucketCount);
+        this.setRunSortName("Most Significant Digit Radix Sort, Base " + bucketCount);
         this.setRunSortName("Most Significant Digit Radix Sort, Base " + bucketCount);
         radixMSD(array, sortLength, 0, sortLength, bucketCount, highestpower);
     }

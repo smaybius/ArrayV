@@ -1,12 +1,10 @@
 package io.github.arrayv.utils;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
 import io.github.arrayv.main.ArrayVisualizer;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 /*
  *
@@ -35,6 +33,8 @@ SOFTWARE.
  */
 
 /**
+ *
+ * Wrapper class for write operations.
  *
  * @author S630690
  */

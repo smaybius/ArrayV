@@ -180,13 +180,9 @@ public abstract class Sort {
         deprecatedMetadataTable[1] = listName;
     }
 
-    protected void setRunAllSortsName(String showcaseName) {
-        initDeprecatedMetadataTable();
-        deprecatedMetadataTable[2] = showcaseName;
-    }
-
     protected void setRunSortName(String runName) {
         initDeprecatedMetadataTable();
+        deprecatedMetadataTable[2] = runName;
         deprecatedMetadataTable[3] = runName;
     }
 

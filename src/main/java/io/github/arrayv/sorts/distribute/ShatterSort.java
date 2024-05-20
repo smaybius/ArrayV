@@ -37,7 +37,7 @@ public final class ShatterSort extends ShatterSorting {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.setRunAllSortsName("Shatter Sort, " + bucketCount + " Buckets");
+        this.setRunSortName("Shatter Sort, " + bucketCount + " Buckets");
         this.setRunSortName("Shatter Sort, " + bucketCount + " Buckets");
         this.shatterSort(array, sortLength, bucketCount);
     }

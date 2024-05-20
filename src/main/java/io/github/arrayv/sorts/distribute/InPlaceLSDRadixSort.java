@@ -37,7 +37,7 @@ public final class InPlaceLSDRadixSort extends Sort {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.setRunAllSortsName("In-Place LSD Radix Sort, Base " + bucketCount);
+        this.setRunSortName("In-Place LSD Radix Sort, Base " + bucketCount);
 
         int pos = 0;
         int[] vregs = Writes.createExternalArray(bucketCount - 1);

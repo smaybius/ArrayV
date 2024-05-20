@@ -1,5 +1,52 @@
 package io.github.arrayv.main;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.KeyboardFocusManager;
+import java.awt.Stroke;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+
 import io.github.arrayv.dialogs.FileDialog;
 import io.github.arrayv.dialogs.SaveArrayDialog;
 import io.github.arrayv.frames.ArrayFrame;
@@ -9,9 +56,16 @@ import io.github.arrayv.groovyapi.ArrayVEventHandler;
 import io.github.arrayv.groovyapi.ScriptManager;
 import io.github.arrayv.panes.JErrorPane;
 import io.github.arrayv.sortdata.SortInfo;
+import io.github.arrayv.utils.AntiQSort;
+import io.github.arrayv.utils.ArrayFileWriter;
+import io.github.arrayv.utils.Delays;
+import io.github.arrayv.utils.Highlights;
+import io.github.arrayv.utils.Reads;
 import io.github.arrayv.utils.Renderer;
+import io.github.arrayv.utils.Sounds;
+import io.github.arrayv.utils.Statistics;
 import io.github.arrayv.utils.Timer;
-import io.github.arrayv.utils.*;
+import io.github.arrayv.utils.Writes;
 import io.github.arrayv.visuals.Visual;
 import io.github.arrayv.visuals.VisualStyles;
 import io.github.arrayv.visuals.bars.BarGraph;
@@ -29,23 +83,6 @@ import io.github.arrayv.visuals.dots.WaveDots;
 import io.github.arrayv.visuals.image.CustomImage;
 import io.github.arrayv.visuals.misc.HoopStack;
 import io.github.arrayv.visuals.misc.PixelMesh;
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.*;
-import java.io.*;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  *
@@ -707,13 +744,6 @@ public final class ArrayVisualizer {
         }
     }
 
-    /**
-     * @deprecated This method no longer does anything!
-     */
-    @Deprecated
-    public void toggleVisualUpdates(boolean bool) {
-    }
-
     public void forceVisualUpdate(int count) {
         this.updateVisualsForced.addAndGet(count);
     }
@@ -780,6 +810,12 @@ public final class ArrayVisualizer {
         }
     }
 
+    /**
+     *
+     * Checks if the main array is sorted or not
+     *
+     * @return The answer
+     */
     public boolean isSorted() {
         return this.statSnapshot.findSegments(this.array, this.sortLength, this.reversedComparator)[0] == 1;
     }
@@ -1329,41 +1365,6 @@ public final class ArrayVisualizer {
         this.Highlights.clearAllMarks();
     }
 
-    /**
-     * @deprecated No longer does anything
-     */
-    @Deprecated
-    public void togglePointer(boolean showPointer) {
-    }
-
-    /**
-     * @deprecated No longer does anything
-     */
-    @Deprecated
-    public void toggleDistance(boolean unused) {
-    }
-
-    /**
-     * @deprecated No longer does anything
-     */
-    @Deprecated
-    public void togglePixels(boolean usePixels) {
-    }
-
-    /**
-     * @deprecated No longer does anything
-     */
-    @Deprecated
-    public void toggleRainbow(boolean rainbow) {
-    }
-
-    /**
-     * @deprecated No longer does anything
-     */
-    @Deprecated
-    public void toggleSpiral(boolean spiral) {
-    }
-
     public void toggleLinkedDots(boolean showLines) {
         this.showLines = showLines;
     }
@@ -1374,13 +1375,6 @@ public final class ArrayVisualizer {
 
     public void toggleColor(boolean showColor) {
         this.showColor = showColor;
-    }
-
-    /**
-     * @deprecated No longer does anything
-     */
-    @Deprecated
-    public void toggleWave(boolean useWave) {
     }
 
     public void toggleExternalArrays(boolean showExternalArrays) {

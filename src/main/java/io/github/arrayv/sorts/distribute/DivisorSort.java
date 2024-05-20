@@ -78,7 +78,7 @@ final public class DivisorSort extends Sort {
 
     @Override
     public void runSort(int[] array, int sortLength, int base) throws Exception {
-        this.setRunAllSortsName("Divisor Sort, Base " + base);
+        this.setRunSortName("Divisor Sort, Base " + base);
         flatbuckets = Writes.createMockExternalArray(sortLength);
         int highestLog = Reads.analyzeMaxCeilingLog(array, sortLength, base, 0.5, true);
 

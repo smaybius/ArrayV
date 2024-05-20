@@ -1,21 +1,30 @@
 package io.github.arrayv.groovyapi;
 
-import groovy.lang.GroovyShell;
-import groovy.lang.Script;
-import io.github.arrayv.main.ArrayVisualizer;
-import io.github.arrayv.panes.JErrorPane;
-import org.codehaus.groovy.control.CompilationFailedException;
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.MultipleCompilationErrorsException;
-import org.codehaus.groovy.control.customizers.ImportCustomizer;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.MultipleCompilationErrorsException;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
+
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
+import io.github.arrayv.main.ArrayVisualizer;
+import io.github.arrayv.panes.JErrorPane;
 
 /**
  * This class is used to load and run Groovy scripts.
@@ -210,6 +219,7 @@ public final class ScriptManager {
      *
      * @param path The path of the script
      * @return The loaded {@link Script} object
+     * @throws IOException The file can't be gotten
      */
     public Script loadScript(File path) throws IOException {
         Script script;
@@ -227,6 +237,7 @@ public final class ScriptManager {
      *
      * @param url The URL of the script
      * @return The loaded {@link Script} object
+     * @throws IOException when the file can't be gotten
      */
     public Script loadScript(URL url) throws IOException {
         Script script;
@@ -272,6 +283,8 @@ public final class ScriptManager {
      * </p>
      *
      * @throws IllegalStateException When you call this method.
+     * @throws IOException           When a file can't be accessed.
+     * @return The default script
      */
     public Map<String, Script> loadDefaultScripts() throws IOException, IllegalStateException {
         if (defaultScripts != null) {

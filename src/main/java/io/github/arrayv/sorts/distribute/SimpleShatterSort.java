@@ -37,7 +37,7 @@ public final class SimpleShatterSort extends ShatterSorting {
 
     @Override
     public void runSort(int[] array, int sortLength, int bucketCount) throws Exception {
-        this.setRunAllSortsName("Simple Shatter Sort, " + bucketCount + " Buckets");
+        this.setRunSortName("Simple Shatter Sort, " + bucketCount + " Buckets");
         this.setRunSortName("Simple Shatter Sort, " + bucketCount + " Buckets");
         this.simpleShatterSort(array, sortLength, bucketCount, (int) (Math.log(sortLength) / Math.log(2)) / 2);
     }
