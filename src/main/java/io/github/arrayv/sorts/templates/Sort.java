@@ -29,8 +29,7 @@ public abstract class Sort {
     private void initDeprecatedMetadataTable() {
         if (deprecatedMetadataTable != null)
             return;
-        deprecatedMetadataTable = new Object[] {
-                true, "", "", "", "", false, false, false, 0, null, 0
+        deprecatedMetadataTable = new Object[] { true, "", "", "", "", false, false, false, 0, null, 0
         };
     }
 

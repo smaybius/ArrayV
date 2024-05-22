@@ -9,5 +9,8 @@
         "org.graalvm.*",
         "io.micrometer.shaded.*"
     ],
-    "java.format.settings.url": "./eclipse-java-google-style.xml"
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "[java]": {
+        "editor.tabSize": 2
+    }
 }

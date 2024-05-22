@@ -1,8 +1,8 @@
 package io.github.arrayv.utils;
 
 public final class Range {
-    public int start;
-    public int end;
+    private int start;
+    private int end;
 
     public Range(int start1, int end1) {
         this.start = start1;

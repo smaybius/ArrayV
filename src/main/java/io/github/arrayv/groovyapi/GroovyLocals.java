@@ -1,5 +1,9 @@
 package io.github.arrayv.groovyapi;
 
+import java.util.Map;
+
+import org.codehaus.groovy.runtime.MethodClosure;
+
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import groovy.transform.stc.ClosureParams;
@@ -13,9 +17,6 @@ import io.github.arrayv.sortdata.SortInfo;
 import io.github.arrayv.sortdata.SortNameType;
 import io.github.arrayv.sorts.templates.Sort;
 import io.github.arrayv.utils.Sounds;
-import org.codehaus.groovy.runtime.MethodClosure;
-
-import java.util.Map;
 
 /**
  * This class defines methods and properties directly accessible from within
@@ -98,7 +99,7 @@ public final class GroovyLocals {
      */
     public static SortInfo newSort(
             @ClosureParams(value = FromAbstractTypeMethods.class, options = {
-                    "io.github.arrayv.groovyapi.GroovyLocals$SortFunctionSignatures" }) Closure<?> sort,
+                "io.github.arrayv.groovyapi.GroovyLocals$SortFunctionSignatures" }) Closure<?> sort,
             @DelegatesTo(SortInfo.Builder.class) Closure<?> metadata) {
         switch (sort.getMaximumNumberOfParameters()) {
             case 2:
