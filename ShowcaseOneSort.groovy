@@ -6,7 +6,7 @@ import io.github.arrayv.utils.Delays
 def shuffles = arrayv.arrayManager.shuffles
 def distributions = arrayv.arrayManager.distributions
 //Warning: With this current code, this script will run as soon as ArrayV is loaded if it's in the scripts/ folder.
-runGroup(shuffles.size() + distributions.size()) { // The number of inputs will be shown in the UI as the length of the shuffles plus the length of the distributions.
+runGroup(shuffles.size() + distributions.size() + 1) { // The number of inputs will be shown in the UI as the length of the shuffles plus the length of the distributions.
     for (shuffle in shuffles) { // Iterate through shuffles and distributions instead of manually listing each of them.
         if (shuffle != Shuffles.ALREADY) { // Exclude the "no shuffle" shuffle, for being redundant with "sorted".
             category = shuffle.name
@@ -16,20 +16,20 @@ runGroup(shuffles.size() + distributions.size()) { // The number of inputs will 
             } else {
                 arrayv.arrayManager.setShuffleSingle(shuffle)
             }
-            run PipoSort go 2048.numbers
+            run PatienceSort go 2048.numbers
         } else {
             arrayv.setUniqueItems(64)
             category = "Few Uniques (64)"
             arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
-            run PipoSort go 2048.numbers
+            run PatienceSort go 2048.numbers
             category = "Few Uniques (32)"
             arrayv.setUniqueItems(32)
             arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
-            run PipoSort go 2048.numbers
+            run PatienceSort go 2048.numbers
             category = "Few Uniques (16)"
             arrayv.setUniqueItems(16)
             arrayv.arrayManager.setShuffleSingle(Shuffles.RANDOM)
-            run PipoSort go 2048.numbers
+            run PatienceSort go 2048.numbers
             arrayv.setUniqueItems(2048)
         }
         
@@ -43,7 +43,7 @@ runGroup(shuffles.size() + distributions.size()) { // The number of inputs will 
             } else {
                 arrayv.arrayManager.setShuffleSingle(distrib)
             }
-            run PipoSort go 2048.numbers
+            run PatienceSort go 2048.numbers
         }
         if (distrib == Distributions.CUSTOM)
         return;

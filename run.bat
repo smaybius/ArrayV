@@ -1,4 +1,5 @@
 @echo off
+call mvnw dependency:resolve
 call mvnw dependency:build-classpath -Dmdep.outputFile=target\classpath -Dmdep.regenerateFile=true -q
 <NUL set /p=-cp target\classes;> target\cmdargs
 type target\classpath >> target\cmdargs

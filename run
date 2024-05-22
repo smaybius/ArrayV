@@ -1,3 +1,4 @@
+./mvnw dependency:resolve
 ./mvnw dependency:build-classpath -Dmdep.outputFile=target/classpath -Dmdep.regenerateFile=true -q
 echo -n -cp target/classes:> target/cmdargs
 cat target/classpath >> target/cmdargs
