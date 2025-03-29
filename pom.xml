@@ -15,7 +15,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>24</maven.compiler.release>
   </properties>
 
   <repositories>
@@ -40,12 +40,12 @@
     <dependency>
       <groupId>io.github.classgraph</groupId>
       <artifactId>classgraph</artifactId>
-      <version>4.8.172</version>
+      <version>4.8.179</version>
     </dependency>
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
-      <version>4.0.21</version>
+      <version>5.0.0-alpha-12</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
   </dependencies>
@@ -78,7 +78,7 @@
       <plugin>
         <groupId>io.github.git-commit-id</groupId>
         <artifactId>git-commit-id-maven-plugin</artifactId>
-        <version>8.0.2</version>
+        <version>9.0.1</version>
         <executions>
           <execution>
             <goals>
@@ -97,7 +97,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.2</version>
         <configuration>
           <archive>
             <manifest>
@@ -122,7 +122,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.6.3</version>
+        <version>3.11.2</version>
         <configuration>
           <sourceFileIncludes>
             <include>io/github/arrayv/groovyapi/**/*.java</include>
@@ -132,8 +132,8 @@
             <include>io/github/arrayv/utils/**/*.java</include>
           </sourceFileIncludes>
           <links>
-            <link>https://javadoc.io/doc/io.github.classgraph/classgraph/4.8.172</link>
-            <link>https://docs.groovy-lang.org/4.0.0/html/api</link>
+            <link>https://javadoc.io/doc/io.github.classgraph/classgraph/latest</link>
+            <link>https://docs.groovy-lang.org/latest/html/api</link>
           </links>
         </configuration>
         <executions>
@@ -148,7 +148,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.3</version>
+        <version>3.6.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -161,7 +161,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.6.0</version>
         <configuration>
           <configLocation>checkstyle.xml</configLocation>
           <consoleOutput>true</consoleOutput>
@@ -185,7 +185,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>10.16.0</version>
+            <version>10.21.4</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -194,7 +194,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.3.2</version>
+          <version>3.4.1</version>
         </plugin>
         <!-- see
         http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
@@ -204,29 +204,29 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.13.0</version>
+          <version>3.14.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.2.5</version>
+          <version>3.5.2</version>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.1.4</version>
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.1.4</version>
         </plugin>
         <!-- site lifecycle, see
         https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.12.1</version>
+          <version>3.21.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.5.0</version>
+          <version>3.9.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
